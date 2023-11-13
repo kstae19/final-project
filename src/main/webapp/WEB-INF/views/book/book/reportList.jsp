@@ -36,6 +36,8 @@
     </style>
 </head>
 <body>
+
+	<jsp:include page="../common/bookHeader.jsp" />
     
     <div class="outer">
         <div>

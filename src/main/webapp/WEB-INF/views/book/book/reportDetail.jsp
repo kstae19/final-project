@@ -27,6 +27,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+
     <div class="outer">
         <button type="button" class="btn btn-secondary">목록</button>
         <hr>

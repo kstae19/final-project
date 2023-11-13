@@ -51,6 +51,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+
     <div class="outer">
         <form class="search-form">
             <select name="">

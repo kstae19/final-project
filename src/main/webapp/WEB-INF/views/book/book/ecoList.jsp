@@ -31,6 +31,8 @@
     </style>
 </head>
 <body>
+
+	<jsp:include page="../common/bookHeader.jsp" />
     
     <div class="outer">
         <h3>찾고자 하는 환경용어를 검색해보세요</h3>

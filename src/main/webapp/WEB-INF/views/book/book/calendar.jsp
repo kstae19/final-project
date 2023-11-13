@@ -36,6 +36,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+
     <div class="outer">
         <p style="background-color: lightgrey;">
             실제 달력, 디지털 스프레드시트, 전문 독서 앱 또는 이러한 도구의 조합을 선호하든 독서 달력을 만들고 사용하는 것은 독서 목표를 달성하고 독서 시간을 최대한 활용하는 효과적인 방법이 될 수 있습니다. 이는 독서 노력을 체계적으로 유지하고 동기를 부여하는 데 유용한 도구입니다.

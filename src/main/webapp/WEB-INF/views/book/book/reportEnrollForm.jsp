@@ -36,6 +36,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+
     <div class="outer">
         <h3>글쓰기</h3>
         <form>
