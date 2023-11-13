@@ -24,13 +24,11 @@
 		padding : 0;
 	}
 	.outer{
-		background : beige;
 		height:1100px;
-	}	
+	}
 	#content{
 		width:1200px;
 		height:1000px;
-		border : 2px solid green;
 		margin:auto;
 	}
 	#searching-area{
@@ -52,7 +50,7 @@
 		float:right;
 		}
 	#controll-area>select{
-		margin-left:770px;
+		margin-left:790px;
 		padding : 5px;
 		font-size:20px;
 	}
@@ -176,7 +174,7 @@
 		<div id="newist">
 			<img src="resources/images/saltedbutter.jpg">
 			<img src="resources/images/butterpantry.png">
-			<br>
+			<br><br>
 			<div class="like-cart">
 			<img src="resources/images/heart-solid.svg">
 			<img src="resources/images/shopping-cart-solid.svg">
