@@ -13,7 +13,7 @@
 	#menubar{
 		width : 1200px;
 		height : 60px;
-		border : 2px solid darkgreen;
+		
 		box-sizing : border-box;
 		margin:auto;
 		padding:0;
