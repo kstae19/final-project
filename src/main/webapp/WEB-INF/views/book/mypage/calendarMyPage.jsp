@@ -34,6 +34,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+
     <div class="outer">
         <button type="button">일정추가</button>
         <button type="button">일정수정</button>
