@@ -1,5 +1,25 @@
 package com.kh.eco.book.model.service;
 
-public class BookServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookServiceImpl implements BookService{
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
