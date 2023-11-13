@@ -1,5 +1,5 @@
 package com.kh.eco.book.model.service;
 
-public class Test {
- 
+public interface BookService {
+
 }
