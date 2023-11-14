@@ -88,7 +88,7 @@
 		height : 50px;
 	}
 	
-	.login_center {
+	.login-center {
 		margin : auto;
 		width : 353px;
 	}
@@ -101,13 +101,13 @@
 </style>
 </head>
 <body>
-	<jsp:include page="../common/header.jsp" />
+	<%--<jsp:include page="../common/header.jsp" />--%>
 	
 	<div id="login-main">
 		<div id="login-user">
 			<div id="login-id" class="login">
 				<h1>로그인</h1>
-				<div class="login_center">
+				<div class="login-center">
 					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId">
 					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd">
 					<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
