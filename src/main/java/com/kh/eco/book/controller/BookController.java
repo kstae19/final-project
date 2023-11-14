@@ -23,8 +23,6 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
-import com.kh.eco.book.model.service.BookService;
-
 @Controller
 public class BookController {
 	
@@ -33,18 +31,16 @@ public class BookController {
 	
 	public static final String SERVICEKEY = "ttbrkd_gus_wl1746003";
 	
-	@RequestMapping("book")
-	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
+	// 알라딘 api 검색기능 메소드
+	public ArrayList<Book> selectBookList(String query, int currentPage) throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 		url += "?TTBKey=" + BookController.SERVICEKEY;
-		url += "&Query=" + URLEncoder.encode("환경", "UTF-8");
-		// 환경, 에코, 기후변화, 탄소중립, 생태계
-		url += "&MaxResults=100";
-		url += "&start=1";
+		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
+		url += "&MaxResults=16";
 		url += "&output=JS";
 		url += "&Version=20131101";
 		url += "&Cover=big";
-		System.out.println(url);
+		url += "&start=" + currentPage;
 		
 		/*
 		 * http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?
@@ -102,6 +98,11 @@ public class BookController {
 			Book book = new Book();
 			
 			book.setISBN13(item.get("isbn13").getAsString());
+			book.setBookCategory(item.get("categoryName").getAsString());
+			book.setBookContent(item.get("description").getAsString());
+			book.setBookDate(item.get("pubDate").getAsString());
+			book.setBookLink(item.get("link").getAsString());
+			book.setBookPublisher(item.get("publisher").getAsString());
 			book.setBookTitle(item.get("title").getAsString());
 			book.setBookWriter(item.get("author").getAsString());
 			book.setBookImg(item.get("cover").getAsString());
@@ -112,13 +113,28 @@ public class BookController {
 		br.close();
 		urlConnection.disconnect();
 		
+		return bookList;
+	}
+	
+	@RequestMapping("book")
+	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
+		
+		ArrayList<Book> bookList = selectBookList("환경", currentPage);
 		ArrayList<Book> countList = bookService.countList();
 		
-		PageInfo pi = Pagination.getPageInfo(itemArr.size(), currentPage, 5, 5);
+		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
+		for(int i = 0; i < bookList.size(); i++) {
+			for(int n = 0; n < countList.size(); n++) {
+				if((bookList.get(i).getISBN13()).equals(countList.get(n).getISBN13())) {
+					bookList.get(i).setBookCount(countList.get(n).getBookCount());
+				}
+			}
+		}
+		
+		PageInfo pi = Pagination.getPageInfo(200, currentPage, 10, 10);
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
-		model.addAttribute("countList", countList);
 		
 		return "book/book/bookList";
 	}
