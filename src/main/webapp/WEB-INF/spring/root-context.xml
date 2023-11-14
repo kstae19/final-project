@@ -17,7 +17,7 @@
 	<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
 		<!-- 어떤 DB에 접속할껀지 정보 작성 -->
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@192.168.30.12:1521:xe" />
+		<property name="url" value="jdbc:oracle:thin:@192.168.30.21:1521:xe" />
 		<property name="username" value="ECO" />
 		<property name="password" value="ECO" />
 	</bean>

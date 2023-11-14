@@ -9,13 +9,11 @@
 	</settings>
 	
 	<typeAliases>
-		<!-- test -->
+		<typeAlias type="com.kh.eco.book.model.vo.Book" alias="book" />
 	</typeAliases>
 
-	
 	<mappers>
-		
-
+  		<mapper resource="/mapper/book/book-mapper.xml" />
 	</mappers>
   
 </configuration>
