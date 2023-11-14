@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,5 +25,6 @@
         <img src="https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/07/resize-images-banner.jpeg" width="100%" height="200px">
         <h1 class="main_image_text" style="font-size:50px">가운데에 글씨 쓰기</h1>
     </div>
+    <br><br>
 </body>
 </html>

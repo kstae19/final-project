@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,6 +55,8 @@
 </head>
 <body>
 
+	<jsp:include page="../common/bookHeader.jsp" />
+	
     <div class="outer">
         <h3>북마크 도서 목록</h3>
         <div id="book-mypage">

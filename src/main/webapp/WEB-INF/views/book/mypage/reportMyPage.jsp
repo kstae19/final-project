@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +21,8 @@
     </style>
 </head>
 <body>
+
+	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
         <h3>게시글 목록</h3>

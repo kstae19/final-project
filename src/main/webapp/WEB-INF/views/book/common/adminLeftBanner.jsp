@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,11 +28,8 @@
 <body>
     <div class="floatdiv">
         <ul>
-            <li style="font-size: 30px; margin-bottom: 15px;">정보제공/커뮤니티</li>
-            <li>우수환경도서</li>
-            <li>독후감 게시판</li>
-            <li>환경용어사전</li>
-            <li>독서캘린더</li>
+            <li style="font-size: 30px; margin-bottom: 15px;">도서 관리자페이지</li>
+            <li>독후감게시판 신고목록</li>
         </ul>
     </div>
 </body>

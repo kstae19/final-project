@@ -5,15 +5,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Eco Friendly</title>
-<!-- jQuery 라이브러리 -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+<title>Insert title here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
 <style>
+	body {
+		font-family: 'Noto Sans KR', sans-serif;
+	}
 	#menubar{
 		width : 1200px;
 		height : 60px;
-		
 		box-sizing : border-box;
 		margin:auto;
 		padding:0;
@@ -26,41 +28,15 @@
 		cursor:pointer;
 		margin:auto;
 	}
-	#placeholder{
-		width : 1200px;
-		height : 800px;
-		margin:auto;
-	}
-	#placeholder>img{
-		width : 100%;
-		height : 100%;
-		opacity:0.8;
-	}
 </style>
 </head>
 <body>
 	<div id="menubar">
-
 		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
-
 		<div class="menu"><h1>CHALLENGE</h1></div>
 		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
 		<div class="menu"><h1>MOVE</h1></div>
 		<div class="menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
 	</div>
-	<div id="placeholder">
-	<img src="resources/images/cookieChunsik.jpg">
-	
-	</div>
-	
-	<script>
-		$(()=>{
-			$('.menu').hover(function(){
-				$(this).css('color', 'red');
-			}, function(){
-				$(this).css('color', 'black');
-			});
-		})
-	</script>
 </body>
 </html>
