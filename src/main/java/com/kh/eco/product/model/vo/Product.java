@@ -1,5 +1,7 @@
 package com.kh.eco.product.model.vo;
 
+import java.util.ArrayList;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +20,5 @@ public class Product {
 	private String mainImg;
 	private int count;
 	private String createDate;
+	private ArrayList<ProductOption> optionList;
 }
