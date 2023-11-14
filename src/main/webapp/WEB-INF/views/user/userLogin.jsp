@@ -101,19 +101,21 @@
 </style>
 </head>
 <body>
-	<%--<jsp:include page="../common/header.jsp" />--%>
+	<jsp:include page="../common/header.jsp" />
 	
 	<div id="login-main">
 		<div id="login-user">
-			<div id="login-id" class="login">
-				<h1>로그인</h1>
-				<div class="login-center">
-					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId">
-					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd">
-					<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
-					<input type="checkbox" /> 아이디 저장
+			<form action="login.us" method="post">
+				<div id="login-id" class="login">
+					<h1>로그인</h1>
+					<div class="login-center">
+						<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId">
+						<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd">
+						<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
+						<input type="checkbox"/> 아이디 저장
+					</div>
 				</div>
-			</div>
+			</form>
 			<div id="login-sns" class="login">
 				<h1>소셜 로그인</h1>
 
