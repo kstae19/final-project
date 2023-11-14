@@ -1,8 +1,5 @@
 package com.kh.eco.book.model.dao;
 
-<<<<<<< Updated upstream
-public class BookDao {
-=======
 import java.util.ArrayList;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,6 +20,5 @@ public class BookDao {
 	
 	
 	
->>>>>>> Stashed changes
 
 }

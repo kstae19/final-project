@@ -1,8 +1,5 @@
 package com.kh.eco.book.model.service;
 
-<<<<<<< Updated upstream
-public class BookServiceImpl {
-=======
 import java.util.ArrayList;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -42,6 +39,5 @@ public class BookServiceImpl implements BookService{
 	
 	
 	
->>>>>>> Stashed changes
 
 }
