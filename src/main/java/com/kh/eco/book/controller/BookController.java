@@ -176,10 +176,17 @@ public class BookController {
 		}
 		
 		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 10, 10);
-		// 만약 현재페이지 1 : 0 ~ 19
-		// 2 : 20 ~ 39
-		// 3 : 40 ~ 59
-		model.addAttribute("bookList", searchList.subList((currentPage - 1) * 10, currentPage * 20));
+		// 만약 현재페이지 1 : 0 ~ 19(20)
+		// 2 : 20 ~ 39(40)
+		// 3 : 40 ~ 59(60)
+		// 4 : 60 ~ 79(80)
+		int startList = pi.getMaxPage() * (currentPage - 1);
+		int endList = currentPage * 20;
+		if(endList > searchList.size()) {
+			endList = searchList.size();
+		}
+		
+		model.addAttribute("bookList", searchList.subList(startList, endList));
 		model.addAttribute("pi", pi);
 		model.addAttribute("selectBook", selectBook);
 		model.addAttribute("searchBook", searchBook);
