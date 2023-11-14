@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.eco.book.model.vo.Book;
+import com.kh.eco.common.model.template.Pagination;
+import com.kh.eco.common.model.vo.PageInfo;
 
 @Controller
 public class BookController {
@@ -23,7 +26,7 @@ public class BookController {
 	public static final String SERVICEKEY = "ttbrkd_gus_wl1746003";
 	
 	@RequestMapping("book")
-	public String bookMain(@RequestParam(value="cPage", defaultValue="1"),Model model) throws IOException {
+	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 		url += "?TTBKey=" + BookController.SERVICEKEY;
 		url += "&Query=" + URLEncoder.encode("환경", "UTF-8");
@@ -94,12 +97,6 @@ public class BookController {
 			book.setBookTitle(item.get("title").getAsString());
 			book.setBookWriter(item.get("author").getAsString());
 			book.setBookImg(item.get("cover").getAsString());
-			book.setBookPublisher(item.get("publisher").getAsString());
-			book.setBookContent(item.get("description").getAsString());
-			// Date 포맷으로 변환하지 않은 이유 : 이미 api 내에서 date포맷을 사용하고 있기 때문에, 단순한 출력기능이기 때문에
-			book.setBookDate(item.get("pubDate").getAsString());
-			book.setBookCategory(item.get("categoryName").getAsString());
-			book.setBookLink(item.get("link").getAsString());
 			
 			list.add(book);
 		}
@@ -107,7 +104,10 @@ public class BookController {
 		br.close();
 		urlConnection.disconnect();
 		
+		PageInfo pi = Pagination.getPageInfo(itemArr.size(), currentPage, 5, 5);
+		
 		model.addAttribute("bookList", list);
+		model.addAttribute("pi", pi);
 		
 		return "book/book/bookList";
 	}

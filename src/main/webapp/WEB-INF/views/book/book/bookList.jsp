@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,6 +67,19 @@
         <br><br>
 
         <div id="book-container">
+            
+            <c:forEach items="${ bookList }" var="b">
+            	<div>
+            		<img src="${ b.bookImg }">
+            		<p>${ b.bookTitle }</p>
+            		<p>${ b.bookWriter }</p>
+            		<p>${ b.bookCount }</p>
+            	</div>
+            </c:forEach>
+            
+            
+            
+            <!-- 
             <div>
                 <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
                 <p>제목</p>
@@ -149,7 +163,7 @@
                 <p>제목</p>
                 <p>글쓴이</p>
                 <p>카운트</p>
-            </div>
+            </div> -->
         </div>
         <br>
 
