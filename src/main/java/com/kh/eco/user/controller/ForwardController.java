@@ -8,7 +8,12 @@ public class ForwardController {
 
 	
 	@RequestMapping("login")
-	public String naverPage() {
+	public String loginPage() {
 		return "user/userLogin";	
+	}
+	
+	@RequestMapping("enroll")
+	public String enrollPage() {
+		return "user/userEnrollform";	
 	}
 }
