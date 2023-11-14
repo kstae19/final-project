@@ -13,12 +13,5 @@ public class BookDao {
 	public ArrayList<Book> countList(SqlSessionTemplate sqlSession){
 		return (ArrayList)sqlSession.selectList("bookMapper.countList");
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }
