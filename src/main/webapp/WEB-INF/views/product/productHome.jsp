@@ -55,6 +55,7 @@
 		font-size:20px;
 	}
 	#controll-area>button{
+	
 		padding:5px;
 		margin-left : 5px;
 		border-radius:5px;
