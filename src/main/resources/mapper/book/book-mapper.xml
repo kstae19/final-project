@@ -10,7 +10,16 @@
 	
 	
 	<!-- 도서정보insert -->
-	
+	<insert id="bookImport" parameterType="string">
+		INSERT INTO BOOK
+						(
+						ISBN13
+						)
+		VALUES
+						(
+						#{ISBN}
+						)
+	</insert>
 	
 	
 	

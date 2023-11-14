@@ -10,7 +10,7 @@ import com.kh.eco.book.model.vo.Book;
 @Repository
 public class BookDao {
 	
-	public int bookImport(SqlSessionTemplate sqlSession, ArrayList<Book> list) {
+	public int bookImport(SqlSessionTemplate sqlSession, ArrayList<String> list) {
 		return sqlSession.insert("bookMapper.bookImport", list);
 	}
 	
