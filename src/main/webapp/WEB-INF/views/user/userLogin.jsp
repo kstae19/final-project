@@ -15,33 +15,12 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- JavaScript -->
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-<style>
-	body {
-		font-family: 'Noto Sans KR', sans-serif;
-	}
 
+<style>
 	div{
 		border : 2px solid darkgreen;
 		box-sizing: border-box;
 	
-	}
-	#menubar{
-		width : 1200px;
-		height : 60px;
-		box-sizing : border-box;
-		margin:auto;
-		padding:0;
-	}
-	.menu
-	{
-		height:100%;
-		float:left;
-		width : 200px;
-		cursor:pointer;
-		margin:auto;
 	}
 	
 	#login-main {
@@ -87,7 +66,7 @@
 	#regist {
 		text-align: center;
 		line-height: 36px;
-		width: 505px;
+		width: 475px;
 		height: 40px;
 		margin: auto;
 		margin-top: 20px;
@@ -122,13 +101,7 @@
 </style>
 </head>
 <body>
-	<div id="menubar">
-		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
-		<div class="menu"><h1>CHALLENGE</h1></div>
-		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
-		<div class="menu"><h1>MOVE</h1></div>
-		<div class="menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
-	</div>
+	<jsp:include page="../common/header.jsp" />
 	
 	<div id="login-main">
 		<div id="login-user">
@@ -160,7 +133,7 @@
 				<div id="bar">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
-				<div id="enroll-user" onclick="location.href='#'">
+				<div id="enroll-user" onclick="location.href='enroll'">
 					<h4>회원가입</h4>
 				</div>
 			</div>
