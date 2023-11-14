@@ -41,6 +41,7 @@
 <body>
 	<div id="menubar">
 		<div class="menu"><h1>BOOK</h1></div>
+		<div class="menu"><h1><a href="list.ev">EVENT</a></h1></div>
 		<div class="menu"><h1>CHALLENGE</h1></div>
 		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
 		<div class="menu"><h1>MOVE</h1></div>

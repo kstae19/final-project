@@ -12,12 +12,37 @@
     <script>
 
       document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
+
+        $(function () {
+            var request = $.ajax({
+                url: "/full-calendar/calendar-admin", // 변경하기
+                method: "GET",
+                dataType: "json"
+            });
+
+            request.done(function (data) {// Get방식으로 데이터 요청한 값이 불러오기 완료되면
+                console.log(data);
+
+                    var calendarEl = document.getElementById('calendar');
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    editable: true,
+                    droppable: true, // this allows things to be dropped onto the calendar
+                    drop: function (arg) {
+                        // is the "remove after drop" checkbox checked?
+                        if (document.getElementById('drop-remove').checked) {
+                            // if so, remove the element from the "Draggable Events" list
+                            arg.draggedEl.parentNode.removeChild(arg.draggedEl);
+                        }
+                    },
+                   
+                    events: data // data값이 events란 변수에 담김
+                     
+                    });
+            });
+            calendar.render();
         });
-        calendar.render();
-      });
+    });
 
     </script>
   </head>
