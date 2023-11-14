@@ -9,13 +9,12 @@
 	</settings>
 	
 	<typeAliases>
-		<!-- test -->
+		<typeAlias type="com.kh.eco.user.model.vo.User" alias="user"/>
 	</typeAliases>
 
 	
 	<mappers>
-		
-
+		<mapper resource="/mapper/user/user-mapper.xml"/>
 	</mappers>
   
 </configuration>
