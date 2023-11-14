@@ -30,4 +30,9 @@ public class Book {
 		return ISBN13 == book.ISBN13; // 들어온 객체의 ISBN값 비교
 	}	
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(ISBN13);
+	}
+	
 }

@@ -37,7 +37,7 @@
             border: 1px solid gray;
             padding: 5px;
             width: 240px;
-            height: 300px;
+            height: 450px;
             background-color: lightgray;
         }
         #book-container>div>img{
@@ -55,11 +55,11 @@
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
-        <form class="search-form">
-            <select name="">
-                <option value="">제목</option>
-                <option value="">작가</option>
-                <option value="">카테고리</option>
+        <form class="search-form" action="booksearch.bk" >
+            <select name="search-book">
+                <option value="title">제목</option>
+                <option value="writer">작가</option>
+                <option value="category">카테고리</option>
             </select>
             <input type="text" name="book-search">
             <button type="submit">검색</button>
@@ -67,112 +67,37 @@
         <br><br>
 
         <div id="book-container">
-            
             <c:forEach items="${ bookList }" var="b">
             	<div>
             		<img src="${ b.bookImg }">
             		<p>${ b.bookTitle }</p>
             		<p>${ b.bookWriter }</p>
-            		<p>${ b.bookCount }</p>
+            		<p>조회수 : ${ b.bookCount }</p>
             	</div>
             </c:forEach>
-            
-            
-            
-            <!-- 
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-                <p>글쓴이</p>
-                <p>카운트</p>
-            </div> -->
         </div>
         <br>
 
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        	<c:choose>
+	       		<c:when test="${ pi.currentPage eq 1 }">
+	             <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+	       		</c:when>
+	       		<c:otherwise>
+	       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+	       		</c:otherwise>
+	       	</c:choose>
+	           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+	           <li class="page-item"><a class="page-link" href="book?cPage=${p}">${p}</a></li>
+	           </c:forEach>
+	           <c:choose>
+	       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+	       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+	       		</c:when>
+	       		<c:otherwise>
+	       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
+	       		</c:otherwise>
+	       	</c:choose>
         </ul>
     </div>
 </body>
