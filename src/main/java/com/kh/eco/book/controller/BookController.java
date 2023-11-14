@@ -32,11 +32,11 @@ public class BookController {
 	public static final String SERVICEKEY = "ttbrkd_gus_wl1746003";
 	
 	// 알라딘 api 검색기능 메소드
-	public ArrayList<Book> selectBookList(String query, int currentPage) throws IOException{
+	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 		url += "?TTBKey=" + BookController.SERVICEKEY;
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
-		url += "&MaxResults=16";
+		url += "&MaxResults=" + maxResult;
 		url += "&output=JS";
 		url += "&Version=20131101";
 		url += "&Cover=big";
@@ -119,7 +119,7 @@ public class BookController {
 	@RequestMapping("book")
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
-		ArrayList<Book> bookList = selectBookList("환경", currentPage);
+		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
 		ArrayList<Book> countList = bookService.countList();
 		
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
@@ -135,6 +135,54 @@ public class BookController {
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
+		
+		return "book/book/bookList";
+	}
+	
+	@RequestMapping("searchbook.bk")
+	public String bookSearch(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model, String selectBook, String searchBook) throws IOException {
+		
+		ArrayList<Book> allList = new ArrayList();
+		for(int i = 1; i <= 4; i++) {
+			ArrayList<Book> bookList = selectBookList(50, "환경", i);
+			for(int n = 0; n < bookList.size(); n++) {
+				allList.add(bookList.get(n));
+			}
+		}
+		
+		ArrayList<Book> searchList = new ArrayList();
+		switch(selectBook) {
+		case "title" : 
+			for(int i = 0; i < allList.size(); i++) {
+				if((allList.get(i).getBookTitle()).contains(searchBook)) {
+					searchList.add(allList.get(i));
+				}
+			}
+			break;
+		case "writer" : 
+			for(int i = 0; i < allList.size(); i++) {
+				if((allList.get(i).getBookWriter()).contains(searchBook)) {
+					searchList.add(allList.get(i));
+				}
+			}
+			break;
+		case "category" : 
+			for(int i = 0; i < allList.size(); i++) {
+				if((allList.get(i).getBookCategory()).contains(searchBook)) {
+					searchList.add(allList.get(i));
+				}
+			}
+			break;
+		}
+		
+		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 10, 10);
+		// 만약 현재페이지 1 : 0 ~ 19
+		// 2 : 20 ~ 39
+		// 3 : 40 ~ 59
+		model.addAttribute("bookList", searchList.subList((currentPage - 1) * 10, currentPage * 20));
+		model.addAttribute("pi", pi);
+		model.addAttribute("selectBook", selectBook);
+		model.addAttribute("searchBook", searchBook);
 		
 		return "book/book/bookList";
 	}
