@@ -8,7 +8,15 @@
 	
 	
 	
-	
+	<!-- 도서 조회수 조회 -->
+	<select id="countList" resultType="book">
+		SELECT
+			ISBN13 ISBN13,
+    		BOOK_COUNT bookCount
+		FROM
+			TB_BOOK
+	</select>
+
 	<!-- 도서정보insert -->
 	<insert id="bookImport" parameterType="string">
 		INSERT INTO BOOK
@@ -20,6 +28,8 @@
 						#{ISBN}
 						)
 	</insert>
+	
+	
 	
 	
 	

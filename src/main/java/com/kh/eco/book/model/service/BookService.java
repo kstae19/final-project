@@ -6,8 +6,8 @@ import com.kh.eco.book.model.vo.Book;
 
 public interface BookService {
 	
-	// 책 정보 DB에 저장
-	public int bookImport(ArrayList<String> list);
+	// 도서정보 조회수 조회
+	public ArrayList<Book> countList();
 	
 	
 	

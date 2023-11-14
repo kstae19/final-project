@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
 @Controller
 public class BookController {
+	
+	@Autowired
+	public BookService bookService;
 	
 	public static final String SERVICEKEY = "ttbrkd_gus_wl1746003";
 	
@@ -86,7 +91,7 @@ public class BookController {
 		JsonObject totalObj = JsonParser.parseString(responseText).getAsJsonObject();
 		JsonArray itemArr = totalObj.getAsJsonArray("item");
 		
-		ArrayList<Book> list = new ArrayList();
+		ArrayList<Book> bookList = new ArrayList();
 		
 		for(int i = 0; i < itemArr.size(); i++) {
 			JsonObject item = itemArr.get(i).getAsJsonObject();
@@ -98,16 +103,19 @@ public class BookController {
 			book.setBookWriter(item.get("author").getAsString());
 			book.setBookImg(item.get("cover").getAsString());
 			
-			list.add(book);
+			bookList.add(book);
 		}
 		
 		br.close();
 		urlConnection.disconnect();
 		
+		ArrayList<Book> countList = bookService.countList();
+		
 		PageInfo pi = Pagination.getPageInfo(itemArr.size(), currentPage, 5, 5);
 		
-		model.addAttribute("bookList", list);
+		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
+		model.addAttribute("countList", countList);
 		
 		return "book/book/bookList";
 	}

@@ -19,9 +19,11 @@ public class BookServiceImpl implements BookService{
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public int bookImport(ArrayList<String> list) {
-		return bookDao.bookImport(sqlSession, list);
+	public ArrayList<Book> countList() {
+		return bookDao.countList(sqlSession);
 	}
+
+	
 	
 	
 	
