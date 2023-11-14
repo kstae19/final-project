@@ -28,17 +28,6 @@ public class Book {
 		if (o == null || getClass() != o.getClass()) return false; // null값이 들어오거나 다른 클래스가 들어오면 false
 		Book book = (Book) o;
 		return ISBN13 == book.ISBN13; // 들어온 객체의 ISBN값 비교
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(ISBN13);
-	}
-	
-	
-	
-	
-	
-	
+	}	
 	
 }

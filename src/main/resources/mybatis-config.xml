@@ -12,9 +12,8 @@
 		<typeAlias type="com.kh.eco.book.model.vo.Book" alias="book" />
 	</typeAliases>
 
-	<!-- 일단 매퍼패키지 내 매퍼파일이 전부 등록되도록 설정해봤습니다(오류있을시 수정 환영) -->
 	<mappers>
-  		<package name="com.resources.mapper"/>
+  		<mapper resource="/mapper/book/book-mapper.xml" />
 	</mappers>
   
 </configuration>
