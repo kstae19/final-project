@@ -3,6 +3,8 @@ package com.kh.eco.challenge.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,25 +25,40 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	@Override
 	public int countChallengeList() {
 		
-		return 0;
+		return challengeDao.countChallengeList(sqlSession);
 	}
 
 	@Override
 	public ArrayList<Challenge> selectChallengeList(PageInfo pi) {
 		
-		return null;
+		// offset(상쇄)이용해 rowBounds 만들기
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		// 만들어진 rowBounds가지고 challengeList 조회
+		return challengeDao.selectChallengeList(sqlSession, rowBounds);
 	}
+
 
 	@Override
 	public int countChallengeSearch(HashMap<String, String> map) {
 		
-		return 0;
+		return challengeDao.countChallengeSearch(sqlSession, map);
 	}
-
+	
+	/**
+	 * map : 조건 및 검색어를 키값으로 전달하는 매개변수
+	 * pi : 페이징처리를 위한 매개변수
+	 */
 	@Override
-	public ArrayList<Challenge> selectSearchList(HashMap<String, String> map) {
+	public ArrayList<Challenge> selectSearchList(HashMap<String, String> map, PageInfo pi) {
 		
-		return null;
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		// 조건 및 검색어를 mapper에서 적용해야하기에,
+		// rowBounds는 페이징처리를 위해 인자로 넘김
+		return challengeDao.selectSearchList(sqlSession, map, rowBounds);
 	}
 
 	@Override

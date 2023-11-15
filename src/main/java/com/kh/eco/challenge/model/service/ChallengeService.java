@@ -15,7 +15,7 @@ public interface ChallengeService {
 	
 	int countChallengeSearch(HashMap<String, String> map);
 	
-	ArrayList<Challenge> selectSearchList(HashMap<String, String> map);
+	ArrayList<Challenge> selectSearchList(HashMap<String, String> map, PageInfo pi);
 	
 	// challengeDetailView와  좋아요 클릭
 	
