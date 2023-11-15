@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="productMapper">
+<resultMap id="resultProductMap" type="product">
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="productName" column="PRODUCT_NM"/>
+	<result property="mainImg" column="MAIN_IMG"/>
+	<result property="productInfo" column = "PRODUCT_INFO"/>
+	<result property="detailInfo" column = "DETAIL_INFO"/>
+	<result property="extraInfo" column = "EXTRA_INFO"/>
+	<collection property="optionList" ofType="option">
+		<result column = "OPTION_NO" property = "optionNo"/>
+		<result column = "OPTION_NM" property="optionName"/>
+		<result column = "PRICE" property="price"/>
+	</collection>
+</resultMap>
+<select id="selectProductList" resultMap="resultProductMap">
+SELECT 
+		PRODUCT_NO, 
+		PRODUCT_NM, 
+		MAIN_IMG, 
+		OPTION_NO, 
+		OPTION_NM, 
+		PRICE
+	FROM 
+		TB_PRODUCT P
+	JOIN 
+		TB_PRODUCT_OPTION O USING (PRODUCT_NO)
+	WHERE 
+		O.STATUS IN ('Y', 'O') 
+	AND 
+		P.STATUS = 'Y'
+</select>
+
+<insert id="addLike" parameterType="hashmap">
+INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
+</insert>
+
+<select id = "selectProduct" parameterType = "_int"  resultMap="resultProductMap">
+SELECT 
+	PRODUCT_NO, 
+	PRODUCT_NM, 
+	PRODUCT_INFO, 
+	DETAIL_INFO, 
+	EXTRA_INFO, 
+	BRAND_NO, 
+	MAIN_IMG, 
+	OPTION_NO, 
+	OPTION_NM, 
+	PRICE
+FROM 
+	TB_PRODUCT 
+JOIN 
+	TB_PRODUCT_OPTION O USING (PRODUCT_NO) 
+WHERE 
+	O.STATUS IN ('Y', 'O') 
+AND 
+	PRODUCT_NO = #{productNo}
+</select>
+
+<select id="getPrice" parameterType="_int" resultType="string">
+select TO_CHAR(price, '999,999') from tb_product_option where OPTION_NO = #{optionNo}
+</select>
+<select id="getImages" parameterType="_int" resultType="string">
+SELECT 
+		FILE_NAME fileName 
+	FROM 
+		TB_PRODUCT_IMG 
+	WHERE 
+		PRODUCT_NO = #{productNo} 
+	AND STATUS= 'Y'
+</select>
+
+<select id="getBrand" parameterType="_int" resultType="brand">
+SELECT 
+	BRAND_NO brandNo, 
+	BRAND_NAME brandName, 
+	BRAND_INTRO brandIntro  
+FROM 
+	TB_BRAND 
+WHERE 
+	BRAND_NO = (
+				SELECT 
+					BRAND_NO 
+				FROM 
+					TB_PRODUCT 
+				WHERE 
+					PRODUCT_NO = #{productNo}
+					)
+</select>
+
+<select id="getRate" parameterType="_int" resultType="productReview">
+SELECT 
+    COUNT(*) reviewNo, 
+    ROUND(AVG(STAR_RATE),1) starRate  
+FROM 
+    TB_PRODUCT_REVIEW 
+WHERE 
+    OPTION_NO IN (
+                    SELECT OPTION_NO 
+                    FROM TB_PRODUCT_OPTION 
+                    WHERE PRODUCT_NO = #{productNo}
+                    )
+</select>
+</mapper>

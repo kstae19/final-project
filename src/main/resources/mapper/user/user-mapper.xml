@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">
+	<select id="loginUser" parameterType="user" resultType="user">
+		SELECT
+		       USER_ID userId,
+		       USER_PWD userPwd,
+		       USER_NAME userName,
+		       EMAIL email,
+		       PHONE phone,
+		       POINT point,
+		       POST post,
+		       ADDRESS address,
+		       DETAIL_ADDRESS detailAdress,
+		       USER_STATUS userStatus,
+		       ENROLL_DATE enrollDate
+		  FROM
+		       TB_USER
+		 WHERE
+		       USER_ID = #{userId}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	</select>
+
+	<select id="idCheck" parameterType="string" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_USER
+		 WHERE
+		 	   USER_ID = #{checkId}
+	</select>
+
+	<insert id="insertSecret" parameterType="cert">
+		INSERT
+		  INTO	
+		       TB_USER_CERT
+		       (
+		       	CERT_EMAIL,
+		       	CERT_SECRET,
+		       	CERT_DATE
+		       )
+		VALUES
+			   (
+			    #{certEmail},
+			    #{certSecret},
+			    sysdate
+			   )
+	</insert>
+	
+	<select id="vaildate" parameterType="cert" resultType="cert">
+		SELECT
+			   CERT_EMAIL,
+			   CERT_SECRET,
+			   CERT_DATE
+		  FROM
+		  	   TB_USER_CERT
+		 WHERE
+		 	   CERT_EMAIL = #{certEmail}
+		   AND
+		   	   CERT_SECRET = #{certSecret}
+		   AND
+		   	   CERT_DATE BETWEEN SYSDATE - 1/24 AND SYSDATE
+	</select>
+	
+	<delete id="deleteCert" parameterType="cert">
+		DELETE
+			   TB_USER_CERT
+		 WHERE
+		 	   CERT_EMAIL = #{certEmail}
+		   AND
+		   	   CERT_SECRET = #{certSecret}
+	</delete>
+
+</mapper>

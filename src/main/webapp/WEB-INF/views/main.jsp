@@ -10,22 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <style>
-	#menubar{
-		width : 1200px;
-		height : 60px;
-		
-		box-sizing : border-box;
-		margin:auto;
-		padding:0;
-	}
-	.menu
-	{
-		height:100%;
-		float:left;
-		width : 200px;
-		cursor:pointer;
-		margin:auto;
-	}
+
 	#placeholder{
 		width : 1200px;
 		height : 800px;
@@ -39,15 +24,7 @@
 </style>
 </head>
 <body>
-	<div id="menubar">
-
-		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
-
-		<div class="menu"><h1>CHALLENGE</h1></div>
-		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
-		<div class="menu"><h1>MOVE</h1></div>
-		<div class="menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
-	</div>
+	<jsp:include page="common/header.jsp" />
 	<div id="placeholder">
 	<img src="resources/images/cookieChunsik.jpg">
 	
@@ -56,6 +33,11 @@
 	<script>
 		$(()=>{
 			$('.menu').hover(function(){
+				$(this).css('color', 'red');
+			}, function(){
+				$(this).css('color', 'black');
+			});
+			$('.login-menu').hover(function(){
 				$(this).css('color', 'red');
 			}, function(){
 				$(this).css('color', 'black');
