@@ -23,9 +23,9 @@ public interface ChallengeService {
 	
 	Challenge selectChallengeDetail(int challengeNo);
 	
-	int increaseLikeCount(int userNo, int challengeNo);
+	int increaseLikeCount(HashMap<String, Integer> map);
 	
-	int decreaseLikeCount(int userNo, int challengeNo); //loginUser.userNo
+	int decreaseLikeCount(HashMap<String, Integer> map); //loginUser.userNo
 	
 	// challengeEnrollForm과 수정
 	

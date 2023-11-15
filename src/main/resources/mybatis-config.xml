@@ -13,10 +13,11 @@
 		<typeAlias type="com.kh.eco.product.model.vo.Product" alias="product"/>
 		<typeAlias type="com.kh.eco.product.model.vo.ProductOption" alias="option"/>
 		<typeAlias type="com.kh.eco.book.model.vo.Book" alias="book" />
+		<typeAlias type="com.kh.eco.challenge.model.vo.Challenge" alias="challenge" />
 	</typeAliases>
 
 	<mappers>
-
+		<mapper resource="/mapper/challenge/challenge-mapper.xml" />
 		<mapper resource="/mapper/user/user-mapper.xml"/>
 		<mapper resource ="/mapper/product/product-mapper.xml"/>
   	<mapper resource="/mapper/book/book-mapper.xml" />
