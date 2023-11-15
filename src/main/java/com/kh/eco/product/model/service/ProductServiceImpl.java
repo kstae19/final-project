@@ -28,4 +28,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.addLike(sqlSession, like);
 	}
 
+	@Override
+	public Product selectProduct(int productNo) {
+		return dao.selectProduct(sqlSession, productNo);
+	}
+
 }

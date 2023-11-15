@@ -11,5 +11,6 @@ import com.kh.eco.product.model.vo.Product;
 public interface ProductService {
 	ArrayList<Product> selectProductList();
 	int addLike(HashMap like);
+	Product selectProduct(int productNo);
 
 }

@@ -107,21 +107,22 @@ div {
 	height: 49%;
 	float: left;
 	margin: 2px;
+	cursor:pointer;
 }
 
-.product>table {
+.product table {
 	display: none;
 	padding-top: 50px;
 	padding-left: 100px;
 	text-align:center;
 }
-.product>table img{
+.product table img{
 	width : 50px;
 	height:50px;
 }
 
 .product>h1 {
-	color: beige;
+	color: rgb(205, 205, 154);
 	font-size: 40px;
 	text-align: center;
 	line-height: 380px;
@@ -134,6 +135,7 @@ div {
 .like-cart>img {
 	width: 30px;
 	height: 30px;
+	cursor:pointer;
 }
 </style>
 </head>
@@ -161,8 +163,9 @@ div {
 			<div id="product-area">
 				<div id="products">
 					<c:forEach var="p" items="${productList }">
-						<div id="product${p.productNo }" class="product">
+						<div id="${p.productNo }" class="product">
 							<h1>${p.productName }</h1>
+							<div>
 							<table class="table">
 								<thead>
 									<tr>
@@ -177,24 +180,28 @@ div {
 											<td>${option.price }</td>
 										</tr>
 									</c:forEach>
-									<tr>
-									<td colspan="2"><img onclick="like(${p.productNo});" src="resources/images/heart-solid.svg"></td>
+									<tr>	
+									<td colspan="2"><img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg"></td>
 									</tr>
 								</tbody>
 							</table>
+							</div>
 							
 						</div>
 						<script>
 							$(function() {
-								$('#product${p.productNo}').css({
+								$('#${p.productNo}').css({
 									"background-image" : "url(${p.mainImg})",
-									"background-size" : "cover"
+									"background-size" : "cover",
+									"opacity" : "0.9"
 								}).hover(()=>{
-									$('#product${p.productNo}>h1').css("display", "none");
-									$('#product${p.productNo}>table').css('display', 'block');
+									$('#${p.productNo}>h1').css("display", "none");
+									$('#${p.productNo} table').css('display', 'block');
 								}, ()=>{
-									$('#product${p.productNo}>table').css("display", "none");
-									$('#product${p.productNo}>h1').css('display', 'block');
+									$('#${p.productNo} table').css("display", "none");
+									$('#${p.productNo}>h1').css('display', 'block');
+								}).click(()=>{
+									location.href='product.detail?productNo='+${p.productNo};
 								});
 							})
 						</script>
@@ -205,7 +212,7 @@ div {
 					function like(pno){
 						console.log(pno);
 						$.ajax({
-							url : 'product/like',
+							url : 'product.like',
 							data : {
 								productNo : pno
 							},
@@ -218,6 +225,11 @@ div {
 						})
 					}
 				</script>
+				<c:if test = "${!empty loginUser}">
+					<script>
+						
+					</script>
+				</c:if>
 				
 				
 				<div id="newist">
