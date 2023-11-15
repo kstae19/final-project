@@ -140,6 +140,7 @@ div {
 </style>
 </head>
 <body>
+<jsp:include page="../common/header.jsp"/>
 	<div class="outer">
 		<br> <br>
 		<div id="content">

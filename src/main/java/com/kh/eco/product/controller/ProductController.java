@@ -1,5 +1,6 @@
 package com.kh.eco.product.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,36 @@ public class ProductController {
 		HashMap like = new HashMap();
 		like.put("productNo", productNo);
 		like.put("userNo", userNo);
+		System.out.println("유저넘버 넘어왔나 ? :"+userNo);
 		int result = productService.addLike(like);
 		if(result>0) {			
-			return "안녕안녕";
+			return "ne";
 		}else {
-			return "좋아요 못눌름";
+			return "aniyo";
 		}
 	}
 	@GetMapping("product.detail")
 	public String showDetail(int productNo, Model model) {
-		Product p = productService.selectProduct(productNo);
-		System.out.println(p);
-		model.addAttribute("p", p);
+		model.addAttribute("p", productService.selectProduct(productNo));
+		model.addAttribute("images", productService.getImages(productNo));
+		model.addAttribute("brand", productService.getBrand(productNo));
+		model.addAttribute("review", productService.getRate(productNo));
 		return "product/productDetail";
 	}
 	@RequestMapping("product.orderForm")
 	public String orderForm() {
 		
+		return "redirect:/";
+	}
+	@ResponseBody
+	@GetMapping(value ="getPrice")
+	public String getPrice(int optionNo) {
+		String price = productService.getPrice(optionNo);
+		return price;
+	}
+	@GetMapping("product.review")
+	public String reviewList(int productNo) {
+		System.out.println(productNo);
 		return "redirect:/";
 	}
 }
