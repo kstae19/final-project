@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.eco.product.model.service.ProductService;
-import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductReview;
 
 @Controller
 public class ProductController {
@@ -59,8 +59,9 @@ public class ProductController {
 		return price;
 	}
 	@GetMapping("product.review")
-	public String reviewList(int productNo) {
-		System.out.println(productNo);
-		return "redirect:/";
+	public String reviewList(int productNo, Model model) {
+		ArrayList<ProductReview> reviews = productService.reviewList(productNo);
+		model.addAttribute("reviews", reviews);
+		return "product/productReview";
 	}
 }

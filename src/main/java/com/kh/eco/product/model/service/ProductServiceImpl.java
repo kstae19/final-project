@@ -55,4 +55,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.getRate(sqlSession, productNo);
 	}
 
+	@Override
+	public ArrayList<ProductReview> reviewList(int productNo) {
+		return dao.reviewList(sqlSession, productNo);
+	}
+
 }

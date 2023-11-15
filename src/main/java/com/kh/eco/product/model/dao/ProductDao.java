@@ -35,5 +35,8 @@ public class ProductDao {
 	public ProductReview getRate(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.selectOne("productMapper.getRate", productNo);
 	}
+	public ArrayList<ProductReview> reviewList(SqlSessionTemplate sqlSession, int productNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.reviewList", productNo);
+	}
 
 }

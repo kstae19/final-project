@@ -18,4 +18,5 @@ public interface ProductService {
 	ArrayList<String> getImages(int productNo);
 	Brand getBrand(int productNo);
 	ProductReview getRate(int productNo);
+	ArrayList<ProductReview> reviewList(int productNo);
 }

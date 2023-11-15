@@ -17,7 +17,7 @@ div {
 	border : 1px solid orange;
 }
 
-#product-content {
+.product-content {
 	width: 1000px;
 	margin: auto;
 }
@@ -116,7 +116,7 @@ div {
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<div id="product-content">
+	<div class="product-content">
 		<div id="product-top">
 			<div id="main-pic">
 				<img src="${p.mainImg }">
