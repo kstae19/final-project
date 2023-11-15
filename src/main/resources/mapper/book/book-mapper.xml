@@ -1,1 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bookMapper">
+	
+	<!-- resultMap 영역 -->
+	
+	
+	
+	<!-- 도서 조회수 조회 -->
+	<select id="countList" resultType="book">
+		SELECT
+			ISBN13 ISBN13,
+    		BOOK_COUNT bookCount
+		FROM
+			TB_BOOK
+	</select>
+
+	<!-- 도서정보insert -->
+	<insert id="bookImport" parameterType="string">
+		INSERT INTO BOOK
+						(
+						ISBN13
+						)
+		VALUES
+						(
+						#{ISBN}
+						)
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
+
