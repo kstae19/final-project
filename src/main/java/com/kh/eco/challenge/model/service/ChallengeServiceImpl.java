@@ -64,43 +64,43 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	@Override
 	public int increaseViewCount(int challengeNo) {
 		
-		return 0;
+		return challengeDao.increaseViewCount(sqlSession, challengeNo);
 	}
 
 	@Override
 	public Challenge selectChallengeDetail(int challengeNo) {
 		
-		return null;
+		return challengeDao.selectChallengeDetail(sqlSession, challengeNo);
 	}
 
 	@Override
 	public int increaseLikeCount(int userNo, int challengeNo) {
 	
-		return 0;
+		return challengeDao.increaseLikeCount(sqlSession, userNo, challengeNo);
 	}
 
 	@Override
 	public int decreaseLikeCount(int userNo, int challengeNo) {
 	
-		return 0;
+		return  challengeDao.decreaseLikeCount(sqlSession, userNo, challengeNo);
 	}
 
 	@Override
 	public int insertChallenge(Challenge c) {
 		
-		return 0;
+		return challengeDao.insertChallenge(sqlSession, c);
 	}
 
 	@Override
 	public int updateChallenge(Challenge c) {
 		
-		return 0;
+		return challengeDao.updateChallenge(sqlSession, c);
 	}
 
 	@Override
 	public int deleteChallenge(int challengeNo) {
 		
-		return 0;
+		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
 
 

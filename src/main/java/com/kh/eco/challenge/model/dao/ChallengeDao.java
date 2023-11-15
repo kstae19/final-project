@@ -33,4 +33,41 @@ public class ChallengeDao {
 		return null;
 	}
 
+	public int increaseViewCount(SqlSessionTemplate sqlSession, int challengeNo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Challenge selectChallengeDetail(SqlSessionTemplate sqlSession, int challengeNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public int increaseLikeCount(SqlSessionTemplate sqlSession, int userNo, int challengeNo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int decreaseLikeCount(SqlSessionTemplate sqlSession, int userNo, int challengeNo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int insertChallenge(SqlSessionTemplate sqlSession, Challenge c) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int updateChallenge(SqlSessionTemplate sqlSession, Challenge c) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int deleteChallenge(SqlSessionTemplate sqlSession, int challengeNo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
 }
