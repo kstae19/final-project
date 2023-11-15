@@ -7,6 +7,9 @@
 	<result property="productNo" column="PRODUCT_NO"/>
 	<result property="productName" column="PRODUCT_NM"/>
 	<result property="mainImg" column="MAIN_IMG"/>
+	<result property="productInfo" column = "PRODUCT_INFO"/>
+	<result property="detailInfo" column = "DETAIL_INFO"/>
+	<result property="extraInfo" column = "EXTRA_INFO"/>
 	<collection property="optionList" ofType="option">
 		<result column = "OPTION_NO" property = "optionNo"/>
 		<result column = "OPTION_NM" property="optionName"/>
@@ -34,4 +37,26 @@ SELECT
 <insert id="addLike" parameterType="hashmap">
 INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </insert>
+
+<select id = "selectProduct" parameterType = "_int"  resultMap="resultProductMap">
+SELECT 
+	PRODUCT_NO, 
+	PRODUCT_NM, 
+	PRODUCT_INFO, 
+	DETAIL_INFO, 
+	EXTRA_INFO, 
+	BRAND_NO, 
+	MAIN_IMG, 
+	OPTION_NO, 
+	OPTION_NM, 
+	PRICE
+FROM 
+	TB_PRODUCT 
+JOIN 
+	TB_PRODUCT_OPTION O USING (PRODUCT_NO) 
+WHERE 
+	O.STATUS IN ('Y', 'O') 
+AND 
+	PRODUCT_NO = #{productNo}
+</select>
 </mapper>

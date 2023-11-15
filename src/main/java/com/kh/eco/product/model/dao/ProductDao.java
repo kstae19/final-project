@@ -17,5 +17,8 @@ public class ProductDao {
 	public int addLike(SqlSession sqlSession, HashMap like) {
 		return sqlSession.insert("productMapper.addLike", like);
 	}
+	public Product selectProduct(SqlSession sqlSession, int productNo) {
+		return sqlSession.selectOne("productMapper.selectProduct", productNo);
+	}
 
 }
