@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.eco.product.model.dao.ProductDao;
+import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductReview;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -31,6 +33,26 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product selectProduct(int productNo) {
 		return dao.selectProduct(sqlSession, productNo);
+	}
+
+	@Override
+	public String getPrice(int optionNo) {
+		return dao.getPrice(sqlSession, optionNo);
+	}
+
+	@Override
+	public ArrayList<String> getImages(int productNo) {
+		return dao.getImages(sqlSession, productNo);
+	}
+
+	@Override
+	public Brand getBrand(int productNo) {
+		return dao.getBrand(sqlSession, productNo);
+	}
+
+	@Override
+	public ProductReview getRate(int productNo) {
+		return dao.getRate(sqlSession, productNo);
 	}
 
 }
