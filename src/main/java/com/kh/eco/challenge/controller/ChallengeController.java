@@ -75,7 +75,7 @@ public class ChallengeController {
 		
 		if( !upfile.getOriginalFilename().equals("") ) {
 			
-			System.out.println("upfile은 null이 아니야");
+			//System.out.println("upfile은 null이 아니야");
 			// challenge에 업로드한 파일 원본명/새이름 세팅
 			c.setOriginName(upfile.getOriginalFilename());
 			c.setChangeName(saveFile(upfile, session));

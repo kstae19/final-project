@@ -70,7 +70,7 @@
 
 		<!--파일을 첨부하는 요청을 할 때는 반드시 form태그에 enctype="multipart/form-data" 를 추가해줘야함!!-->
         <form enctype="multipart/form-data" action="insert.ch" id="enrollform" method="post">
-			<input type="hidden" name="user" value="${loginUser.userNo }" />
+			<input type="hidden" name="userNo" value="${loginUser.userNo }" />
             <article id="content-items">
             	<div class="content-item">
 	            	<label for="title">

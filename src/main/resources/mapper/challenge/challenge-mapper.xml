@@ -176,45 +176,35 @@
 						CHALLENGE_NO,
 						CHALLENGE_TITLE,
 						CHALLENGE_CONTENT,
-						CHALLENGE_PLACE,
-						
+						CHALLENGE_PLACE,			
 						ACHIEVEMENT_COUNT,
 						SUCCESS_LIMIT,
 						MIN_PARTICIPANT,
 						MAX_PARTICIPANT,
-					<!-- 	STATUS
-						VIEW_COUNT
-						LIKE_COUNT
-						MODIFY_DATE-->
 						ORIGIN_NAME,
 						CHANGE_NAME,
 						UPLOAD_DATE,
-				
 						START_DATE,
 						END_DATE,
 						USER_NO,
 						CATEGORY_NO
 						)
-		
 		VALUES(
-		SEQ_CHALLENGE_NO.NEXTVAL,
-		#{challengeTitle},
-		#{challengeContent},
-		#{challengePlace},
-		
-		#{achievementCount},
-		#{successLimit},
-		#{minParticipant},
-		#{maxParticipant},
-		
-		#{originName},
-		#{changeName},
-		SYSDATE,
-		
-		#{startDate},
-		#{endDate},
-		#{userNo},
-		#{categoryNo}
+						SEQ_CHALLENGE_NO.NEXTVAL,
+						#{challengeTitle},
+						#{challengeContent},
+						#{challengePlace},
+						#{achievementCount},
+						#{successLimit},
+						#{minParticipant},
+						#{maxParticipant},	
+						#{originName},
+						#{changeName},
+						SYSDATE,
+						#{startDate},
+						#{endDate},
+						#{userNo},
+						#{categoryNo}
 		)
 	</insert>
 	
