@@ -47,21 +47,28 @@
         #book-container>div>p{
             margin-bottom: 5px;
         }
-
     </style>
+    <c:if test="${ not empty selectBook }">
+		<script>
+			$(function(){
+				$('#book-search option[value=${selectBook}]').attr('selected', true);
+			})				
+		</script>
+	</c:if>
 </head>
 <body>
 
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
-        <form class="search-form" action="booksearch.bk" >
-            <select name="search-book">
+        <form id="book-search" class="search-form" action="searchbook.bk" >
+            <select name="selectBook">
                 <option value="title">제목</option>
                 <option value="writer">작가</option>
                 <option value="category">카테고리</option>
             </select>
-            <input type="text" name="book-search">
+            <input type="text" name="searchBook">
             <button type="submit">검색</button>
         </form>
         <br><br>
@@ -72,33 +79,74 @@
             		<img src="${ b.bookImg }">
             		<p>${ b.bookTitle }</p>
             		<p>${ b.bookWriter }</p>
-            		<p>조회수 : ${ b.bookCount }</p>
+            		<p>조회수 : </p>
+            		<p id="book-count">${ b.bookCount }</p>
+	            	<input type="hidden" name="ISBN" value="${ b.ISBN13 }">
             	</div>
             </c:forEach>
         </div>
         <br>
-
-        <ul class="pagination justify-content-center">
-        	<c:choose>
-	       		<c:when test="${ pi.currentPage eq 1 }">
-	             <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-	       		</c:when>
-	       		<c:otherwise>
-	       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
-	       		</c:otherwise>
-	       	</c:choose>
-	           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-	           <li class="page-item"><a class="page-link" href="book?cPage=${p}">${p}</a></li>
-	           </c:forEach>
-	           <c:choose>
-	       		<c:when test="${ pi.currentPage eq pi.maxPage }">
-	       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-	       		</c:when>
-	       		<c:otherwise>
-	       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
-	       		</c:otherwise>
-	       	</c:choose>
-        </ul>
+		
+		<c:choose>
+			<c:when test="${ empty selectBook }">
+				<ul class="pagination justify-content-center">
+		        	<c:choose>
+			       		<c:when test="${ pi.currentPage eq 1 }">
+			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+			           		<li class="page-item"><a class="page-link" href="book?cPage=${p}">${p}</a></li>
+			           </c:forEach>
+			           <c:choose>
+			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+        		</ul>
+			</c:when>
+			<c:otherwise>
+				<ul class="pagination justify-content-center">
+		        	<c:choose>
+			       		<c:when test="${ pi.currentPage eq 1 }">
+			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage - 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Previous</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+			           		<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${p}&searchBook=${searchBook}&selectBook=${selectBook}">${p}</a></li>
+			           </c:forEach>
+			           <c:choose>
+			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage + 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Next</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+	        	</ul>
+			</c:otherwise>
+		</c:choose>
+		
+		
+		
+		<script>
+			$(function(){
+				$('#book-container div').click(function(){
+					location.href='bookdetail.bk?ISBN='+$(this).children('input[name=ISBN]').val() + '&count=' + $(this).children('#book-count').text();
+				})
+			})
+		</script>
+		
+        
     </div>
 </body>
 </html>

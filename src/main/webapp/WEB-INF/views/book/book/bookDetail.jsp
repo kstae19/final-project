@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,49 +40,77 @@
             grid-column: 2 / 3;
 	        grid-row: 2 / 3;
         }
-
         
+        .bookmark{
+        	content: url(http://localhost:8001/eco/resources/images/book/book-empty.png);
+        }
+        img[class$=abled]{
+        	content: url(http://localhost:8001/eco/resources/images/book/book-full.png);
+        }
     </style>
+    <script>
+    	function bookList(){
+    		location.href="book";
+    	}
+    	
+    	function bookmark(){
+    		$.ajax({
+    			url : 'bookmark.bk',
+    			type : 'get',
+    			data : {
+    				className: $('.bookmark').attr('class')
+    			},
+    			success : result => {
+    				console.log(result);
+    			},
+    			error : () => {
+    				console.log("북마크 통신 실패");
+    			}
+    		})
+    	}
+    </script>
 </head>
 <body>
-
+	
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
         <div>
-            <button type="button" class="btn btn-secondary">목록</button>
-            <span>카테고리</span>
+            <button type="button" class="btn btn-secondary" onclick="bookList();">목록</button>
+            <span>${ b.bookCategory }</span>
+            <!-- 로그인유저처리 -->
             <span id="" style="float: right;">내 서재에 담기</span>
-            <img src="/resources/book-empty.png" style="height: 30px; width: 30px; float: right;">
+            <img class="bookmark" src="" style="height: 30px; width: 30px; float: right;" onclick="bookmark();">
         </div>
         <br>
         <div id="bookform-grid">
-            <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-            <span style="font-size: 50px;">책 제목</span>
+            <img src="${ b.bookImg }">
+            <span style="font-size: 50px;">${ b.bookTitle }</span>
             <table class="table table-bordered">
                 <tr>
                     <th>작가</th>
-                    <td>Doe</td>
+                    <td>${ b.bookWriter }</td>
                 </tr>
                 <tr>
                     <th>출판사</th>
-                    <td>Moe</td>
+                    <td>${ b.bookPublisher }</td>
                 </tr>
                 <tr>
                     <th>조회수</th>
-                    <td>Dooley</td>
+                    <td>${ b.bookCount }</td>
                 </tr>
                 <tr>
                     <th>ISBN</th>
-                    <td>Dooley</td>
+                    <td>${ b.ISBN13 }</td>
                 </tr>
               </table>
         </div>
         <p>
-            소개글행복스럽고 평화스러운 곳으로 인도하겠다는 커다란 이상을 품었기 때문이다 그러므로 그들은 길지 아니한 목숨을 사는가 싶이 살았으며 그들의 그림자는 천고에 사라지지 않는 것이다 이것은 현저하게 일월과 같은 예가 되려니와 그와 같지 못하다 할지라도
+            ${ b.bookContent }
         </p>
 
-        <p>알라딘 구매 링크 - <a href="#">링크</a></p>
+        <p><a href="${ b.bookLink }">알라딘 구매 링크</a></p>
 
         <hr>
 
