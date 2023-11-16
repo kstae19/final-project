@@ -14,4 +14,7 @@ public interface UserService {
 	int sendMail(Cert cert);
 
 	int vaildate(Cert cert);
+	
+	// 회원가입 서비스
+	int insertMember(User u);
 }
