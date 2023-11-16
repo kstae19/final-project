@@ -113,18 +113,19 @@ WHERE
 <select id="reviewList" parameterType="_int" resultType="productReview">
 SELECT 
     REVIEW_NO reviewNo, 
-    OPTION_NM option, 
+    OPTION_NM "option", 
     REVIEW_TITLE reviewTitle, 
     REVIEW_CONTENT reviewContent, 
-    STAR_RATE starRate
-FROM TB_PRODUCT_REVIEW R
+    STAR_RATE starRate 
+FROM TB_PRODUCT_REVIEW R 
 JOIN TB_PRODUCT_OPTION USING(OPTION_NO) 
-WHERE R.STATUS='Y' 
+WHERE R.STATUS='Y'
 AND OPTION_NO IN (
                 SELECT OPTION_NO 
                 FROM TB_PRODUCT_OPTION 
                 WHERE PRODUCT_NO = #{productNo}
                 )
+</select>
 <select id="getLikes" parameterType="_int" resultType="productLike">
 SELECT 
 	PRODUCT_NO productNo, 

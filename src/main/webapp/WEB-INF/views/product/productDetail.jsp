@@ -118,6 +118,13 @@ div {
 	margin-left : 100px;
 
 }
+.detail-info, .extra-info{
+	width : 800px;
+	margin:auto;
+}
+#review-area>h2{
+	cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -141,7 +148,10 @@ div {
 						<div id="like"><img onclick="like(${p.productNo})" src="resources/images/heart-regular.svg"></div>
 						</c:otherwise>
 					</c:choose>
-						<div id="star"><a href="product.review?productNo=${p.productNo }">${review.starRate }/5</a><br>(${review.reviewNo }개) </div>
+						<div id="star">
+						<a href="product.review?productNo=${p.productNo }">${review.starRate }/5</a>
+						<br>(${review.reviewNo }개) 
+						</div>
 					</div>
 				</div>
 
@@ -232,11 +242,57 @@ div {
 					})
 				</script>
 		<div id="picture-area">
+			<div class="detail-info">
+				<h3>상품 설명</h3>
+				<p>${p.detailInfo }</p>
+			</div>
+			<hr>
 			<c:forEach items="${images }" var="img">
 				<img src="${img}">
 				<br>
 			</c:forEach>
+			<hr>
+			<div class="extra-info">
+				<h3>상품 정보</h3>
+				<p>${p.extraInfo }</p>
+			</div>
 		</div>
+		<hr>
+		<div id="review-area">
+			 <c:choose>
+			 	<c:when test="${empty review.reviewNo}">
+			 		<h2>상품 리뷰가 없습니다.</h2>
+			 	</c:when>
+			 	<c:otherwise>
+			 		<h2 onclick="showReviews();">리뷰 보기(${review.reviewNo }개)</h2>
+			 	</c:otherwise>			 	
+			 </c:choose>
+			 <div></div>
+		</div>
+		<script>
+			function showReviews(){
+				$.ajax({
+					url:'product.review',
+					data:{productNo:${p.productNo}},
+					success: reviews => {
+						console.log(reviews);
+						let value = '<div><table><tbody>';
+						for(let i in reviews){
+							value += '<tr>'
+								+ '<td><i>'+reviews[i].option+'</i> <b>'+reviews[i].reviewTitle+'</b></tr>'
+								+'<tr>'
+								+ '<td>'+reviews[i].reviewContent+'</td>'
+								+'</tr>';	
+						}
+						value += '</tbody></table></div>';
+						$('#review-area>div').html(value);
+					},
+					error:()=>{
+						alert('지겨웡~~~~~~~~~~');
+					}
+				});
+			}
+		</script>
 	</div>
 </body>
 </html>

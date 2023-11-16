@@ -143,8 +143,8 @@ div {
 			</div>
 
 			<div id="controll-area">
-				<button>FOOD</button>
-				<button>Eco Friendly Items</button>
+				<button onclick="sort('F');">FOOD</button>
+				<button onclick="sort('P');">Eco Friendly Items</button>
 
 				<select>
 					<option>최신순</option>
@@ -238,6 +238,9 @@ div {
 								console.log('세상은 요지경~~');
 							}
 						})
+					}
+					function sort(type){
+						
 					}
 				</script>
 				<c:if test = "${!empty loginUser}">
