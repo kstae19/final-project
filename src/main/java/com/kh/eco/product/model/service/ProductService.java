@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
 
-@Service
 public interface ProductService {
 	ArrayList<Product> selectProductList();
 	int addLike(HashMap like);
@@ -19,4 +19,6 @@ public interface ProductService {
 	Brand getBrand(int productNo);
 	ProductReview getRate(int productNo);
 	ArrayList<ProductReview> reviewList(int productNo);
+	ArrayList<ProductLike> getLikes(int userNo);
+
 }

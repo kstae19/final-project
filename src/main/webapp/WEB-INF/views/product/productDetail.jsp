@@ -97,11 +97,16 @@ div {
 	height: 45%;
 	text-align:center;
 }
-#choice input, select {
-	width: 80%;
+#choice input, select{
+	width: 70%;
 	height: 30px;
 	border: none;
-	margin-left:50px;
+}
+#choice p{
+	text-align:left;
+	color:orangered;
+		padding:0;
+	margin:0;
 }
 #picture-area {
 	width: 100%;
@@ -111,6 +116,7 @@ div {
 	width: 800px;
 	height: 600px;
 	margin-left : 100px;
+
 }
 </style>
 </head>
@@ -127,7 +133,14 @@ div {
 						<h1>${p.productName }</h1>
 					</div>
 					<div id="like-star">
+					<c:choose>
+						<c:when test="${empty sessionScope.loginUser }">
+							<div id="like"><img onclick="askLogin();" src="resources/images/heart-regular.svg"></div>
+						</c:when>
+						<c:otherwise>
 						<div id="like"><img onclick="like(${p.productNo})" src="resources/images/heart-regular.svg"></div>
+						</c:otherwise>
+					</c:choose>
 						<div id="star"><a href="product.review?productNo=${p.productNo }">${review.starRate }/5</a><br>(${review.reviewNo }개) </div>
 					</div>
 				</div>
@@ -157,22 +170,33 @@ div {
 							<span id="totalPrice"></span>
 							
 							<br>
-							
+						<c:choose>
+						<c:when test="${!empty sessionScope.loginUser }">	
 							<button type="button">장바구니 추가</button>
 							<button type="submit">구매하기</button>
+						</c:when>
+						<c:otherwise>
+							<p>로그인 후 상품 주문이 가능합니다.</p>
+						</c:otherwise>
+						</c:choose>
 						</form>
 					</div><!-- 옵션 선택 영역 끝 -->
 				</div><!-- 제품 설명영역 끝 -->
 			</div>
 		</div>
 				<script>
+					function askLogin(){
+						if(confirm('로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?')){
+						location.href='login';
+						}
+					}
 					function like(pno){
 						console.log(pno);
 						$.ajax({
 							url : 'product.like',
 							data : {
 								productNo : pno,
-								userNo : ${loginUser.userNo}
+								//userNo : ${loginUser.userNo}
 							},
 							success : e => {
 								console.log(e);

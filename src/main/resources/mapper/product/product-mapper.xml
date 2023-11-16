@@ -16,6 +16,11 @@
 		<result column = "PRICE" property="price"/>
 	</collection>
 </resultMap>
+<resultMap id="resultLikeMap" type = "productLike">
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="userNo" column="USER_NO"/>
+	<result property="addDate" column="ADD_DATE"/>
+</resultMap>
 <select id="selectProductList" resultMap="resultProductMap">
 SELECT 
 		PRODUCT_NO, 
@@ -120,5 +125,13 @@ AND OPTION_NO IN (
                 FROM TB_PRODUCT_OPTION 
                 WHERE PRODUCT_NO = #{productNo}
                 )
+<select id="getLikes" parameterType="_int" resultType="productLike">
+SELECT 
+	PRODUCT_NO productNo, 
+	USER_NO userNo 
+FROM 
+	TB_PRODUCT_LIKE 
+WHERE 
+	USER_NO = #{userNo}
 </select>
 </mapper>

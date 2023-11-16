@@ -15,6 +15,15 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Alertify -->
+<!-- JavaScript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
 
 <style>
 @font-face {
@@ -30,6 +39,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	border:1px solid saddlebrown;
 }
 
 .outer {
@@ -82,32 +92,24 @@ div {
 #product-area {
 	font-family: 'SBAggroB';
 	width: 100%;
-	height: 90%;
-}
-
-#newist {
-	width: 30%;
-	height: 100%;
-	float: left;
-}
-
-#newist>img {
-	width: 100%;
-	height: 35%;
 }
 
 #products {
-	width: 70%;
-	height: 100%;
-	float: left;
+	width: 100%;
+	display:flex;
 }
 
+
 .product {
-	width: 49%;
-	height: 49%;
-	float: left;
-	margin: 2px;
+	float:left;
+	width: 400px;
+	height: 400px;
+	padding: 2px;
 	cursor:pointer;
+}
+.product>div{
+	width:100%;
+	height:90%;
 }
 
 .product table {
@@ -116,26 +118,17 @@ div {
 	padding-left: 100px;
 	text-align:center;
 }
-.product table img{
-	width : 50px;
-	height:50px;
+.product>span>img{
+	width : 40px;
+	height:40px;
 }
 
-.product>h1 {
+.product h1 {
 	color: rgb(205, 205, 154);
 	font-size: 40px;
+	font-weight:300;
 	text-align: center;
-	line-height: 380px;
-}
-
-.like-cart {
-	padding-left: 135px;
-}
-
-.like-cart>img {
-	width: 30px;
-	height: 30px;
-	cursor:pointer;
+	line-height: 300px;
 }
 </style>
 </head>
@@ -164,9 +157,10 @@ div {
 			<div id="product-area">
 				<div id="products">
 					<c:forEach var="p" items="${productList }">
-						<div id="${p.productNo }" class="product">
-							<h1>${p.productName }</h1>
+						<div id="${p.productNo }" class="product">	
+							<!--  -->					
 							<div>
+							<h1>${p.productName }</h1>
 							<table class="table">
 								<thead>
 									<tr>
@@ -181,14 +175,23 @@ div {
 											<td>${option.price }</td>
 										</tr>
 									</c:forEach>
-									<tr>	
-									<td colspan="2"><img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg"></td>
+									<tr>
 									</tr>
 								</tbody>
 							</table>
-							</div>
-							
+							</div><!-- product-info -->
+							<span>
+									<c:choose>
+									<c:when test="${empty sessionScope.loginUser }">
+										<img onclick="askLogin();" src="resources/images/heart-regular.svg">
+									</c:when>
+									<c:otherwise>
+										<img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg">
+									</c:otherwise>
+									</c:choose>
+							</span>
 						</div>
+							
 						<script>
 							$(function() {
 								$('#${p.productNo}').css({
@@ -196,20 +199,31 @@ div {
 									"background-size" : "cover",
 									"opacity" : "0.9"
 								}).hover(()=>{
-									$('#${p.productNo}>h1').css("display", "none");
+									$('#${p.productNo} h1').css("display", "none");
 									$('#${p.productNo} table').css('display', 'block');
 								}, ()=>{
 									$('#${p.productNo} table').css("display", "none");
-									$('#${p.productNo}>h1').css('display', 'block');
-								}).click(()=>{
+									$('#${p.productNo} h1').css('display', 'block');
+								});
+								$('#${p.productNo}>div').click(()=>{
 									location.href='product.detail?productNo='+${p.productNo};
 								});
 							})
 						</script>
 					</c:forEach>
+					</div>
 				</div>
 				
 				<script>
+					function askLogin(){
+						alertify.confirm('로그인','로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?',
+								()=>{
+									location.href='login';
+								},
+								()=>{
+									alertify.error('비회원으로 계속합니다.');
+								});
+					}
 					function like(pno){
 						console.log(pno);
 						$.ajax({
@@ -232,42 +246,7 @@ div {
 					</script>
 				</c:if>
 				
-				
-				<div id="newist">
-					<img src="resources/images/saltedbutter.jpg"> <img
-						src="resources/images/butterpantry.png"> <br> <br>
-					<div class="like-cart">
-						<img src="resources/images/heart-solid.svg"> <img
-							src="resources/images/shopping-cart-solid.svg">
-					</div>
-					<br>
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th></th>
-								<th>옵션명</th>
-								<th>가격</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>바보춘식</td>
-								<td>150000</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>똑똑춘식</td>
-								<td>250000</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>보통춘식</td>
-								<td>50000</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			
 			</div>
 		</div>
 	</div>
