@@ -108,6 +108,7 @@ public class AjaxBookController {
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
 		map.put("replyList", list);
+		map.put("replyPi", pi);
 		
 		Gson gson = new GsonBuilder().create();
 		String jsonMap = gson.toJson(map);

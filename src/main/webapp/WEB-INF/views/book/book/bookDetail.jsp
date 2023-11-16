@@ -48,115 +48,151 @@
         	content: url(http://localhost:8001/eco/resources/images/book/book-full.png);
         }
     </style>
-    <script>
+    
+    	<c:if test="${ not empty sessionScope.loginUser }">
+    		<script>
+	    		function bookmark(){ // 북마크 등록/삭제 ajax
+	        		$.ajax({
+	        			url : 'bookmark.bk',
+	        			type : 'get',
+	        			data : {
+	        				className: $('.bookmark').attr('class'),
+	        				ISBN13 : '${ b.ISBN13 }',
+	        				userNo : ${ sessionScope.loginUser.userNo }
+	        			},
+	        			success : result => {
+	        				console.log(result);
+	        				
+	        				$('.bookmark').attr('class', result);
+	        			},
+	        			error : () => {
+	        				console.log("북마크 통신 실패");
+	        			}
+	        		});
+	        	}
+	    		
+	    		function insertReply(){ // 한줄평 등록 ajax
+	        		if($('#bookReplyContent').val().trim() != ''){
+	    	    		$.ajax({
+	    	    			url : 'insertbookreply.bk',
+	    	    			async : false,
+	    	    			type : 'get',
+	    	    			data : {
+	    	    				ISBN13 : '${ b.ISBN13 }',
+	    	    				userNo : ${ sessionScope.loginUser.userNo },
+	    	    				content : $('#bookReplyContent').val()
+	    	    			},
+	    	    			success : result => {
+	    	    				console.log(result);
+	    	    				
+	    	    				if(result === 'success'){
+	    	    					$('bookReplyContent').val('');
+	    	    					selectBookReply();
+	    	    				} else{
+	    	    					alert('댓글 등록 실패');
+	    	    				}
+	    	    			},
+	    	    			error : () => {
+	    	    				console.log("댓글 통신 실패");
+	    	    			}
+	    	    		});
+	        		}
+	        	}
+	    		
+	    		function deleteReply(){ // 한줄평 삭제 ajax
+	        		$.ajax({
+	        			url : 'deletebookreply.bk',
+	        			async : false,
+	        			type : 'get',
+	        			data : {
+	        				ISBN13 : '${ b.ISBN13 }',
+	        				userNo : ${ sessionScope.loginUser.userNo }
+	        			},
+	        			success : result => {
+	        				console.log(result);
+	        			},
+	        			error : () => {
+	        				console.log("댓글 통신 실패");
+	        			}
+	        		})
+	        	}
+
+	        	$(function(){
+	        		// 북마크 조회 ajax
+	        		$.ajax({
+	        			url : 'markbook.bk',
+	        			async : false,
+	        			type : 'get',
+	        			data : {
+	        				ISBN13 : '${ b.ISBN13 }',
+	        				userNo : ${ sessionScope.loginUser.userNo }
+	        			},
+	        			success : result => {
+	        				console.log(result);
+	        				
+	        				$('.bookmark').attr('class', result);
+	        			},
+	        			error : () => {
+	        				console.log("북마크 통신 실패");
+	        			}
+	        		});
+	        	})
+    		</script>
+    	</c:if>
+    	<script>
     	function bookList(){ // 목록으로
     		location.href="book";
     	};
     	
-    	function bookmark(){ // 북마크 등록/삭제 ajax
-    		$.ajax({
-    			url : 'bookmark.bk',
-    			type : 'get',
-    			data : {
-    				className: $('.bookmark').attr('class'),
-    				ISBN13 : '${ b.ISBN13 }',
-    				userNo : ${ sessionScope.loginUser.userNo }
-    			},
-    			success : result => {
-    				console.log(result);
-    				
-    				$('.bookmark').attr('class', result);
-    			},
-    			error : () => {
-    				console.log("북마크 통신 실패");
-    			}
-    		});
-    	}
-    	
-    	function insertReply(){ // 한줄평 등록 ajax
-    		if($('#bookReplyContent').val().trim() != ''){
-	    		$.ajax({
-	    			url : 'insertbookreply.bk',
-	    			async : false,
-	    			type : 'get',
-	    			data : {
-	    				ISBN13 : '${ b.ISBN13 }',
-	    				userNo : ${ sessionScope.loginUser.userNo },
-	    				content : $('#bookReplyContent').val()
-	    			},
-	    			success : result => {
-	    				console.log(result);
-	    				
-	    				if(result === 'success'){
-	    					$('bookReplyContent').val('');
-	    					selectBookReply();
-	    				} else{
-	    					alert('댓글 등록 실패');
-	    				}
-	    			},
-	    			error : () => {
-	    				console.log("댓글 통신 실패");
-	    			}
-	    		});
-    		}
-    	}
-    	
-    	function deleteReply(){ // 한줄평 삭제 ajax
-    		$.ajax({
-    			url : 'deletebookreply.bk',
-    			async : false,
-    			type : 'get',
-    			data : {
-    				ISBN13 : '${ b.ISBN13 }',
-    				userNo : ${ sessionScope.loginUser.userNo }
-    			},
-    			success : result => {
-    				console.log(result);
-    			},
-    			error : () => {
-    				console.log("댓글 통신 실패");
-    			}
-    		})
-    	}
-    	
-    	function selectBookReply(){
+    	function selectBookReply(nowPage){
     		// 한줄평 조회 ajax
     		$.ajax({
     			url : 'selectbookreply.bk',
     			async : false,
     			type : 'get',
     			data : {
-    				ISBN13 : '${ b.ISBN13 }'
+    				ISBN13 : '${ b.ISBN13 }',
+					cPage : nowPage    				
     			},
     			success : result => {
     				console.log(result);
+    				
+    				$('#bookReply-count').html(result.replyCount);
+    				
+                	let replyArr = result.replyList;
+    				let replyValue = '';
+    				for(let i in replyArr){
+    					replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
+    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
+    						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
+    				}
+    				$('#bookReply-area').html(replyValue);
+    				
+    				let replyPi = result.replyPi;
+    				let replyPiValue = '';
+    				if(replyPi['currentPage'] == 1){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+    				}
+    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+    				}
+    				if(replyPi['currentPage'] == replyPi['endPage']){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+    				}
+    				
+    				$('#bookReply-pagination').html(replyPiValue);
+    				
     			},
     			error : () => {
     				console.log("댓글 통신 실패");
     			}
     		});
     	}
-    	
-    	$(function(){
-    		// 북마크 조회 ajax
-    		$.ajax({
-    			url : 'markbook.bk',
-    			async : false,
-    			type : 'get',
-    			data : {
-    				ISBN13 : '${ b.ISBN13 }',
-    				userNo : ${ sessionScope.loginUser.userNo }
-    			},
-    			success : result => {
-    				console.log(result);
-    				
-    				$('.bookmark').attr('class', result);
-    			},
-    			error : () => {
-    				console.log("북마크 통신 실패");
-    			}
-    		});
-    	})
     	
     	$(function(){
     		selectBookReply();
@@ -211,25 +247,21 @@
         <div>
             <div>
                 <span>한 줄 평</span>
-                <span>123개</span>
+                <span id="bookReply-count">0개</span>
             </div>
-            <div>
+            <div id="bookReply-area">
             	<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>
-                <p style="margin-bottom: 0px;">아이디</p>
-                <p style="margin-bottom: 0px;">작성날짜</p>
-                <p>리뷰글행복스럽고 평화스러운 곳으로 인도하겠다는 커다란 이상을 품었기 때문이다 그러므로 그들은 길지 아니한 목숨을 사는가 싶이 살았으며 그들의 그림자는 천고에 사라지지 않는 것이다 이것은 현저하게 일월과 같은 예가 되려니와 그와 같지 못하다 할지라도</p>
+                <p style="margin-bottom: 0px;"></p>
+                <p style="margin-bottom: 0px;"></p>
+                <p></p>
             </div>
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <ul class="pagination justify-content-center" id="bookReply-pagination">
+                
             </ul>
             <input id="bookReplyContent" type="text" placeholder="다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
             <c:if test="${ not empty sessionScope.loginUser }">
-             <button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
-             <p>0/50</p>
+	             <button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
+	             <p>0/50</p>
             </c:if>
         </div>
     </div>

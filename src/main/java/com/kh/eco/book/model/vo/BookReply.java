@@ -11,6 +11,6 @@ public class BookReply {
 	private Date bookReplyDate;
 	private String bookReplyContent;
 	private String ISBN13;
-	private int userNo;
+	private String userId;
 
 }

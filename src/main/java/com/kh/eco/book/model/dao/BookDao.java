@@ -50,7 +50,7 @@ public class BookDao {
 	}
 	
 	public ArrayList<BookReply> ajaxSelectBookReply(SqlSessionTemplate sqlSession, String ISBN13, RowBounds rowBounds){
-		return (ArrayList)sqlSession.selectList("ookMapper.ajaxSelectBookReply", ISBN13, rowBounds);
+		return (ArrayList)sqlSession.selectList("bookMapper.ajaxSelectBookReply", ISBN13, rowBounds);
 	}
 
 }

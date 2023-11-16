@@ -5,6 +5,12 @@
 <mapper namespace="bookMapper">
 	
 	<!-- resultMap 영역 -->
+	<resultMap id="bookReplyResultSet" type="bookReply">
+		<result column="BOOK_REPLY_NO" property="bookReplyNo" />
+		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
+		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
+		<result column="USER_ID" property="userId" />
+	</resultMap>
 	
 	
 	
@@ -126,7 +132,7 @@
 	</select>
 	
 	<!-- 도서 한줄평 리스트 조회 -->
-	<select id="ajaxSelectBookReply" parameterType="string" resultType="bookReply">
+	<select id="ajaxSelectBookReply" parameterType="string" resultMap="bookReplyResultSet">
 		SELECT 
 			BOOK_REPLY_NO,
 			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
