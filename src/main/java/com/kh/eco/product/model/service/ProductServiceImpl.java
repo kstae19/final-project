@@ -27,7 +27,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public int addLike(HashMap like) {
+	public int addLike(ProductLike like) {
 		return dao.addLike(sqlSession, like);
 	}
 
@@ -62,6 +62,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 	public ArrayList<ProductLike> getLikes(int userNo) {
 		return dao.getLikes(sqlSession, userNo);
+	}
+
+	@Override
+	public String checkLike(ProductLike like) {
+		return dao.checkLike(sqlSession, like)!=null? "Y":"N";
 	}
 
 }

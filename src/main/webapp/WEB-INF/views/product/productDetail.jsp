@@ -141,11 +141,11 @@ div {
 					</div>
 					<div id="like-star">
 					<c:choose>
-						<c:when test="${empty sessionScope.loginUser }">
+						<c:when test="${like eq 'N' or empty sessionScope.loginUser}">
 							<div id="like"><img onclick="askLogin();" src="resources/images/heart-regular.svg"></div>
 						</c:when>
 						<c:otherwise>
-						<div id="like"><img onclick="like(${p.productNo})" src="resources/images/heart-regular.svg"></div>
+						<div id="like"><img onclick="like(${p.productNo})" src="resources/images/heart-solid.svg"></div>
 						</c:otherwise>
 					</c:choose>
 						<div id="star">
@@ -202,11 +202,12 @@ div {
 					}
 					function like(pno){
 						console.log(pno);
+
 						$.ajax({
 							url : 'product.like',
 							data : {
 								productNo : pno,
-								//userNo : ${loginUser.userNo}
+								userNo : '${loginUser.userNo}';
 							},
 							success : e => {
 								console.log(e);
@@ -217,6 +218,7 @@ div {
 						})
 					}
 					$(()=>{
+
 						$('#choice select').change(()=>{
 							$.ajax({
 								url : 'getPrice',
