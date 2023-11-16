@@ -16,11 +16,11 @@
 		<result column="CHANGE_NAME" property="changeName" />
 		
 		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
-		<!-- <result column="USER_NO" property="userNo" />
-		<result column="CATEGORY_NO" property="categoryNo" /> -->
+		<!-- <result column="USER_ID" property="userId" />
+		<result column="CATEGORY_NAME" property="categoryName" /> -->
 		<result column="USER_NO" property="userNo" />
 		<result column="CATEGORY_NO" property="categoryNo" />
-		<!--  There is no setter for property named 'userId' in 'class com.kh.eco.challenge.model.vo.Challenge' -->
+
 	
 	</resultMap>
 	
