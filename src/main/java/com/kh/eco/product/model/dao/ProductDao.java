@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
 
 @Repository
@@ -35,5 +36,12 @@ public class ProductDao {
 	public ProductReview getRate(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.selectOne("productMapper.getRate", productNo);
 	}
+	public ArrayList<ProductReview> reviewList(SqlSessionTemplate sqlSession, int productNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.reviewList", productNo);
+	}
+	public ArrayList<ProductLike> getLikes(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.getLikes", userNo);
+	}
+	//좋아요 되어있는 상품인지 확인
 
 }

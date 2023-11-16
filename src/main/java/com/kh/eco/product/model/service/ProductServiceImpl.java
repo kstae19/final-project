@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kh.eco.product.model.dao.ProductDao;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
 
 @Service
@@ -53,6 +54,14 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductReview getRate(int productNo) {
 		return dao.getRate(sqlSession, productNo);
+	}
+
+	@Override
+	public ArrayList<ProductReview> reviewList(int productNo) {
+		return dao.reviewList(sqlSession, productNo);
+	}
+	public ArrayList<ProductLike> getLikes(int userNo) {
+		return dao.getLikes(sqlSession, userNo);
 	}
 
 }

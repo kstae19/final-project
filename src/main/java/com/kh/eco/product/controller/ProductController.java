@@ -1,6 +1,5 @@
 package com.kh.eco.product.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
-import com.kh.eco.product.model.vo.Product;
 
 @Controller
 public class ProductController {
@@ -58,9 +57,9 @@ public class ProductController {
 		String price = productService.getPrice(optionNo);
 		return price;
 	}
-	@GetMapping("product.review")
-	public String reviewList(int productNo) {
-		System.out.println(productNo);
-		return "redirect:/";
+	@ResponseBody
+	@GetMapping(value ="product.review", produces="application/json; charset=UTF-8")
+	public String ajaxReviewList(int productNo, Model model) {
+		return new Gson().toJson(productService.reviewList(productNo));
 	}
 }
