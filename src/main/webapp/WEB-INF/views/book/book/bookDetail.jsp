@@ -49,17 +49,17 @@
         }
     </style>
     <script>
-    	function bookList(){
+    	function bookList(){ // 목록으로
     		location.href="book";
     	};
     	
-    	function bookmark(){
+    	function bookmark(){ // 북마크 등록/삭제 ajax
     		$.ajax({
     			url : 'bookmark.bk',
     			type : 'get',
     			data : {
     				className: $('.bookmark').attr('class'),
-    				ISBN : ${ b.ISBN13 },
+    				ISBN13 : '${ b.ISBN13 }',
     				userNo : ${ sessionScope.loginUser.userNo }
     			},
     			success : result => {
@@ -73,12 +73,78 @@
     		});
     	}
     	
-    	$(function(){
+    	function insertReply(){ // 한줄평 등록 ajax
+    		if($('#bookReplyContent').val().trim() != ''){
+	    		$.ajax({
+	    			url : 'insertbookreply.bk',
+	    			async : false,
+	    			type : 'get',
+	    			data : {
+	    				ISBN13 : '${ b.ISBN13 }',
+	    				userNo : ${ sessionScope.loginUser.userNo },
+	    				content : $('#bookReplyContent').val()
+	    			},
+	    			success : result => {
+	    				console.log(result);
+	    				
+	    				if(result === 'success'){
+	    					$('bookReplyContent').val('');
+	    					selectBookReply();
+	    				} else{
+	    					alert('댓글 등록 실패');
+	    				}
+	    			},
+	    			error : () => {
+	    				console.log("댓글 통신 실패");
+	    			}
+	    		});
+    		}
+    	}
+    	
+    	function deleteReply(){ // 한줄평 삭제 ajax
     		$.ajax({
-    			url : 'markbook.bk',
+    			url : 'deletebookreply.bk',
+    			async : false,
     			type : 'get',
     			data : {
-    				ISBN : ${ b.ISBN13 },
+    				ISBN13 : '${ b.ISBN13 }',
+    				userNo : ${ sessionScope.loginUser.userNo }
+    			},
+    			success : result => {
+    				console.log(result);
+    			},
+    			error : () => {
+    				console.log("댓글 통신 실패");
+    			}
+    		})
+    	}
+    	
+    	function selectBookReply(){
+    		// 한줄평 조회 ajax
+    		$.ajax({
+    			url : 'selectbookreply.bk',
+    			async : false,
+    			type : 'get',
+    			data : {
+    				ISBN13 : '${ b.ISBN13 }'
+    			},
+    			success : result => {
+    				console.log(result);
+    			},
+    			error : () => {
+    				console.log("댓글 통신 실패");
+    			}
+    		});
+    	}
+    	
+    	$(function(){
+    		// 북마크 조회 ajax
+    		$.ajax({
+    			url : 'markbook.bk',
+    			async : false,
+    			type : 'get',
+    			data : {
+    				ISBN13 : '${ b.ISBN13 }',
     				userNo : ${ sessionScope.loginUser.userNo }
     			},
     			success : result => {
@@ -89,7 +155,11 @@
     			error : () => {
     				console.log("북마크 통신 실패");
     			}
-    		})
+    		});
+    	})
+    	
+    	$(function(){
+    		selectBookReply();
     	})
     </script>
 </head>
@@ -142,9 +212,9 @@
             <div>
                 <span>한 줄 평</span>
                 <span>123개</span>
-                <button type="button" class="btn btn-secondary">삭제</button>
             </div>
             <div>
+            	<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>
                 <p style="margin-bottom: 0px;">아이디</p>
                 <p style="margin-bottom: 0px;">작성날짜</p>
                 <p>리뷰글행복스럽고 평화스러운 곳으로 인도하겠다는 커다란 이상을 품었기 때문이다 그러므로 그들은 길지 아니한 목숨을 사는가 싶이 살았으며 그들의 그림자는 천고에 사라지지 않는 것이다 이것은 현저하게 일월과 같은 예가 되려니와 그와 같지 못하다 할지라도</p>
@@ -156,11 +226,11 @@
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
-            <form>
-                <input type="text" placeholder="다양한 생각을 남겨주세요" name="" style="height: 50px; width: 90%;">
-                <button type="submit" style="height: 50px; width: 9%;">등록</button>
-                <p>0/50</p>
-            </form>
+            <input id="bookReplyContent" type="text" placeholder="다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
+            <c:if test="${ not empty sessionScope.loginUser }">
+             <button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
+             <p>0/50</p>
+            </c:if>
         </div>
     </div>
     <br>
