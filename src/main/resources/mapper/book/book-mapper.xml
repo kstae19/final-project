@@ -18,18 +18,37 @@
 	</select>
 
 	<!-- 도서정보insert -->
-	<insert id="bookImport" parameterType="string">
-		INSERT INTO BOOK
+	<insert id="insertBook" parameterType="String">
+		INSERT INTO TB_BOOK
 						(
-						ISBN13
+						ISBN13,
+						BOOK_COUNT
 						)
 		VALUES
 						(
-						#{ISBN}
+						#{ISBN},
+						1
 						)
 	</insert>
 	
+	<!-- 도서정보 조회수 증가 -->
+	<update id="increaseBook" parameterType="String">
+		UPDATE TB_BOOK
+		SET
+			BOOK_COUNT = BOOK_COUNT + 1
+		WHERE
+			ISBN13 = #{ISBN}
+	</update>
 	
+	<!-- 도서정보 조회수 조회 -->
+	<select id="countBook" parameterType="String" resultType="_int">
+		SELECT
+			BOOK_COUNT
+		FROM
+			TB_BOOK
+		WHERE
+			ISBN13 = #{ISBN}
+	</select>
 	
 	
 	

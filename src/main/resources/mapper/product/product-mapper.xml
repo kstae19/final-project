@@ -16,6 +16,11 @@
 		<result column = "PRICE" property="price"/>
 	</collection>
 </resultMap>
+<resultMap id="resultLikeMap" type = "productLike">
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="userNo" column="USER_NO"/>
+	<result property="addDate" column="ADD_DATE"/>
+</resultMap>
 <select id="selectProductList" resultMap="resultProductMap">
 SELECT 
 		PRODUCT_NO, 
@@ -58,5 +63,76 @@ WHERE
 	O.STATUS IN ('Y', 'O') 
 AND 
 	PRODUCT_NO = #{productNo}
+</select>
+
+<select id="getPrice" parameterType="_int" resultType="string">
+select TO_CHAR(price, '999,999') from tb_product_option where OPTION_NO = #{optionNo}
+</select>
+<select id="getImages" parameterType="_int" resultType="string">
+SELECT 
+		FILE_NAME fileName 
+	FROM 
+		TB_PRODUCT_IMG 
+	WHERE 
+		PRODUCT_NO = #{productNo} 
+	AND STATUS= 'Y'
+</select>
+
+<select id="getBrand" parameterType="_int" resultType="brand">
+SELECT 
+	BRAND_NO brandNo, 
+	BRAND_NAME brandName, 
+	BRAND_INTRO brandIntro  
+FROM 
+	TB_BRAND 
+WHERE 
+	BRAND_NO = (
+				SELECT 
+					BRAND_NO 
+				FROM 
+					TB_PRODUCT 
+				WHERE 
+					PRODUCT_NO = #{productNo}
+					)
+</select>
+
+<select id="getRate" parameterType="_int" resultType="productReview">
+SELECT 
+    COUNT(*) reviewNo, 
+    ROUND(AVG(STAR_RATE),1) starRate  
+FROM 
+    TB_PRODUCT_REVIEW 
+WHERE 
+    OPTION_NO IN (
+                    SELECT OPTION_NO 
+                    FROM TB_PRODUCT_OPTION 
+                    WHERE PRODUCT_NO = #{productNo}
+                    )
+</select>
+
+<select id="reviewList" parameterType="_int" resultType="productReview">
+SELECT 
+    REVIEW_NO reviewNo, 
+    OPTION_NM "option", 
+    REVIEW_TITLE reviewTitle, 
+    REVIEW_CONTENT reviewContent, 
+    STAR_RATE starRate 
+FROM TB_PRODUCT_REVIEW R 
+JOIN TB_PRODUCT_OPTION USING(OPTION_NO) 
+WHERE R.STATUS='Y'
+AND OPTION_NO IN (
+                SELECT OPTION_NO 
+                FROM TB_PRODUCT_OPTION 
+                WHERE PRODUCT_NO = #{productNo}
+                )
+</select>
+<select id="getLikes" parameterType="_int" resultType="productLike">
+SELECT 
+	PRODUCT_NO productNo, 
+	USER_NO userNo 
+FROM 
+	TB_PRODUCT_LIKE 
+WHERE 
+	USER_NO = #{userNo}
 </select>
 </mapper>

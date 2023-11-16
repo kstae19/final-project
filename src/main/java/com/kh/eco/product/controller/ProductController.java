@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
-import com.kh.eco.product.model.vo.Product;
 
 @Controller
 public class ProductController {
@@ -30,23 +30,36 @@ public class ProductController {
 		HashMap like = new HashMap();
 		like.put("productNo", productNo);
 		like.put("userNo", userNo);
+		System.out.println("유저넘버 넘어왔나 ? :"+userNo);
 		int result = productService.addLike(like);
 		if(result>0) {			
-			return "안녕안녕";
+			return "ne";
 		}else {
-			return "좋아요 못눌름";
+			return "aniyo";
 		}
 	}
 	@GetMapping("product.detail")
 	public String showDetail(int productNo, Model model) {
-		Product p = productService.selectProduct(productNo);
-		System.out.println(p);
-		model.addAttribute("p", p);
+		model.addAttribute("p", productService.selectProduct(productNo));
+		model.addAttribute("images", productService.getImages(productNo));
+		model.addAttribute("brand", productService.getBrand(productNo));
+		model.addAttribute("review", productService.getRate(productNo));
 		return "product/productDetail";
 	}
 	@RequestMapping("product.orderForm")
 	public String orderForm() {
 		
 		return "redirect:/";
+	}
+	@ResponseBody
+	@GetMapping(value ="getPrice")
+	public String getPrice(int optionNo) {
+		String price = productService.getPrice(optionNo);
+		return price;
+	}
+	@ResponseBody
+	@GetMapping(value ="product.review", produces="application/json; charset=UTF-8")
+	public String ajaxReviewList(int productNo, Model model) {
+		return new Gson().toJson(productService.reviewList(productNo));
 	}
 }
