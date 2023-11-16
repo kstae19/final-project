@@ -50,7 +50,36 @@
 			ISBN13 = #{ISBN}
 	</select>
 	
+	<!-- 북마크 추가 -->
+	<insert id="insertBookMark" parameterType="hashMap">
+		INSERT INTO TB_LIKE_BOOK
+		VALUES
+				(
+				#{userNo},
+				#{ISBN}
+				)
+	</insert>
 	
+	<!-- 북마크 제거 -->
+	<delete id="removeBookMark" parameterType="hashMap">
+		DELETE FROM TB_LIKE_BOOK
+		WHERE
+			ISBN13 = #{ISBN}
+		AND
+			USER_NO = #{userNo}
+	</delete>
+	
+	<!-- 북마크 조회 -->
+	<select id="selectBookMark" parameterType="hashMap" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_LIKE_BOOK
+		WHERE
+			ISBN13 = #{ISBN}
+		AND
+			USER_NO = #{userNo}
+	</select>
 	
 	
 	
