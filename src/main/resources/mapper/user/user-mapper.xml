@@ -5,6 +5,7 @@
 <mapper namespace="userMapper">
 	<select id="loginUser" parameterType="user" resultType="user">
 		SELECT
+			   USER_NO userNo,
 		       USER_ID userId,
 		       USER_PWD userPwd,
 		       USER_NAME userName,

@@ -2,6 +2,7 @@ package com.kh.eco.book.model.service;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,18 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public int insertBookMark() {
-		return bookDao.insertBookMark();
+	public int insertBookMark(HashMap map) {
+		return bookDao.insertBookMark(sqlSession, map);
 	}
 
 	@Override
-	public int removeBookMark() {
-		return bookDao.removeBookMark();
+	public int removeBookMark(HashMap map) {
+		return bookDao.removeBookMark(sqlSession, map);
+	}
+
+	@Override
+	public int selectBookMark(HashMap map) {
+		return bookDao.selectBookMark(sqlSession, map);
 	}
 
 	

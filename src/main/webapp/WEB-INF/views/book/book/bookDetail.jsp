@@ -51,23 +51,46 @@
     <script>
     	function bookList(){
     		location.href="book";
-    	}
+    	};
     	
     	function bookmark(){
     		$.ajax({
     			url : 'bookmark.bk',
     			type : 'get',
     			data : {
-    				className: $('.bookmark').attr('class')
+    				className: $('.bookmark').attr('class'),
+    				ISBN : ${ b.ISBN13 },
+    				userNo : ${ sessionScope.loginUser.userNo }
     			},
     			success : result => {
     				console.log(result);
+    				
+    				$('.bookmark').attr('class', result);
+    			},
+    			error : () => {
+    				console.log("북마크 통신 실패");
+    			}
+    		});
+    	}
+    	
+    	$(function(){
+    		$.ajax({
+    			url : 'markbook.bk',
+    			type : 'get',
+    			data : {
+    				ISBN : ${ b.ISBN13 },
+    				userNo : ${ sessionScope.loginUser.userNo }
+    			},
+    			success : result => {
+    				console.log(result);
+    				
+    				$('.bookmark').attr('class', result);
     			},
     			error : () => {
     				console.log("북마크 통신 실패");
     			}
     		})
-    	}
+    	})
     </script>
 </head>
 <body>
@@ -79,9 +102,10 @@
         <div>
             <button type="button" class="btn btn-secondary" onclick="bookList();">목록</button>
             <span>${ b.bookCategory }</span>
-            <!-- 로그인유저처리 -->
-            <span id="" style="float: right;">내 서재에 담기</span>
-            <img class="bookmark" src="" style="height: 30px; width: 30px; float: right;" onclick="bookmark();">
+            <c:if test="${ not empty sessionScope.loginUser }">
+	            <span style="float: right;">내 서재에 담기</span>
+	            <img class="bookmark" src="" style="height: 30px; width: 30px; float: right;" onclick="bookmark();">
+       		</c:if>
         </div>
         <br>
         <div id="bookform-grid">
@@ -110,7 +134,7 @@
             ${ b.bookContent }
         </p>
 
-        <p><a href="${ b.bookLink }">알라딘 구매 링크</a></p>
+        <p><a href="${ b.bookLink }" target="_blank" rel="noopener noreferrer">알라딘 구매 링크</a></p>
 
         <hr>
 

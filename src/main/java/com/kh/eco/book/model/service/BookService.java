@@ -1,6 +1,7 @@
 package com.kh.eco.book.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.eco.book.model.vo.Book;
 
@@ -20,10 +21,13 @@ public interface BookService {
 	public int countBook(String ISBN);
 	
 	// 도서 북마크 추가
-	public int insertBookMark();
+	public int insertBookMark(HashMap map);
 	
 	// 도서 북마크 제거
-	public int removeBookMark();
+	public int removeBookMark(HashMap map);
+	
+	// 도서 북마크 추가
+	public int selectBookMark(HashMap map);
 	
 	
 	
