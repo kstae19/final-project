@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -121,11 +122,19 @@ public class UserController {
 	
 	
 	@RequestMapping("insert")
-	public String insertUser(User u) {
+	public String insertUser(User u, HttpSession session, Model model) {
 		//System.out.println("평문 : " + u.getUserPwd());
 		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
 		//System.out.println("암호문 : " + encPwd);
-		return null;
+		u.setUserPwd(encPwd); // User 객체에 userPwd필드에 평문이 아닌 암호문을 담아서 DB로 보내기!
+		
+		if(userService.insertMember(u) > 0) { // 성공 => 메인페이지
+			session.setAttribute("alertMsg", "회원가입에 성공했습니다!!");
+			return "redirect:/";
+		} else { // 실패 => 에러메시지 담아서 에러메시지로 포워딩
+			model.addAttribute("errorMsg", "회원가입을 실패했습니다..");	
+			return "common/errorPage";
+		}
 		
 	}
 }
