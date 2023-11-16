@@ -47,15 +47,21 @@
         #book-container>div>p{
             margin-bottom: 5px;
         }
-
     </style>
+    <c:if test="${ not empty selectBook }">
+		<script>
+			$(function(){
+				$('#book-search option[value=${selectBook}]').attr('selected', true);
+			})				
+		</script>
+	</c:if>
 </head>
 <body>
 
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
-        <form class="search-form" action="searchbook.bk" >
+        <form id="book-search" class="search-form" action="searchbook.bk" >
             <select name="selectBook">
                 <option value="title">제목</option>
                 <option value="writer">작가</option>
@@ -72,7 +78,9 @@
             		<img src="${ b.bookImg }">
             		<p>${ b.bookTitle }</p>
             		<p>${ b.bookWriter }</p>
-            		<p>조회수 : ${ b.bookCount }</p>
+            		<p>조회수 : </p>
+            		<p id="book-count">${ b.bookCount }</p>
+	            	<input type="hidden" name="ISBN" value="${ b.ISBN13 }">
             	</div>
             </c:forEach>
         </div>
@@ -126,6 +134,16 @@
 	        	</ul>
 			</c:otherwise>
 		</c:choose>
+		
+		
+		
+		<script>
+			$(function(){
+				$('#book-container div').click(function(){
+					location.href='bookdetail.bk?ISBN='+$(this).children('input[name=ISBN]').val() + '&count=' + $(this).children('#book-count').text();
+				})
+			})
+		</script>
 		
         
     </div>

@@ -34,7 +34,7 @@ public class BookController {
 	// 알라딘 api 검색기능 메소드
 	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
-		url += "?TTBKey=" + BookController.SERVICEKEY;
+		url += "?TTBKey=" + SERVICEKEY;
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
 		url += "&MaxResults=" + maxResult;
 		url += "&output=JS";
@@ -116,6 +116,74 @@ public class BookController {
 		return bookList;
 	}
 	
+	// 알라딘 api 상품조회 메소드
+	public Book bookLookUp(String ISBN) throws IOException {
+		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
+		url += "?TTBKey=" + SERVICEKEY;
+		url += "&ItemId=" + ISBN;
+		url += "&ItemIdType=ISBN13";
+		url += "&Cover=Big";
+		url += "&Output=JS";
+		url += "&Version=20131101";
+		
+		URL requestUrl = new URL(url);
+		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
+		urlConnection.setRequestMethod("GET");
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+		
+		// 결과 받기
+		String responseText = br.readLine();
+		
+		JsonObject totalObj = JsonParser.parseString(responseText).getAsJsonObject();
+		JsonArray itemArr = totalObj.getAsJsonArray("item");
+		/*
+		 * {
+	      "title": "경험은 어떻게 유전자에 새겨지는가 - 환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
+	      "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=324228542&amp;partner=openAPI&amp;start=api",
+	      "author": "데이비드 무어 (지은이), 정지인 (옮긴이)",
+	      "pubDate": "2023-09-18",
+	      "description": "하버드대학교에서 발달·생물심리학 박사 학위를 받은 뒤 피처대학 심리학과 교수로 활동 중인 데이비드 무어가 ‘경이로울 정도로 성장하는’ 후성유전학의 연구와 통찰을 《경험은 어떻게 유전자에 새겨지는가》에 집대성했다.",
+	      "isbn": "K102935996",
+	      "isbn13": "9791192465111",
+	      "itemId": 324228542,
+	      "priceSales": 26100,
+	      "priceStandard": 29000,
+	      "mallType": "BOOK",
+	      "stockStatus": "",
+	      "mileage": 1450,
+	      "cover": "https://image.aladin.co.kr/product/32422/85/cover/k102935996_1.jpg",
+	      "categoryId": 51002,
+	      "categoryName": "국내도서>과학>기초과학/교양과학",
+	      "publisher": "아몬드",
+	      "salesPoint": 24560,
+	      "adult": false,
+	      "fixedPrice": true,
+	      "customerReviewRank": 10,
+	      "subInfo": {
+	        "subTitle": "환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
+	        "originalTitle": "The Developing Genome: An Introduction to Behavioral Epigenetics (2015년)",
+	        "itemPage": 540
+      		}
+		 */
+		JsonObject item = itemArr.get(0).getAsJsonObject();
+		
+		Book book = new Book();
+		
+		book.setISBN13(item.get("isbn13").getAsString());
+		book.setBookCategory(item.get("categoryName").getAsString());
+		book.setBookContent(item.get("description").getAsString());
+		book.setBookDate(item.get("pubDate").getAsString());
+		book.setBookLink(item.get("link").getAsString());
+		book.setBookPublisher(item.get("publisher").getAsString());
+		book.setBookTitle(item.get("title").getAsString());
+		book.setBookWriter(item.get("author").getAsString());
+		book.setBookImg(item.get("cover").getAsString());
+		
+		return book;
+	}
+	
+	
+	// 메인화면 메소드
 	@RequestMapping("book")
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
@@ -139,6 +207,8 @@ public class BookController {
 		return "book/book/bookList";
 	}
 	
+	
+	// 검색 메소드
 	@RequestMapping("searchbook.bk")
 	public String bookSearch(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model, String selectBook, String searchBook) throws IOException {
 		
@@ -192,6 +262,36 @@ public class BookController {
 		model.addAttribute("searchBook", searchBook);
 		
 		return "book/book/bookList";
+	}
+	
+	
+	// 상세페이지 메소드
+	@RequestMapping("bookdetail.bk")
+	public String bookDetail(String ISBN, Model model, int count) throws IOException {
+		
+		Book book = bookLookUp(ISBN);
+		
+		if(count == 0) { // 조회수가 0일때
+			int bookCount = bookService.insertBook(ISBN);
+			if(bookCount > 0) { // 조회수 추가 성공
+				book.setBookCount(bookCount);
+			} else { // 조회수 추가 실패
+				System.out.println("실패!");
+			}
+		} else { // 조회수가 1 이상일때
+			int bookCount = bookService.increaseBook(ISBN);
+			if(bookCount > 0) { // 조회수 증가 성공
+				int countBook = bookService.countBook(ISBN);
+				book.setBookCount(countBook);
+			} else { // 조회수 증가 실패
+				System.out.println("실패!");
+			}
+		}
+		
+		System.out.println(book);
+		
+		model.addAttribute("b", book);
+		return "book/book/bookDetail";
 	}
 	
 	
