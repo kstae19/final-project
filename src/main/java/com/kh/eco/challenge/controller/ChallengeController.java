@@ -75,6 +75,7 @@ public class ChallengeController {
 		
 		if( !upfile.getOriginalFilename().equals("") ) {
 			
+			System.out.println("upfile은 null이 아니야");
 			// challenge에 업로드한 파일 원본명/새이름 세팅
 			c.setOriginName(upfile.getOriginalFilename());
 			c.setChangeName(saveFile(upfile, session));
@@ -83,7 +84,7 @@ public class ChallengeController {
 		
 		if(challengeService.insertChallenge(c) > 0) {
 			
-			System.out.println(c);
+			System.out.println("챌린지 등록 성공!");
 			
 		} else {
 			

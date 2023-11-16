@@ -18,8 +18,8 @@
 		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
 		<!-- <result column="USER_ID" property="userId" />
 		<result column="CATEGORY_NAME" property="categoryName" /> -->
-		<result column="USER_NO" property="userNo" />
-		<result column="CATEGORY_NO" property="categoryNo" />
+		<result column="USER_NO" property="user" />
+		<result column="CATEGORY_NO" property="category" />
 
 	
 	</resultMap>
@@ -169,7 +169,7 @@
 	</update>	
 		
 	<!-- 게시글 작성 -->
-	<insert id="insertChallenge">
+	<insert id="insertChallenge" parameterType="challenge">
 		INSERT 
 		INTO
 						TB_CHALLENGE(
@@ -177,6 +177,7 @@
 						CHALLENGE_TITLE,
 						CHALLENGE_CONTENT,
 						CHALLENGE_PLACE,
+						
 						ACHIEVEMENT_COUNT,
 						SUCCESS_LIMIT,
 						MIN_PARTICIPANT,
@@ -196,21 +197,24 @@
 						)
 		
 		VALUES(
-		SEQ_CHALLENGE_NO,
-		#{c.challengeTitle},
-		#{c.challengeContent},
-		#{c.challengePlace},
+		SEQ_CHALLENGE_NO.NEXTVAL,
+		#{challengeTitle},
+		#{challengeContent},
+		#{challengePlace},
 		
-		#{c.successLimit},
-		#{c.minParticipant},
-		#{c.maxParticipant},
-		#{c.originName},
-		#{c.changeName},
+		#{achievementCount},
+		#{successLimit},
+		#{minParticipant},
+		#{maxParticipant},
+		
+		#{originName},
+		#{changeName},
 		SYSDATE,
-		#{c.startDate},
-		#{c.endDate},
-		<!--#{c.userNo? loginUser.userNo?}  → Challenge객체 만들 때 userNo필드에 loginUser값 넣기 -->
-		#{c.categoryNo},
+		
+		#{startDate},
+		#{endDate},
+		#{userNo},
+		#{categoryNo}
 		)
 	</insert>
 	

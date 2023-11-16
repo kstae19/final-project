@@ -70,7 +70,7 @@
 
 		<!--파일을 첨부하는 요청을 할 때는 반드시 form태그에 enctype="multipart/form-data" 를 추가해줘야함!!-->
         <form enctype="multipart/form-data" action="insert.ch" id="enrollform" method="post">
-
+			<input type="hidden" name="user" value="${loginUser.userNo }" />
             <article id="content-items">
             	<div class="content-item">
 	            	<label for="title">
@@ -89,7 +89,7 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="place" >
-							장소<input type="text" name="challengePlace"/><i class="fas fa-map-marker-alt"></i>
+							장소<input id="place" type="text" name="challengePlace"/><i class="fas fa-map-marker-alt"></i>
 							<!-- 지도api에서 위치 클릭시 해당 도로명주소를 String으로 받아와 ajax로 input의 value값에 세팅할 예정 -->
 					</label>
             	</div>
@@ -126,7 +126,7 @@
             	</div>
             	 <div class="content-item">
 	            	<label for="file" id="file">
-							File🖼️<input id="upfile" type="file" name="upfile"/>
+							File🖼️<input id="upfile" type="file" name="upfile"/><!-- fileInput의 name을 multiFileRequest의 이름과 맞춰야  -->
 					</label>
             	</div>
                 <div class="content-item">
@@ -149,7 +149,7 @@
    
         </form>
 		<br><br><br>
-
+	</section>
         <style>
             #content-items{
                 width : 100%;

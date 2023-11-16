@@ -98,26 +98,26 @@
 
 	<section id="content-area">
 		<article id="content-items">
-			<c:forEach var="challenge" items="${ list }">
+			<c:forEach var="c" items="${ list }">
 		
 				<div class="content-item">
 					<div>
-						<span>${ challenge.userNo }</span>
-						<span>${ challenge.viewCount }</span>
-						<span>${ challenge.likeCount }</span>
+						<span>${ c.userNo }</span>
+						<span>${ c.viewCount }</span>
+						<span>${ c.likeCount }</span>
 					</div>
 					<!--  <a href="/petopia/detail.bo?bno=${ board.boardNo }">
 	                        <img src="/petopia/${ board.fileImg }" alt="">
 	                       </a> 
 	                -->
-					<a href="detail.ch?challengeNo=${challenge.challengeNo }">
-					<img src="${challenge.changeName }"/><!-- /resources/uploadFiles/2023110311274210000.pdf -->
+					<a href="detail.ch?challengeNo=${c.challengeNo }">
+					<img src="${c.changeName }"/><!-- /resources/uploadFiles/2023110311274210000.pdf -->
 					</a>
-					<h6>${ challenge.challengeTitle }</h6>
+					<h6>${ c.challengeTitle }</h6>
 					<div>
-						<span>${ challenge.categoryNo }</span>
-						<span>${ challenge.successLimit }</span>
-						<span>${ challenge.startDate }</span>
+						<span>${ c.categoryNo }</span>
+						<span>${ c.successLimit }</span>
+						<span>${ c.startDate }</span>
 					</div>
 				</div>
 			
