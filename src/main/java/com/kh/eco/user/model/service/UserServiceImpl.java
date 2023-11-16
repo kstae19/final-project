@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User loginUser(User u) {
-		System.out.println(userDao.loginUser(sqlSession, u));
 		return userDao.loginUser(sqlSession, u);
 	}
 
@@ -36,11 +35,16 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int vaildate(Cert cert) {
 		boolean result = userDao.vaildate(sqlSession, cert);
-		
-		/*if(result != false) {
+		/*if(result == true) {
 			userDao.deleteCert(sqlSession, cert);
 		}*/
-		System.out.println(result);
 		return result == true ? 1 : 0;
+	}
+
+	@Override
+	public int insertMember(User u) {
+		int result = userDao.insertMember(sqlSession, u);
+
+		return result;
 	}
 }
