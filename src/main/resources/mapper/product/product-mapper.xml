@@ -141,5 +141,8 @@ WHERE
 SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
 </select>
 
+<delete id="removeLike" parameterType="productLike">
+	DELETE FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
+</delete>
 
 </mapper>

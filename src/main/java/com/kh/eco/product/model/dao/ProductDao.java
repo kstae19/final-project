@@ -46,5 +46,8 @@ public class ProductDao {
 	public String checkLike(SqlSessionTemplate sqlSession, ProductLike like) {
 		return sqlSession.selectOne("productMapper.checkLike", like);
 	}
+	public int removeLike(SqlSessionTemplate sqlSession, ProductLike like) {
+		return sqlSession.delete("productMapper.removeLike", like);
+	}
 
 }

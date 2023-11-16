@@ -145,7 +145,7 @@ div {
 							<div id="like"><img onclick="askLogin();" src="resources/images/heart-regular.svg"></div>
 						</c:when>
 						<c:otherwise>
-						<div id="like"><img onclick="like(${p.productNo})" src="resources/images/heart-solid.svg"></div>
+						<div id="like"><img onclick="like(${p.productNo}, this);" src="resources/images/heart-solid.svg"></div>
 						</c:otherwise>
 					</c:choose>
 						<div id="star">
@@ -200,17 +200,21 @@ div {
 						location.href='login';
 						}
 					}
-					function like(pno){
+					function like(pno, th){
 						console.log(pno);
-
 						$.ajax({
 							url : 'product.like',
 							data : {
 								productNo : pno,
-								userNo : '${loginUser.userNo}';
+								userNo : '${sessionScope.loginUser.userNo}'
 							},
 							success : e => {
-								console.log(e);
+								if(e == 'added'){
+									$(th).attr('src', 'resources/images/heart-solid.svg');
+								}
+								else if(e == 'removed'){
+									$(th).attr('src', 'resources/images/heart-regular.svg');
+								};
 							},
 							error : e => {
 								console.log('세상은 요지경~~');

@@ -69,4 +69,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.checkLike(sqlSession, like)!=null? "Y":"N";
 	}
 
+	@Override
+	public int removeLike(ProductLike like) {
+		return dao.removeLike(sqlSession, like);
+	}
+
 }

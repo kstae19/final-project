@@ -21,5 +21,6 @@ public interface ProductService {
 	ArrayList<ProductReview> reviewList(int productNo);
 	ArrayList<ProductLike> getLikes(int userNo);
 	String checkLike(ProductLike like);
+	int removeLike(ProductLike like);
 
 }
