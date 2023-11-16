@@ -86,21 +86,21 @@
 	<div id="enroll-main">
 		<div id="enroll-id" class="enroll">
 			<h1>회원가입</h1>
-			<form action="insert" method="get" id="enroll-form">
+			<form action="insert" method="post" id="enroll-form">
 				<div id="info">
 					<b id="enroll-info">*필수 입력사항</b>
 				</div>
 				<div class="enroll-border rd">
-					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId">
+					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required>
 					<div id="idcheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
-					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd">
-					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호 확인" id="checkPwd" >
+					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required>
+					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호 확인" id="checkPwd" required>
 					<div id="pwdcheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이름(닉네임)" id="userName" name="userName">
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이름(닉네임)" id="userName" name="userName" required>
 					<div id="namecheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
@@ -108,8 +108,8 @@
 				<div class="enroll-border">
 					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email">
 					<div class="floatleft">
-						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret">
-						<input type="button" class="btn btn-secondary" onclick="send();" value="전송">
+						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled>
+						<input type="button" class="btn btn-secondary" id="secretbtn" onclick="send();" value="전송">
 						<div id="emailcheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 						</div>
@@ -118,8 +118,8 @@
 				</div>
 				<div class="enroll-border">
 					<div class="floatleft">
-						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="우편번호" id="post" name="post">
-						<input type="button" class="btn btn-secondary" onclick="sample4_execDaumPostcode()" value="검색">
+						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="우편번호" id="postNo" name="postNo">
+						<input type="button" class="btn btn-secondary" onclick="DaumPostcode()" value="검색">
 					</div>
 					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="주소" id="address" name="address">
 					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="상세주소" id="detailAddress" name="detailAddress">
@@ -132,20 +132,32 @@
 		</div>
 	</div>
 	
-	 <script>
+	<!-- 다음 우편번호 Api  -->
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+
+	    
     	$(function(){
     		
 			const $idInput = $('.enroll-border #userId');
 			const $pwdInput = $('.enroll-border #userPwd');
 			const $nameInput = $('.enroll-border #userName');
+			const $checkPwdInput = $('.enroll-border #checkPwd');			
 			const $emailInput = $('.enroll-border #email');
 			const $secretInput = $('.enroll-border #secret');
+			const $phoneInput = $('.enroll-border #phone');
+			
+			const $postInput = $('.enroll-border #postNo');
+    		const $detailAddressInput = $('.enroll-border #detailAddress');
+			
 			const $checkIdResult = $('#idcheckResult');
 			const $checkPwdResult = $('#pwdcheckResult');
 			const $checkNameResult = $('#namecheckResult');
 			const $checkEmailResult = $('#emailcheckResult');
-			const $checkPwdInput = $('.enroll-border #checkPwd');
+			
 			const $enrollFormSubmit = $('#enroll-form :submit');
+			
+			var checksecret = 0;
 			
 			$secretInput.keyup(() => {
 			
@@ -158,21 +170,26 @@
 						success : result => {
 							if(result.substr(4) === 'N'){ // 사용불가능
 								$checkEmailResult.show().css('color', 'crimson').text('인증번호 불일치..')
-								//$enrollFormSubmit.attr('disabled', true);
+								$enrollFormSubmit.attr('disabled', true);
+								checksecret = 0;
 							}
 							else { // 사용가능
 								$checkEmailResult.show().css('color', 'green').text('인증번호 일치!!')
-								//$enrollFormSubmit.removeAttr('disabled');
+								$enrollFormSubmit.removeAttr('disabled');
+								checksecret = 1;
 							}
+						},
+						error : () => {
+							console.log('이메일 인증번호용 AJAX통신 실패~!')
 						}
-						
-					})
+					});
+					console.log(checksecret);
 				}
 				else {
 					$checkEmailResult.hide();
 				}
-				
-			})
+			});
+			
 			
 			$idInput.keyup(() => {
 				// console.log($idInput.val());
@@ -190,6 +207,7 @@
 							if(result.substr(4) === 'N'){ // 사용불가능
 								$checkIdResult.show().css('color', 'crimson').text('사용할 수 없는 아이디입니다. 다른 아이디를 입력해 주세요.')
 								//$enrollFormSubmit.attr('disabled', true);
+								
 							}
 							else { // 사용가능
 								$checkIdResult.show().css('color', 'green').text('사용할 수 있는 아이디입니다!')
@@ -238,27 +256,81 @@
 					}
 				}
 			});
+			
+			
+			$('body').on("click", () => {
+				
+				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length > 5 && $checkPwdInput.val().length > 5 && $nameInput.val().length > 0 ){
+					
+					// 입력값이 있는 경우
+					if ($emailInput.val().length > 0 && $secretInput.val().length === 0) {
+					    $enrollFormSubmit.attr('disabled', true);
+					} 
+					else if ($postInput.val().length > 0 && $detailAddressInput.val().length === 0) {
+					    $enrollFormSubmit.attr('disabled', true);
+					} 
+					else {
+					    $enrollFormSubmit.removeAttr('disabled');
+					}
+				}
+				else {
+					$enrollFormSubmit.attr('disabled', true);
+				}
+			});
     	});
-	function send() {
-		const $emailInput = $('.enroll-border #email');
-   		 $.ajax({
-   			 url : 'mail',
-   			 data : {
-				email : $emailInput.val()
-			 },
-			 success : result => {
-				 if(result.substr(4) === 'N'){ // 사용불가능
-					 	alert('이메일 주소를 다시 입력해주세요!');
+    	
+    	// 이메일 인증 기능
+		function send() {
+			const $emailInput = $('.enroll-border #email');
+	   		 $.ajax({
+	   			 url : 'mail',
+	   			 data : {
+					email : $emailInput.val()
+				 },
+				 success : result => {
+					 if(result.substr(4) === 'N'){ // 사용불가능
+						 alert('이메일 주소를 다시 입력해주세요!');
+					}
+					else { // 사용가능
+				 		alert($('#email').val() + '으로 인증번호가 발송되었습니다!');
+				 		$('.enroll-border #secret').removeAttr('disabled');
+					}
+				},
+				error : () => {
+					alert('이메일 주소를 입력해주세요!');
+					console.log('이메일 인증용 AJAX통신 실패~!')
 				}
-				else { // 사용가능
-			 		alert($('#email').val() + '으로 인증번호가 발송되었습니다!');
-				}
-			},
-			error : () => {
-				console.log('이메일 인증용 AJAX통신 실패~!')
-			}
-   		 });
-   	 }
+	   		 });
+	   	 }
+    	
+    	// 다음 우편번호 Api
+	    function DaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function(data) {
+	                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	                var addr = ''; // 주소 변수
+	
+	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+	
+	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	                $('.enroll-border #postNo').val(data.zonecode);
+	                $('.enroll-border #address').val(addr);
+	                // 커서를 상세주소 필드로 이동한다.
+	                
+	            }
+	        }).open();
+		}
+    	
+		
+
     	
     </script>
 </body>
