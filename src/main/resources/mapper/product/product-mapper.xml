@@ -16,6 +16,11 @@
 		<result column = "PRICE" property="price"/>
 	</collection>
 </resultMap>
+<resultMap id="resultLikeMap" type = "productLike">
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="userNo" column="USER_NO"/>
+	<result property="addDate" column="ADD_DATE"/>
+</resultMap>
 <select id="selectProductList" resultMap="resultProductMap">
 SELECT 
 		PRODUCT_NO, 
@@ -34,7 +39,7 @@ SELECT
 		P.STATUS = 'Y'
 </select>
 
-<insert id="addLike" parameterType="hashmap">
+<insert id="addLike" parameterType="productLike">
 INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </insert>
 
@@ -104,4 +109,37 @@ WHERE
                     WHERE PRODUCT_NO = #{productNo}
                     )
 </select>
+
+<select id="reviewList" parameterType="_int" resultType="productReview">
+SELECT 
+    REVIEW_NO reviewNo, 
+    OPTION_NM "option", 
+    REVIEW_TITLE reviewTitle, 
+    REVIEW_CONTENT reviewContent, 
+    STAR_RATE starRate 
+FROM TB_PRODUCT_REVIEW R 
+JOIN TB_PRODUCT_OPTION USING(OPTION_NO) 
+WHERE R.STATUS='Y'
+AND OPTION_NO IN (
+                SELECT OPTION_NO 
+                FROM TB_PRODUCT_OPTION 
+                WHERE PRODUCT_NO = #{productNo}
+                )
+</select>
+<select id="getLikes" parameterType="_int" resultType="productLike">
+SELECT 
+	PRODUCT_NO productNo, 
+	USER_NO userNo 
+FROM 
+	TB_PRODUCT_LIKE 
+WHERE 
+	USER_NO = #{userNo}
+</select>
+
+
+<select id="checkLike" parameterType="productLike" resultType="string">
+SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
+</select>
+
+
 </mapper>

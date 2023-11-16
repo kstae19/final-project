@@ -15,6 +15,15 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Alertify -->
+<!-- JavaScript -->
+<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<!-- CSS -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+<!-- Default theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+<!-- Semantic UI theme -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
 
 <style>
 @font-face {
@@ -30,6 +39,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
+	border : 1px solid transparent;
 }
 
 .outer {
@@ -82,32 +92,23 @@ div {
 #product-area {
 	font-family: 'SBAggroB';
 	width: 100%;
-	height: 90%;
-}
-
-#newist {
-	width: 30%;
-	height: 100%;
-	float: left;
-}
-
-#newist>img {
-	width: 100%;
-	height: 35%;
 }
 
 #products {
-	width: 70%;
-	height: 100%;
-	float: left;
+	width: 100%;
+	display:flex;
 }
 
+
 .product {
-	width: 49%;
-	height: 49%;
-	float: left;
-	margin: 2px;
+	float:left;
+	width: 400px;
+	height: 400px;
 	cursor:pointer;
+}
+.product-info{
+	width:100%;
+	height:330px;
 }
 
 .product table {
@@ -116,26 +117,22 @@ div {
 	padding-left: 100px;
 	text-align:center;
 }
-.product table img{
-	width : 50px;
-	height:50px;
+.like-cart{
+	width:100%;
+	height:70px;
+	padding:10px;
+}
+.like-cart>img{
+	width : 40px;
+	height:40px;
 }
 
-.product>h1 {
+.product h1 {
 	color: rgb(205, 205, 154);
 	font-size: 40px;
+	font-weight:300;
 	text-align: center;
-	line-height: 380px;
-}
-
-.like-cart {
-	padding-left: 135px;
-}
-
-.like-cart>img {
-	width: 30px;
-	height: 30px;
-	cursor:pointer;
+	line-height: 300px;
 }
 </style>
 </head>
@@ -150,8 +147,8 @@ div {
 			</div>
 
 			<div id="controll-area">
-				<button>FOOD</button>
-				<button>Eco Friendly Items</button>
+				<button onclick="sort('F');">FOOD</button>
+				<button onclick="sort('P');">Eco Friendly Items</button>
 
 				<select>
 					<option>최신순</option>
@@ -165,30 +162,52 @@ div {
 				<div id="products">
 					<c:forEach var="p" items="${productList }">
 						<div id="${p.productNo }" class="product">
-							<h1>${p.productName }</h1>
-							<div>
-							<table class="table">
-								<thead>
-									<tr>
-										<th>옵션명</th>
-										<th>가격</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="option" items="${p.optionList }">
+									
+							<c:choose>
+							<c:when test="${empty loginUser }">
+								<div class="product-info" 
+								onclick="location.href='product.detail?userNo=0&productNo='+${p.productNo}">
+							</c:when>
+							<c:otherwise>		
+								<div class="product-info" 
+								onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo }+'productNo='+${p.productNo}">
+							</c:otherwise>
+							</c:choose>
+								<h1>${p.productName }</h1>
+								<table class="table">
+									<thead>
 										<tr>
-											<td>${option.optionName }</td>
-											<td>${option.price }</td>
+											<th>옵션명</th>
+											<th>가격</th>
 										</tr>
-									</c:forEach>
-									<tr>	
-									<td colspan="2"><img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg"></td>
-									</tr>
-								</tbody>
-							</table>
+									</thead>
+									<tbody>
+										<c:forEach var="option" items="${p.optionList }">
+											<tr>
+												<td>${option.optionName }</td>
+												<td>${option.price }</td>
+											</tr>
+										</c:forEach>
+										<tr>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 							
-						</div>
+							<div class="like-cart">
+									<c:choose>
+									<c:when test="${empty sessionScope.loginUser }">
+										<img onclick="askLogin();" src="resources/images/heart-regular.svg">
+									</c:when>
+									<c:otherwise>
+										<img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg">
+									</c:otherwise>
+									</c:choose>
+							</div>
+							
+						</div><!-- product class-->
+						
+							
 						<script>
 							$(function() {
 								$('#${p.productNo}').css({
@@ -196,20 +215,28 @@ div {
 									"background-size" : "cover",
 									"opacity" : "0.9"
 								}).hover(()=>{
-									$('#${p.productNo}>h1').css("display", "none");
+									$('#${p.productNo} h1').css("display", "none");
 									$('#${p.productNo} table').css('display', 'block');
 								}, ()=>{
 									$('#${p.productNo} table').css("display", "none");
-									$('#${p.productNo}>h1').css('display', 'block');
-								}).click(()=>{
-									location.href='product.detail?productNo='+${p.productNo};
+									$('#${p.productNo} h1').css('display', 'block');
 								});
 							})
 						</script>
 					</c:forEach>
+					</div>
 				</div>
 				
 				<script>
+					function askLogin(){
+						alertify.confirm('로그인','로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?',
+								()=>{
+									location.href='login';
+								},
+								()=>{
+									alertify.error('비회원으로 계속합니다.');
+								});
+					}
 					function like(pno){
 						console.log(pno);
 						$.ajax({
@@ -225,49 +252,38 @@ div {
 							}
 						})
 					}
+					function sort(type){
+						
+					}
+					$(()=>{
+						
+						$.ajax({
+							url : 'getLikes.pr',
+							data : {userNo : '${sessionScope.loginUser.userNo}'},
+							success: result =>{
+								console.log(result);
+								for(let i in result){
+									$('.product').each((idnex, item)=>{
+										if(result[i].productNo == item.id){
+										$(item).find('.like-cart>img').attr('src', 'resources/images/heart-solid.svg');
+											
+										}
+									})
+								}
+							},
+							error: ()=>{
+								console.log('에이젝스 망했어...');
+							}
+						})
+					})
 				</script>
 				<c:if test = "${!empty loginUser}">
 					<script>
-						
+
 					</script>
 				</c:if>
 				
-				
-				<div id="newist">
-					<img src="resources/images/saltedbutter.jpg"> <img
-						src="resources/images/butterpantry.png"> <br> <br>
-					<div class="like-cart">
-						<img src="resources/images/heart-solid.svg"> <img
-							src="resources/images/shopping-cart-solid.svg">
-					</div>
-					<br>
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th></th>
-								<th>옵션명</th>
-								<th>가격</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>1</td>
-								<td>바보춘식</td>
-								<td>150000</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>똑똑춘식</td>
-								<td>250000</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>보통춘식</td>
-								<td>50000</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+			
 			</div>
 		</div>
 	</div>

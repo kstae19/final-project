@@ -1,6 +1,7 @@
 package com.kh.eco.challenge.model.vo;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class Challenge {
 	private String challengeContent;
 	private String challengePlace;
 	
-	private int achievementCount;
+	private String achievementCount;
 	private int successLimit;
 	private int minParticipant;
 	private int maxParticipant;
@@ -28,8 +29,8 @@ public class Challenge {
 	
 	private Date uploadDate;
 	private Date modifyDate;
-	private Date startDate;
-	private Date endDate;
+	private String startDate;
+	private String endDate;
 	
 	private int userNo;
 	private int categoryNo;

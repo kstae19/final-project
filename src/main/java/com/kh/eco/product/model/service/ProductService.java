@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Product;
+import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
 
-@Service
 public interface ProductService {
 	ArrayList<Product> selectProductList();
-	int addLike(HashMap like);
+	int addLike(ProductLike like);
 	Product selectProduct(int productNo);
 	String getPrice(int optionNo);
 	ArrayList<String> getImages(int productNo);
 	Brand getBrand(int productNo);
 	ProductReview getRate(int productNo);
+	ArrayList<ProductReview> reviewList(int productNo);
+	ArrayList<ProductLike> getLikes(int userNo);
+	String checkLike(ProductLike like);
+
 }
