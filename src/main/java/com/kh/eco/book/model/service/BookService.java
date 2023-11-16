@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.eco.book.model.vo.Book;
+import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.common.model.vo.PageInfo;
 
 public interface BookService {
 	
@@ -27,7 +29,16 @@ public interface BookService {
 	public int removeBookMark(HashMap map);
 	
 	// 도서 북마크 추가
-	public int selectBookMark(HashMap map);
+	public int ajaxSelectBookMark(HashMap map);
+	
+	// 도서 한줄평 등록
+	public int ajaxInsertBookReply(HashMap map);
+	
+	// 도서 한줄평 개수 조회
+	public int ajaxSelectBookReplyCount(String ISBN13);
+	
+	// 도서 한줄평 조회
+	public ArrayList<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi);
 	
 	
 	

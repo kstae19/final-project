@@ -5,6 +5,12 @@
 <mapper namespace="bookMapper">
 	
 	<!-- resultMap 영역 -->
+	<resultMap id="bookReplyResultSet" type="bookReply">
+		<result column="BOOK_REPLY_NO" property="bookReplyNo" />
+		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
+		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
+		<result column="USER_ID" property="userId" />
+	</resultMap>
 	
 	
 	
@@ -81,11 +87,69 @@
 			USER_NO = #{userNo}
 	</select>
 	
+	<!-- 도서 한줄평 등록 -->
+	<insert id="ajaxInsertBookReply" parameterType="hashMap">
+		INSERT ALL
+				WHEN 
+				<![CDATA[
+					(SELECT 
+						COUNT(*)
+					FROM 
+						TB_BOOK_REPLY
+					WHERE
+						USER_NO = #{userNo}
+					AND
+						ISBN13 = #{ISBN13}
+					) < 1
+				]]>
+				THEN
+				INTO TB_BOOK_REPLY
+				VALUES (
+					SEQ_BOOK_REPLY.NEXTVAL,
+					SYSDATE,
+					#{content},
+					#{ISBN13},
+					#{userNo}
+					)
+				INTO TB_ECO_HISTORY
+				VALUES (
+					#{userNo},
+					10,
+					SYSDATE,
+					'B'
+					)
+				SELECT * FROM DUAL
+	</insert>
 	
+	<!-- 도서 한줄평 개수 조회 -->
+	<select id="ajaxSelectBookReplyCount" parameterType="string" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_BOOK_REPLY
+		WHERE
+			ISBN13 = #{ISBN13}
+	</select>
 	
-	
-	
-	
+	<!-- 도서 한줄평 리스트 조회 -->
+	<select id="ajaxSelectBookReply" parameterType="string" resultMap="bookReplyResultSet">
+		SELECT 
+			BOOK_REPLY_NO,
+			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
+			BOOK_REPLY_CONTENT,
+			USER_ID
+		FROM
+			TB_BOOK_REPLY
+		JOIN
+			TB_USER USING(USER_NO)
+		JOIN
+			TB_BOOK USING(ISBN13)
+		WHERE
+			ISBN13 = #{ISBN13}
+		ORDER
+		BY
+			BOOK_REPLY_DATE DESC
+	</select>
 	
 	
 	
