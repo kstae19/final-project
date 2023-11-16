@@ -69,17 +69,25 @@ public class ChallengeController {
 												HttpSession session,
 												Model model) {
 		
-		/*
-		 * System.out.println(c); System.out.println(upfile);
-		 */
+		
+		  System.out.println(c); System.out.println(upfile);
+		 
 		
 		if( !upfile.getOriginalFilename().equals("") ) {
 			
-			// 업로드한 파일과 현재 세션을 통해 파일업로드
-			saveFile(upfile, session);
-			
+			// challenge에 업로드한 파일 원본명/새이름 세팅
 			c.setOriginName(upfile.getOriginalFilename());
+			c.setChangeName(saveFile(upfile, session));
 			
+		} 
+		
+		if(challengeService.insertChallenge(c) > 0) {
+			
+			System.out.println(c);
+			
+		} else {
+			
+			System.out.println("실패!!");
 		}
 		
 
@@ -130,6 +138,7 @@ public class ChallengeController {
 	@RequestMapping("increase.like")
 	public void increaseLikeCount(int userNo, int challengeNo) {
 		
+		// 복합키인 userNo와 challengeNo를 map에 각각 담음
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", Integer.valueOf(userNo));
 		map.put("challengerNo", Integer.valueOf(challengeNo));

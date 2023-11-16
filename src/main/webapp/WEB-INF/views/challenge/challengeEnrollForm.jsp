@@ -74,11 +74,11 @@
             <article id="content-items">
             	<div class="content-item">
 	            	<label for="title">
-							챌린지명<input id="title" type="text" name="title">
+							챌린지명<input id="title" type="text" name="challengeTitle">
 					</label>
             	</div>
             	 	<div class="content-item">
-	            	<select id="category" name="category">
+	            	<select id="category" name="categoryNo">
 	            			<option selected>카테고리</option>
 							<option value="1">비건</option>
 							<option value="2">친환경제품사용</option>
@@ -89,7 +89,7 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="place" >
-							장소<input type="text" /><i class="fas fa-map-marker-alt"></i>
+							장소<input type="text" name="challengePlace"/><i class="fas fa-map-marker-alt"></i>
 							<!-- 지도api에서 위치 클릭시 해당 도로명주소를 String으로 받아와 ajax로 input의 value값에 세팅할 예정 -->
 					</label>
             	</div>
@@ -126,12 +126,12 @@
             	</div>
             	 <div class="content-item">
 	            	<label for="file" id="file">
-							File🖼️<input id="upfile" type="file" name="file"/>
+							File🖼️<input id="upfile" type="file" name="upfile"/>
 					</label>
             	</div>
                 <div class="content-item">
 							내용
-				<textarea id="content"  style="resize:none; height:300px;" name="content">
+				<textarea id="content"  style="resize:none; height:300px;" name="challengeContent">
 				</textarea>
             	</div>
 
@@ -184,12 +184,12 @@
                 width : 100%;
             }
            	#upfile {
-                position: absolute;
+              /*   position: absolute;
                 width: 0;
                 height: 0;
                 padding: 0;
                 overflow: hidden;
-                border: 0;
+                border: 0; */
                 
             }
             #file {
