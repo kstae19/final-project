@@ -5,7 +5,24 @@
 <mapper namespace="challengeMapper">
 	
 	<!-- resultMap 영역 -->
+	<resultMap id="challengeResultSet" type="challenge">
+		<result column="CHALLENGE_NO" property="challengeNo" />
+		<result column="CHALLENGE_TITLE" property="challengeTitle" />
+		<result column="START_DATE" property="startDate" />
+		<result column="SUCCESS_LIMIT" property="successLimit" />
+		<result column="VIEW_COUNT" property="viewCount" />
+		<result column="LIKE_COUNT" property="likeCount" />
+		<result column="ORIGIN_NAME" property="originName" />
+		<result column="CHANGE_NAME" property="changeName" />
+		
+		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
+		<!-- <result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" /> -->
+		<result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" />
+		<!--  There is no setter for property named 'userId' in 'class com.kh.eco.challenge.model.vo.Challenge' -->
 	
+	</resultMap>
 	
 	
 	<!-- 게시글 총개수 조회 -->
@@ -21,7 +38,7 @@
 	</select>
 	
 	<!-- 게시글 전체조회 -->
-	<select id="selectChallengeList" resultType="arraylist">
+	<select id="selectChallengeList" resultMap="challengeResultSet"><!-- resultType을 왜 arrayList가 아닌 resultMap으로 해야할까 -->
 		SELECT
 						CHALLENGE_NO,
 						CHALLENGE_TITLE,
@@ -42,6 +59,9 @@
 						TB_CATEGORY USING (CATEGORY_NO)
 		WHERE 
 						STATUS = 'Y'
+		ORDER
+		BY	
+						UPLOAD_DATE DESC
 	</select>
 	
 	<!-- 검색결과수 조회 -->
@@ -189,7 +209,7 @@
 		SYSDATE,
 		#{c.startDate},
 		#{c.endDate},
-		#{c.userNo? loginUser.userNo?} → Challenge객체 만들 때 userNo필드에 loginUser값 넣기
+		<!--#{c.userNo? loginUser.userNo?}  → Challenge객체 만들 때 userNo필드에 loginUser값 넣기 -->
 		#{c.categoryNo},
 		)
 	</insert>
