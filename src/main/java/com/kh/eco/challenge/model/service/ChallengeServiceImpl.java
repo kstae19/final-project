@@ -74,15 +74,15 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	}
 
 	@Override
-	public int increaseLikeCount(int userNo, int challengeNo) {
+	public int increaseLikeCount(HashMap<String, Integer> map) {
 	
-		return challengeDao.increaseLikeCount(sqlSession, userNo, challengeNo);
+		return challengeDao.increaseLikeCount(sqlSession, map);
 	}
 
 	@Override
-	public int decreaseLikeCount(int userNo, int challengeNo) {
+	public int decreaseLikeCount(HashMap<String, Integer> map) {
 	
-		return  challengeDao.decreaseLikeCount(sqlSession, userNo, challengeNo);
+		return  challengeDao.decreaseLikeCount(sqlSession, map);
 	}
 
 	@Override
@@ -102,9 +102,6 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
-
-
-
 
 	
 }

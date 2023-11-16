@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeMapper">
+	
+	<!-- resultMap 영역 -->
+	<resultMap id="challengeResultSet" type="challenge">
+		<result column="CHALLENGE_NO" property="challengeNo" />
+		<result column="CHALLENGE_TITLE" property="challengeTitle" />
+		<result column="START_DATE" property="startDate" />
+		<result column="SUCCESS_LIMIT" property="successLimit" />
+		<result column="VIEW_COUNT" property="viewCount" />
+		<result column="LIKE_COUNT" property="likeCount" />
+		<result column="ORIGIN_NAME" property="originName" />
+		<result column="CHANGE_NAME" property="changeName" />
+		
+		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
+		<!-- <result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" /> -->
+		<result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" />
+		<!--  There is no setter for property named 'userId' in 'class com.kh.eco.challenge.model.vo.Challenge' -->
+	
+	</resultMap>
+	
+	
+	<!-- 게시글 총개수 조회 -->
+	<select id="countChallengeList" resultType="_int">
+		SELECT 
+						COUNT(*)
+		FROM 
+						TB_CHALLENGE
+		WHERE 
+						STATUS = 'Y'
+	
+	
+	</select>
+	
+	<!-- 게시글 전체조회 -->
+	<select id="selectChallengeList" resultMap="challengeResultSet"><!-- resultType을 왜 arrayList가 아닌 resultMap으로 해야할까 -->
+		SELECT
+						CHALLENGE_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+		
+						VIEW_COUNT,
+						LIKE_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_USER USING(USER_NO)
+		JOIN 
+						TB_CATEGORY USING (CATEGORY_NO)
+		WHERE 
+						STATUS = 'Y'
+		ORDER
+		BY	
+						UPLOAD_DATE DESC
+	</select>
+	
+	<!-- 검색결과수 조회 -->
+	<select id="countChallengeSearch" resultType="_int">
+		SELECT 
+						COUNT(*)
+		FROM 
+						TB_CHALLENGE
+		JOIN 
+						TB_USER USING (USER_NO)
+		WHERE 
+						TB_CHALLENGE.STATUS = 'Y'<!-- USER에도 STATUS가 있기 때문 -->
+	
+		<if test=" condition == 'title' ">
+		AND CHALLENGE_TITLE 
+		</if>
+		<if test=" condiiton == 'content' ">
+		AND CHALLENGE_CONTENT
+		</if>
+		<if test=" condition == 'userId' ">
+		AND USER_ID
+		</if>
+		LIKE '%' || #{keyword} || '%'
+	</select>
+	
+	<!-- 검색결과리스트 조회 -->
+	
+	
+	<!-- 조회수 증가 -->
+	<update id="increaseViewCount">
+		UPDATE 
+						TB_CHALLENGE
+		SET 
+						VIEW_COUNT = VIEW_COUNT + 1
+		WHERE 	
+						CHALLENGE_NO = #{challengeNo}
+	</update>	
+	
+		<!-- 게시글 상세조회 -->
+	<select id="selectChallengeDetail" resultType="challenge"><!-- resultMap으로 할까? -->
+		SELECT
+						CHALLENGE_NO,
+						CHALLENGE_TITLE,
+						CHALLENGE_CONTENT,
+						CHALLENGE_PLACE,
+						ACHIEVEMENT_COUNT,
+						SUCCESS_LIMIT,
+						MIN_PARTICIPANT,
+						MAX_PARTICIPANT,
+						STATUS,
+						VIEW_COUNT,
+						LIKE_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+						MODIFY_DATE,
+						START_DATE,
+						END_DATE,
+			
+						USER_ID,
+						CATEGORY_NAME
+					
+		FROM 
+						TB_CHALLENGE
+		JOIN 
+						TB_USER USING (USER_NO)
+		JOIN 
+						TB_CATEGORY USING (CATEGORY_NO)
+		WHERE 
+						CHALLENGE_NO = #{challengeNo}
+	</select>
+	
+	<!-- 좋아요수 증가 -->
+	<update id="increaseLikeCount">
+		update 
+						tb_challenge A
+		join 
+						tb_like B using (user_no)
+		set 
+						like_count = ( 
+												select count(*) 
+												from tb_like 
+												where 
+												challenge_No = #{challengeNo} 
+											) + 1
+		where 
+						B.userNo = #{loginUser.userNo}
+	</update>
+	
+	<!-- 좋아요수 감소 -->
+	<update id="decreaseLikeCount">
+		update 
+						tb_challenge A
+		join 
+						tb_like B using (user_no)
+		set 
+						like_count = (
+											 select count(*) 
+											 from tb_like 
+											 where 
+											 challenge_No = #{challengeNo} 
+											) - 1
+		where 
+						B.userNo = #{loginUser.userNo}
+	</update>	
+		
+	<!-- 게시글 작성 -->
+	<insert id="insertChallenge">
+		INSERT 
+		INTO
+						TB_CHALLENGE(
+						CHALLENGE_NO,
+						CHALLENGE_TITLE,
+						CHALLENGE_CONTENT,
+						CHALLENGE_PLACE,
+						ACHIEVEMENT_COUNT,
+						SUCCESS_LIMIT,
+						MIN_PARTICIPANT,
+						MAX_PARTICIPANT,
+					<!-- 	STATUS
+						VIEW_COUNT
+						LIKE_COUNT
+						MODIFY_DATE-->
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+				
+						START_DATE,
+						END_DATE,
+						USER_NO,
+						CATEGORY_NO
+						)
+		
+		VALUES(
+		SEQ_CHALLENGE_NO,
+		#{c.challengeTitle},
+		#{c.challengeContent},
+		#{c.challengePlace},
+		
+		#{c.successLimit},
+		#{c.minParticipant},
+		#{c.maxParticipant},
+		#{c.originName},
+		#{c.changeName},
+		SYSDATE,
+		#{c.startDate},
+		#{c.endDate},
+		<!--#{c.userNo? loginUser.userNo?}  → Challenge객체 만들 때 userNo필드에 loginUser값 넣기 -->
+		#{c.categoryNo},
+		)
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateChallenge">
+		UPDATE 
+						TB_CHALLENGE
+		SET  
+						CHALLENGE_TITLE = #{c.challengeTitle},
+						CHALLENGE_CONTENT = #{c.challengeContent},
+						CHALLENGE_PLACE = #{c.challengePlace},
+						ACHIEVEMENT_COUNT=#{c.achievementCount},
+						SUCCESS_LIMIT = #{c.successLImit},
+						MIN_PARTICIPANT=#{c.minParticipant},
+						MAX_PARTICIPANT=#{c.maxParticipant},
+						ORIGIN_NAME = #{c.originName},
+						CHANGE_NAME = #{c.changeName},
+						MODIFY_DATE = SYSDATE,
+						START_DATE = #{c.startDate},
+						END_DATE = #{c.endDate},
+						CATEGORY_NO = #{c.categoryNo}
+		WHERE 
+						CHALLENGE_NO = #{c.challengeNo}
+	</update>
+	
+	
+	
+	<!-- 게시글 삭제 -->
+	<update id="deleteChallenge">
+	UPDATE 
+					TB_CHALLENGE
+	SET
+					STATUS = 'N'
+	WHERE 
+					CHALLENGE_NO = #{challengeNo}
+	</update>
+	
+</mapper>
+
