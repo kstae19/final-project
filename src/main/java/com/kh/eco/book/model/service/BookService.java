@@ -19,6 +19,12 @@ public interface BookService {
 	// 도서정보 조회수 조회
 	public int countBook(String ISBN);
 	
+	// 도서 북마크 추가
+	public int insertBookMark();
+	
+	// 도서 북마크 제거
+	public int removeBookMark();
+	
 	
 	
 	

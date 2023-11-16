@@ -288,11 +288,11 @@ public class BookController {
 			}
 		}
 		
-		System.out.println(book);
-		
 		model.addAttribute("b", book);
 		return "book/book/bookDetail";
 	}
+	
+	 
 	
 	
 	

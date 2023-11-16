@@ -40,6 +40,16 @@ public class BookServiceImpl implements BookService{
 		return bookDao.countBook(sqlSession, ISBN);
 	}
 
+	@Override
+	public int insertBookMark() {
+		return bookDao.insertBookMark();
+	}
+
+	@Override
+	public int removeBookMark() {
+		return bookDao.removeBookMark();
+	}
+
 	
 
 	

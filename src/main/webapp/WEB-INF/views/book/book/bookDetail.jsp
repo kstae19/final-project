@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,23 +40,48 @@
             grid-column: 2 / 3;
 	        grid-row: 2 / 3;
         }
+        
+        .bookmark{
+        	content: url(http://localhost:8001/eco/resources/images/book/book-empty.png);
+        }
+        img[class$=abled]{
+        	content: url(http://localhost:8001/eco/resources/images/book/book-full.png);
+        }
     </style>
     <script>
     	function bookList(){
     		location.href="book";
     	}
+    	
+    	function bookmark(){
+    		$.ajax({
+    			url : 'bookmark.bk',
+    			type : 'get',
+    			data : {
+    				className: $('.bookmark').attr('class')
+    			},
+    			success : result => {
+    				console.log(result);
+    			},
+    			error : () => {
+    				console.log("북마크 통신 실패");
+    			}
+    		})
+    	}
     </script>
 </head>
 <body>
-
+	
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
         <div>
             <button type="button" class="btn btn-secondary" onclick="bookList();">목록</button>
             <span>${ b.bookCategory }</span>
+            <!-- 로그인유저처리 -->
             <span id="" style="float: right;">내 서재에 담기</span>
-            <img src="../../../resources/book/book-empty.png" style="height: 30px; width: 30px; float: right;">
+            <img class="bookmark" src="" style="height: 30px; width: 30px; float: right;" onclick="bookmark();">
         </div>
         <br>
         <div id="bookform-grid">

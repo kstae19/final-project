@@ -58,6 +58,7 @@
 </head>
 <body>
 
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 
     <div class="outer">
