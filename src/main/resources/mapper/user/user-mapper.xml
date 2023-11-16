@@ -74,5 +74,34 @@
 		   AND
 		   	   CERT_SECRET = #{certSecret}
 	</delete>
+	
+	<insert id="insertMember" parameterType="user">
+		INSERT
+		  INTO
+		       TB_USER
+		       (
+		        USER_NO,
+		        USER_ID,
+		        USER_PWD,
+		        USER_NAME,
+		        EMAIL,
+		        PHONE,
+		        POST,
+		        ADDRESS,
+		        DETAIL_ADDRESS
+		       )
+		VALUES 
+			   (
+			    SEQ_UNO.NEXTVAL, 
+			   	#{userId},
+			   	#{userPwd},
+			   	#{userName},
+			   	#{email},
+			   	#{phone},
+			   	#{postNo},
+			   	#{address}, 
+			   	#{detailAddress}
+			   ) 	
+	</insert>
 
 </mapper>

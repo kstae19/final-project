@@ -62,6 +62,13 @@
 </style>
 </head>
 <body>
+	<c:if test="${ not empty alertMsg }">
+		<script>
+			alert('${alertMsg}')
+		</script>
+		<c:remove var="alertMsg" scope="session" />
+	</c:if>
+
 	<div id="menubar">
 		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
 		<div class="menu" onclick="location.href='event'"><h1>EVENT</h1></div>

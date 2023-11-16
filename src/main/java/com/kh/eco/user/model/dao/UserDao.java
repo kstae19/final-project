@@ -32,4 +32,8 @@ public class UserDao {
 		sqlSession.delete("userMapper.deleteCert", cert);
 	}
 
+	public int insertMember(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.insert("userMapper.insertMember", u);
+	}
+
 }
