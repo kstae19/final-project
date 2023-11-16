@@ -39,7 +39,7 @@ SELECT
 		P.STATUS = 'Y'
 </select>
 
-<insert id="addLike" parameterType="hashmap">
+<insert id="addLike" parameterType="productLike">
 INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </insert>
 
@@ -135,4 +135,11 @@ FROM
 WHERE 
 	USER_NO = #{userNo}
 </select>
+
+
+<select id="checkLike" parameterType="productLike" resultType="string">
+SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
+</select>
+
+
 </mapper>

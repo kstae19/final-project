@@ -39,7 +39,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border:1px solid saddlebrown;
+	border : 1px solid transparent;
 }
 
 .outer {
@@ -104,12 +104,11 @@ div {
 	float:left;
 	width: 400px;
 	height: 400px;
-	padding: 2px;
 	cursor:pointer;
 }
-.product>div{
+.product-info{
 	width:100%;
-	height:90%;
+	height:330px;
 }
 
 .product table {
@@ -118,7 +117,12 @@ div {
 	padding-left: 100px;
 	text-align:center;
 }
-.product>span>img{
+.like-cart{
+	width:100%;
+	height:70px;
+	padding:10px;
+}
+.like-cart>img{
 	width : 40px;
 	height:40px;
 }
@@ -157,30 +161,40 @@ div {
 			<div id="product-area">
 				<div id="products">
 					<c:forEach var="p" items="${productList }">
-						<div id="${p.productNo }" class="product">	
-							<!--  -->					
-							<div>
-							<h1>${p.productName }</h1>
-							<table class="table">
-								<thead>
-									<tr>
-										<th>옵션명</th>
-										<th>가격</th>
-									</tr>
-								</thead>
-								<tbody>
-									<c:forEach var="option" items="${p.optionList }">
+						<div id="${p.productNo }" class="product">
+									
+							<c:choose>
+							<c:when test="${empty loginUser }">
+								<div class="product-info" 
+								onclick="location.href='product.detail?userNo=0&productNo='+${p.productNo}">
+							</c:when>
+							<c:otherwise>		
+								<div class="product-info" 
+								onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo }+'productNo='+${p.productNo}">
+							</c:otherwise>
+							</c:choose>
+								<h1>${p.productName }</h1>
+								<table class="table">
+									<thead>
 										<tr>
-											<td>${option.optionName }</td>
-											<td>${option.price }</td>
+											<th>옵션명</th>
+											<th>가격</th>
 										</tr>
-									</c:forEach>
-									<tr>
-									</tr>
-								</tbody>
-							</table>
-							</div><!-- product-info -->
-							<span>
+									</thead>
+									<tbody>
+										<c:forEach var="option" items="${p.optionList }">
+											<tr>
+												<td>${option.optionName }</td>
+												<td>${option.price }</td>
+											</tr>
+										</c:forEach>
+										<tr>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="like-cart">
 									<c:choose>
 									<c:when test="${empty sessionScope.loginUser }">
 										<img onclick="askLogin();" src="resources/images/heart-regular.svg">
@@ -189,8 +203,10 @@ div {
 										<img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg">
 									</c:otherwise>
 									</c:choose>
-							</span>
-						</div>
+							</div>
+							
+						</div><!-- product class-->
+						
 							
 						<script>
 							$(function() {
@@ -204,9 +220,6 @@ div {
 								}, ()=>{
 									$('#${p.productNo} table').css("display", "none");
 									$('#${p.productNo} h1').css('display', 'block');
-								});
-								$('#${p.productNo}>div').click(()=>{
-									location.href='product.detail?productNo='+${p.productNo};
 								});
 							})
 						</script>
@@ -242,10 +255,31 @@ div {
 					function sort(type){
 						
 					}
+					$(()=>{
+						
+						$.ajax({
+							url : 'getLikes.pr',
+							data : {userNo : '${sessionScope.loginUser.userNo}'},
+							success: result =>{
+								console.log(result);
+								for(let i in result){
+									$('.product').each((idnex, item)=>{
+										if(result[i].productNo == item.id){
+										$(item).find('.like-cart>img').attr('src', 'resources/images/heart-solid.svg');
+											
+										}
+									})
+								}
+							},
+							error: ()=>{
+								console.log('에이젝스 망했어...');
+							}
+						})
+					})
 				</script>
 				<c:if test = "${!empty loginUser}">
 					<script>
-						
+
 					</script>
 				</c:if>
 				

@@ -18,7 +18,7 @@ public class ProductDao {
 	public ArrayList<Product> selectProductList(SqlSession sqlSession){
 		return (ArrayList)sqlSession.selectList("productMapper.selectProductList");
 	}
-	public int addLike(SqlSession sqlSession, HashMap like) {
+	public int addLike(SqlSession sqlSession, ProductLike like) {
 		return sqlSession.insert("productMapper.addLike", like);
 	}
 	public Product selectProduct(SqlSession sqlSession, int productNo) {
@@ -43,5 +43,8 @@ public class ProductDao {
 		return (ArrayList)sqlSession.selectList("productMapper.getLikes", userNo);
 	}
 	//좋아요 되어있는 상품인지 확인
+	public String checkLike(SqlSessionTemplate sqlSession, ProductLike like) {
+		return sqlSession.selectOne("productMapper.checkLike", like);
+	}
 
 }

@@ -1,7 +1,5 @@
 package com.kh.eco.product.controller;
 
-import java.util.HashMap;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
+import com.kh.eco.product.model.vo.ProductLike;
 
 @Controller
 public class ProductController {
@@ -26,24 +25,30 @@ public class ProductController {
 	}
 	@ResponseBody
 	@RequestMapping(value = "product.like", produces="text/html; charset=UTF-8")
-	public String like(int productNo, @RequestParam(value="userNo", defaultValue="1") int userNo) {
-		HashMap like = new HashMap();
-		like.put("productNo", productNo);
-		like.put("userNo", userNo);
-		System.out.println("유저넘버 넘어왔나 ? :"+userNo);
-		int result = productService.addLike(like);
-		if(result>0) {			
-			return "ne";
+	public String like(ProductLike like) {
+		if(checkLike(like).equals("Y")) {
+			//이미 좋아요 되어있으니까 좋아요를 빼야대
+			return "removed";
 		}else {
-			return "aniyo";
+			//좋아요를 추가하면 돼
+			int result = productService.addLike(like);
+			return result>0? "added":"failed to add like";		
 		}
 	}
+	@ResponseBody
+	@GetMapping("check.like")
+	public String checkLike(ProductLike like) {
+		return productService.checkLike(like);
+	}
+	
 	@GetMapping("product.detail")
-	public String showDetail(int productNo, Model model) {
-		model.addAttribute("p", productService.selectProduct(productNo));
-		model.addAttribute("images", productService.getImages(productNo));
-		model.addAttribute("brand", productService.getBrand(productNo));
-		model.addAttribute("review", productService.getRate(productNo));
+	public String showDetail(ProductLike like, Model model) {
+		String likeCheck = like.getUserNo() !=0 ? checkLike(like) : "N";
+		model.addAttribute("like", likeCheck);
+		model.addAttribute("p", productService.selectProduct(like.getProductNo()));
+		model.addAttribute("images", productService.getImages(like.getProductNo()));
+		model.addAttribute("brand", productService.getBrand(like.getProductNo()));
+		model.addAttribute("review", productService.getRate(like.getProductNo()));
 		return "product/productDetail";
 	}
 	@RequestMapping("product.orderForm")
@@ -61,5 +66,10 @@ public class ProductController {
 	@GetMapping(value ="product.review", produces="application/json; charset=UTF-8")
 	public String ajaxReviewList(int productNo, Model model) {
 		return new Gson().toJson(productService.reviewList(productNo));
+	}
+	@ResponseBody
+	@GetMapping(value="getLikes.pr", produces="application/json; charset=UTF-8")
+	public String ajaxGetLikes(@RequestParam(value="userNo", defaultValue="1") int userNo) {
+		return new Gson().toJson(productService.getLikes(userNo));
 	}
 }
