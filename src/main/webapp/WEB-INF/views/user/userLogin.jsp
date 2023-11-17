@@ -139,6 +139,13 @@
 				</div>
 			</div>
 		</div>
+		
+		<script>
+			$('#kakao-login').click(() => {
+				location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=371545a4bd07fbb21965518d557bf733&redirect_uri=http://localhost:8001/eco/code&response_type=code&scope=profile_image';
+			});
+		</script>
+		
 		<div id="regist-user">
 			<div id="regist">
 				<div id="search-id" onclick="location.href='#'">
