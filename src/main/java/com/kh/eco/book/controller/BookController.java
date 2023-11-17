@@ -41,6 +41,7 @@ public class BookController {
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
 		url += "&MaxResults=" + maxResult;
 		url += "&output=JS";
+		url += "&Sort=SalesPoint";
 		url += "&Version=20131101";
 		url += "&Cover=big";
 		url += "&start=" + currentPage;
@@ -202,7 +203,7 @@ public class BookController {
 			}
 		}
 		
-		PageInfo pi = Pagination.getPageInfo(200, currentPage, 10, 10);
+		PageInfo pi = Pagination.getPageInfo(200, currentPage, 20, 10);
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
@@ -248,12 +249,12 @@ public class BookController {
 			break;
 		}
 		
-		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 10, 10);
+		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 20, 10);
 		// 만약 현재페이지 1 : 0 ~ 19(20)
 		// 2 : 20 ~ 39(40)
 		// 3 : 40 ~ 59(60)
 		// 4 : 60 ~ 79(80)
-		int startList = pi.getMaxPage() * (currentPage - 1);
+		int startList = 20 * (currentPage - 1);
 		int endList = currentPage * 20;
 		if(endList > searchList.size()) {
 			endList = searchList.size();

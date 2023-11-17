@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class BookReply {
 	
-	private int bookReplyNo;
 	private String bookReplyDate;
 	private String bookReplyContent;
 	private String ISBN13;
