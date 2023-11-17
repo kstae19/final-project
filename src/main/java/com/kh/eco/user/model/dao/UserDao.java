@@ -4,14 +4,13 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.eco.user.model.vo.Cert;
+import com.kh.eco.user.model.vo.KakaoUser;
 import com.kh.eco.user.model.vo.User;
 
 @Repository
 public class UserDao {
 
 	public User loginUser(SqlSessionTemplate sqlSession, User u) {
-		User user = sqlSession.selectOne("userMapper.loginUser", u);
-		System.out.println(user);
 		return sqlSession.selectOne("userMapper.loginUser", u);
 	}
 
@@ -34,6 +33,14 @@ public class UserDao {
 
 	public int insertMember(SqlSessionTemplate sqlSession, User u) {
 		return sqlSession.insert("userMapper.insertMember", u);
+	}
+
+	public int selectKakao(SqlSessionTemplate sqlSession, String id) {
+		return sqlSession.selectOne("userMapper.selectKakao", id);
+	}
+
+	public int insertKakao(SqlSessionTemplate sqlSession, KakaoUser ku) {
+		return sqlSession.insert("userMapper.insertKakao", ku);
 	}
 
 }
