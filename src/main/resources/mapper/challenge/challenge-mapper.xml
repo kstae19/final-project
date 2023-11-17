@@ -178,37 +178,34 @@
 	</select>
 	
 	<!-- 좋아요수 증가 -->
-	<update id="increaseLikeCount">
-		update 
-						tb_challenge A
-		join 
-						tb_like B using (user_no)
-		set 
-						like_count = ( 
-												select count(*) 
-												from tb_like 
-												where 
-												challenge_No = #{challengeNo} 
+	<update id="increaseLikeCount" parameterType="hashmap">
+	UPDATE 
+					TB_CHALLENGE 
+	SET
+					LIKE_COUNT = (
+												SELECT COUNT(*)
+												FROM TB_LIKE
+												WHERE
+												CHALLENGE_NO = #{ challengeNo }	
 											) + 1
-		where 
-						B.userNo = #{loginUser.userNo}
+	WHERE
+					USER_NO = #{ userNo }
+
 	</update>
 	
 	<!-- 좋아요수 감소 -->
-	<update id="decreaseLikeCount">
+	<update id="decreaseLikeCount" parameterType="hashmap">
 		update 
 						tb_challenge A
-		join 
-						tb_like B using (user_no)
 		set 
 						like_count = (
 											 select count(*) 
-											 from tb_like 
+											 from tb_like B
 											 where 
 											 challenge_No = #{challengeNo} 
 											) - 1
 		where 
-						B.userNo = #{loginUser.userNo}
+						userNo = #{loginUser.userNo}
 	</update>	
 		
 	<!-- 게시글 작성 -->

@@ -13,6 +13,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <!-- overal -->
 <style>
@@ -70,8 +71,54 @@
     		</article>
     		
     		<article id="participants">
-    			${ challenge.minParticipant }
+    			${ challenge.minParticipant } ~ ${ challenge.maxParticipant }
     		</article>
+    		
+    		<article id="likeCount">
+    			<div id="like">🤍</div>
+    			<div id="count">${challenge.likeCount }</div> 
+    		</article>
+    		
+    		<script>
+    		$(function(){
+    			$('#likeCount').on('click', function(e){
+    				// 처음 클릭하는 회원이라면
+    				increaseLikeCount();
+    				
+    				// 이미 클릭한 회원이라면
+    				//decreaseLikeCount();
+    			})
+    		});
+    			
+    		// 좋아요 증가함수
+    		function increaseLikeCount(){
+	
+		    			$.ajax({
+		    				url : 'increase.like',
+		    				data : {
+		    					userNo : ${ loginUser.userNo },
+		    					challengeNo : ${ challenge.challengeNo },
+		    				},
+		    				success : function(data){
+		    					$('#like').html('💚')
+		    					console.log(data);
+		    				},
+		    				error : function(){
+		    					
+		    					console.log('실패');
+		    					
+		    				}
+		    			
+		    			/* ;		    
+		    			
+		    		
+		    			$('#count').html('${challenge.likeCount }' + 1); */
+	
+    			})
+    		
+    		}
+		    </script>
+		    		
     		
     		<c:if test="${  sessionScope.loginUser.userNo eq challenge.userNo }">
     			<button><a href="#">수정</a></button><button><a href="#">삭제</a></button>
@@ -103,9 +150,13 @@
     		</article>
     	
     	</section>
+	
+    	
     <!-- content -->
     <style>
-    
+    #likeCount{
+    	border : 1px solid black;
+    }
     </style>
     
     <!-- achievement  -->

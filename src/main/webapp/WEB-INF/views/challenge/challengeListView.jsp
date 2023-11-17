@@ -184,7 +184,7 @@
 
 	
 	<section id="pasing-area">
-		${condition }
+	
 		<c:choose>
 			
 			<c:when test="${ empty condition }">
