@@ -42,8 +42,7 @@ public class ProductController {
 	}
 	public int removeLike(ProductLike like) {
 		return productService.removeLike(like);
-	}
-	
+	}	
 	
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {
@@ -56,8 +55,7 @@ public class ProductController {
 		return "product/productDetail";
 	}
 	@RequestMapping("product.orderForm")
-	public String orderForm() {
-		
+	public String orderForm() {		
 		return "redirect:/";
 	}
 	@ResponseBody
@@ -73,7 +71,13 @@ public class ProductController {
 	}
 	@ResponseBody
 	@GetMapping(value="getLikes.pr", produces="application/json; charset=UTF-8")
-	public String ajaxGetLikes(@RequestParam(value="userNo", defaultValue="1") int userNo) {
+	public String ajaxGetLikes(int userNo) {
 		return new Gson().toJson(productService.getLikes(userNo));
+	}
+	
+	@GetMapping("cart")
+	public String myCart() {
+		
+		return "product/cart";
 	}
 }

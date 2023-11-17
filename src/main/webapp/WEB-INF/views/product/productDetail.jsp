@@ -14,7 +14,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border : 1px solid orange;
+	border : 1px solid transparent;
 }
 
 .product-content {
@@ -50,7 +50,7 @@ div {
 
 #productTitle {
 	display: flex;
-	height: 100px;
+	height: 90px;
 	margin-left:10px;
 	background:rgb(234, 226, 213);
 	opacity:0.9;
@@ -87,25 +87,29 @@ div {
 	width: 100%;
 	height: 55%;
 	padding-left:25px;
+	padding-top:10px;
 }
 #like>img{
-	width: 50px;
-	height:50px;
+	width: 40px;
+	height:40px;
 }
 #star {
 	width: 100%;
 	height: 45%;
 	text-align:center;
+	padding:5px;
 }
 #choice input, select{
 	width: 70%;
 	height: 30px;
 	border: none;
+	margin-left:20px;
+	margin-right:20px;
 }
 #choice p{
-	text-align:left;
+	text-align:center;
 	color:orangered;
-		padding:0;
+	padding:0;
 	margin:0;
 }
 #picture-area {
@@ -125,6 +129,11 @@ div {
 #review-area>h2{
 	cursor:pointer;
 }
+.fakebtn{
+	border-radius:5px;
+	background:beige;
+	padding:1px;
+}
 </style>
 </head>
 <body>
@@ -141,8 +150,11 @@ div {
 					</div>
 					<div id="like-star">
 					<c:choose>
-						<c:when test="${like eq 'N' or empty sessionScope.loginUser}">
+						<c:when test="${empty sessionScope.loginUser}">
 							<div id="like"><img onclick="askLogin();" src="resources/images/heart-regular.svg"></div>
+						</c:when>
+						<c:when test="${like eq 'N' }">
+						<div id="like"><img onclick="like(${p.productNo}, this);" src="resources/images/heart-regular.svg"></div>
 						</c:when>
 						<c:otherwise>
 						<div id="like"><img onclick="like(${p.productNo}, this);" src="resources/images/heart-solid.svg"></div>
@@ -150,7 +162,7 @@ div {
 					</c:choose>
 						<div id="star">
 						<a href="product.review?productNo=${p.productNo }">${review.starRate }/5</a>
-						<br>(${review.reviewNo }개) 
+						 (${review.reviewNo }개) 
 						</div>
 					</div>
 				</div>
@@ -253,6 +265,9 @@ div {
 				<p>${p.detailInfo }</p>
 			</div>
 			<hr>
+				<c:if test="${empty images }">
+				<h3 align ="center"> 상세 이미지가 없습니다. </h3>
+				</c:if>
 			<c:forEach items="${images }" var="img">
 				<img src="${img}">
 				<br>
@@ -281,11 +296,11 @@ div {
 					url:'product.review',
 					data:{productNo:${p.productNo}},
 					success: reviews => {
-						console.log(reviews);
 						let value = '<div><table><tbody>';
 						for(let i in reviews){
 							value += '<tr>'
-								+ '<td><i>'+reviews[i].option+'</i> <b>'+reviews[i].reviewTitle+'</b></tr>'
+								+ '<td><span class="fakebtn">'+reviews[i].option+'</span> <b>'+reviews[i].reviewTitle+'</b></td>'
+								+'</tr>'
 								+'<tr>'
 								+ '<td>'+reviews[i].reviewContent+'</td>'
 								+'</tr>';	
@@ -300,5 +315,10 @@ div {
 			}
 		</script>
 	</div>
+	
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
+	<br><br><br>
 </body>
 </html>

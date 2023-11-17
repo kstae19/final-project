@@ -46,7 +46,7 @@ div {
 	height: 1100px;
 }
 
-#content {
+.content {
 	width: 1200px;
 	height: 1000px;
 	margin: auto;
@@ -140,7 +140,7 @@ div {
 <jsp:include page="../common/header.jsp"/>
 	<div class="outer">
 		<br> <br>
-		<div id="content">
+		<div class="content">
 			<div id="searching-area">
 				<input type="text" placeholder="검색어를 입력하세요."> <img
 					src="resources/images/searhIcon.svg">
@@ -267,7 +267,6 @@ div {
 							url : 'getLikes.pr',
 							data : {userNo : '${sessionScope.loginUser.userNo}'},
 							success: result =>{
-								console.log(result);
 								for(let i in result){
 									$('.product').each((idnex, item)=>{
 										if(result[i].productNo == item.id){
