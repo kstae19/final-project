@@ -13,7 +13,7 @@ public interface ChallengeService {
 	
 	ArrayList<Challenge> selectChallengeList(PageInfo pi);
 	
-	int countChallengeSearch(HashMap<String, String> map);
+	int countSearchList(HashMap<String, String> map);
 	
 	ArrayList<Challenge> selectSearchList(HashMap<String, String> map, PageInfo pi);
 	
@@ -34,4 +34,6 @@ public interface ChallengeService {
 	int updateChallenge(Challenge c);
 	
 	int deleteChallenge(int challengeNo);
+
+	
 }

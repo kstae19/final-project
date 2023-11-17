@@ -27,7 +27,7 @@ public class ChallengeController {
 	@Autowired
 	private ChallengeService challengeService;
 	
-	// boardlistView
+	// 전체 리스트 조회
 	@RequestMapping("challenge")
 	public String selectChallengeList(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model) throws IOException {
 		
@@ -36,23 +36,61 @@ public class ChallengeController {
 		 * pi.setListCount(challengeService.countChallengeList())
 		 */
 		
-		PageInfo pi = Pagination.getPageInfo( // 1. listCount부터 알아오기
-											challengeService.countChallengeList(),
+		PageInfo pi = Pagination.getPageInfo( 
+											challengeService.countChallengeList(),//  listCount
 											currentPage,
-											4,
-											5
+											4, // boardLimit
+											5 // pageLimit
 											);
 		// System.out.println(challengeService.countChallengeList());
 		
 		// 2. 페이징정보 불러오기 : model, modelAndView, session 셋 중 하나
-		model.addAttribute("list", challengeService.selectChallengeList(pi));
-		//model.addAttribute("pi", pi);
+		model.addAttribute("list", challengeService.selectChallengeList(pi)); // list 정보
+		model.addAttribute("pi", pi); // list개수에 따른 페이징 정보
 		//System.out.println(challengeService.selectChallengeList(pi));
 		
 		// 3. 화면 포워딩하기   WEB-INF/views/        "요기"           .jsp
-		return "challenge/challengeListView";
+		return "challenge/challengeListView"; // vs "redirect:challenge"
 		
 	}
+	
+	// 검색결과 리스트 조회
+	@RequestMapping("search.condition")
+	public String selectChallengeSearch(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String condition, String keyword) {
+		
+		// condition과 keyword 한 쌍으로 담기
+		HashMap<String, String> map = new HashMap();
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+
+		System.out.println(condition);
+		PageInfo pi = Pagination.getPageInfo( 
+				challengeService.countSearchList(map),// 검색결과수 구하기
+				currentPage,
+				4,
+				5
+				);
+		
+		System.out.println("검색결과수 : " + challengeService.countSearchList(map));
+		
+		// 2. 페이징정보 불러오기 : model, modelAndView, session 셋 중 하나
+		model.addAttribute("condition", condition);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("list", challengeService.selectSearchList(map, pi));
+		model.addAttribute("pi", pi);
+		
+		System.out.println("검색결과리스트 : " + challengeService.selectSearchList(map, pi));
+		
+		// 화면 redirect? 포워딩?
+		//return "redirect:challenge"; 
+		return "challenge/challengeListView";
+
+	}
+	
+	
+	
+	
+	
 	
 	// challengeEnrollForm으로 가는 매핑메서드
 	@RequestMapping("enrollForm.ch")
@@ -84,16 +122,16 @@ public class ChallengeController {
 		
 		if(challengeService.insertChallenge(c) > 0) {
 			
-			System.out.println("챌린지 등록 성공!");
+			session.setAttribute("alertMsg", "게시글 작성 성공!!!!");
+			//System.out.println("등록된 Challenge정보 : " + challengeService.insertChallenge(c));
 			
 		} else {
 			
 			System.out.println("실패!!");
+			
 		}
 		
-
-		
-		return "redirect:challenge";
+		return "redirect:/challenge";
 		
 	}
 	
@@ -131,6 +169,28 @@ public class ChallengeController {
 		// 파일전송완료시 그 파일이 있는 경로를 반환해줘야함
 		return "resources/uploadFiles/" + changeName;
 		
+	}
+	
+	
+	@RequestMapping("detail.ch")
+	public String selectChallengeDetail(int challengeNo, Model model) {
+		
+		// 1. 성공적으로 조회수 증가시
+		if(challengeService.increaseViewCount(challengeNo) > 0) {
+			
+			//System.out.println("내가 찍히면 조회수 증가" + challengeService.increaseViewCount(challengeNo));
+			
+			// 2. boardDetailView.jsp상 필요한 데이터를 조회 
+			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo)); 
+			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(challengeNo) );
+			return "challenge/challengeDetailView";
+			
+		} else {
+			
+			System.out.println("조회수 증가 실패!");
+			return "common/errorPage";
+		}
+	
 	}
 	
 	

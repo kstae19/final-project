@@ -22,9 +22,9 @@ public class ChallengeDao {
 		return (ArrayList)sqlSession.selectList("challengeMapper.selectChallengeList", null, rowBounds);
 	}
 
-	public int countChallengeSearch(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
+	public int countSearchList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
 		
-		return sqlSession.selectOne("challengeMapper.countChallengeSearch", map);
+		return sqlSession.selectOne("challengeMapper.countSearchList", map);
 	}
 
 	public ArrayList<Challenge> selectSearchList(SqlSessionTemplate sqlSession, HashMap<String, String> map,

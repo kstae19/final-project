@@ -41,9 +41,9 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 
 
 	@Override
-	public int countChallengeSearch(HashMap<String, String> map) {
+	public int countSearchList(HashMap<String, String> map) {
 		
-		return challengeDao.countChallengeSearch(sqlSession, map);
+		return challengeDao.countSearchList(sqlSession, map);
 	}
 	
 	/**

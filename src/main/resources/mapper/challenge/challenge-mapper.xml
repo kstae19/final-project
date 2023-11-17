@@ -14,14 +14,21 @@
 		<result column="LIKE_COUNT" property="likeCount" />
 		<result column="ORIGIN_NAME" property="originName" />
 		<result column="CHANGE_NAME" property="changeName" />
-		
+		<result column="CHALLENGE_CONTENT" property="challengeContent" />
 		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
 		<!-- <result column="USER_ID" property="userId" />
 		<result column="CATEGORY_NAME" property="categoryName" /> -->
 		<result column="USER_NO" property="user" />
 		<result column="CATEGORY_NO" property="category" />
-
-	
+		
+		<result column="END_DATE" property="endDate" />
+		<result column="CHALLENGE_PLACE" property="challengePlace" />
+		<result column="ACHIEVEMENT_COUNT" property="achievementCount" />
+		<result column="MIN_PARTICIPANT" property="minParticipant" />
+		<result column="MAX_PARTICIPANT" property="maxParticipant" />
+		<result column="STATUS" property="status" />
+		<result column="UPLOAD_DATE" property="uploadDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
 	</resultMap>
 	
 	
@@ -33,8 +40,6 @@
 						TB_CHALLENGE
 		WHERE 
 						STATUS = 'Y'
-	
-	
 	</select>
 	
 	<!-- 게시글 전체조회 -->
@@ -57,15 +62,15 @@
 						TB_USER USING(USER_NO)
 		JOIN 
 						TB_CATEGORY USING (CATEGORY_NO)
-		WHERE 
-						STATUS = 'Y'
+<!-- 		WHERE 
+						STATUS = 'Y' -->
 		ORDER
 		BY	
 						UPLOAD_DATE DESC
 	</select>
 	
 	<!-- 검색결과수 조회 -->
-	<select id="countChallengeSearch" resultType="_int">
+	<select id="countSearchList" resultType="_int" parameterType="hashmap">
 		SELECT 
 						COUNT(*)
 		FROM 
@@ -76,22 +81,60 @@
 						TB_CHALLENGE.STATUS = 'Y'<!-- USER에도 STATUS가 있기 때문 -->
 	
 		<if test=" condition == 'title' ">
-		AND CHALLENGE_TITLE 
+			AND CHALLENGE_TITLE 
 		</if>
-		<if test=" condiiton == 'content' ">
-		AND CHALLENGE_CONTENT
-		</if>
+<!-- 		<if test=" condiiton == 'content' ">
+			AND CHALLENGE_CONTENT
+		</if> -->
 		<if test=" condition == 'userId' ">
-		AND USER_ID
+			AND USER_ID
 		</if>
-		LIKE '%' || #{keyword} || '%'
+		LIKE '%' || #{ keyword } || '%'
 	</select>
 	
 	<!-- 검색결과리스트 조회 -->
-	
+	<select id="selectSearchList" resultMap="challengeResultSet" parameterType="hashmap">
+		SELECT
+						CHALLENGE_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+						<!-- CHALLENGE_CONTENT, -->
+						VIEW_COUNT,
+						LIKE_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_USER USING(USER_NO)
+		JOIN 
+						TB_CATEGORY USING (CATEGORY_NO)
+<!-- 		WHERE 
+						STATUS = 'Y' -->
+		WHERE 
+						TB_CHALLENGE.STATUS = 'Y'	
+		<choose>
+			<when test="condition == 'title' ">
+					AND		CHALLENGE_TITLE
+			</when>
+<!-- 			<when test="condition == 'content' ">
+					AND	    CHALLENGE_CONTENT    => listView에는 content가 조회안됨
+			</when> -->
+			<otherwise>
+					AND		USER_ID
+			</otherwise>
+		</choose>
+						LIKE '%' || #{keyword} || '%'
+		ORDER
+		BY	
+						UPLOAD_DATE DESC
+	</select>
 	
 	<!-- 조회수 증가 -->
-	<update id="increaseViewCount">
+	<update id="increaseViewCount" parameterType="_int">
 		UPDATE 
 						TB_CHALLENGE
 		SET 
@@ -101,7 +144,7 @@
 	</update>	
 	
 		<!-- 게시글 상세조회 -->
-	<select id="selectChallengeDetail" resultType="challenge"><!-- resultMap으로 할까? -->
+	<select id="selectChallengeDetail" resultMap="challengeResultSet" parameterType="_int"><!-- resultMap으로 할까? -->
 		SELECT
 						CHALLENGE_NO,
 						CHALLENGE_TITLE,
