@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReport;
+import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.vo.PageInfo;
 
 public interface BookService {
@@ -45,10 +47,10 @@ public interface BookService {
 	public int reportCount();
 	
 	// 독후감 게시판 리스트 조회
-	public ArrayList<BookReport> selectReportList();
+	public ArrayList<BookReport> selectReportList(PageInfo pi);
 	
 	// 독후감 게시판 검색 조회
-	public ArrayList<BookReport> searchReportList();
+	public ArrayList<BookReport> searchReportList(String bookSearchCondition, PageInfo pi);
 	
 	// 독후감 게시판 상세조회
 	public BookReport reportDetail(int reportNo);

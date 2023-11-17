@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReport;
 
 @Repository
 public class BookDao {
@@ -51,6 +52,14 @@ public class BookDao {
 	
 	public ArrayList<BookReply> ajaxSelectBookReply(SqlSessionTemplate sqlSession, String ISBN13, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.ajaxSelectBookReply", ISBN13, rowBounds);
+	}
+	
+	public int reportCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.reportCount");
+	}
+	
+	public ArrayList<BookReport> selectReportList(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.selectReportList", null, rowBounds);
 	}
 
 }

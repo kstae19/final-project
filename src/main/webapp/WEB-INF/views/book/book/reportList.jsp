@@ -59,45 +59,90 @@
         <table class="table table-bordered" id="report-table">
           <thead>
             <tr>
-              <th style="width: 10%;">게시판번호</th>
-              <th style="width: 50%;">제목</th>
+              <th style="width: 5%;">게시판번호</th>
+              <th style="width: 10%;">별점</th>
+              <th style="width: 45%;">제목</th>
               <th style="width: 10%;">작성자</th>
               <th style="width: 10%;">작성일</th>
               <th style="width: 10%;">조회수</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>어쩌고저쩌고</td>
-              <td>홍길동</td>
-              <td>2023-03-05</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>어쩌고저쩌고</td>
-              <td>홍길동</td>
-              <td>2023-03-05</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>어쩌고저쩌고</td>
-              <td>홍길동</td>
-              <td>2023-03-05</td>
-              <td>100</td>
-            </tr>
+          	<c:forEach items="${ list }" var="r">
+          		<c:choose>
+          			<c:when test="${ r.bookReportStar eq 0 }">
+          				<tr  style="color:red;">
+				          <td>${ r.bookReportNo }</td>
+				          <td>공지</td>
+				          <td>${ r.bookReportTitle }</td>
+				          <td>${ r.userId }</td>
+				          <td>${ r.bookReportDate }</td>
+				          <td>${ r.bookReportCount }</td>
+				        </tr>
+          			</c:when>
+          			<c:otherwise>
+          				<tr>
+				          <td>${ r.bookReportNo }</td>
+				          <td>${ r.bookReportStar }</td>
+				          <td>${ r.bookReportTitle }</td>
+				          <td>${ r.userId }</td>
+				          <td>${ r.bookReportDate }</td>
+				          <td>${ r.bookReportCount }</td>
+				        </tr>
+          			</c:otherwise>
+          		</c:choose>
+          	</c:forEach>
           </tbody>
         </table>
           
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
+        <c:choose>
+			<c:when test="${ empty reportcondition }">
+				<ul class="pagination justify-content-center">
+		        	<c:choose>
+			       		<c:when test="${ pi.currentPage eq 1 }">
+			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+			           		<li class="page-item"><a class="page-link" href="book?cPage=${p}">${p}</a></li>
+			           </c:forEach>
+			           <c:choose>
+			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+        		</ul>
+			</c:when>
+			<c:otherwise>
+				<ul class="pagination justify-content-center">
+		        	<c:choose>
+			       		<c:when test="${ pi.currentPage eq 1 }">
+			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage - 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Previous</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+			           		<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${p}&searchBook=${searchBook}&selectBook=${selectBook}">${p}</a></li>
+			           </c:forEach>
+			           <c:choose>
+			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			       		</c:when>
+			       		<c:otherwise>
+			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage + 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Next</a></li>
+			       		</c:otherwise>
+			       	</c:choose>
+	        	</ul>
+			</c:otherwise>
+		</c:choose>
     </div>
 </body>
 </html>

@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.Book;
+import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
@@ -295,10 +296,9 @@ public class BookController {
 	// 독후감 게시판 포워딩 겸 리스트 조회
 	@RequestMapping("bookreport")
 	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
-		
 		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
-		
-		
+		model.addAttribute("list", bookService.selectReportList(pi));
+		model.addAttribute("pi", pi);
 		return "book/book/reportList";
 	}
 	 

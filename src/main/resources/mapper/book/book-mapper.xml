@@ -5,6 +5,7 @@
 <mapper namespace="bookMapper">
 	
 	<!-- resultMap 영역 -->
+	<!-- 한줄평 -->
 	<resultMap id="bookReplyResultSet" type="bookReply">
 		<result column="BOOK_REPLY_NO" property="bookReplyNo" />
 		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
@@ -12,6 +13,17 @@
 		<result column="USER_ID" property="userId" />
 	</resultMap>
 	
+	<!-- 독후감 게시글 -->
+	<resultMap id="bookReportResultSet" type="bookReport">
+		<result column="BOOK_REPORT_NO" property="bookReportNo" />
+		<result column="BOOK_REPORT_NOTICE" property="bookReportNotice" />
+		<result column="BOOK_REPORT_TITLE" property="bookReportTitle" />
+		<result column="USER_ID" property="userId" />
+		<result column="BOOK_REPORT_DATE" property="bookReportDate" />
+		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
+		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
+		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
+	</resultMap>
 	
 	
 	<!-- 도서 조회수 조회 -->
@@ -151,7 +163,34 @@
 			BOOK_REPLY_DATE DESC
 	</select>
 	
+	<!-- 독후감 게시글 개수 조회 -->
+	<select id="reportCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM TB_BOOK_REPORT
+	</select>
 	
+	<!-- 독후감 게시글 리스트 조회 -->
+	<select id="selectReportList" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE
+			BOOK_REPORT_STATUS = 'Y'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
 	
 	
 	
