@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.eco.product.model.dao.ProductDao;
 import com.kh.eco.product.model.vo.Brand;
+import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
@@ -72,6 +73,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int removeLike(ProductLike like) {
 		return dao.removeLike(sqlSession, like);
+	}
+
+	@Override
+	public ArrayList<Cart> selectCartItems(int userNo) {
+		return dao.selectCartItems(sqlSession, userNo);
 	}
 
 }

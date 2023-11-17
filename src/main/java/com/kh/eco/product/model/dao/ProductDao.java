@@ -1,13 +1,13 @@
 package com.kh.eco.product.model.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.eco.product.model.vo.Brand;
+import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
@@ -48,6 +48,9 @@ public class ProductDao {
 	}
 	public int removeLike(SqlSessionTemplate sqlSession, ProductLike like) {
 		return sqlSession.delete("productMapper.removeLike", like);
+	}
+	public ArrayList<Cart> selectCartItems(SqlSessionTemplate sqlSession, int userNo){
+		return (ArrayList)sqlSession.selectList("productMapper.selectCartItems", userNo);
 	}
 
 }

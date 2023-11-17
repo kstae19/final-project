@@ -1,15 +1,17 @@
 package com.kh.eco.product.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
+import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.ProductLike;
 
 @Controller
@@ -76,8 +78,8 @@ public class ProductController {
 	}
 	
 	@GetMapping("cart")
-	public String myCart() {
-		
+	public String myCart(int userNo, Model model) {
+		model.addAttribute("cart", productService.selectCartItems(userNo));
 		return "product/cart";
 	}
 }
