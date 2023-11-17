@@ -54,12 +54,24 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.ajaxSelectBookReply", ISBN13, rowBounds);
 	}
 	
+	public int ajaxDeleteBookReply(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.delete("bookMapper.ajaxDeleteBookReply", map);
+	}
+	
 	public int reportCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("bookMapper.reportCount");
 	}
 	
 	public ArrayList<BookReport> selectReportList(SqlSessionTemplate sqlSession, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.selectReportList", null, rowBounds);
+	}
+	
+	public int searchReportCount(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.selectOne("bookMapper.searchReportCount", map);
+	}
+	
+	public ArrayList<BookReport> searchReportList(SqlSessionTemplate sqlSession, HashMap map, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.searchReportList", map, rowBounds);
 	}
 
 }

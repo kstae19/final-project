@@ -77,6 +77,11 @@ public class BookServiceImpl implements BookService{
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.ajaxSelectBookReply(sqlSession, ISBN13, rowBounds);
 	}
+	
+	@Override
+	public int ajaxDeleteBookReply(HashMap map) {
+		return bookDao.ajaxDeleteBookReply(sqlSession, map);
+	}
 
 	@Override
 	public int reportCount() {
@@ -89,10 +94,17 @@ public class BookServiceImpl implements BookService{
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.selectReportList(sqlSession, rowBounds);
 	}
+	
+	@Override
+	public int searchReportCount(HashMap map) {
+		return bookDao.searchReportCount(sqlSession, map);
+	}
 
 	@Override
-	public ArrayList<BookReport> searchReportList(String bookSearchCondition, PageInfo pi) {
-		return null;
+	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.searchReportList(sqlSession, map, rowBounds);
 	}
 
 	@Override
@@ -104,6 +116,8 @@ public class BookServiceImpl implements BookService{
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;
 	}
+
+	
 
 
 	

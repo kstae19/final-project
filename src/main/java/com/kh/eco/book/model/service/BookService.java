@@ -42,6 +42,9 @@ public interface BookService {
 	// 도서 한줄평 조회
 	public ArrayList<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi);
 	
+	// 도서 한줄평 삭제
+	public int ajaxDeleteBookReply(HashMap map);
+	
 	
 	// 독후감 게시글 개수 조회
 	public int reportCount();
@@ -49,8 +52,11 @@ public interface BookService {
 	// 독후감 게시판 리스트 조회
 	public ArrayList<BookReport> selectReportList(PageInfo pi);
 	
+	// 독후감 게시판 검색 개수 조회
+	public int searchReportCount(HashMap map);
+	
 	// 독후감 게시판 검색 조회
-	public ArrayList<BookReport> searchReportList(String bookSearchCondition, PageInfo pi);
+	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi);
 	
 	// 독후감 게시판 상세조회
 	public BookReport reportDetail(int reportNo);

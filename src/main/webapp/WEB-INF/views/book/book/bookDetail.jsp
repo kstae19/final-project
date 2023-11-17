@@ -89,7 +89,7 @@
 	    	    				console.log(result);
 	    	    				
 	    	    				if(result === 'success'){
-	    	    					$('bookReplyContent').val('');
+	    	    					$('#bookReplyContent').val('');
 	    	    					selectBookReply();
 	    	    				} else{
 	    	    					alert('댓글 등록 실패');
@@ -113,6 +113,13 @@
 	        			},
 	        			success : result => {
 	        				console.log(result);
+	        				
+	        				if(result === 'success'){
+    	    					$('#bookReplyContent').val('');
+    	    					selectBookReply();
+    	    				} else{
+    	    					alert('댓글 등록 실패');
+    	    				}
 	        			},
 	        			error : () => {
 	        				console.log("댓글 통신 실패");

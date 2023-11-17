@@ -17,6 +17,7 @@
 	<resultMap id="bookReportResultSet" type="bookReport">
 		<result column="BOOK_REPORT_NO" property="bookReportNo" />
 		<result column="BOOK_REPORT_NOTICE" property="bookReportNotice" />
+		<result column="BOOK_REPORT_CONTENT" property="bookReportContent" />
 		<result column="BOOK_REPORT_TITLE" property="bookReportTitle" />
 		<result column="USER_ID" property="userId" />
 		<result column="BOOK_REPORT_DATE" property="bookReportDate" />
@@ -163,6 +164,13 @@
 			BOOK_REPLY_DATE DESC
 	</select>
 	
+	<!-- 도서 한줄평 삭제 -->
+	<delete id="ajaxDeleteBookReply" parameterType="hashMap">
+		DELETE TB_BOOK_REPLY
+		WHERE ISBN13 = #{ISBN13}
+		AND USER_NO = #{userNo}
+	</delete>
+	
 	<!-- 독후감 게시글 개수 조회 -->
 	<select id="reportCount" resultType="_int">
 		SELECT COUNT(*)
@@ -192,7 +200,66 @@
 			BOOK_REPORT_DATE DESC
 	</select>
 	
+	<!-- 독후감 게시글 검색 개수 조회 -->
+	<select id="searchReportCount" parameterType="hashMap" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE 
+			BOOK_REPORT_STATUS = 'Y'
+		AND 
+		<if test="condition == 'title'">
+			BOOK_REPORT_TITLE
+		</if>
+		<if test="condition == 'content'">
+			BOOK_REPORT_CONTENT
+		</if>
+		<if test="condition == 'writer'">
+			USER_ID
+		</if>
+		LIKE '%' || '${keyword}' || '%'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
 	
+	<!-- 독후감 게시글 검색 조회 -->
+	<select id="searchReportList" parameterType="hashMap" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE 
+			BOOK_REPORT_STATUS = 'Y'
+		AND 
+		<if test="condition == 'title'">
+			BOOK_REPORT_TITLE
+		</if>
+		<if test="condition == 'content'">
+			BOOK_REPORT_CONTENT
+		</if>
+		<if test="condition == 'writer'">
+			USER_ID
+		</if>
+		LIKE '%' || '${keyword}' || '%'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
 	
 	
 </mapper>

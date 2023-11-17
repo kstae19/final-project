@@ -17,7 +17,7 @@ public class BookReport {
 	private int bookReportNotice;
 	private String bookReportTitle;
 	private String bookReportContent;
-	private Date bookReportDate;
+	private String bookReportDate;
 	private int bookReportCount;
 	private String bookReportStatus;
 	private String userId;

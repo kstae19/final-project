@@ -44,9 +44,10 @@
     <div class="outer">
         <div>
           <h3 style="display: inline-block;">독후감 게시판</h3>
-          <form class="search-form" action="reportsearch.bk">
+          <form class="search-form" action="reportsearch.bk" id="reportsearch-area">
               <select name="reportcondition">
                   <option value="title">제목</option>
+                  <option value="content">내용</option>
                   <option value="writer">작성자</option>
               </select>
               <input type="text" name="reportsearch">
@@ -54,24 +55,34 @@
           </form>
         </div>
         <hr>
-        <button type="button">작성</button>
+        <c:if test="${ not empty sessionScope.loginUser }">
+            <button type="button" onclick="reportEnroll.bk">작성</button>
+        </c:if>
+        
+        <script>
+        	$(function(){
+        		console.log("${sessionScope.loginUser.userId}");
+        		console.log("${sessionScope.loginUser.userId}");
+        	})
+        </script>
+        
         <br><br>
         <table class="table table-bordered" id="report-table">
           <thead>
             <tr>
-              <th style="width: 5%;">게시판번호</th>
+              <th style="width: 10%;">게시판번호</th>
               <th style="width: 10%;">별점</th>
-              <th style="width: 45%;">제목</th>
+              <th style="width: 40%;">제목</th>
               <th style="width: 10%;">작성자</th>
               <th style="width: 10%;">작성일</th>
               <th style="width: 10%;">조회수</th>
             </tr>
           </thead>
           <tbody>
-          	<c:forEach items="${ list }" var="r">
+          	<c:forEach items="${ list }" var="r" varStatus="i">
           		<c:choose>
           			<c:when test="${ r.bookReportStar eq 0 }">
-          				<tr  style="color:red;">
+          				<tr style="color:red;">
 				          <td>${ r.bookReportNo }</td>
 				          <td>공지</td>
 				          <td>${ r.bookReportTitle }</td>
@@ -79,6 +90,20 @@
 				          <td>${ r.bookReportDate }</td>
 				          <td>${ r.bookReportCount }</td>
 				        </tr>
+          			</c:when>
+          			<c:when test="${ r.bookReportSecret eq 1 }">
+        				<c:choose>
+        					<c:when test="${ r.userId eq loginUser.userId }">
+        						<tr>
+						          <td>${ r.bookReportNo }</td>
+						          <td>${ r.bookReportStar }</td>
+						          <td>[비밀글] ${ r.bookReportTitle }</td>
+						          <td>${ r.userId }</td>
+						          <td>${ r.bookReportDate }</td>
+						          <td>${ r.bookReportCount }</td>
+						        </tr>
+        					</c:when>
+        				</c:choose>
           			</c:when>
           			<c:otherwise>
           				<tr>
@@ -94,9 +119,26 @@
           	</c:forEach>
           </tbody>
         </table>
+        
+        <script>
+        	$(function(){
+        		$('#report-table > tbody > tr').click(function(){
+        			location.href='reportdetail.bk?rno='+$(this).children(('.rno')).text();
+        		})
+        	})
+        </script>
+        
+        <c:if test="${ not empty condition }">
+			<script>
+				$(function(){
+					$('#reportsearch-area option[value=${condition}]').attr('selected', true);
+					$('#reportsearch-area input[name=reportsearch]').val('${keyword}');
+				})				
+			</script>
+		</c:if>
           
         <c:choose>
-			<c:when test="${ empty reportcondition }">
+			<c:when test="${ empty condition }">
 				<ul class="pagination justify-content-center">
 		        	<c:choose>
 			       		<c:when test="${ pi.currentPage eq 1 }">
