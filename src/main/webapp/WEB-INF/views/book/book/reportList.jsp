@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,24 +37,25 @@
     </style>
 </head>
 <body>
-
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
+	<jsp:include page="../common/bookLeftBanner.jsp" />
     
     <div class="outer">
         <div>
           <h3 style="display: inline-block;">독후감 게시판</h3>
-          <form class="search-form">
-              <select name="">
-                  <option value="">제목</option>
-                  <option value="">작성자</option>
-                  <option value="">카테고리</option>
+          <form class="search-form" action="reportsearch.bk">
+              <select name="reportcondition">
+                  <option value="title">제목</option>
+                  <option value="writer">작성자</option>
               </select>
-              <input type="text" name="report-search">
+              <input type="text" name="reportsearch">
               <button type="submit">검색</button>
           </form>
         </div>
         <hr>
-        
+        <button type="button">작성</button>
+        <br><br>
         <table class="table table-bordered" id="report-table">
           <thead>
             <tr>

@@ -265,7 +265,7 @@ public class BookController {
 	}
 	
 	
-	// 상세페이지 메소드
+	// 상세페이지 메소드(이거 조회 필요없을지도 모름)
 	@RequestMapping("bookdetail.bk")
 	public String bookDetail(String ISBN, Model model, int count) throws IOException {
 		
@@ -292,6 +292,15 @@ public class BookController {
 		return "book/book/bookDetail";
 	}
 	
+	// 독후감 게시판 포워딩 겸 리스트 조회
+	@RequestMapping("bookreport")
+	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
+		
+		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
+		
+		
+		return "book/book/reportList";
+	}
 	 
 	
 	

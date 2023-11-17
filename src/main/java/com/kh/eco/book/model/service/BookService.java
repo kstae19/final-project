@@ -41,6 +41,20 @@ public interface BookService {
 	public ArrayList<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi);
 	
 	
+	// 독후감 게시글 개수 조회
+	public int reportCount();
+	
+	// 독후감 게시판 리스트 조회
+	public ArrayList<BookReport> selectReportList();
+	
+	// 독후감 게시판 검색 조회
+	public ArrayList<BookReport> searchReportList();
+	
+	// 독후감 게시판 상세조회
+	public BookReport reportDetail(int reportNo);
+	
+	// 독후감 게시판 댓글 조회
+	public ArrayList<BookReportReply> selectReportReply(int reportNo);
 	
 	
 	
