@@ -80,13 +80,37 @@
 				<div class="lm login-menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
 			</c:when>
 			<c:otherwise>
-				<div>
-					<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
-					<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-					<div class="im">
-						<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-		            </div>
-	            </div>
+				<c:choose>
+					<c:when test="${ sessionScope.loginUser.userStatus eq 'A' }">
+						<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
+							<div class="lm login-menu" onclick="location.href='user.us'"><h3>회원관리</h3> </div>
+							<div class="im">
+								<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+				            </div>
+					</c:when>
+					<c:otherwise>
+						<c:choose>
+							<c:when test="${ empty sessionScope.accessToken }">
+								<div>
+									<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
+									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+									<div class="im">
+										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+						            </div>
+					            </div>
+							</c:when>
+							<c:otherwise>
+								<div>
+									<div class="lm login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
+									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+									<div class="im">
+										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+						            </div>
+					            </div>
+							</c:otherwise>
+						</c:choose>
+					</c:otherwise>
+	            </c:choose>
 			</c:otherwise>
 		</c:choose>
 	</div>
