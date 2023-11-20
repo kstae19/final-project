@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService{
 		URL url = new URL(kakaoUrl);
 		HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
 		
+		System.out.println(code);
 		urlConnection.setRequestMethod("POST");
 		urlConnection.setDoOutput(true);
 		
@@ -103,6 +104,46 @@ public class UserServiceImpl implements UserService{
 		return accessToken;
 	}
 	
+	@Override
+	public String getNToken(String code) throws IOException, ParseException {
+		String naverUrl = "https://nid.naver.com/oauth2.0/token";
+		URL url = new URL(naverUrl);
+		HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+		
+		// System.out.println(code);
+		urlConnection.setRequestMethod("POST");
+		urlConnection.setDoOutput(true);
+		
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream()));
+		StringBuilder sb = new StringBuilder();
+		sb.append("client_id=Bm7N4g9KvV8b3Wl6cjN0");
+		sb.append("&client_secret=Y3rrs0Jopt");
+		sb.append("&grant_type=authorization_code");
+		sb.append("&code=" + code);
+		sb.append("&state=test");
+		
+		bw.write(sb.toString());
+		bw.flush();
+		
+		// System.out.println(urlConnection.getResponseCode());
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+		String line = "";
+		String responseData = "";
+		while((line = br.readLine()) != null) {
+			responseData += line;
+		}
+		// System.out.println(responseData);
+		
+		JSONParser parser = new JSONParser();
+		JSONObject element = (JSONObject)parser.parse(responseData);
+		
+		String accessToken = element.get("access_token").toString();
+				
+		br.close();
+		bw.close();
+			
+		return accessToken;
+	}
 	
 	public String getUserInfo(String accessToken) throws IOException, ParseException {
 		
@@ -132,6 +173,33 @@ public class UserServiceImpl implements UserService{
 		
 		return responseObj.get("id").toString();
 		
+	}
+	@Override
+	public String getNUserInfo(String accessNToken) throws IOException, ParseException {
+		String naverUrl = "https://openapi.naver.com/v1/nid/me";
+
+		URL url = new URL(naverUrl);
+		
+		HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+		urlConnection.setRequestProperty("Authorization", "Bearer " + accessNToken);
+		urlConnection.setRequestMethod("GET");
+		
+		// System.out.println(urlConnection.getResponseCode());
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+		String line = "";
+		String responseData = "";
+		while((line = br.readLine()) != null) {
+			responseData += line;
+		}
+		// System.out.println(responseData);
+		
+		JSONObject responseObj = (JSONObject)new JSONParser().parse(responseData);
+		JSONObject responseMain = (JSONObject)responseObj.get("response");
+		
+		// System.out.println(responseMain.get("email").toString());
+		
+		return responseMain.get("email").toString();
 	}
 
 	@Override
@@ -163,5 +231,8 @@ public class UserServiceImpl implements UserService{
 	public int findPwd(User u) {
 		return userDao.findPwd(sqlSession, u);
 	}
+
+	
+
 
 }
