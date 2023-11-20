@@ -52,5 +52,8 @@ public class ProductDao {
 	public ArrayList<Cart> selectCartItems(SqlSessionTemplate sqlSession, int userNo){
 		return (ArrayList)sqlSession.selectList("productMapper.selectCartItems", userNo);
 	}
+	public int updateQty(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.update("productMapper.updateQty", cart);
+	}
 
 }

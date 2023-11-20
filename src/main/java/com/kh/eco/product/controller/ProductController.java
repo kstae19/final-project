@@ -1,11 +1,10 @@
 package com.kh.eco.product.controller;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -81,5 +80,10 @@ public class ProductController {
 	public String myCart(int userNo, Model model) {
 		model.addAttribute("cartItems", productService.selectCartItems(userNo));
 		return "product/cart";
+	}
+	@ResponseBody
+	@PostMapping(value="update.cart", produces="html/text; charset=UTF-8")
+	public String updateQty(Cart cart) {
+		return productService.updateQty(cart)>0? "success":"fail";
 	}
 }
