@@ -91,7 +91,7 @@
 					<b id="enroll-info">*필수 입력사항</b>
 				</div>
 				<div class="enroll-border rd">
-					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required value="${ userid }">
+					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required value="${ userid }" readonly>
 					<div id="idcheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
