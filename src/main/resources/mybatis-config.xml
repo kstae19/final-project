@@ -11,6 +11,7 @@
 	<typeAliases>
 		<typeAlias type="com.kh.eco.user.model.vo.User" alias="user"/>
 		<typeAlias type="com.kh.eco.user.model.vo.Cert" alias="cert"/>
+		<typeAlias type="com.kh.eco.user.model.vo.KakaoUser" alias="kakaouser"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Product" alias="product"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Brand" alias="brand"/>
 		<typeAlias type="com.kh.eco.product.model.vo.ProductReview" alias="productReview"/>

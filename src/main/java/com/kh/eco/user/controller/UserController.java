@@ -1,27 +1,36 @@
 package com.kh.eco.user.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.Random;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.eco.user.model.service.UserService;
 import com.kh.eco.user.model.vo.Cert;
+import com.kh.eco.user.model.vo.KakaoUser;
 import com.kh.eco.user.model.vo.User;
 
 @Controller
@@ -45,6 +54,7 @@ public class UserController {
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
 			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
 			mv.setViewName("redirect:/");
 		} else {
 			// model.addattribute
@@ -55,7 +65,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("logout.us")
-	public String logoutMember(HttpSession session) {
+	public String logoutMember(HttpSession session) throws IOException {
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -137,4 +147,70 @@ public class UserController {
 		}
 		
 	}
+	
+	
+	@GetMapping("code")
+	public ModelAndView getCode(User u, KakaoUser ku, String code, HttpSession session, ModelAndView mv) throws IOException, ParseException  {
+		String accessToken = userService.getToken(code);
+		String id = userService.getUserInfo(accessToken);
+		
+		int kakaoLoginUser = userService.selectKakao(id);
+		u.setUserId(id);
+		
+		ku.setKakaoId(id);
+		
+		User loginUser = userService.loginUser(u);
+		
+		if(kakaoLoginUser > 0 && accessToken != null) {
+			if (idCheck(id) == "NNNNY") {
+				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+				userService.insertKakao(ku);
+				mv.addObject("userid", id);
+				mv.setViewName("user/kakaoUserEnrollForm");
+			} else {
+				session.setAttribute("loginUser", loginUser);
+				session.setAttribute("accessToken", accessToken);
+				session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
+				mv.setViewName("redirect:/");
+			}
+		} else {
+			session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+			userService.insertKakao(ku);
+			mv.addObject("userid", id);
+			mv.setViewName("user/kakaoUserEnrollForm");
+		}
+		return mv;
+
+	}
+	@RequestMapping("kakaologout.us")
+	public String kakaoLogout(HttpSession session, HttpServletResponse response) throws IOException, ParseException {
+		String accessToken = (String)session.getAttribute("accessToken");
+		
+		String kakaoLogoutURL = "https://kapi.kakao.com/v1/user/logout";
+		
+		URL url = new URL(kakaoLogoutURL);
+		
+		HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+		urlConnection.setRequestMethod("POST");
+		urlConnection.setRequestProperty("Authorization", "Bearer " + accessToken);
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+		String line = "";
+		String responseData = "";
+		
+		 while ((line = br.readLine()) != null) {
+			 responseData += line;
+	        }
+        System.out.println(responseData);
+		session.invalidate();
+		
+		// 특정 쿠키 삭제
+        Cookie accessTokenCookie = new Cookie("accessToken", null);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(0);
+        response.addCookie(accessTokenCookie);
+        
+		return "redirect:/";
+	}
+	
 }

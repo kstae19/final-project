@@ -103,5 +103,27 @@
 			   	#{detailAddress}
 			   ) 	
 	</insert>
-
+	
+	<select id="selectKakao" parameterType="string" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_KAKAO_USER
+		 WHERE
+		 	   KAKAO_ID = #{id}
+		
+	</select>
+	
+	<insert id="insertKakao" parameterType="kakaouser">
+		INSERT
+			  INTO
+			       TB_KAKAO_USER
+			       (
+			        KAKAO_ID
+			       )
+			VALUES 
+				   (
+				   	#{kakaoId}
+				   ) 	
+	</insert>
 </mapper>
