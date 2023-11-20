@@ -5,13 +5,25 @@
 <mapper namespace="bookMapper">
 	
 	<!-- resultMap 영역 -->
+	<!-- 한줄평 -->
 	<resultMap id="bookReplyResultSet" type="bookReply">
-		<result column="BOOK_REPLY_NO" property="bookReplyNo" />
 		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
 		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
 		<result column="USER_ID" property="userId" />
 	</resultMap>
 	
+	<!-- 독후감 게시글 -->
+	<resultMap id="bookReportResultSet" type="bookReport">
+		<result column="BOOK_REPORT_NO" property="bookReportNo" />
+		<result column="BOOK_REPORT_NOTICE" property="bookReportNotice" />
+		<result column="BOOK_REPORT_CONTENT" property="bookReportContent" />
+		<result column="BOOK_REPORT_TITLE" property="bookReportTitle" />
+		<result column="USER_ID" property="userId" />
+		<result column="BOOK_REPORT_DATE" property="bookReportDate" />
+		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
+		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
+		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
+	</resultMap>
 	
 	
 	<!-- 도서 조회수 조회 -->
@@ -105,7 +117,6 @@
 				THEN
 				INTO TB_BOOK_REPLY
 				VALUES (
-					SEQ_BOOK_REPLY.NEXTVAL,
 					SYSDATE,
 					#{content},
 					#{ISBN13},
@@ -134,7 +145,6 @@
 	<!-- 도서 한줄평 리스트 조회 -->
 	<select id="ajaxSelectBookReply" parameterType="string" resultMap="bookReplyResultSet">
 		SELECT 
-			BOOK_REPLY_NO,
 			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
 			BOOK_REPLY_CONTENT,
 			USER_ID
@@ -151,10 +161,129 @@
 			BOOK_REPLY_DATE DESC
 	</select>
 	
+	<!-- 도서 한줄평 삭제 -->
+	<delete id="ajaxDeleteBookReply" parameterType="hashMap">
+		DELETE TB_BOOK_REPLY
+		WHERE ISBN13 = #{ISBN13}
+		AND USER_NO = #{userNo}
+	</delete>
 	
+	<!-- 독후감 게시글 개수 조회 -->
+	<select id="reportCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM TB_BOOK_REPORT
+	</select>
 	
+	<!-- 독후감 게시글 리스트 조회 -->
+	<select id="selectReportList" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE
+			BOOK_REPORT_STATUS = 'Y'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
 	
+	<!-- 독후감 게시글 검색 개수 조회 -->
+	<select id="searchReportCount" parameterType="hashMap" resultType="_int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE 
+			BOOK_REPORT_STATUS = 'Y'
+		AND 
+		<if test="condition == 'title'">
+			BOOK_REPORT_TITLE
+		</if>
+		<if test="condition == 'content'">
+			BOOK_REPORT_CONTENT
+		</if>
+		<if test="condition == 'writer'">
+			USER_ID
+		</if>
+		LIKE '%' || '${keyword}' || '%'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
 	
+	<!-- 독후감 게시글 검색 조회 -->
+	<select id="searchReportList" parameterType="hashMap" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE 
+			BOOK_REPORT_STATUS = 'Y'
+		AND 
+		<if test="condition == 'title'">
+			BOOK_REPORT_TITLE
+		</if>
+		<if test="condition == 'content'">
+			BOOK_REPORT_CONTENT
+		</if>
+		<if test="condition == 'writer'">
+			USER_ID
+		</if>
+		LIKE '%' || '${keyword}' || '%'
+		ORDER
+		BY
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_DATE DESC
+	</select>
+	
+	<!-- 독후감 게시판 조회수 증가 -->
+	<update id="countReport" parameterType="_int">
+		UPDATE TB_BOOK_REPORT
+		SET BOOK_REPORT_COUNT = BOOK_REPORT_COUNT + 1
+		WHERE BOOK_REPORT_NO = #{rno}
+	</update>
+	
+	<!-- 독후감 게시판 상세조회 -->
+	<select id="reportDetail" parameterType="_int" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			BOOK_REPORT_CONTENT,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE
+			BOOK_REPORT_NO = #{rno}
+	</select>
 	
 </mapper>
 

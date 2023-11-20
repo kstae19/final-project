@@ -49,8 +49,11 @@
         }
     </style>
     
+    <!-- 굳이 c태그 안써도 될것같음 -->
     	<c:if test="${ not empty sessionScope.loginUser }">
     		<script>
+    			var loginNo = ${ sessionScope.loginUser.userNo };
+    			
 	    		function bookmark(){ // 북마크 등록/삭제 ajax
 	        		$.ajax({
 	        			url : 'bookmark.bk',
@@ -58,7 +61,7 @@
 	        			data : {
 	        				className: $('.bookmark').attr('class'),
 	        				ISBN13 : '${ b.ISBN13 }',
-	        				userNo : ${ sessionScope.loginUser.userNo }
+	        				userNo : loginNo
 	        			},
 	        			success : result => {
 	        				console.log(result);
@@ -79,14 +82,14 @@
 	    	    			type : 'get',
 	    	    			data : {
 	    	    				ISBN13 : '${ b.ISBN13 }',
-	    	    				userNo : ${ sessionScope.loginUser.userNo },
+	    	    				userNo : loginNo,
 	    	    				content : $('#bookReplyContent').val()
 	    	    			},
 	    	    			success : result => {
 	    	    				console.log(result);
 	    	    				
 	    	    				if(result === 'success'){
-	    	    					$('bookReplyContent').val('');
+	    	    					$('#bookReplyContent').val('');
 	    	    					selectBookReply();
 	    	    				} else{
 	    	    					alert('댓글 등록 실패');
@@ -106,10 +109,17 @@
 	        			type : 'get',
 	        			data : {
 	        				ISBN13 : '${ b.ISBN13 }',
-	        				userNo : ${ sessionScope.loginUser.userNo }
+	        				userNo : loginNo
 	        			},
 	        			success : result => {
 	        				console.log(result);
+	        				
+	        				if(result === 'success'){
+    	    					$('#bookReplyContent').val('');
+    	    					selectBookReply();
+    	    				} else{
+    	    					alert('댓글 등록 실패');
+    	    				}
 	        			},
 	        			error : () => {
 	        				console.log("댓글 통신 실패");
@@ -125,7 +135,7 @@
 	        			type : 'get',
 	        			data : {
 	        				ISBN13 : '${ b.ISBN13 }',
-	        				userNo : ${ sessionScope.loginUser.userNo }
+	        				userNo : loginNo
 	        			},
 	        			success : result => {
 	        				console.log(result);
@@ -144,6 +154,14 @@
     		location.href="book";
     	};
     	
+    	//문자열이 빈 문자열인지 체크하여 결과값을 리턴. 
+    	function isEmpty(str){
+    		if(typeof str == "undefined" || str == null || str == "")
+    			return true;
+    		else
+    			return false ;
+    	}
+    	
     	function selectBookReply(nowPage){
     		// 한줄평 조회 ajax
     		$.ajax({
@@ -158,34 +176,42 @@
     				console.log(result);
     				
     				$('#bookReply-count').html(result.replyCount);
-    				
-                	let replyArr = result.replyList;
-    				let replyValue = '';
-    				for(let i in replyArr){
-    					replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
-    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
-    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
-    						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
+    				if(result.replyCount == 0){
+    					$('#bookReply-area').html("한줄평이 없습니다.");
+    				} else {
+    					let replyArr = result.replyList;
+        				let replyValue = '';
+        				for(let i in replyArr){
+        					if(!isEmpty('${ sessionScope.loginUser.userId }')){
+        						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+            						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>';
+            					}
+        					}
+        					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+        						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
+        						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
+        				}
+        				$('#bookReply-area').html(replyValue);
+        				
+        				let replyPi = result.replyPi;
+        				let replyPiValue = '';
+        				if(replyPi['currentPage'] == 1){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+        				}
+        				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+        				}
+        				if(replyPi['currentPage'] == replyPi['endPage']){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+        				}
+        				
+        				$('#bookReply-pagination').html(replyPiValue);
     				}
-    				$('#bookReply-area').html(replyValue);
-    				
-    				let replyPi = result.replyPi;
-    				let replyPiValue = '';
-    				if(replyPi['currentPage'] == 1){
-    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
-    				} else{
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
-    				}
-    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
-    				}
-    				if(replyPi['currentPage'] == replyPi['endPage']){
-    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
-    				} else{
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
-    				}
-    				
-    				$('#bookReply-pagination').html(replyPiValue);
+    			
     				
     			},
     			error : () => {
@@ -203,6 +229,7 @@
 	
 	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
+	<jsp:include page="../common/bookLeftBanner.jsp" />
 
     <div class="outer">
         <div>
@@ -250,19 +277,22 @@
                 <span id="bookReply-count">0개</span>
             </div>
             <div id="bookReply-area">
-            	<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>
                 <p style="margin-bottom: 0px;"></p>
                 <p style="margin-bottom: 0px;"></p>
                 <p></p>
             </div>
             <ul class="pagination justify-content-center" id="bookReply-pagination">
-                
             </ul>
-            <input id="bookReplyContent" type="text" placeholder="다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
-            <c:if test="${ not empty sessionScope.loginUser }">
-	             <button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
-	             <p>0/50</p>
-            </c:if>
+            <c:choose>
+            	<c:when test="${ empty sessionScope.loginUser }">
+            		<input id="bookReplyContent" type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
+            	</c:when>
+            	<c:otherwise>
+            		<input id="bookReplyContent" type="text" placeholder="다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
+            		<button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
+	             	<p>0/50</p>
+            	</c:otherwise>
+            </c:choose>
         </div>
     </div>
     <br>

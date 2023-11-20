@@ -60,6 +60,7 @@
 
 	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
+	<jsp:include page="../common/bookLeftBanner.jsp" />
 
     <div class="outer">
         <form id="book-search" class="search-form" action="searchbook.bk" >

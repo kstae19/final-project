@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.kh.eco.book.model.dao.BookDao;
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReport;
+import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.vo.PageInfo;
 
 @Service
@@ -75,6 +77,54 @@ public class BookServiceImpl implements BookService{
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.ajaxSelectBookReply(sqlSession, ISBN13, rowBounds);
 	}
+	
+	@Override
+	public int ajaxDeleteBookReply(HashMap map) {
+		return bookDao.ajaxDeleteBookReply(sqlSession, map);
+	}
+
+	@Override
+	public int reportCount() {
+		return bookDao.reportCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<BookReport> selectReportList(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.selectReportList(sqlSession, rowBounds);
+	}
+	
+	@Override
+	public int searchReportCount(HashMap map) {
+		return bookDao.searchReportCount(sqlSession, map);
+	}
+
+	@Override
+	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.searchReportList(sqlSession, map, rowBounds);
+	}
+	
+	@Override
+	public int countReport(int reportNo) {
+		return bookDao.countReport(sqlSession, reportNo);
+	}
+
+	@Override
+	public BookReport reportDetail(int reportNo) {
+		return bookDao.reportDetail(sqlSession, reportNo);
+	}
+
+	@Override
+	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
+		return null;
+	}
+
+	
+
+	
 
 
 	
