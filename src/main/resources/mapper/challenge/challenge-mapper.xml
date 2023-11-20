@@ -133,6 +133,58 @@
 						UPLOAD_DATE DESC
 	</select>
 	
+	<!-- 정렬 결과수 조회 -->
+	<select id="countChallengeList" parameterType="string" resultType="_int">
+		SELECT
+						COUNT(*)
+		FROM
+						TB_CHALLENGE
+		WHERE
+						TB_CHALLENGE.STATUS = 'Y'	
+						
+						<if test="status == 'coming'">
+						AND SYSDATE < START_DATE
+						</if>
+						<if test="status == 'progress'">
+						AND  START_DATE < SYSDATE < END_DATE
+						</if>
+						<if test="status == 'complete'">
+						AND END_DATE < SYSDATE 
+						</if>
+						
+	</select>
+	
+	<!-- 정렬결과 리스트 조회 - 진행예정/진행중/종료 -->
+	<select id="selectChallengeStatus" parameterType="hashmap" resultMap="challengeResultSet">
+		SELECT
+						CHALLENGE_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+						<!-- CHALLENGE_CONTENT, -->
+						VIEW_COUNT,
+						LIKE_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		WHERE 
+						TB_CHALLENGE.STATUS = 'Y'
+	<!-- 	<if test="LocalDate.now() < startDate"> -->
+		<if test="status == 'coming'">
+			AND SYSDATE < START_DATE
+		</if>
+		<if test="status == 'progress'">
+			AND  START_DATE < SYSDATE < END_DATE
+		</if>
+		<if test="status == 'complete'">
+			AND END_DATE < SYSDATE 
+		</if>
+	</select>
+	
+	
 	<!-- 조회수 증가 -->
 	<update id="increaseViewCount" parameterType="_int">
 		UPDATE 
@@ -142,6 +194,20 @@
 		WHERE 	
 						CHALLENGE_NO = #{challengeNo}
 	</update>	
+	
+	
+	<!-- 카테고리이름 조회 -->
+	<select id="selectCategoryName" parameterType="_int" resultType="string">
+		SELECT
+						CATEGORY_NAME
+		FROM
+						TB_CATEGORY
+		JOIN
+						TB_CHALLENGE USING (CATEGORY_NO)
+		WHERE
+						CATEGORY_NO = #{categoryNo}
+	
+	</select>
 	
 		<!-- 게시글 상세조회 -->
 	<select id="selectChallengeDetail" resultMap="challengeResultSet" parameterType="_int"><!-- resultMap으로 할까? -->

@@ -8,10 +8,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.eco.challenge.model.vo.Challenge;
+import com.kh.eco.common.model.vo.PageInfo;
 
 @Repository
 public class ChallengeDao {
 
+	// 전체리스트 조회
 	public int countChallengeList(SqlSessionTemplate sqlSession) {
 		
 		return sqlSession.selectOne("challengeMapper.countChallengeList");
@@ -21,7 +23,8 @@ public class ChallengeDao {
 		
 		return (ArrayList)sqlSession.selectList("challengeMapper.selectChallengeList", null, rowBounds);
 	}
-
+	
+	// 검색결과 조회
 	public int countSearchList(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
 		
 		return sqlSession.selectOne("challengeMapper.countSearchList", map);
@@ -32,7 +35,24 @@ public class ChallengeDao {
 		
 		return (ArrayList)sqlSession.selectList("challengeMapper.selectSearchList", map, rowBounds);
 	}
+	
+	
+	// 정렬 조회
 
+	public int countChallengeList(SqlSessionTemplate sqlSession, String status) {
+		
+		return sqlSession.selectOne("challengeMapper.countChallengeList", status);
+	}
+	
+	public ArrayList<Challenge> selectChallengeStatus(SqlSessionTemplate sqlSession, String status,
+			RowBounds rowBounds){
+		
+		return (ArrayList)sqlSession.selectList("challengeMapper.selectChallengeStatus", status, rowBounds);
+		
+	}
+	
+
+	// 상세페이지 조회
 	public int increaseViewCount(SqlSessionTemplate sqlSession, int challengeNo) {
 		
 		return sqlSession.update("challengeMapper.increaseViewCount", challengeNo);
@@ -43,6 +63,15 @@ public class ChallengeDao {
 		return sqlSession.selectOne("challengeMapper.selectChallengeDetail", challengeNo);
 	}
 	
+	
+
+	
+	// 좋아요
+	public int checkLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
+		
+		return 0;
+	}
+
 	public int increaseLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		
 		return sqlSession.update("challengeMapper.increaseLikeCount", map);
@@ -53,6 +82,7 @@ public class ChallengeDao {
 		return sqlSession.update("challengeMapper.decreaseLikeCount", map);
 	}
 
+	// 게시글 작성 수정 삭제
 	public int insertChallenge(SqlSessionTemplate sqlSession, Challenge c) {
 		
 		return sqlSession.insert("challengeMapper.insertChallenge", c);
@@ -67,6 +97,7 @@ public class ChallengeDao {
 		
 		return sqlSession.update("challengeMapper.deleteChallenge", challengeNo);
 	}
+
 
 
 

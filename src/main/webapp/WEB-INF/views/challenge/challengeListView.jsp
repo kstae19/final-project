@@ -79,7 +79,7 @@
 			<div><a href="enrollForm.ch">글쓰기</a></div>
 	
             <article id="search-status">
-            	<form action="search.status">
+            	<form action="search.status" method="GET">
 	            	<select name="status">
 	            		<option value="coming">진행예정</option>
 	            		<option value="progress">진행중</option>

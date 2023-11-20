@@ -95,7 +95,7 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="startDate">
-							시작일<input id="startDate" type="date" value="2023-11-11" name="startDate">
+							시작일<input id="startDate" type="date" value="LocalDate.now();" name="startDate">
 					</label>
             	</div>
             	 	<div class="content-item">

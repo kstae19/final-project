@@ -22,6 +22,7 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	private SqlSessionTemplate sqlSession;
 	
 	
+	// 게시글 전체조회
 	@Override
 	public int countChallengeList() {
 		
@@ -40,6 +41,7 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	}
 
 
+	// 게시글 검색결과 조회
 	@Override
 	public int countSearchList(HashMap<String, String> map) {
 		
@@ -61,6 +63,31 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.selectSearchList(sqlSession, map, rowBounds);
 	}
 
+	
+	
+	
+	// 게시글 정렬 조회
+	@Override
+	public int countChallengeStatus(String status) {
+		
+		return challengeDao.countChallengeList(sqlSession, status);
+	}
+	
+	
+	@Override
+	public ArrayList<Challenge> selectChallengeStatus(String status,  PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+
+		
+		return challengeDao.selectChallengeStatus(sqlSession, status, rowBounds);
+	}
+	
+	
+	
+	
+	// 상세조회 
 	@Override
 	public int increaseViewCount(int challengeNo) {
 		
@@ -73,6 +100,17 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.selectChallengeDetail(sqlSession, challengeNo);
 	}
 
+	
+	
+	
+	// 좋아요
+	@Override
+	public int checkLikeCount(HashMap<String, Integer> map) {
+		
+		return challengeDao.checkLikeCount(sqlSession, map);
+	}
+	
+	
 	@Override
 	public int increaseLikeCount(HashMap<String, Integer> map) {
 	
@@ -85,6 +123,10 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return  challengeDao.decreaseLikeCount(sqlSession, map);
 	}
 
+	
+	
+	
+	// 게시글 등록 수정 삭제
 	@Override
 	public int insertChallenge(Challenge c) {
 		
@@ -102,6 +144,13 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
+
+
+
+
+
+
+
 
 	
 }

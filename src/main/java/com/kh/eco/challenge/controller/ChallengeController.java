@@ -89,17 +89,29 @@ public class ChallengeController {
 
 	}
 	
-	// 정렬결과 조회
+
+
+	// 게시글 정렬 조회
 	@RequestMapping("search.status")
-	public String selectSearchStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status){
-	
+	public String selectChallengeStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status) {
 		
+		// 1. pi가져오기
+		PageInfo pi = Pagination.getPageInfo( 
+				challengeService.countChallengeStatus(status),// 검색결과수 구하기
+				currentPage,
+				4,
+				5
+				);
+		
+	
+		// 2. 페이징정보 불러오기 : model, modelAndView, session 셋 중 하나
+		model.addAttribute("status", status);
+		model.addAttribute("list", challengeService.selectChallengeStatus(status, pi));	// status가지고 DB갔다오기
+		model.addAttribute("pi", pi);
 		
 		return "challenge/challengeListView";
 	}
-	
-	
-	
+
 	
 	
 	
@@ -183,7 +195,7 @@ public class ChallengeController {
 		
 	}
 	
-	
+	// 게시글 상세조회
 	@RequestMapping("detail.ch")
 	public String selectChallengeDetail(int challengeNo, Model model) {
 		
