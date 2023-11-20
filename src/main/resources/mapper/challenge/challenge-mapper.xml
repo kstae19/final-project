@@ -134,24 +134,30 @@
 	</select>
 	
 	<!-- 정렬 결과수 조회 -->
-	<select id="countChallengeList" parameterType="string" resultType="_int">
+	<select id="countChallengeStatus" parameterType="hashmap" resultType="_int">
 		SELECT
 						COUNT(*)
 		FROM
 						TB_CHALLENGE
 		WHERE
-						TB_CHALLENGE.STATUS = 'Y'	
-						
-						<if test="status == 'coming'">
-						AND SYSDATE < START_DATE
-						</if>
-						<if test="status == 'progress'">
-						AND  START_DATE < SYSDATE < END_DATE
-						</if>
-						<if test="status == 'complete'">
-						AND END_DATE < SYSDATE 
-						</if>
-						
+						STATUS = 'Y'			
+			AND			
+					<if test=" status == 'coming' ">
+					<![CDATA[ 
+					SYSDATE < TO_DATE(START_DATE, 'YYYYMMDD')
+					]]> 
+					</if>	
+					<if test=" status == 'progress' ">
+					<![CDATA[ 
+					TO_DATE(START_DATE, 'YYYYMMDD') < SYSDATE < TO_DATE(END_DATE, 'YYYYMMDD')
+					]]>
+					</if>
+					<if test=" status == 'complete' ">
+					<![CDATA[ 
+					TO_DATE(END_DATE, 'YYYYMMDD') < SYSDATE 
+					]]>
+					</if> 
+		 
 	</select>
 	
 	<!-- 정렬결과 리스트 조회 - 진행예정/진행중/종료 -->
@@ -170,18 +176,28 @@
 						CATEGORY_NAME
 		FROM
 						TB_CHALLENGE
+		JOIN
+						TB_USER USING (USER_NO)
+		JOIN
+						TB_CATEGORY USING (CATEGORY_NO)
 		WHERE 
 						TB_CHALLENGE.STATUS = 'Y'
-	<!-- 	<if test="LocalDate.now() < startDate"> -->
-		<if test="status == 'coming'">
-			AND SYSDATE < START_DATE
-		</if>
-		<if test="status == 'progress'">
-			AND  START_DATE < SYSDATE < END_DATE
-		</if>
-		<if test="status == 'complete'">
-			AND END_DATE < SYSDATE 
-		</if>
+		AND
+					<if test=" status == 'coming' ">
+					<![CDATA[ 
+					SYSDATE < TO_DATE(START_DATE, 'YY/MM/DD')
+					]]> 
+					</if>	
+					<if test=" status == 'progress' ">
+					<![CDATA[ 
+					TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
+					]]>
+					</if>
+					<if test=" status == 'complete' ">
+					<![CDATA[ 
+					TO_DATE(END_DATE, 'YY/MM/DD') < SYSDATE 
+					]]>
+					</if> 
 	</select>
 	
 	

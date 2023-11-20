@@ -95,9 +95,16 @@ public class ChallengeController {
 	@RequestMapping("search.status")
 	public String selectChallengeStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status) {
 		
+		
+		  // 0. 
+		HashMap<String, String> map = new HashMap(); 
+		map.put("status", status);
+		 
+		
+		
 		// 1. pi가져오기
 		PageInfo pi = Pagination.getPageInfo( 
-				challengeService.countChallengeStatus(status),// 검색결과수 구하기
+				challengeService.countChallengeStatus(map),// 검색결과수 구하기
 				currentPage,
 				4,
 				5
@@ -106,7 +113,7 @@ public class ChallengeController {
 	
 		// 2. 페이징정보 불러오기 : model, modelAndView, session 셋 중 하나
 		model.addAttribute("status", status);
-		model.addAttribute("list", challengeService.selectChallengeStatus(status, pi));	// status가지고 DB갔다오기
+		model.addAttribute("list", challengeService.selectChallengeStatus(map, pi));	// status가지고 DB갔다오기
 		model.addAttribute("pi", pi);
 		
 		return "challenge/challengeListView";

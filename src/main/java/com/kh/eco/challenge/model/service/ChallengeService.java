@@ -24,9 +24,9 @@ public interface ChallengeService {
 
 	
 	// 정렬 조회
-	int countChallengeStatus(String status);
+	int countChallengeStatus(HashMap<String, String> map);
 	
-	ArrayList<Challenge> selectChallengeStatus(String status, PageInfo pi);
+	ArrayList<Challenge> selectChallengeStatus(HashMap<String, String> map, PageInfo pi);
 
 
 

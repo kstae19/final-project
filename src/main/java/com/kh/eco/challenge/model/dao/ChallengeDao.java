@@ -39,15 +39,14 @@ public class ChallengeDao {
 	
 	// 정렬 조회
 
-	public int countChallengeList(SqlSessionTemplate sqlSession, String status) {
+	public int countChallengeStatus(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
 		
-		return sqlSession.selectOne("challengeMapper.countChallengeList", status);
+		return sqlSession.selectOne("challengeMapper.countChallengeList", map);
 	}
 	
-	public ArrayList<Challenge> selectChallengeStatus(SqlSessionTemplate sqlSession, String status,
-			RowBounds rowBounds){
+	public ArrayList<Challenge> selectChallengeStatus(SqlSessionTemplate sqlSession, HashMap<String, String> map, RowBounds rowBounds){
 		
-		return (ArrayList)sqlSession.selectList("challengeMapper.selectChallengeStatus", status, rowBounds);
+		return (ArrayList)sqlSession.selectList("challengeMapper.selectChallengeStatus", map, rowBounds);
 		
 	}
 	

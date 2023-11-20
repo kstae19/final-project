@@ -68,20 +68,20 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	
 	// 게시글 정렬 조회
 	@Override
-	public int countChallengeStatus(String status) {
+	public int countChallengeStatus(HashMap<String, String> map) {
 		
-		return challengeDao.countChallengeList(sqlSession, status);
+		return challengeDao.countChallengeStatus(sqlSession, map);
 	}
 	
 	
 	@Override
-	public ArrayList<Challenge> selectChallengeStatus(String status,  PageInfo pi) {
+	public ArrayList<Challenge> selectChallengeStatus(HashMap<String, String> map, PageInfo pi) {
 		
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 
 		
-		return challengeDao.selectChallengeStatus(sqlSession, status, rowBounds);
+		return challengeDao.selectChallengeStatus(sqlSession, map, rowBounds);
 	}
 	
 	
