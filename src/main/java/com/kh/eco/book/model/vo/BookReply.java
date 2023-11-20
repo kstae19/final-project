@@ -11,5 +11,6 @@ public class BookReply {
 	private String bookReplyContent;
 	private String ISBN13;
 	private String userId;
+	private int ecoNo;
 
 }

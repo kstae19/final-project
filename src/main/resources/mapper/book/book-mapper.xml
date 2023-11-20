@@ -10,6 +10,7 @@
 		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
 		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
 		<result column="USER_ID" property="userId" />
+		<result column="ECO_HISTORY_NO" property="ecoNo" />
 	</resultMap>
 	
 	<!-- 독후감 게시글 -->
@@ -23,6 +24,7 @@
 		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
 		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
 		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
+		<result column="ECO_HISTORY_NO" property="ecoNo" />
 	</resultMap>
 	
 	
@@ -115,19 +117,21 @@
 					) < 1
 				]]>
 				THEN
-				INTO TB_BOOK_REPLY
-				VALUES (
-					SYSDATE,
-					#{content},
-					#{ISBN13},
-					#{userNo}
-					)
 				INTO TB_ECO_HISTORY
 				VALUES (
 					#{userNo},
 					10,
 					SYSDATE,
-					'B'
+					'B',
+					SEQ_ECO_HISTORY.NEXTVAL
+					)
+				INTO TB_BOOK_REPLY
+				VALUES (
+					SYSDATE,
+					#{content},
+					#{ISBN13},
+					#{userNo},
+					SEQ_ECO_HISTORY.CURRVAL
 					)
 				SELECT * FROM DUAL
 	</insert>
@@ -147,7 +151,8 @@
 		SELECT 
 			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
 			BOOK_REPLY_CONTENT,
-			USER_ID
+			USER_ID,
+			ECO_HISTORY_NO
 		FROM
 			TB_BOOK_REPLY
 		JOIN
@@ -161,9 +166,20 @@
 			BOOK_REPLY_DATE DESC
 	</select>
 	
-	<!-- 도서 한줄평 삭제 -->
+	<!-- 도서 한줄평 삭제 전 에코포인트 환수 -->
+	<delete id="ajaxDeleteBookEco" parameterType="hashmap">
+		DELETE 
+		FROM TB_ECO_HISTORY
+		WHERE USER_NO = (SELECT USER_NO
+		                FROM TB_BOOK_REPLY
+		                WHERE USER_NO = #{userNo}
+	                	AND ISBN13 = #{ISBN13})
+	</delete>
+	
+	<!-- 도서 한줄평 삭제  -->
 	<delete id="ajaxDeleteBookReply" parameterType="hashMap">
-		DELETE TB_BOOK_REPLY
+		DELETE 
+		FROM TB_BOOK_REPLY
 		WHERE ISBN13 = #{ISBN13}
 		AND USER_NO = #{userNo}
 	</delete>
@@ -198,7 +214,7 @@
 	</select>
 	
 	<!-- 독후감 게시글 검색 개수 조회 -->
-	<select id="searchReportCount" parameterType="hashMap" resultType="_int">
+	<select id="searchReportCount" parameterType="hashmap" resultType="_int">
 		SELECT
 			COUNT(*)
 		FROM
@@ -261,6 +277,14 @@
 	<!-- 독후감 게시판 작성 -->
 	<insert id="reportEnrollForm" parameterType="bookReport">
 		INSERT ALL
+		INTO TB_ECO_HISTORY
+		VALUES (
+			#{userNo},
+			10,
+			SYSDATE,
+			'B',
+			SEQ_ECO_HISTORY.NEXTVAL
+			)
 		INTO 
 			TB_BOOK_REPORT
 					(
@@ -270,7 +294,8 @@
 					BOOK_REPORT_CONTENT,
 					USER_NO,
 					BOOK_REPORT_SECRET,
-					BOOK_REPORT_STAR
+					BOOK_REPORT_STAR,
+					ECO_HISTORY_NO
 					)
 		VALUES 
 			(
@@ -280,14 +305,8 @@
 			#{bookReportContent},
 			#{userNo},
 			#{bookReportSecret},
-			#{bookReportStar}
-			)
-		INTO TB_ECO_HISTORY
-		VALUES (
-			#{userNo},
-			10,
-			SYSDATE,
-			'B'
+			#{bookReportStar},
+			SEQ_ECO_HISTORY.CURRVAL
 			)
 		SELECT * FROM DUAL
 	</insert>
@@ -312,12 +331,25 @@
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
 		FROM
-			TB_BOOK_REPORT
+			TB_BOOK_REPORT 
 		JOIN
 			TB_USER USING(USER_NO)
 		WHERE
 			BOOK_REPORT_NO = #{rno}
 	</select>
+	
+	<!-- 독후감 게시판 수정 -->
+	<update id="reportUpdateForm" parameterType="bookReport">
+		UPDATE 
+			TB_BOOK_REPORT
+		SET BOOK_REPORT_NOTICE = #{bookReportNotice},
+			BOOK_REPORT_TITLE = #{bookReportTitle},
+			BOOK_REPORT_CONTENT = #{bookReportContent},
+			BOOK_REPORT_SECRET = #{bookReportSecret},
+			BOOK_REPORT_STAR = #{bookReportStar}
+		WHERE
+			BOOK_REPORT_NO = #{bookReportNo}
+	</update>
 	
 </mapper>
 

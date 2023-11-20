@@ -43,52 +43,9 @@
 
     <div class="outer">
         <h3>글쓰기</h3>
-<<<<<<< Updated upstream
-        <form action="reportEnrollForm.bk">
-            <label><input type="checkbox" name="secret" value="secret">비밀글</label>
-            <c:if test="${ loginUser.userStatus eq 'A' }">
-            	<label><input type="checkbox" name="notice" value="notice">공지등록</label>
-            </c:if>
-            <input type="text" placeholder="제목을 입력해 주세요." name="title">
-            <br><br>
-            <textarea placeholder="내용을 입력해주세요." name="content"></textarea>
-            <br><br>
-            <span>별점</span>
-            <select name="star">
-            	<c:if test="${ loginUser.userStatus eq 'A' }">
-            		<option value="0">없음</option>
-           		 </c:if>
-            	<option value="1">★</option>
-            	<option value="2">★★</option>
-            	<option value="3">★★★</option>
-            	<option value="4">★★★★</option>
-            	<option value="5">★★★★★</option>
-            </select>
-            <button type="submit" class="btn btn-secondary">등록</button>
-            <button type="button" class="btn btn-dark" onclick="location.herf='bookReport'">취소</button>
-        </form>
-    </div>
-    
-    <script>
-    	function submit(){
-    		let secret = $('input[name=secret]').val();
-    		let notice = $('input[name=notice]').val();
-    		let title = $('input[name=title]').val();
-    		let content = $('input[name=content]').val();
-    		let star
-    		
-    		
-    		
-    		
-    	}
-    </script>
-
-
-
-
-=======
-	        <form method="POST" action="reportEnrollForm.bk" id="reportEnrollForm">
+	        <form method="POST" action="reportEnrollForm.bk">
 	        	<input type="hidden" name="userNo" value="${ loginUser.userNo }">
+	        	<input type="hidden" name="bookReportNo" value="">
 		        <label><input type="checkbox" name="bookReportSecret" value="1">비밀글</label>
 		        <c:if test="${ loginUser.userStatus eq 'A' }">
 		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
@@ -112,7 +69,35 @@
 		        <button type="button" class="btn btn-dark" onclick="location.href='bookReport'">취소</button>
 	    	</form>
     </div>
->>>>>>> Stashed changes
+    
+    <c:if test="${ not empty br }">
+    	<script>
+    		function isTrue(str){
+    			if(str != '1'){
+    				return false;
+    			}
+    			else{
+    				return true;
+    			}
+    		}
+    		
+    		$(function(){
+    			$('input[name=bookReportSecret]').attr("checked", isTrue('${br.bookReportSecret}'));
+    			$('input[name=bookReportNotice]').attr("checked", isTrue('${br.bookReportNotice}'));
+    			$('input[name=bookReportTitle]').val('${br.bookReportTitle}');
+    			$('textarea[name=bookReportContent]').val('${br.bookReportContent}');
+    			$('option[value=${br.bookReportStar}]').attr("selected", true);
+    			$('input[name=bookReportNo]').val('${br.bookReportNo}');
+    			
+    			$('form').attr("action", "reportUpdateForm.bk");
+    		})
+    		
+    	
+    	
+    	
+    		
+    	</script>
+    </c:if>
     
 </body>
 </html>

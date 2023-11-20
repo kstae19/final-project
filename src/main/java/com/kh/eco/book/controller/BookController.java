@@ -361,6 +361,32 @@ public class BookController {
 		return "book/book/reportDetail";
 	}
 	
+	// 독후감 게시글 수정 포워딩
+	@RequestMapping("reportUpdate.bk")
+	public String reportUpdate(int reportNo, Model model) {
+		
+		model.addAttribute("br", bookService.reportDetail(reportNo));
+		
+		return "book/book/reportEnrollForm";
+	}
+	
+	// 독후감 게시글 수정
+	@RequestMapping("reportUpdateForm.bk")
+	public String reportUpdateForm(BookReport bookReport) {
+		
+		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
+			System.out.println("성공");
+		} else { // 수정 실패
+			System.out.println("실패!");
+		}
+		
+		return "redirect:bookreport";
+	}
+	
+	// 독후감 게시글 삭제
+	
+	// 독후감 게시글 신고
+	
 	
 	
 	

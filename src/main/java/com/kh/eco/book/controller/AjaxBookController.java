@@ -123,7 +123,7 @@ public class AjaxBookController {
 		map.put("ISBN13", ISBN13);
 		map.put("userNo", userNo);
 		
-		if(bookService.ajaxDeleteBookReply(map) > 0) { // 삭제 성공
+		if(bookService.ajaxDeleteBookReply(map) > 1) { // 삭제 성공
 			return "success";
 		} else { // 실패
 			return "fail";

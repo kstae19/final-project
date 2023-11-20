@@ -58,6 +58,10 @@ public class BookDao {
 		return sqlSession.delete("bookMapper.ajaxDeleteBookReply", map);
 	}
 	
+	public int ajaxDeleteBookEco(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.delete("bookMapper.ajaxDeleteBookEco", map);
+	}
+	
 	public int reportCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("bookMapper.reportCount");
 	}
@@ -84,6 +88,10 @@ public class BookDao {
 	
 	public BookReport reportDetail(SqlSessionTemplate sqlSession, int rno) {
 		return sqlSession.selectOne("bookMapper.reportDetail", rno);
+	}
+	
+	public int reportUpdateForm(SqlSessionTemplate sqlSession, BookReport bookReport) {
+		return sqlSession.update("bookMapper.reportUpdateForm", bookReport);
 	}
 
 }

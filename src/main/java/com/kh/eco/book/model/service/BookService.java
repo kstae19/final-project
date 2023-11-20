@@ -67,6 +67,14 @@ public interface BookService {
 	// 독후감 게시판 상세조회
 	public BookReport reportDetail(int reportNo);
 	
+	// 독후감 게시판 수정
+	public int reportUpdateForm(BookReport bookReport);
+	
+	// 독후감 게시판 삭제
+	
+	// 독후감 게시글 신고
+		
+	
 	// 독후감 게시판 댓글 조회
 	public ArrayList<BookReportReply> selectReportReply(int reportNo);
 	

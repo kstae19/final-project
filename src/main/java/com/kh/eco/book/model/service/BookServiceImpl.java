@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.book.model.dao.BookDao;
 import com.kh.eco.book.model.vo.Book;
@@ -79,8 +80,11 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
+	@Transactional
 	public int ajaxDeleteBookReply(HashMap map) {
-		return bookDao.ajaxDeleteBookReply(sqlSession, map);
+		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
+		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);
+		return result1 + result2;
 	}
 
 	@Override
@@ -121,11 +125,17 @@ public class BookServiceImpl implements BookService{
 	public BookReport reportDetail(int reportNo) {
 		return bookDao.reportDetail(sqlSession, reportNo);
 	}
+	
+	@Override
+	public int reportUpdateForm(BookReport bookReport) {
+		return bookDao.reportUpdateForm(sqlSession, bookReport);
+	}
 
 	@Override
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;
 	}
+
 
 	
 
