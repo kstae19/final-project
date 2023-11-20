@@ -80,16 +80,13 @@
 		WHERE 
 						TB_CHALLENGE.STATUS = 'Y'<!-- USER에도 STATUS가 있기 때문 -->
 	
-		<if test=" condition == 'title' ">
-			AND CHALLENGE_TITLE 
-		</if>
-<!-- 		<if test=" condiiton == 'content' ">
-			AND CHALLENGE_CONTENT
-		</if> -->
-		<if test=" condition == 'userId' ">
-			AND USER_ID
-		</if>
-		LIKE '%' || #{ keyword } || '%'
+			<if test=" condition == 'title' ">
+						AND CHALLENGE_TITLE 
+			</if>
+			<if test=" condition == 'userId' ">
+						AND USER_ID
+			</if>
+						LIKE '%' || #{ keyword } || '%'
 	</select>
 	
 	<!-- 검색결과리스트 조회 -->
@@ -112,19 +109,15 @@
 						TB_USER USING(USER_NO)
 		JOIN 
 						TB_CATEGORY USING (CATEGORY_NO)
-<!-- 		WHERE 
-						STATUS = 'Y' -->
 		WHERE 
 						TB_CHALLENGE.STATUS = 'Y'	
+		AND
 		<choose>
 			<when test="condition == 'title' ">
-					AND		CHALLENGE_TITLE
+						CHALLENGE_TITLE
 			</when>
-<!-- 			<when test="condition == 'content' ">
-					AND	    CHALLENGE_CONTENT    => listView에는 content가 조회안됨
-			</when> -->
 			<otherwise>
-					AND		USER_ID
+						USER_ID
 			</otherwise>
 		</choose>
 						LIKE '%' || #{keyword} || '%'
@@ -144,17 +137,17 @@
 			AND			
 					<if test=" status == 'coming' ">
 					<![CDATA[ 
-					SYSDATE < TO_DATE(START_DATE, 'YYYYMMDD')
+						SYSDATE < TO_DATE(START_DATE, 'YY/MM/DD')
 					]]> 
 					</if>	
 					<if test=" status == 'progress' ">
 					<![CDATA[ 
-					TO_DATE(START_DATE, 'YYYYMMDD') < SYSDATE < TO_DATE(END_DATE, 'YYYYMMDD')
+						TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE AND SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
 					]]>
 					</if>
 					<if test=" status == 'complete' ">
 					<![CDATA[ 
-					TO_DATE(END_DATE, 'YYYYMMDD') < SYSDATE 
+						TO_DATE(END_DATE, 'YY/MM/DD') < SYSDATE 
 					]]>
 					</if> 
 		 
@@ -259,35 +252,58 @@
 						CHALLENGE_NO = #{challengeNo}
 	</select>
 	
+	<!-- 좋아요 한 회원인지 확인 -->
+	<select id="checkLikeCount" parameterType="hashmap" resultType="_int">
+		<!-- SELECT
+						COUNT(*)
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_USER USING(USER_NO)
+		WHERE
+						USER_NO = #{ userNo }
+		AND
+						CHALLENGE_NO = #{ challengeNo }	 -->
+		SELECT
+						COUNT(*)
+		FROM
+						TB_LIKE_CHALLENGE
+		WHERE
+						CHALLENGE_NO = #{ challengeNo }
+		AND		
+						USER_NO = #{ userNo }
+	</select>
+	
+	
 	<!-- 좋아요수 증가 -->
 	<update id="increaseLikeCount" parameterType="hashmap">
-	UPDATE 
-					TB_CHALLENGE 
-	SET
-					LIKE_COUNT = (
-												SELECT COUNT(*)
-												FROM TB_LIKE
-												WHERE
-												CHALLENGE_NO = #{ challengeNo }	
-											) + 1
-	WHERE
-					USER_NO = #{ userNo }
+		UPDATE 
+						TB_CHALLENGE 
+		SET
+						LIKE_COUNT = (
+													SELECT COUNT(*)
+													FROM TB_LIKE_CHALLENGE
+													WHERE
+													CHALLENGE_NO = #{ challengeNo }	
+												) + 1
+		WHERE
+						USER_NO = #{ userNo }
 
 	</update>
 	
 	<!-- 좋아요수 감소 -->
 	<update id="decreaseLikeCount" parameterType="hashmap">
-		update 
-						tb_challenge A
-		set 
-						like_count = (
-											 select count(*) 
-											 from tb_like B
-											 where 
-											 challenge_No = #{challengeNo} 
-											) - 1
-		where 
-						userNo = #{loginUser.userNo}
+		UPDATE 
+						TB_CHALLENGE 
+		SET
+						LIKE_COUNT = (
+													SELECT COUNT(*)
+													FROM TB_LIKE_CHALLENGE
+													WHERE
+													CHALLENGE_NO = #{ challengeNo }	
+												) - 1
+		WHERE
+						USER_NO = #{ userNo }
 	</update>	
 		
 	<!-- 게시글 작성 -->

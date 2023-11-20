@@ -184,12 +184,71 @@
 	</style>
 
 	
-	<section id="pasing-area">
+	<section id="pasing-area"><!-- 검색시/정렬시/기본 3가지 CASE 페이징처리 -->
 	
 		<c:choose>
+	
+			<c:when test="${ not empty condition }">
 			
-			<c:when test="${ empty condition }">
+					<c:choose>
+							<c:when test="${ pi.currentPage eq 1 }">
+								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">Previous</a></article>
+							</c:otherwise>
+						</c:choose>
+						
+						
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a></article>
+						</c:forEach>
+						
+						
+						<c:choose>
+							<c:when test="${ pi.currentPage eq pi.maxPage }">
+								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">Next</a></article>
+							</c:otherwise>
+					</c:choose>
 					
+			</c:when>
+			
+			
+			<c:when test="${ not empty status }">
+			
+					<c:choose>
+							<c:when test="${ pi.currentPage eq 1 }">
+								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ pi.currentPage - 1 }&status=${ status }">Previous</a></article>
+							</c:otherwise>
+						</c:choose>
+						
+						
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ p }&status=${ status }">${ p }</a></article>
+						</c:forEach>
+						
+						
+						<c:choose>
+							<c:when test="${ pi.currentPage eq pi.maxPage }">
+								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ pi.currentPage + 1 }&status=${ status }">Next</a></article>
+							</c:otherwise>
+					</c:choose>
+					
+			</c:when>
+			
+			
+		
+			<c:otherwise>
+			
 					<c:choose>
 							<c:when test="${ pi.currentPage eq 1 }">
 								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
@@ -214,34 +273,8 @@
 							</c:otherwise>
 					</c:choose>
 					
-			</c:when>
-			
-			
-			<c:otherwise>
-				<c:choose>
-							<c:when test="${ pi.currentPage eq 1 }">
-								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
-							</c:when>
-							<c:otherwise>
-								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">Previous</a></article>
-							</c:otherwise>
-						</c:choose>
-						
-						
-						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
-								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a></article>
-						</c:forEach>
-						
-						
-						<c:choose>
-							<c:when test="${ pi.currentPage eq pi.maxPage }">
-								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
-							</c:when>
-							<c:otherwise>
-								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">Next</a></article>
-							</c:otherwise>
-					</c:choose>
 			</c:otherwise>
+			
 		</c:choose>
 	</section>
 

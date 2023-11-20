@@ -56,7 +56,7 @@ public class ChallengeController {
 		
 	}
 	
-	// 검색결과 리스트 조회
+	// 검색결과  조회
 	@RequestMapping("search.condition")
 	public String selectChallengeSearch(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String condition, String keyword) {
 		
@@ -91,12 +91,12 @@ public class ChallengeController {
 	
 
 
-	// 게시글 정렬 조회
+	// 게시글 정렬결과 조회
 	@RequestMapping("search.status")
 	public String selectChallengeStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status) {
 		
 		
-		  // 0. 
+		  // 0. Map에 status 키와 밸류 담기
 		HashMap<String, String> map = new HashMap(); 
 		map.put("status", status);
 		 
@@ -115,6 +115,9 @@ public class ChallengeController {
 		model.addAttribute("status", status);
 		model.addAttribute("list", challengeService.selectChallengeStatus(map, pi));	// status가지고 DB갔다오기
 		model.addAttribute("pi", pi);
+		
+		//System.out.println("정렬조회결과개수 : " + challengeService.countChallengeStatus(map));
+		
 		
 		return "challenge/challengeListView";
 	}
@@ -226,40 +229,6 @@ public class ChallengeController {
 	
 	
 	
-	@ResponseBody
-	@RequestMapping("increase.like")
-	public String increaseLikeCount(int userNo, int challengeNo) {
-		
-		// 복합키인 userNo와 challengeNo를 map에 각각 담음
-		HashMap<String, Integer> map = new HashMap();
-		map.put("userNo", Integer.valueOf(userNo));
-		map.put("challengerNo", Integer.valueOf(challengeNo));
-		
-		if(challengeService.increaseLikeCount(map) > 0 ) {
-			
-			return "success";
-			
-		} else {
-			
-			return "fail";
-			
-		}
-		
-	}	
-
-	
-	
-	@RequestMapping("decrease.like")
-	public void decreaseLikeCount(int userNo, int challengeNo) {
-		
-		HashMap<String, Integer> map = new HashMap();
-		map.put("userNo", Integer.valueOf(userNo));
-		map.put("challengerNo", Integer.valueOf(challengeNo));
-		
-		challengeService.increaseLikeCount(map);
-		
-		
-	}
 	
 
 	

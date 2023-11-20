@@ -74,6 +74,7 @@
     			${ challenge.minParticipant } ~ ${ challenge.maxParticipant }
     		</article>
     		
+    		
     		<article id="likeCount">
     			<div id="like">🤍</div>
     			<div id="count">${challenge.likeCount }</div> 
@@ -82,13 +83,51 @@
     		<script>
     		$(function(){
     			$('#likeCount').on('click', function(e){
-    				// 처음 클릭하는 회원이라면
-    				increaseLikeCount();
     				
-    				// 이미 클릭한 회원이라면
-    				//decreaseLikeCount();
+    				
+    				<c:choose>
+    				
+	    				 <c:when test="${ empty loginUser }">
+	    					alert('로그인한 유저만 좋아요를 할 수 있어요');
+	    				</c:when> 
+	    				
+	    				<c:otherwise>
+	    					checkLikeCount();
+	    				</c:otherwise>
+    				</c:choose>
+    				
+    				
+    				
+    				
+	    				// 처음 클릭하는 회원이라면
+	    				//increaseLikeCount();
+	    				
+	    				// 이미 클릭한 회원이라면
+	    				//decreaseLikeCount();
     			})
     		});
+    		
+    		function checkLikeCount(){
+    			
+    			$.ajax({
+    				url : 'check.like',
+    				data : {
+    					userNo : ${ loginUser.userNo },
+    					challengeNo : ${ challenge.challengeNo }
+    				},
+    				success : function(result){
+    					console.log("성공!");
+    				},
+    				error : function(){
+    					console.log('체크라이크 실패');
+    				}
+    				
+    				
+    				
+    			});
+    			
+    			
+    		}
     			
     		// 좋아요 증가함수
     		function increaseLikeCount(){
@@ -99,9 +138,9 @@
 		    					userNo : ${ loginUser.userNo },
 		    					challengeNo : ${ challenge.challengeNo },
 		    				},
-		    				success : function(data){
+		    				success : function(result){
 		    					$('#like').html('💚')
-		    					console.log(data);
+		    					console.log(result);
 		    				},
 		    				error : function(){
 		    					

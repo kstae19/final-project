@@ -41,7 +41,7 @@ public class ChallengeDao {
 
 	public int countChallengeStatus(SqlSessionTemplate sqlSession, HashMap<String, String> map) {
 		
-		return sqlSession.selectOne("challengeMapper.countChallengeList", map);
+		return sqlSession.selectOne("challengeMapper.countChallengeStatus", map);
 	}
 	
 	public ArrayList<Challenge> selectChallengeStatus(SqlSessionTemplate sqlSession, HashMap<String, String> map, RowBounds rowBounds){
@@ -68,7 +68,7 @@ public class ChallengeDao {
 	// 좋아요
 	public int checkLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		
-		return 0;
+		return sqlSession.selectOne("challengeMapper.checkLikeCount", map);
 	}
 
 	public int increaseLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
