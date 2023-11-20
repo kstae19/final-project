@@ -56,23 +56,16 @@
         </div>
         <hr>
         <c:if test="${ not empty sessionScope.loginUser }">
-            <button type="button" onclick="reportEnroll.bk">작성</button>
+            <button type="button" onclick="location.href='reportEnroll.bk'">작성</button>
         </c:if>
-        
-        <script>
-        	$(function(){
-        		console.log("${sessionScope.loginUser.userId}");
-        		console.log("${sessionScope.loginUser.userId}");
-        	})
-        </script>
         
         <br><br>
         <table class="table table-bordered" id="report-table">
           <thead>
             <tr>
               <th style="width: 10%;">게시판번호</th>
-              <th style="width: 10%;">별점</th>
-              <th style="width: 40%;">제목</th>
+              <th style="width: 15%;">별점</th>
+              <th style="width: 35%;">제목</th>
               <th style="width: 10%;">작성자</th>
               <th style="width: 10%;">작성일</th>
               <th style="width: 10%;">조회수</th>
@@ -83,7 +76,7 @@
           		<c:choose>
           			<c:when test="${ r.bookReportStar eq 0 }">
           				<tr style="color:red;">
-				          <td>${ r.bookReportNo }</td>
+				          <td class="rno">${ r.bookReportNo }</td>
 				          <td>공지</td>
 				          <td>${ r.bookReportTitle }</td>
 				          <td>${ r.userId }</td>
@@ -95,8 +88,12 @@
         				<c:choose>
         					<c:when test="${ r.userId eq loginUser.userId }">
         						<tr>
-						          <td>${ r.bookReportNo }</td>
-						          <td>${ r.bookReportStar }</td>
+						          <td class="rno">${ r.bookReportNo }</td>
+						          <td>
+						          	<c:forEach var="i" begin="1" end="${ r.bookReportStar }">
+						          		★
+						          	</c:forEach>
+						          </td>
 						          <td>[비밀글] ${ r.bookReportTitle }</td>
 						          <td>${ r.userId }</td>
 						          <td>${ r.bookReportDate }</td>
@@ -107,8 +104,12 @@
           			</c:when>
           			<c:otherwise>
           				<tr>
-				          <td>${ r.bookReportNo }</td>
-				          <td>${ r.bookReportStar }</td>
+				          <td class="rno">${ r.bookReportNo }</td>
+				          <td>
+				          <c:forEach var="i" begin="1" end="${ r.bookReportStar }">
+			          		  ★
+			          	  </c:forEach>
+						  </td>
 				          <td>${ r.bookReportTitle }</td>
 				          <td>${ r.userId }</td>
 				          <td>${ r.bookReportDate }</td>

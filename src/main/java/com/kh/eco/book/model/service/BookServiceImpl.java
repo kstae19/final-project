@@ -106,16 +106,23 @@ public class BookServiceImpl implements BookService{
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.searchReportList(sqlSession, map, rowBounds);
 	}
+	
+	@Override
+	public int countReport(int reportNo) {
+		return bookDao.countReport(sqlSession, reportNo);
+	}
 
 	@Override
 	public BookReport reportDetail(int reportNo) {
-		return null;
+		return bookDao.reportDetail(sqlSession, reportNo);
 	}
 
 	@Override
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;
 	}
+
+	
 
 	
 

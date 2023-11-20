@@ -324,8 +324,39 @@ public class BookController {
 		}
 		return mv;
 	}
-	 
 	
+	// 독후감 게시판 작성페이지 포워딩
+	@RequestMapping("reportEnroll.bk")
+	public String reportEnroll() {
+		return "book/book/reportEnrollForm";
+	}
+	
+	// 독후감 게시판 작성
+	@RequestMapping("reportEnrollForm.bk")
+	public String reportEnrollForm() {
+		
+		
+		
+		
+	}
+	 
+	// 독후감 게시판 상세조회
+	@RequestMapping("reportdetail.bk")
+	public String reportDetail(int rno, Model model) {
+		
+		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
+			BookReport bookReport = bookService.reportDetail(rno);
+			if(bookReport != null) { // 상세조회 성공
+				model.addAttribute("br", bookReport);
+			} else { // 상세조회 실패
+				System.out.println("실패!");
+			}
+		} else { // 조회수 증가 실패
+			System.out.println("실패!");
+		}
+		
+		return "book/book/reportDetail";
+	}
 	
 	
 	

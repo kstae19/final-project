@@ -258,6 +258,32 @@
 			BOOK_REPORT_DATE DESC
 	</select>
 	
+	<!-- 독후감 게시판 조회수 증가 -->
+	<update id="countReport" parameterType="_int">
+		UPDATE TB_BOOK_REPORT
+		SET BOOK_REPORT_COUNT = BOOK_REPORT_COUNT + 1
+		WHERE BOOK_REPORT_NO = #{rno}
+	</update>
+	
+	<!-- 독후감 게시판 상세조회 -->
+	<select id="reportDetail" parameterType="_int" resultMap="bookReportResultSet">
+		SELECT
+			BOOK_REPORT_NO,
+			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_TITLE,
+			BOOK_REPORT_CONTENT,
+			USER_ID,
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			BOOK_REPORT_COUNT,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM
+			TB_BOOK_REPORT
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE
+			BOOK_REPORT_NO = #{rno}
+	</select>
 	
 </mapper>
 
