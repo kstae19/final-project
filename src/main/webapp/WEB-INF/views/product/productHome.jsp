@@ -46,7 +46,7 @@ div {
 	height: 1100px;
 }
 
-#content {
+.content {
 	width: 1200px;
 	height: 1000px;
 	margin: auto;
@@ -140,7 +140,7 @@ div {
 <jsp:include page="../common/header.jsp"/>
 	<div class="outer">
 		<br> <br>
-		<div id="content">
+		<div class="content">
 			<div id="searching-area">
 				<input type="text" placeholder="검색어를 입력하세요."> <img
 					src="resources/images/searhIcon.svg">
@@ -170,7 +170,7 @@ div {
 							</c:when>
 							<c:otherwise>		
 								<div class="product-info" 
-								onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo }+'productNo='+${p.productNo}">
+								onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo }+'&productNo='+${p.productNo}">
 							</c:otherwise>
 							</c:choose>
 								<h1>${p.productName }</h1>
@@ -200,7 +200,7 @@ div {
 										<img onclick="askLogin();" src="resources/images/heart-regular.svg">
 									</c:when>
 									<c:otherwise>
-										<img onclick="like(${p.productNo});" src="resources/images/heart-regular.svg">
+										<img onclick="like(${p.productNo}, this);" src="resources/images/heart-regular.svg">
 									</c:otherwise>
 									</c:choose>
 							</div>
@@ -237,15 +237,21 @@ div {
 									alertify.error('비회원으로 계속합니다.');
 								});
 					}
-					function like(pno){
+					function like(pno, th){
 						console.log(pno);
 						$.ajax({
 							url : 'product.like',
 							data : {
-								productNo : pno
+								productNo : pno,
+								userNo : '${sessionScope.loginUser.userNo}'
 							},
 							success : e => {
-								console.log(e);
+								if(e == 'added'){
+									$(th).attr('src', 'resources/images/heart-solid.svg');
+								}
+								else if(e == 'removed'){
+									$(th).attr('src', 'resources/images/heart-regular.svg');
+								};
 							},
 							error : e => {
 								console.log('세상은 요지경~~');
@@ -261,7 +267,6 @@ div {
 							url : 'getLikes.pr',
 							data : {userNo : '${sessionScope.loginUser.userNo}'},
 							success: result =>{
-								console.log(result);
 								for(let i in result){
 									$('.product').each((idnex, item)=>{
 										if(result[i].productNo == item.id){

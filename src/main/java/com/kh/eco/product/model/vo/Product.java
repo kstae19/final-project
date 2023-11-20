@@ -11,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor @AllArgsConstructor @Setter @Getter @ToString
 public class Product {
 	private int productNo;
+	private int brandNo;
 	private String brandName;
 	private String productName;
 	private String productInfo;

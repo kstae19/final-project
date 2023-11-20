@@ -9,6 +9,18 @@
     <style>
         /* 배너 */
         .floatdiv {
+            width: 50px;
+            height: 100px;
+            background-color: #f1f1f1;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            transform: translateY(100%);
+        }
+        .floatdiv li{
+            display: none;
+        }
+        
+        .floatdiv:hover {
             position: fixed;
             left: 0;
             top: 50%;
@@ -16,8 +28,17 @@
             background-color: #f1f1f1;
             padding: 10px;
             width: 200px;
+            height: auto;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
+        
+        .floatdiv:hover li{
+            display: block;
+        }
+        .floatdiv:hover li:hover{
+        	cursor: pointer;
+        }
+
         .floatdiv ul  { list-style: none; }
         .floatdiv li  { margin-bottom: 5px; text-align: center; }
         .floatdiv a   { color: #5D5D5D; border: 0; text-decoration: none; display: block; }
@@ -29,10 +50,10 @@
     <div class="floatdiv">
         <ul>
             <li style="font-size: 30px; margin-bottom: 15px;">정보제공/커뮤니티</li>
-            <li>우수환경도서</li>
-            <li>독후감 게시판</li>
-            <li>환경용어사전</li>
-            <li>독서캘린더</li>
+            <li onclick="location.href='book'">우수환경도서</li>
+            <li onclick="location.href='bookreport'">독후감 게시판</li>
+            <li onclick="location.href='ecodictionary'">환경용어사전</li>
+            <li onclick="location.href='bookcalendar'">독서캘린더</li>
         </ul>
     </div>
 </body>

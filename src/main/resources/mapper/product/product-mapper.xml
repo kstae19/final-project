@@ -21,6 +21,24 @@
 	<result property="userNo" column="USER_NO"/>
 	<result property="addDate" column="ADD_DATE"/>
 </resultMap>
+
+<resultMap id="resultCartMap" type ="cart">
+	<result property="qty" column="QTY"/>
+	<association property = "product" javaType="product">
+		<result property="brandNo" column="BRAND_NO"/>
+		<result property="brandName" column="BRAND_NAME"/>
+		<result property="productNo" column="PRODUCT_NO"/>
+		<result property="productName" column="PRODUCT_NM"/>
+		<result property="productInfo" column="PRODUCT_INFO"/>
+		<result property="mainImg" column="MAIN_IMG"/>
+	</association>
+	<association property="option" javaType="option">
+		<result property="optionNo" column="OPTION_NO"/>
+		<result property="optionName" column="OPTION_NM"/>
+		<result property="price" column="PRICE"/>
+	</association>
+</resultMap>
+
 <select id="selectProductList" resultMap="resultProductMap">
 SELECT 
 		PRODUCT_NO, 
@@ -44,102 +62,137 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </insert>
 
 <select id = "selectProduct" parameterType = "_int"  resultMap="resultProductMap">
-SELECT 
-	PRODUCT_NO, 
-	PRODUCT_NM, 
-	PRODUCT_INFO, 
-	DETAIL_INFO, 
-	EXTRA_INFO, 
-	BRAND_NO, 
-	MAIN_IMG, 
-	OPTION_NO, 
-	OPTION_NM, 
-	PRICE
-FROM 
-	TB_PRODUCT 
-JOIN 
-	TB_PRODUCT_OPTION O USING (PRODUCT_NO) 
-WHERE 
-	O.STATUS IN ('Y', 'O') 
-AND 
-	PRODUCT_NO = #{productNo}
+	SELECT 
+			PRODUCT_NO, 
+			PRODUCT_NM, 
+			PRODUCT_INFO, 
+			DETAIL_INFO, 
+			EXTRA_INFO, 
+			BRAND_NO, 
+			MAIN_IMG, 
+			OPTION_NO, 
+			OPTION_NM, 
+			PRICE
+	FROM 
+		TB_PRODUCT 
+	JOIN 
+		TB_PRODUCT_OPTION O USING (PRODUCT_NO) 
+	WHERE 
+		O.STATUS IN ('Y', 'O') 
+	AND 
+		PRODUCT_NO = #{productNo}
 </select>
 
 <select id="getPrice" parameterType="_int" resultType="string">
-select TO_CHAR(price, '999,999') from tb_product_option where OPTION_NO = #{optionNo}
+	select TO_CHAR(price, '999,999') from tb_product_option where OPTION_NO = #{optionNo}
 </select>
 <select id="getImages" parameterType="_int" resultType="string">
-SELECT 
-		FILE_NAME fileName 
-	FROM 
-		TB_PRODUCT_IMG 
-	WHERE 
-		PRODUCT_NO = #{productNo} 
-	AND STATUS= 'Y'
+	SELECT 
+			FILE_NAME fileName 
+		FROM 
+			TB_PRODUCT_IMG 
+		WHERE 
+			PRODUCT_NO = #{productNo} 
+		AND STATUS= 'Y'
 </select>
 
 <select id="getBrand" parameterType="_int" resultType="brand">
-SELECT 
-	BRAND_NO brandNo, 
-	BRAND_NAME brandName, 
-	BRAND_INTRO brandIntro  
-FROM 
-	TB_BRAND 
-WHERE 
-	BRAND_NO = (
-				SELECT 
-					BRAND_NO 
-				FROM 
-					TB_PRODUCT 
-				WHERE 
-					PRODUCT_NO = #{productNo}
-					)
+	SELECT 
+		BRAND_NO brandNo, 
+		BRAND_NAME brandName, 
+		BRAND_INTRO brandIntro  
+	FROM 
+		TB_BRAND 
+	WHERE 
+		BRAND_NO = (
+					SELECT 
+						BRAND_NO 
+					FROM 
+						TB_PRODUCT 
+					WHERE 
+						PRODUCT_NO = #{productNo}
+						)
 </select>
 
 <select id="getRate" parameterType="_int" resultType="productReview">
-SELECT 
-    COUNT(*) reviewNo, 
-    ROUND(AVG(STAR_RATE),1) starRate  
-FROM 
-    TB_PRODUCT_REVIEW 
-WHERE 
-    OPTION_NO IN (
-                    SELECT OPTION_NO 
-                    FROM TB_PRODUCT_OPTION 
-                    WHERE PRODUCT_NO = #{productNo}
-                    )
+	SELECT 
+	    	COUNT(*) reviewNo, 
+	    	ROUND(AVG(STAR_RATE),1) starRate  
+	FROM 
+	    TB_PRODUCT_REVIEW 
+	WHERE 
+	    OPTION_NO IN (
+	                    SELECT OPTION_NO 
+	                    FROM TB_PRODUCT_OPTION 
+	                    WHERE PRODUCT_NO = #{productNo}
+	                    )
 </select>
 
 <select id="reviewList" parameterType="_int" resultType="productReview">
-SELECT 
-    REVIEW_NO reviewNo, 
-    OPTION_NM "option", 
-    REVIEW_TITLE reviewTitle, 
-    REVIEW_CONTENT reviewContent, 
-    STAR_RATE starRate 
-FROM TB_PRODUCT_REVIEW R 
-JOIN TB_PRODUCT_OPTION USING(OPTION_NO) 
-WHERE R.STATUS='Y'
-AND OPTION_NO IN (
-                SELECT OPTION_NO 
-                FROM TB_PRODUCT_OPTION 
-                WHERE PRODUCT_NO = #{productNo}
-                )
+	SELECT 
+	    	REVIEW_NO reviewNo, 
+	    	OPTION_NM "option", 
+	    	REVIEW_TITLE reviewTitle, 
+	    	REVIEW_CONTENT reviewContent, 
+	    	STAR_RATE starRate 
+	FROM 
+		TB_PRODUCT_REVIEW R 
+	JOIN 
+		TB_PRODUCT_OPTION USING(OPTION_NO) 
+	WHERE 
+		R.STATUS='Y'
+	AND OPTION_NO IN (
+	                SELECT OPTION_NO 
+	                FROM TB_PRODUCT_OPTION 
+	                WHERE PRODUCT_NO = #{productNo}
+	                )
 </select>
 <select id="getLikes" parameterType="_int" resultType="productLike">
-SELECT 
-	PRODUCT_NO productNo, 
-	USER_NO userNo 
-FROM 
-	TB_PRODUCT_LIKE 
-WHERE 
-	USER_NO = #{userNo}
+	SELECT 
+		PRODUCT_NO productNo, 
+		USER_NO userNo 
+	FROM 
+		TB_PRODUCT_LIKE 
+	WHERE 
+		USER_NO = #{userNo}
 </select>
 
 
 <select id="checkLike" parameterType="productLike" resultType="string">
-SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
+	SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
 </select>
 
+<delete id="removeLike" parameterType="productLike">
+	DELETE FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
+</delete>
+
+<select id="selectCartItems" parameterType="_int" resultMap="resultCartMap">
+	SELECT 
+        BRAND_NO, 
+        BRAND_NAME, 
+        PRODUCT_NO, 
+        PRODUCT_NM, 
+        PRODUCT_INFO, 
+        MAIN_IMG, 
+        OPTION_NM, 
+        OPTION_NO, 
+        PRICE,
+        QTY 
+	FROM 
+		TB_CART_ITEM I 
+	JOIN 
+		TB_PRODUCT_OPTION O USING(OPTION_NO) 
+	JOIN 
+		TB_PRODUCT USING(PRODUCT_NO) 
+	JOIN 
+		TB_BRAND USING(BRAND_NO) 
+	WHERE 
+		USER_NO = #{userNo} 
+	AND 
+		O.STATUS IN ('Y', 'O') 
+	ORDER 
+		BY 
+		ADD_DATE DESC
+</select>
 
 </mapper>

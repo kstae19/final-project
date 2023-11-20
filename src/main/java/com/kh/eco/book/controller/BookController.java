@@ -8,18 +8,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.Book;
+import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
@@ -38,6 +41,7 @@ public class BookController {
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
 		url += "&MaxResults=" + maxResult;
 		url += "&output=JS";
+		url += "&Sort=SalesPoint";
 		url += "&Version=20131101";
 		url += "&Cover=big";
 		url += "&start=" + currentPage;
@@ -199,7 +203,7 @@ public class BookController {
 			}
 		}
 		
-		PageInfo pi = Pagination.getPageInfo(200, currentPage, 10, 10);
+		PageInfo pi = Pagination.getPageInfo(200, currentPage, 20, 10);
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
@@ -245,12 +249,12 @@ public class BookController {
 			break;
 		}
 		
-		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 10, 10);
+		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 20, 10);
 		// 만약 현재페이지 1 : 0 ~ 19(20)
 		// 2 : 20 ~ 39(40)
 		// 3 : 40 ~ 59(60)
 		// 4 : 60 ~ 79(80)
-		int startList = pi.getMaxPage() * (currentPage - 1);
+		int startList = 20 * (currentPage - 1);
 		int endList = currentPage * 20;
 		if(endList > searchList.size()) {
 			endList = searchList.size();
@@ -265,7 +269,7 @@ public class BookController {
 	}
 	
 	
-	// 상세페이지 메소드
+	// 상세페이지 메소드(이거 조회 필요없을것같음)
 	@RequestMapping("bookdetail.bk")
 	public String bookDetail(String ISBN, Model model, int count) throws IOException {
 		
@@ -292,8 +296,67 @@ public class BookController {
 		return "book/book/bookDetail";
 	}
 	
-	 
+	// 독후감 게시판 포워딩 겸 리스트 조회
+	@RequestMapping("bookreport")
+	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
+		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
+		model.addAttribute("list", bookService.selectReportList(pi));
+		model.addAttribute("pi", pi);
+		return "book/book/reportList";
+	}
 	
+	// 독후감 게시판 검색목록 리스트 조회
+	@RequestMapping("reportsearch.bk")
+	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, ModelAndView mv, String reportcondition, String reportsearch) {
+		
+		HashMap<String, String> map = new HashMap();
+		map.put("condition", reportcondition);
+		map.put("keyword", reportsearch);
+		
+		PageInfo pi = Pagination.getPageInfo(bookService.searchReportCount(map), currentPage, 10, 10);
+		
+		ArrayList<BookReport> list = bookService.searchReportList(map, pi);
+		
+		if(list != null) { // 리스트 조회 성공
+			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportcondition).addObject("keyword", reportsearch).setViewName("book/book/reportList");
+		} else { // 리스트 조회 실패
+			System.out.println("실패!");
+		}
+		return mv;
+	}
+	
+	// 독후감 게시판 작성페이지 포워딩
+	@RequestMapping("reportEnroll.bk")
+	public String reportEnroll() {
+		return "book/book/reportEnrollForm";
+	}
+	
+	// 독후감 게시판 작성
+	@RequestMapping("reportEnrollForm.bk")
+	public String reportEnrollForm() {
+		
+		
+		
+		
+	}
+	 
+	// 독후감 게시판 상세조회
+	@RequestMapping("reportdetail.bk")
+	public String reportDetail(int rno, Model model) {
+		
+		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
+			BookReport bookReport = bookService.reportDetail(rno);
+			if(bookReport != null) { // 상세조회 성공
+				model.addAttribute("br", bookReport);
+			} else { // 상세조회 실패
+				System.out.println("실패!");
+			}
+		} else { // 조회수 증가 실패
+			System.out.println("실패!");
+		}
+		
+		return "book/book/reportDetail";
+	}
 	
 	
 	

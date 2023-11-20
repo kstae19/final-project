@@ -83,10 +83,9 @@ public class AjaxBookController {
 		map.put("userNo", userNo);
 		map.put("content", content);
 		System.out.println(map);
+
 		
-		int result = bookService.ajaxInsertBookReply(map);
-		
-		if(result > 1) { // 성공
+		if(bookService.ajaxInsertBookReply(map) > 1) { // 성공
 			return "success";
 		} else { // 실패
 			System.out.println("실패!");
@@ -119,7 +118,16 @@ public class AjaxBookController {
 	@ResponseBody
 	@RequestMapping(value="deletebookreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteBookReply(String ISBN13, int userNo) {
-		return "gd";
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("ISBN13", ISBN13);
+		map.put("userNo", userNo);
+		
+		if(bookService.ajaxDeleteBookReply(map) > 0) { // 삭제 성공
+			return "success";
+		} else { // 실패
+			return "fail";
+		}
 	}
 	
 	
