@@ -10,6 +10,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -397,6 +399,22 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 신고
+	@RequestMapping("reportBlack.bk")
+	public String reportBlack(int reportNo, String userId, int userNo, HttpSession session) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportNo", reportNo);
+		map.put("userId", userId);
+		map.put("userNo", userNo);
+		
+		if(bookService.reportBlack(map) > 0) {
+			session.setAttribute("alert", "신고 완료");
+		} else { // 신고 실패
+			System.out.println("실패");
+		}
+		return "redirect:bookreport";
+	}
+	
 	
 	
 	

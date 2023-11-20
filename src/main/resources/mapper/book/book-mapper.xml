@@ -361,5 +361,48 @@
 			BOOK_REPORT_NO = #{reportNo}
 	</update>
 	
+	<!-- 독후감 게시글 신고 -->
+	<insert id="reportBlack" parameterType="hashmap">
+		INSERT
+		INTO
+			TB_BOOK_REPORT_BLACK
+		VALUES
+			(
+			SEQ_BOOK_REPORT_BLACK.NEXTVAL,
+			(SELECT USER_NO
+			FROM TB_USER
+			WHERE USER_ID = #{userId}),
+			#{userNo},
+			#{reportNo}
+			)
+		WHERE NOT EXISTS
+			(
+			SELECT 1
+			FROM TB_BOOK_REPORT_BLACK
+			WHERE
+				LOGIN_USER_NO = #{userNo}
+			AND
+				BOOK_REPORT_NO = #{reportNo}
+			)
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </mapper>
 

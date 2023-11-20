@@ -74,6 +74,7 @@ public interface BookService {
 	public int reportDelete(int reportNo);
 	
 	// 독후감 게시글 신고
+	public int reportBlack(HashMap map);
 		
 	
 	// 독후감 게시판 댓글 조회

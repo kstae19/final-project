@@ -46,7 +46,7 @@
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
-	        <button type="button" class="btn btn-dark" onclick="locaiont.href='reportBlack.bk?reportNo=${br.bookReportNo}'">신고하기</button>
+	        <button type="button" class="btn btn-dark" onclick="location.href='reportBlack.bk?reportNo=${br.bookReportNo}&userId=${ br.userId }&userNo=${ loginUser.userNo }'">신고하기</button>
 	        <c:if test="${ loginUser.userId eq br.userId }">
 		        <button type="button" class="btn btn-danger" onclick="location.href='reportDelete.bk?reportNo=${br.bookReportNo}'">삭제</button>
 		        <button type="button" class="btn btn-secondary" onclick="location.href='reportUpdate.bk?reportNo=${br.bookReportNo}'">수정</button>
@@ -78,11 +78,9 @@
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
-            <form>
-                <input type="text" placeholder="댓글을 남겨보세요" name="" style="height: 50px; width: 90%;">
-                <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;">등록</button>
-                <p>0/50</p>
-            </form>
+            <input type="text" placeholder="댓글을 남겨보세요" name="" style="height: 50px; width: 90%;">
+            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;">등록</button>
+            <p>0/50</p>
         </div>
 
 

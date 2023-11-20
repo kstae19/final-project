@@ -137,6 +137,11 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
+	public int reportBlack(HashMap map) {
+		return bookDao.reportBlack(sqlSession, map);
+	}
+	
+	@Override
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;
 	}

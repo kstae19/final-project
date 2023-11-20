@@ -98,7 +98,9 @@ public class BookDao {
 		return sqlSession.update("bookMapper.reportDelete", reportNo);
 	}
 	
-	
+	public int reportBlack(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.reportBlack", map);
+	}
 	
 	
 	
