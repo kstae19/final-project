@@ -107,6 +107,11 @@
 	 	height : 60px;
 	 	margin-top : 10px;
 	 	margin-bottom : 10px;
+	 	cursor:pointer;
+	 }
+	 
+	 .regist-cursor{
+	 	cursor:pointer;
 	 }
 
 </style>
@@ -172,6 +177,12 @@
 		</script>
 		
 		<script>
+			$('#naver-login').click(() => {
+				location.href = 'https://nid.naver.com/oauth2.0/authorize?client_id=Bm7N4g9KvV8b3Wl6cjN0&redirect_uri=http://localhost:8001/eco/ncode&response_type=code&state=test';
+			});
+		</script>
+		
+		<script>
 			$('#saveId').click(() => {
 			    if ($('#saveId').prop('checked')) {
 			        $.ajax({
@@ -203,19 +214,19 @@
 		
 		<div id="regist-user">
 			<div id="regist">
-				<div id="search-id" onclick="location.href='findId'">
+				<div id="search-id" onclick="location.href='findId'" class="regist-cursor">
 					<h4>아이디 찾기</h4>
 				</div>
 				<div id="bar">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
-				<div id="search-pwd" onclick="location.href='findPwd'">
+				<div id="search-pwd" onclick="location.href='findPwd'" class="regist-cursor">
 					<h4>비밀번호 찾기</h4>
 				</div>
 				<div id="bar">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
-				<div id="enroll-user" onclick="location.href='enroll'">
+				<div id="enroll-user" onclick="location.href='enroll'" class="regist-cursor">
 					<h4>회원가입</h4>
 				</div>
 			</div>
