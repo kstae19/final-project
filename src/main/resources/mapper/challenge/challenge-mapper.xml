@@ -288,8 +288,23 @@
 												) + 1
 		WHERE
 						USER_NO = #{ userNo }
+		AND
+						CHALLENGE_NO = #{ challengeNo }
 
 	</update>
+	
+	<!-- 좋아요테이블에 한 행 삽입 -->
+	<insert id="insertLike" parameterType="hashmap">
+		INSERT 
+		INTO 
+							TB_LIKE_CHALLENGE
+		VALUES 
+							( 
+							#{ challengeNo }, 
+							#{ userNo }, 
+							SYSDATE 
+							)
+	</insert>
 	
 	<!-- 좋아요수 감소 -->
 	<update id="decreaseLikeCount" parameterType="hashmap">
@@ -304,8 +319,22 @@
 												) - 1
 		WHERE
 						USER_NO = #{ userNo }
-	</update>	
+		AND
+						CHALLENGE_NO = #{ challengeNo }
 		
+	</update>	
+	
+	<!-- 좋아요 테이블에 한 행 삭제 -->
+	<delete id="deleteLike" parameterType="hashmap">
+		DELETE
+			FROM		
+							TB_LIKE_CHALLENGE
+		WHERE 
+							CHALLENGE_NO =  #{ challengeNo }
+		AND
+							USER_NO =  #{ userNo }
+	</delete>	
+	
 	<!-- 게시글 작성 -->
 	<insert id="insertChallenge" parameterType="challenge">
 		INSERT 

@@ -75,10 +75,19 @@ public class ChallengeDao {
 		
 		return sqlSession.update("challengeMapper.increaseLikeCount", map);
 	}
+	public int insertLike(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
+		
+		return sqlSession.insert("challengeMapper.insertLike", map);
+	}
+	
 
 	public int decreaseLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		
 		return sqlSession.update("challengeMapper.decreaseLikeCount", map);
+	}
+	public int deleteLike(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
+		
+		return sqlSession.delete("challengeMapper.deleteLike", map);
 	}
 
 	// 게시글 작성 수정 삭제
@@ -96,6 +105,8 @@ public class ChallengeDao {
 		
 		return sqlSession.update("challengeMapper.deleteChallenge", challengeNo);
 	}
+
+
 
 
 

@@ -7,10 +7,14 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.challenge.model.dao.ChallengeDao;
 import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.vo.PageInfo;
+
+
 
 @Service
 public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 implements
@@ -117,13 +121,28 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.increaseLikeCount(sqlSession, map);
 	}
 
+	 @Override 
+	 public int insertLike(HashMap<String, Integer> map) {
+	 
+	  return challengeDao.insertLike(sqlSession, map); 
+	  
+	  }
+	 
+	
+
 	@Override
 	public int decreaseLikeCount(HashMap<String, Integer> map) {
 	
-		return  challengeDao.decreaseLikeCount(sqlSession, map);
+			return  challengeDao.decreaseLikeCount(sqlSession, map);
 	}
 
-	
+	  @Override 
+	  public int deleteLike(HashMap<String, Integer> map) {
+	  
+		  return challengeDao.deleteLike(sqlSession, map); 
+	  
+	  }
+	 
 	
 	
 	// 게시글 등록 수정 삭제
@@ -144,6 +163,8 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
+
+
 
 
 

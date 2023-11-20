@@ -82,9 +82,13 @@
     		
     		<script>
     		$(function(){
+    			
+    			
+				// 클릭했을 때 이벤트    		
     			$('#likeCount').on('click', function(e){
     				
-    				
+    				checkLikeCount();
+/*     				
     				<c:choose>
     				
 	    				 <c:when test="${ empty loginUser }">
@@ -94,68 +98,92 @@
 	    				<c:otherwise>
 	    					checkLikeCount();
 	    				</c:otherwise>
-    				</c:choose>
-    				
-    				
-    				
-    				
-	    				// 처음 클릭하는 회원이라면
-	    				//increaseLikeCount();
 	    				
-	    				// 이미 클릭한 회원이라면
-	    				//decreaseLikeCount();
-    			})
-    		});
-    		
-    		function checkLikeCount(){
-    			
-    			$.ajax({
-    				url : 'checkLike.ch',
-    				data : {
-    					userNo : ${ loginUser.userNo },
-    					challengeNo : ${ challenge.challengeNo }
-    				},
-    				success : function(data){
-    					console.log(data);
-    				},
-    				error : function(){
-    					console.log('체크라이크 실패');
-    				}
-    				
-    				
-    				
+    				</c:choose> */
+
     			});
     			
-    			
-    		}
-    			
-    		// 좋아요 증가함수
-    		function increaseLikeCount(){
-	
-		    			$.ajax({
-		    				url : 'increaseLike.ch',
-		    				data : {
-		    					userNo : ${ loginUser.userNo },
-		    					challengeNo : ${ challenge.challengeNo },
-		    				},
-		    				success : function(result){
-		    					$('#like').html('💚')
-		    					console.log(result);
-		    				},
-		    				error : function(){
-		    					
-		    					console.log('실패');
-		    					
-		    				}
-		    			
-		    			/* ;		    
-		    			
-		    		
-		    			$('#count').html('${challenge.likeCount }' + 1); */
-	
-    			})
-    		
-    		}
+    			// 좋아요 했는지 확인
+    			function checkLikeCount(){
+        			
+        			$.ajax({
+        				url : 'checkLike.ch',
+        				data : {
+        					userNo : ${ loginUser.userNo },
+        					challengeNo : ${ challenge.challengeNo }
+        				},
+        				success : function(data){ 
+        					if(data == 'success'){
+        						// 좋아요 이미 체크한 회원
+        						decreaseLikeCount();
+        						
+        					} else{
+        						// 좋아요 처음 체크한 회원
+        						increaseLikeCount();
+        					}
+        				},
+        				error : function(){
+        					console.log('좋아요 했는지 여부 확인불가');
+        				}
+        				
+        				
+        				
+        			});
+        			
+        			
+        		};
+        			
+        		// 좋아요 증가함수
+        		function increaseLikeCount(){
+    	
+    		    			$.ajax({
+    		    				url : 'increaseLike.ch',
+    		    				data : {
+    		    					userNo : ${ loginUser.userNo },
+    		    					challengeNo : ${ challenge.challengeNo },
+    		    				},
+    		    				success : function(result){
+    		    					
+    		    					console.log("좋아요 증가 성공");
+    		    				},
+    		    				error : function(){
+    		    					
+    		    					console.log('좋아요 증가 실패');
+    		    					
+    		    				}
+    		    			
+    		    		
+    	
+    	
+        			})
+        		
+        		};
+
+        		// 좋아요 감소함수
+        		function decreaseLikeCount(){
+    	
+    		    			$.ajax({
+    		    				url : 'decreaseLike.ch',
+    		    				data : {
+    		    					userNo : ${ loginUser.userNo },
+    		    					challengeNo : ${ challenge.challengeNo },
+    		    				},
+    		    				success : function(result){
+    		    					
+    		    					console.log("좋아요 감소 성공");
+    		    				},
+    		    				error : function(){
+    		    					
+    		    					console.log('좋아요 감소 실패');
+    		    					
+    		    				}
+
+    	
+        			})
+        		
+        		};
+        		
+    		})
 		    </script>
 		    		
     		

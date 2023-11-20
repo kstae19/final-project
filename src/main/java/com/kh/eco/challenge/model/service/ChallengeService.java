@@ -41,13 +41,12 @@ public interface ChallengeService {
 	
 	// 좋아요 기능
 	int checkLikeCount(HashMap<String, Integer> map);
-
-
 	
 	int increaseLikeCount(HashMap<String, Integer> map);
+	int insertLike(HashMap<String, Integer> map);
 	
 	int decreaseLikeCount(HashMap<String, Integer> map); //loginUser.userNo
-	
+	int deleteLike(HashMap<String, Integer> map);
 
 	// 게시글 등록 수정 삭제
 	int insertChallenge(Challenge c);
