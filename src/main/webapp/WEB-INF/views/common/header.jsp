@@ -98,6 +98,7 @@
 								<div>
 									<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
 									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+									<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
 									<div class="im">
 										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
 						            </div>
@@ -107,6 +108,7 @@
 								<div>
 									<div class="lm login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
 									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+									<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
 									<div class="im">
 										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
 						            </div>
@@ -114,15 +116,7 @@
 							</c:otherwise>
 						</c:choose>
 					</c:otherwise>
-        </c:choose>
-				<div>
-					<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
-					<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-					<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-					<div class="im">
-						<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-		            </div>
-	            </div>
+        		</c:choose>
 			</c:otherwise>
 		</c:choose>
 	</div>
