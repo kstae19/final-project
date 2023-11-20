@@ -112,15 +112,17 @@
         					userNo : ${ loginUser.userNo },
         					challengeNo : ${ challenge.challengeNo }
         				},
+        				async : false,
         				success : function(data){ 
-        					if(data == 'success'){
+        			/* 		if(data == 'success'){
         						// 좋아요 이미 체크한 회원
         						decreaseLikeCount();
         						
         					} else{
         						// 좋아요 처음 체크한 회원
         						increaseLikeCount();
-        					}
+        					} */
+        					console.log(data);
         				},
         				error : function(){
         					console.log('좋아요 했는지 여부 확인불가');
@@ -142,6 +144,7 @@
     		    					userNo : ${ loginUser.userNo },
     		    					challengeNo : ${ challenge.challengeNo },
     		    				},
+    		    				async : false,
     		    				success : function(result){
     		    					
     		    					console.log("좋아요 증가 성공");
@@ -168,6 +171,7 @@
     		    					userNo : ${ loginUser.userNo },
     		    					challengeNo : ${ challenge.challengeNo },
     		    				},
+    		    				async : false,
     		    				success : function(result){
     		    					
     		    					console.log("좋아요 감소 성공");
