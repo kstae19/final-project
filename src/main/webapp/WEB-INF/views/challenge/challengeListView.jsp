@@ -39,6 +39,12 @@
         height : 75%; 
         width : 100%;
     }
+    
+  	#pasing-area{
+		display : flex;
+		justify-content : center;
+		align-items : center;
+	}
 
 </style>
 
@@ -54,23 +60,32 @@
           	 	 <form action="search.condition" method="GET">
 					<select name="condition">
 						<option value="title">제목</option>
-						<option value="content">내용</option>
 						<option value="userId">글쓴이</option>
 					</select>
-	                <input type="text" name="keyword" placeholder="검색어를 입력하세요"/>
+	                <input type="text" name="keyword"  value="${ keyword }"/>
 					<button id="search-keyword-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
 				</form>
             </article>
+            
+            <c:if test="${ not empty condition }">
+	            <script>
+	            	$(function(){
+	            	
+	            		$('#search-condition option[value=${ condition }]').attr('selected', true);
+	            	})
+	            </script>
+            </c:if>
 
 			<div><a href="enrollForm.ch">글쓰기</a></div>
 	
             <article id="search-status">
-            	<form action="search.status">
+            	<form action="search.status" method="GET">
 	            	<select name="status">
 	            		<option value="coming">진행예정</option>
 	            		<option value="progress">진행중</option>
 	            		<option value="complete">종료</option>
 	            	</select>
+	            	<button id="search-status-btn" type="submit"><i class="fas fa-search fa-lg"></i></button>
 	            </form>
             </article>
         
@@ -97,50 +112,67 @@
 </style>
 
 	<section id="content-area">
-		<article id="content-items">
-			<c:forEach var="c" items="${ list }">
 		
-				<div class="content-item">
-					<div>
-						<span>${ c.userNo }</span>
-						<span>${ c.viewCount }</span>
-						<span>${ c.likeCount }</span>
-					</div>
-					<!--  <a href="/petopia/detail.bo?bno=${ board.boardNo }">
-	                        <img src="/petopia/${ board.fileImg }" alt="">
-	                       </a> 
-	                -->
-					<a href="detail.ch?challengeNo=${c.challengeNo }">
-					<img src="${c.changeName }"/><!-- /resources/uploadFiles/2023110311274210000.pdf -->
-					</a>
-					<h6>${ c.challengeTitle }</h6>
-					<div>
-						<span>${ c.categoryNo }</span>
-						<span>${ c.successLimit }</span>
-						<span>${ c.startDate }</span>
-					</div>
-				</div>
+			<c:choose>
 			
-			</c:forEach>
-		</article>
+			
+				<c:when test="${ not empty list }">
+				<article id="content-list">
+					<c:forEach var="c" items="${ list }">
+				
+						<div class="content-item">
+							<div>
+								<span>${ c.userNo }</span>
+								<span>${ c.viewCount }</span>
+								<span>${ c.likeCount }</span>
+							</div>
+				
+							<a href="detail.ch?challengeNo=${ c.challengeNo }"><img src="${ c.changeName }"/></a>
+							<h6>${ c.challengeTitle }</h6>
+							
+							<div>
+								<span>${ c.categoryNo }</span>
+								<span>${ c.successLimit }</span>
+								<span>${ c.startDate }</span>
+							</div>
+						</div>
+						
+					</c:forEach>
+					</article>
+				</c:when>
+				
+				<c:otherwise>
+					<div id="no-item">
+						<h1>게시글 없지롱</h1>
+					</div>
+				</c:otherwise>
+			</c:choose>		
+		
 	</section>
 
 
-<!-- content  -->
-<style>
-	#content-items{
+	<!-- content  -->
+	<style>
+	#content-list{
       	display : grid;
       	justify-content : center;
+      	align-items:center;
+      	
         grid-template-columns : 400px 400px;
         grid-row: auto auto;
         
-      grid-column-gap: 100px;
+      	grid-column-gap: 100px;
   		grid-row-gap: 50px;
         
     
 	}
+	#no-item{
+		display : flex;
+	 	align-items:center;
+	    justify-content:center; 
+	    border : 1px solid black;
+	}
 	.content-item{
-
 	    align-items:center;
 	    justify-content:center; 
 
@@ -149,14 +181,103 @@
 		width : 400px;
 		height : 250px;
 	}
-</style>
+	</style>
 
-
-	<section id="pasing-area">
 	
+	<section id="pasing-area"><!-- 검색시/정렬시/기본 3가지 CASE 페이징처리 -->
 	
+		<c:choose>
 	
+			<c:when test="${ not empty condition }">
+			
+					<c:choose>
+							<c:when test="${ pi.currentPage eq 1 }">
+								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage - 1 }&condition=${ condition }&keyword=${ keyword }">Previous</a></article>
+							</c:otherwise>
+						</c:choose>
+						
+						
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ p }&condition=${ condition }&keyword=${ keyword }">${ p }</a></article>
+						</c:forEach>
+						
+						
+						<c:choose>
+							<c:when test="${ pi.currentPage eq pi.maxPage }">
+								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.condition?currentPage=${ pi.currentPage + 1 }&condition=${ condition }&keyword=${ keyword }">Next</a></article>
+							</c:otherwise>
+					</c:choose>
+					
+			</c:when>
+			
+			
+			<c:when test="${ not empty status }">
+			
+					<c:choose>
+							<c:when test="${ pi.currentPage eq 1 }">
+								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ pi.currentPage - 1 }&status=${ status }">Previous</a></article>
+							</c:otherwise>
+						</c:choose>
+						
+						
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ p }&status=${ status }">${ p }</a></article>
+						</c:forEach>
+						
+						
+						<c:choose>
+							<c:when test="${ pi.currentPage eq pi.maxPage }">
+								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="search.status?currentPage=${ pi.currentPage + 1 }&status=${ status }">Next</a></article>
+							</c:otherwise>
+					</c:choose>
+					
+			</c:when>
+			
+			
+		
+			<c:otherwise>
+			
+					<c:choose>
+							<c:when test="${ pi.currentPage eq 1 }">
+								<article class="page-item disabled"><a class="page-link" href="#">Previous</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="challenge?currentPage=${ pi.currentPage - 1 }">Previous</a></article>
+							</c:otherwise>
+						</c:choose>
+						
+					
+						<c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">		
+								<article class="page-item"><a class="page-link" href="challenge?currentPage=${ p }">${ p }</a></article>
+						</c:forEach>
+						
+						
+						<c:choose>
+							<c:when test="${ pi.currentPage eq pi.maxPage }">
+								<article class="page-item disabled"><a class="page-link" href="#">Next</a></article>
+							</c:when>
+							<c:otherwise>
+								<article class="page-item"><a class="page-link" href="challenge?currentPage=${ pi.currentPage + 1 }">Next</a></article>
+							</c:otherwise>
+					</c:choose>
+					
+			</c:otherwise>
+			
+		</c:choose>
 	</section>
+
 
 
 
