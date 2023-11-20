@@ -161,7 +161,7 @@ public class UserController {
 		
 		User loginUser = userService.loginUser(u);
 		
-		if(kakaoLoginUser > 0 && accessToken != null) {
+		if(kakaoLoginUser > 0) {
 			if (idCheck(id) == "NNNNY") {
 				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
 				userService.insertKakao(ku);
