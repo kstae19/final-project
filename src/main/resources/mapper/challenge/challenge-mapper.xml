@@ -190,7 +190,7 @@
 					</if>	
 					<if test=" status == 'progress' ">
 					<![CDATA[ 
-					TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
+					TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE AND SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
 					]]>
 					</if>
 					<if test=" status == 'complete' ">
