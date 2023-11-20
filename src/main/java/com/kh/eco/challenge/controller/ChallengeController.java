@@ -4,6 +4,7 @@ package com.kh.eco.challenge.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -87,6 +88,16 @@ public class ChallengeController {
 		return "challenge/challengeListView";
 
 	}
+	
+	// 정렬결과 조회
+	@RequestMapping("search.status")
+	public String selectSearchStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status){
+	
+		
+		
+		return "challenge/challengeListView";
+	}
+	
 	
 	
 	

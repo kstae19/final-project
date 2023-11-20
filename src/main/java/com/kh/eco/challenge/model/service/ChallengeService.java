@@ -8,27 +8,40 @@ import com.kh.eco.common.model.vo.PageInfo;
 
 public interface ChallengeService {
 
-	// challengeListView에서 전체조회와 검색 및 조회
+	// 게시글 전체조회
 	int countChallengeList();
 	
 	ArrayList<Challenge> selectChallengeList(PageInfo pi);
 	
+	
+	// 검색결과 조회
 	int countSearchList(HashMap<String, String> map);
 	
 	ArrayList<Challenge> selectSearchList(HashMap<String, String> map, PageInfo pi);
 	
-	// challengeDetailView와  좋아요 클릭
 	
+	// 정렬 조회
+	ArrayList<Challenge> selectSearchStatus(String status, PageInfo pi);
+
+	
+	// 상세글 조회
 	int increaseViewCount(int challengeNo);
 	
 	Challenge selectChallengeDetail(int challengeNo);
+	
+	
+	
+	// 좋아요 기능
+	int checkLikeCount();
 	
 	int increaseLikeCount(HashMap<String, Integer> map);
 	
 	int decreaseLikeCount(HashMap<String, Integer> map); //loginUser.userNo
 	
-	// challengeEnrollForm과 수정
 	
+	
+	
+	// 게시글 등록 수정 삭제
 	int insertChallenge(Challenge c);
 	
 	int updateChallenge(Challenge c);
