@@ -39,7 +39,7 @@
 	 	margin: auto;
 	 	margin-bottom : 20px;
 	 	margin-top: 20px;
-	 	border : 1px solid lightgray;
+	 	border : 1px solid #28a745;
 	 	border-radius : 33px;
 	}
 	
