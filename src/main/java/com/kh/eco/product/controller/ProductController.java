@@ -1,15 +1,17 @@
 package com.kh.eco.product.controller;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
+import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.ProductLike;
 
 @Controller
@@ -28,7 +30,7 @@ public class ProductController {
 	public String like(ProductLike like) {
 		if(checkLike(like).equals("Y")) {
 			//이미 좋아요 되어있으니까 좋아요를 빼야대
-			return "removed";
+			return productService.removeLike(like)==1? "removed" : "remove failed";
 		}else {
 			//좋아요를 추가하면 돼
 			int result = productService.addLike(like);
@@ -40,6 +42,9 @@ public class ProductController {
 	public String checkLike(ProductLike like) {
 		return productService.checkLike(like);
 	}
+	public int removeLike(ProductLike like) {
+		return productService.removeLike(like);
+	}	
 	
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {
@@ -52,8 +57,7 @@ public class ProductController {
 		return "product/productDetail";
 	}
 	@RequestMapping("product.orderForm")
-	public String orderForm() {
-		
+	public String orderForm() {		
 		return "redirect:/";
 	}
 	@ResponseBody
@@ -69,7 +73,13 @@ public class ProductController {
 	}
 	@ResponseBody
 	@GetMapping(value="getLikes.pr", produces="application/json; charset=UTF-8")
-	public String ajaxGetLikes(@RequestParam(value="userNo", defaultValue="1") int userNo) {
+	public String ajaxGetLikes(int userNo) {
 		return new Gson().toJson(productService.getLikes(userNo));
+	}
+	
+	@GetMapping("cart")
+	public String myCart(int userNo, Model model) {
+		model.addAttribute("cartItems", productService.selectCartItems(userNo));
+		return "product/cart";
 	}
 }
