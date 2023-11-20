@@ -80,4 +80,9 @@ public class ProductServiceImpl implements ProductService {
 		return dao.selectCartItems(sqlSession, userNo);
 	}
 
+	@Override
+	public int updateQty(Cart cart) {
+		return dao.updateQty(sqlSession, cart);
+	}
+
 }

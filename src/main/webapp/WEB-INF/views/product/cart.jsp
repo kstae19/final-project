@@ -122,7 +122,7 @@ h3{
 						<a href="#" class="brand-${i.product.brandNo }">${i.product.brandName }</a><br>
 						<a href="product.detail?productNo=${i.product.productNo }" class="product-name"><h3>${i.product.productName }</h3></a><br>
 						<div>${i.product.productInfo }</div>
-						<span class="option-${i.option.optionNo }">${i.option.optionName }</span>
+						<span class="option ${i.option.optionNo }">${i.option.optionName }</span>
 						${i.option.price }원
 					</div>
 				</div>
@@ -146,12 +146,6 @@ h3{
 				let $qtyspan = $(btn).siblings('input');
 				$qty = Number($qtyspan.val());
 				$option = $(btn).parents('.item').find('span[class^=option]');
-				console.log($option.substring(7));
-				$.ajax({
-					url:'update.cart',
-					data :{userNo:'${sessionScope.loginUser.userNo}',
-						  optionNo : '$'}
-				});
 				if(num != -1){
 					if($qty >=10){
 						alert('최대 수량은 10개입니다.');
@@ -166,7 +160,20 @@ h3{
 					}
 					$qty -=1;
 				}
-					$qtyspan.val($qty);
+				$.ajax({
+					url:'update.cart',
+					data :{userNo:'${sessionScope.loginUser.userNo}',
+						  optionNo : $option.attr('class').substring(7),
+						  qty : $qty},
+					success: e=>{
+						console.log(e);
+						$qtyspan.val($qty);
+					},
+					error : ()=>{
+						console.log('ajax망..');
+					}
+				});
+				
 			}
 		</script>
 	</div>

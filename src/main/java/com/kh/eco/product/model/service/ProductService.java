@@ -21,4 +21,5 @@ public interface ProductService {
 	String checkLike(ProductLike like);
 	int removeLike(ProductLike like);
 	ArrayList<Cart> selectCartItems(int userNo);
+	int updateQty(Cart cart);
 }

@@ -194,5 +194,14 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 		BY 
 		ADD_DATE DESC
 </select>
-
+<update id="changeQty" parameterType="cart">
+	UPDATE 
+			TB_CART_ITEM 
+		SET 
+			QTY=#{qty} 
+		WHERE 
+			USER_NO=#{userNo} 
+		AND 
+			OPTION_NO=#{optionNo}
+</update>
 </mapper>
