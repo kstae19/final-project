@@ -17,7 +17,7 @@
 
 <style>
 	div{
-		border : 2px solid darkgreen;
+		/*border : 2px solid darkgreen;*/
 		box-sizing: border-box;
 	
 	}
