@@ -55,9 +55,7 @@
 		margin-top : 30px;
 		border : 1px solid red;
 	}
-	.lm {
-		border : 1px solid red;
-	}
+
 	.cart img{
 		width:30px;
 		height:30px;
