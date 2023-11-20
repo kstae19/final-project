@@ -260,7 +260,7 @@
 			
 			$('body').on("click", () => {
 				
-				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length > 5 && $checkPwdInput.val().length > 5 && $nameInput.val().length > 0 ){
+				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 ){
 					
 					// 입력값이 있는 경우
 					if ($emailInput.val().length > 0 && $secretInput.val().length === 0) {
