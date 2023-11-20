@@ -188,13 +188,13 @@ div {
 							
 							<br> 
 							
-							<input type="number" value="1" min="1" max="10" required>
-							<span id="totalPrice"></span>
+							<input type="number" value="1" min="1" max="10" required disabled>
+							<span id="totalPrice"></span><br>
 							
 							<br>
 						<c:choose>
 						<c:when test="${!empty sessionScope.loginUser }">	
-							<button type="button">장바구니 추가</button>
+							<button type="button" onclick="addCart();">장바구니 추가</button>
 							<button type="submit">구매하기</button>
 						</c:when>
 						<c:otherwise>
@@ -207,6 +207,41 @@ div {
 			</div>
 		</div>
 				<script>
+					function addCart(){
+						let $option = $('#choice select').val();
+						if($option == 0){
+							alert('상품 옵션을 선택해주세요.');
+							return false;
+						}
+						else{
+							$.ajax({
+								url : 'add.cart',
+								method : 'POST',
+								data : {
+									userNo : '${sessionScope.loginUser.userNo}',
+									optionNo : $option,
+									qty : $('#choice input[type=number]').val()
+								},
+								success : e =>{
+									if(e == 'added'){
+										alert('장바구니에 추가되었습니다.');
+									}
+									else if(e == 'failed'){
+										alert('장바구니 추가에 실패했습니다. 다시 한 번 도전해주세요.');
+									}
+									else{
+										alert('이미 장바구니에 존재하는 상품입니다.\n 추가일자 :'+e);
+									}
+								},
+								error : ()=>{
+									console.log('ajax망..'); 
+								}
+								
+							})
+							
+						}
+						
+					}
 					function askLogin(){
 						if(confirm('로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?')){
 						location.href='login';
@@ -245,16 +280,25 @@ div {
 									//console.log($price);
 									//console.log($qty);
 									$('#price').text(price+'원');
+									$('#totalPrice').text(price+'원');
+									$('#choice input').attr('disabled', false);
 								},
 								error : ()=>{
 									console.log('공부 더해 이자기식아!');
 								}
 							})
 						});
+
 						$('#choice input').change(()=>{
+							if($('#choice select').val() == 0){
+								alert('옵션을 먼저 선택 해주세요.');
+								$('#choice select').focus();
+							}else{
+								
 							let price = $('#choice span').text();
 							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input').val());
 							$('#totalPrice').text(totalPrice.toLocaleString()+'원');
+							}
 							
 						})
 					})

@@ -38,6 +38,18 @@
 		<result property="price" column="PRICE"/>
 	</association>
 </resultMap>
+<resultMap id="cartMap" type ="cart">
+	<result property="qty" column="QTY"/>
+	<result property="brandNo" column="BRAND_NO"/>
+	<result property="brandName" column="BRAND_NAME"/>
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="productName" column="PRODUCT_NM"/>
+	<result property="productInfo" column="PRODUCT_INFO"/>
+	<result property="mainImg" column="MAIN_IMG"/>
+	<result property="optionNo" column="OPTION_NO"/>
+	<result property="optionName" column="OPTION_NM"/>
+	<result property="price" column="PRICE"/>
+</resultMap>
 
 <select id="selectProductList" resultMap="resultProductMap">
 SELECT 
@@ -166,7 +178,7 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	DELETE FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
 </delete>
 
-<select id="selectCartItems" parameterType="_int" resultMap="resultCartMap">
+<select id="selectCartItems" parameterType="_int" resultMap="cartMap">
 	SELECT 
         BRAND_NO, 
         BRAND_NAME, 
@@ -194,7 +206,7 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 		BY 
 		ADD_DATE DESC
 </select>
-<update id="changeQty" parameterType="cart">
+<update id="updateQty" parameterType="cart">
 	UPDATE 
 			TB_CART_ITEM 
 		SET 
@@ -204,4 +216,64 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 		AND 
 			OPTION_NO=#{optionNo}
 </update>
+
+<insert id="addCart" parameterType="cart">
+	INSERT 
+		INTO 
+			TB_CART_ITEM(
+						USER_NO, 
+						OPTION_NO, 
+						QTY
+						) 
+			VALUES
+					(
+					#{userNo},
+					#{optionNo},
+					#{qty}
+					)
+</insert>
+
+<select id="checkCart" parameterType="cart" resultType="string">
+	SELECT 
+			TO_CHAR(ADD_DATE, 'YYYY-MM-DD') 
+	FROM 
+		TB_CART_ITEM 
+	WHERE 
+		USER_NO = #{userNo} 
+	AND 
+		OPTION_NO = #{optionNo} 
+</select>
+
+<delete id="removeItem" parameterType="cart">
+	DELETE 
+			FROM 
+				TB_CART_ITEM 
+			WHERE 
+				USER_NO = #{userNo} 
+			AND 
+				OPTION_NO = #{optionNo}
+</delete>
+
+<select id = "getCartItem" parameterType="_int" resultMap="cartMap">
+	SELECT 
+			OPTION_NO, 
+			OPTION_NM, 
+			PRICE , 
+			PRODUCT_NO, 
+			PRODUCT_NM, 
+			MAIN_IMG
+    FROM 
+    	TB_PRODUCT_OPTION 
+    JOIN 
+    	TB_PRODUCT USING(PRODUCT_NO) 
+    WHERE 
+    	OPTION_NO = #{optionNo}
+</select>
+
+<insert id="insertOrder" parameterType="order">
+	INSERT INTO TB_ORDER VALUES(SEQ_ORDER_NO.NEXTVAL, #{addressNo}, #{userNo}, SYSDATE)
+</insert>
+<insert id="insertOrderItem" parameterType="order">
+	INSERT INTO TB_ORDER_ITEM VALUES(SEQ_ORDER_NO.CURRVAL, #{optionNo}, #{qty})
+</insert>
 </mapper>

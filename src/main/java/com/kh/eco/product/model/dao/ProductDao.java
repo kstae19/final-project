@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
@@ -54,6 +55,24 @@ public class ProductDao {
 	}
 	public int updateQty(SqlSessionTemplate sqlSession, Cart cart) {
 		return sqlSession.update("productMapper.updateQty", cart);
+	}
+	public int addCart(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.insert("productMapper.addCart", cart);
+	}
+	public String checkCart(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.selectOne("productMapper.checkCart", cart);
+	}
+	public int removeItem(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.delete("productMapper.removeItem", cart);
+	}
+	public Cart getCartItem(SqlSessionTemplate sqlSession, int optionNo) {
+		return sqlSession.selectOne("productMapper.getCartItem", optionNo);
+	}
+	public int insertOrder(SqlSessionTemplate sqlSession, Order order) {
+		return sqlSession.insert("productMapper.insertOrder", order);
+	}
+	public int insertOrderItem(SqlSessionTemplate sqlSession, Order order) {
+		return sqlSession.insert("productMapper.insertOrderItem", order);
 	}
 
 }

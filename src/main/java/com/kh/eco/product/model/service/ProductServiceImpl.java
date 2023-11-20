@@ -1,7 +1,6 @@
 package com.kh.eco.product.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.kh.eco.product.model.dao.ProductDao;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
@@ -83,6 +83,36 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int updateQty(Cart cart) {
 		return dao.updateQty(sqlSession, cart);
+	}
+
+	@Override
+	public int addCart(Cart cart) {
+		return dao.addCart(sqlSession, cart);
+	}
+
+	@Override
+	public String checkCart(Cart cart) {
+		return dao.checkCart(sqlSession, cart);
+	}
+
+	@Override
+	public int removeItem(Cart cart) {
+		return dao.removeItem(sqlSession, cart);
+	}
+
+	@Override
+	public Cart getCartItem(int optionNo) {
+		return dao.getCartItem(sqlSession, optionNo);
+	}
+
+	@Override
+	public int orderProduct(Order order) {
+		int orderResult = dao.insertOrder(sqlSession, order);
+		int itemResult =1;
+		if(orderResult>0) {
+			itemResult = dao.insertOrderItem(sqlSession, order);
+		}
+		return orderResult*itemResult;
 	}
 
 }
