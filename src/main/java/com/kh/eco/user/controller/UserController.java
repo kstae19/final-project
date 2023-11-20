@@ -213,4 +213,102 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@ResponseBody
+	@RequestMapping("nameCheck")
+	public String nameCheck(User u, String checkName, String checkEmail) {
+		u.setUserName(checkName);
+		u.setEmail(checkEmail);
+		
+		return userService.nameCheck(u) > 0 ? "NNNNY" : "NNNNN";
+	}
+	
+	@ResponseBody
+	@RequestMapping("nameIdCheck")
+	public String nameIdCheck(User u, String checkName, String checkId, String checkEmail) {
+		u.setUserName(checkName);
+		u.setUserId(checkId);
+		u.setEmail(checkEmail);
+		
+		System.out.println(userService.nameIdCheck(u));
+		
+		return userService.nameIdCheck(u) > 0 ? "NNNNY" : "NNNNN";
+	}
+			
+	
+	@RequestMapping("findId.us")
+	public String findId(User u, String email, HttpServletRequest request, HttpSession session) throws MessagingException {
+		MimeMessage message = sender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+		
+		String ip = request.getRemoteAddr();
+		
+		String fId = userService.findId(u);
+		
+		helper.setTo(email);
+		helper.setSubject("회원님의 아이디를 보내드립니다.");
+		helper.setText("<!DOCTYPE html>"
+						+ "<html>"
+							+ "<body>"
+								+ "<div style=' width:400px; height:270px; margin:auto; border:2px solid darkgreen;'>"
+									+ "<h1 style='color:darkgreen; margin-top:30px; text-align:center'>Eco-Friendly</h1>"
+									+ "<div style='margin-top:60px; text-align:center;'>"
+										+ "<h1>아이디 : " + fId + "</h1>"
+									+ "</div>"
+									+ "<br>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>이 인증번호는 1시간 뒤 만료됩니다.</h3>"
+								+ "<div>"
+							+ "</body>"
+						+ "</html>", true);
+		sender.send(message);
+		
+		session.setAttribute("alertMsg", u.getEmail() + "으로 이메일을 전송했습니다!!");
+		
+		return "user/userLogin";
+	}
+	
+	@RequestMapping("findPwd.us")
+	public String findPwd(User u, String email, HttpServletRequest request, HttpSession session) throws MessagingException {
+		MimeMessage message = sender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+		
+		String ip = request.getRemoteAddr();
+		
+		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+		
+		String fPwd = "";
+		
+		int result = 0;
+		for(int i = 0; i < 8; i++) {
+			result = (int) (charSet.length * Math.random());
+			fPwd += charSet[result];
+		}
+		
+		String newPwd = bcryptPasswordEncoder.encode(fPwd);
+		//System.out.println("암호문 : " + encPwd);
+		u.setUserPwd(newPwd);
+				
+		userService.findPwd(u);
+		
+		helper.setTo(email);
+		helper.setSubject("회원님의 임시 비밀번호를 보내드립니다.");
+		helper.setText("<!DOCTYPE html>"
+						+ "<html>"
+							+ "<body>"
+								+ "<div style=' width:400px; height:270px; margin:auto; border:2px solid darkgreen;'>"
+									+ "<h1 style='color:darkgreen; margin-top:30px; text-align:center'>Eco-Friendly</h1>"
+									+ "<div style='margin-top:60px; text-align:center;'>"
+										+ "<h1>임시 비밀번호 : " + fPwd + "</h1>"
+									+ "</div>"
+									+ "<br>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>이 인증번호는 1시간 뒤 만료됩니다.</h3>"
+								+ "<div>"
+							+ "</body>"
+						+ "</html>", true);
+		sender.send(message);
+		
+		session.setAttribute("alertMsg", u.getEmail() + "으로 이메일을 전송했습니다!!");
+		
+		return "user/userLogin";
+	}
 }
