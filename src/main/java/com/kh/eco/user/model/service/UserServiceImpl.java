@@ -103,6 +103,7 @@ public class UserServiceImpl implements UserService{
 		return accessToken;
 	}
 	
+	
 	public String getUserInfo(String accessToken) throws IOException, ParseException {
 		
 		String kakaoUrl = "https://kapi.kakao.com/v2/user/me";
@@ -142,6 +143,7 @@ public class UserServiceImpl implements UserService{
 	public int insertKakao(KakaoUser ku) {
 		return userDao.insertKakao(sqlSession, ku);
 	}
+
 
 
 }
