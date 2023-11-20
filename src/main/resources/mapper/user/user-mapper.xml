@@ -126,4 +126,61 @@
 				   	#{kakaoId}
 				   ) 	
 	</insert>
+	
+	<select id="nameCheck" parameterType="user" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_USER
+		 WHERE
+		 	   USER_NAME = #{userName}
+		   AND
+		   	   EMAIL = #{email}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	</select>
+	
+	<select id="nameIdCheck" parameterType="user" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_USER
+		 WHERE
+		 	   USER_NAME = #{userName}
+   		   AND
+		   	   USER_ID = #{userId}
+		   AND
+		   	   EMAIL = #{email}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	
+	</select>
+	
+	<select id="findId" parameterType="user" resultType="string">
+		SELECT
+			   USER_ID
+		  FROM
+		  	   TB_USER
+		 WHERE
+		 	   USER_NAME = #{userName}
+		   AND
+		   	   EMAIL = #{email}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	</select>
+	
+	<update id="findPwd" parameterType="user">
+		UPDATE
+			   TB_USER
+		   SET
+		   	   USER_PWD = #{userPwd}
+		 WHERE
+		 	   USER_NAME = #{userName}
+   		   AND
+		   	   USER_ID = #{userId}	
+		   AND
+		   	   EMAIL = #{email}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	</update>
 </mapper>
