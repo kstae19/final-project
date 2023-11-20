@@ -81,28 +81,71 @@
     		</article>
     		
     		<script>
-    		$(function(){
+    		$('#likeCount').on('click', function(e){
+			    		new Promise( (resolve, reject) => {
+			    			
+			    			$.ajax({
+			    				url : 'checkLike.ch',
+			    				data : {
+			    					userNo : ${ loginUser.userNo },
+			    					challengeNo : ${ challenge.challengeNo }
+			    				},
+			    				success : function(data){ 
+			    					resolve(data);
+			    				},
+			    				error : function(){
+			    					
+			    				}
+			    				
+			    			});
+			
+			    		})
+			    		.then( (arg)  => {
+			    			
+			    			$.ajax({
+			    				url : 'increaseLike.ch',
+			    				data : {
+			    					userNo : ${ loginUser.userNo },
+			    					challengeNo : ${ challenge.challengeNo },
+			    				},
+			    				success : function(result){
+			    					
+			    					console.log("좋아요 증가 성공");
+			    				},
+			    				error : function(){					
+			    					console.log('좋아요 증가 실패'); 
+			    				}
+			    		})
+    				})
+    				.then( (arg)  => {
+			    			
+			    			$.ajax({
+			    				url : 'decreaseLike.ch',
+			    				data : {
+			    					userNo : ${ loginUser.userNo },
+			    					challengeNo : ${ challenge.challengeNo },
+			    				},
+			    				success : function(result){			
+			    					console.log("좋아요 감소 성공");
+			    				},
+			    				error : function(){		
+			    					console.log('좋아요 감소 실패');	
+			    				}
+			    		})
+    				})
+    		})
+    	/* 	$(function(){
     			
     			
 				// 클릭했을 때 이벤트    		
-    			$('#likeCount').on('click', function(e){
+    		
     				
     				checkLikeCount();
-/*     				
-    				<c:choose>
-    				
-	    				 <c:when test="${ empty loginUser }">
-	    					alert('로그인한 유저만 좋아요를 할 수 있어요');
-	    				</c:when> 
-	    				
-	    				<c:otherwise>
-	    					checkLikeCount();
-	    				</c:otherwise>
-	    				
-    				</c:choose> */
+
 
     			});
     			
+				
     			// 좋아요 했는지 확인
     			function checkLikeCount(){
         			
@@ -112,16 +155,8 @@
         					userNo : ${ loginUser.userNo },
         					challengeNo : ${ challenge.challengeNo }
         				},
-        				async : false,
         				success : function(data){ 
-        			/* 		if(data == 'success'){
-        						// 좋아요 이미 체크한 회원
-        						decreaseLikeCount();
-        						
-        					} else{
-        						// 좋아요 처음 체크한 회원
-        						increaseLikeCount();
-        					} */
+        
         					console.log(data);
         				},
         				error : function(){
@@ -144,7 +179,6 @@
     		    					userNo : ${ loginUser.userNo },
     		    					challengeNo : ${ challenge.challengeNo },
     		    				},
-    		    				async : false,
     		    				success : function(result){
     		    					
     		    					console.log("좋아요 증가 성공");
@@ -171,7 +205,6 @@
     		    					userNo : ${ loginUser.userNo },
     		    					challengeNo : ${ challenge.challengeNo },
     		    				},
-    		    				async : false,
     		    				success : function(result){
     		    					
     		    					console.log("좋아요 감소 성공");
@@ -187,7 +220,7 @@
         		
         		};
         		
-    		})
+    		}) */
 		    </script>
 		    		
     		

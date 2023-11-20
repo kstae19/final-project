@@ -298,12 +298,11 @@
 		INSERT 
 		INTO 
 							TB_LIKE_CHALLENGE
-		VALUES 
-							( 
+		VALUES ( 
 							#{ challengeNo }, 
 							#{ userNo }, 
 							SYSDATE 
-							)
+						)
 	</insert>
 	
 	<!-- 좋아요수 감소 -->
