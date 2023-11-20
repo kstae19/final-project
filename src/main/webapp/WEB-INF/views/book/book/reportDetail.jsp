@@ -42,12 +42,13 @@
          	</c:forEach>
 			${ br.bookReportTitle }
 		</h3>
+		<!-- 폼태그 post로 바꿔야할듯... -->
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
-	        <button type="button" class="btn btn-dark" onclick="reportBlack();">신고하기</button>
+	        <button type="button" class="btn btn-dark" onclick="locaiont.href='reportBlack.bk?reportNo=${br.bookReportNo}'">신고하기</button>
 	        <c:if test="${ loginUser.userId eq br.userId }">
-		        <button type="button" class="btn btn-danger" onclick="reportDelete();">삭제</button>
+		        <button type="button" class="btn btn-danger" onclick="location.href='reportDelete.bk?reportNo=${br.bookReportNo}'">삭제</button>
 		        <button type="button" class="btn btn-secondary" onclick="location.href='reportUpdate.bk?reportNo=${br.bookReportNo}'">수정</button>
 	        </c:if>
         </c:if>

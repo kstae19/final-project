@@ -130,7 +130,12 @@ public class BookServiceImpl implements BookService{
 	public int reportUpdateForm(BookReport bookReport) {
 		return bookDao.reportUpdateForm(sqlSession, bookReport);
 	}
-
+	
+	@Override
+	public int reportDelete(int reportNo) {
+		return bookDao.reportDelete(sqlSession, reportNo);
+	}
+	
 	@Override
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;

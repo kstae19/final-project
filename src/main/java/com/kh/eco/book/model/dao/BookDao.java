@@ -93,5 +93,27 @@ public class BookDao {
 	public int reportUpdateForm(SqlSessionTemplate sqlSession, BookReport bookReport) {
 		return sqlSession.update("bookMapper.reportUpdateForm", bookReport);
 	}
+	
+	public int reportDelete(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.update("bookMapper.reportDelete", reportNo);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

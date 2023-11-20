@@ -71,6 +71,7 @@ public interface BookService {
 	public int reportUpdateForm(BookReport bookReport);
 	
 	// 독후감 게시판 삭제
+	public int reportDelete(int reportNo);
 	
 	// 독후감 게시글 신고
 		

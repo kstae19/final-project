@@ -384,6 +384,17 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 삭제
+	@RequestMapping("reportDelete.bk")
+	public String reportDelete(int reportNo) {
+		
+		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
+			System.out.println("성공");
+		} else { // 삭제 실패
+			System.out.println("실패");
+		}
+		
+		return "redirect:bookreport";
+	}
 	
 	// 독후감 게시글 신고
 	

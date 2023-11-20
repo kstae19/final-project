@@ -338,7 +338,7 @@
 			BOOK_REPORT_NO = #{rno}
 	</select>
 	
-	<!-- 독후감 게시판 수정 -->
+	<!-- 독후감 게시글 수정 -->
 	<update id="reportUpdateForm" parameterType="bookReport">
 		UPDATE 
 			TB_BOOK_REPORT
@@ -349,6 +349,16 @@
 			BOOK_REPORT_STAR = #{bookReportStar}
 		WHERE
 			BOOK_REPORT_NO = #{bookReportNo}
+	</update>
+	
+	<!-- 독후감 게시글 삭제(수정) -->
+	<update id="reportDelete" parameterType="_int">
+		UPDATE
+			TB_BOOK_REPORT
+		SET
+			BOOK_REPORT_STATUS = 'N'
+		WHERE
+			BOOK_REPORT_NO = #{reportNo}
 	</update>
 	
 </mapper>
