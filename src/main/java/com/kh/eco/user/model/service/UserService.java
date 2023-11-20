@@ -32,6 +32,10 @@ public interface UserService {
 
 	int insertKakao(KakaoUser ku);
 
+	String getNToken(String ncode) throws IOException, ParseException;
+	
+	String getNUserInfo(String accessNToken) throws IOException, ParseException;
+	
 	// 아이디 / 비밀번호 찾기 서비스
 	int nameCheck(User u);
 
@@ -40,6 +44,8 @@ public interface UserService {
 	String findId(User u);
 
 	int findPwd(User u);
+
+
 
 	
 
