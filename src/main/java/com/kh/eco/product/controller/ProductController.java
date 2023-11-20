@@ -79,7 +79,7 @@ public class ProductController {
 	
 	@GetMapping("cart")
 	public String myCart(int userNo, Model model) {
-		model.addAttribute("cart", productService.selectCartItems(userNo));
+		model.addAttribute("cartItems", productService.selectCartItems(userNo));
 		return "product/cart";
 	}
 }
