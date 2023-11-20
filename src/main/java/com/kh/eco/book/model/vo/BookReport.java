@@ -23,5 +23,6 @@ public class BookReport {
 	private String userId;
 	private int bookReportSecret;
 	private int bookReportStar;
+	private int userNo;
 
 }

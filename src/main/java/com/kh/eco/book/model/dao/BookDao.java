@@ -74,6 +74,10 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.searchReportList", map, rowBounds);
 	}
 	
+	public int reportEnrollForm(SqlSessionTemplate sqlSession, BookReport bookReport) {
+		return sqlSession.insert("bookMapper.reportEnrollForm", bookReport);
+	}
+	
 	public int countReport(SqlSessionTemplate sqlSession, int rno) {
 		return sqlSession.update("bookMapper.countReport", rno);
 	}

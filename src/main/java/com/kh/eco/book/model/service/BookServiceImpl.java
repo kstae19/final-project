@@ -108,6 +108,11 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
+	public int reportEnrollForm(BookReport bookReport) {
+		return bookDao.reportEnrollForm(sqlSession, bookReport);
+	}
+	
+	@Override
 	public int countReport(int reportNo) {
 		return bookDao.countReport(sqlSession, reportNo);
 	}
@@ -121,6 +126,8 @@ public class BookServiceImpl implements BookService{
 	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
 		return null;
 	}
+
+	
 
 	
 

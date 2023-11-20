@@ -193,7 +193,7 @@
 			BOOK_REPORT_STATUS = 'Y'
 		ORDER
 		BY
-			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_NOTICE DESC NULLS LAST,
 			BOOK_REPORT_DATE DESC
 	</select>
 	
@@ -220,7 +220,7 @@
 		LIKE '%' || '${keyword}' || '%'
 		ORDER
 		BY
-			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_NOTICE DESC NULLS LAST,
 			BOOK_REPORT_DATE DESC
 	</select>
 	
@@ -257,6 +257,40 @@
 			BOOK_REPORT_NOTICE,
 			BOOK_REPORT_DATE DESC
 	</select>
+	
+	<!-- 독후감 게시판 작성 -->
+	<insert id="reportEnrollForm" parameterType="bookReport">
+		INSERT ALL
+		INTO 
+			TB_BOOK_REPORT
+					(
+					BOOK_REPORT_NO,
+					BOOK_REPORT_NOTICE,
+					BOOK_REPORT_TITLE,
+					BOOK_REPORT_CONTENT,
+					USER_NO,
+					BOOK_REPORT_SECRET,
+					BOOK_REPORT_STAR
+					)
+		VALUES 
+			(
+			SEQ_BOOK_REPORT.NEXTVAL,
+			#{bookReportNotice},
+			#{bookReportTitle},
+			#{bookReportContent},
+			#{userNo},
+			#{bookReportSecret},
+			#{bookReportStar}
+			)
+		INTO TB_ECO_HISTORY
+		VALUES (
+			#{userNo},
+			10,
+			SYSDATE,
+			'B'
+			)
+		SELECT * FROM DUAL
+	</insert>
 	
 	<!-- 독후감 게시판 조회수 증가 -->
 	<update id="countReport" parameterType="_int">

@@ -333,11 +333,14 @@ public class BookController {
 	
 	// 독후감 게시판 작성
 	@RequestMapping("reportEnrollForm.bk")
-	public String reportEnrollForm() {
+	public String reportEnrollForm(BookReport bookReport) {
 		
-		
-		
-		
+		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
+			System.out.println("성공");
+		} else { // 작성 실패
+			System.out.println("실패!");
+		}
+		return "redirect:bookreport";
 	}
 	 
 	// 독후감 게시판 상세조회

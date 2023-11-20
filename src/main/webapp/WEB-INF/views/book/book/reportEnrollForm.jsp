@@ -43,6 +43,7 @@
 
     <div class="outer">
         <h3>글쓰기</h3>
+<<<<<<< Updated upstream
         <form action="reportEnrollForm.bk">
             <label><input type="checkbox" name="secret" value="secret">비밀글</label>
             <c:if test="${ loginUser.userStatus eq 'A' }">
@@ -85,6 +86,33 @@
 
 
 
+=======
+	        <form method="POST" action="reportEnrollForm.bk" id="reportEnrollForm">
+	        	<input type="hidden" name="userNo" value="${ loginUser.userNo }">
+		        <label><input type="checkbox" name="bookReportSecret" value="1">비밀글</label>
+		        <c:if test="${ loginUser.userStatus eq 'A' }">
+		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
+		        </c:if>
+		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle">
+		        <br><br>
+		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent"></textarea>
+		        <br><br>
+		        <span>별점</span>
+		        <select name="bookReportStar">
+		         <c:if test="${ loginUser.userStatus eq 'A' }">
+		         	<option value="0">공지</option>
+		         </c:if>
+		        	<option value="1">★</option>
+		        	<option value="2">★★</option>
+		        	<option value="3">★★★</option>
+		        	<option value="4">★★★★</option>
+		        	<option value="5">★★★★★</option>
+		        </select>
+		        <button type="submit" class="btn btn-secondary">등록</button>
+		        <button type="button" class="btn btn-dark" onclick="location.href='bookReport'">취소</button>
+	    	</form>
+    </div>
+>>>>>>> Stashed changes
     
 </body>
 </html>

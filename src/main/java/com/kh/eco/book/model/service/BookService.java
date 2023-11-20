@@ -58,6 +58,9 @@ public interface BookService {
 	// 독후감 게시판 검색 조회
 	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi);
 	
+	// 독후감 게시판 작성
+	public int reportEnrollForm(BookReport bookReport);
+	
 	// 독후감 게시판 조회수 증가
 	public int countReport(int reportNo);
 	
