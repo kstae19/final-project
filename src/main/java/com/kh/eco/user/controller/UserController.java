@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.eco.user.model.service.UserService;
 import com.kh.eco.user.model.vo.Cert;
 import com.kh.eco.user.model.vo.KakaoUser;
+import com.kh.eco.user.model.vo.NaverUser;
 import com.kh.eco.user.model.vo.User;
 
 @Controller
@@ -180,8 +181,19 @@ public class UserController {
 			mv.setViewName("user/kakaoUserEnrollForm");
 		}
 		return mv;
-
 	}
+	
+	@GetMapping("ncode")
+	public ModelAndView getNcode(User u, NaverUser nu, String code, HttpSession session, ModelAndView mv) throws IOException, ParseException  {
+		// System.out.println(code);
+		String accessNToken = userService.getNToken(code);
+		String email = userService.getNUserInfo(accessNToken);
+		// System.out.println(email);
+		
+		
+		return mv;
+	}
+	
 	@RequestMapping("kakaologout.us")
 	public String kakaoLogout(HttpSession session, HttpServletResponse response) throws IOException, ParseException {
 		String accessToken = (String)session.getAttribute("accessToken");
@@ -255,7 +267,7 @@ public class UserController {
 										+ "<h1>아이디 : " + fId + "</h1>"
 									+ "</div>"
 									+ "<br>"
-									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>이 인증번호는 1시간 뒤 만료됩니다.</h3>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>아이디 잊지말기!</h3>"
 								+ "<div>"
 							+ "</body>"
 						+ "</html>", true);
@@ -298,10 +310,10 @@ public class UserController {
 								+ "<div style=' width:400px; height:270px; margin:auto; border:2px solid darkgreen;'>"
 									+ "<h1 style='color:darkgreen; margin-top:30px; text-align:center'>Eco-Friendly</h1>"
 									+ "<div style='margin-top:60px; text-align:center;'>"
-										+ "<h1>임시 비밀번호 : " + fPwd + "</h1>"
+										+ "<h1> - 임시 비밀번호 - </h1><br><h1>" + fPwd + "</h1>"
 									+ "</div>"
 									+ "<br>"
-									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>이 인증번호는 1시간 뒤 만료됩니다.</h3>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>임시 비밀번호를 통한 로그인 후 추후 변경해주세요.</h3>"
 								+ "<div>"
 							+ "</body>"
 						+ "</html>", true);
