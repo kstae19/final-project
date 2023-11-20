@@ -16,4 +16,14 @@ public class ForwardController {
 	public String enrollPage() {
 		return "user/userEnrollform";	
 	}
+	
+	@RequestMapping("findId")
+	public String findIdPage() {
+		return "user/findId";	
+	}
+	
+	@RequestMapping("findPwd")
+	public String findPwdPage() {
+		return "user/findPwd";	
+	}
 }

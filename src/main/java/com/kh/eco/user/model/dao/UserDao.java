@@ -43,4 +43,22 @@ public class UserDao {
 		return sqlSession.insert("userMapper.insertKakao", ku);
 	}
 
+	public int nameCheck(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.selectOne("userMapper.nameCheck", u);
+	}
+
+	public int nameIdCheck(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.selectOne("userMapper.nameIdCheck", u);
+	}
+	
+	public String findId(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.selectOne("userMapper.findId", u);
+	}
+
+	public int findPwd(SqlSessionTemplate sqlSession, User u) {
+		return sqlSession.update("userMapper.findPwd", u);
+	}
+
+
+
 }

@@ -144,6 +144,24 @@ public class UserServiceImpl implements UserService{
 		return userDao.insertKakao(sqlSession, ku);
 	}
 
+	@Override
+	public int nameCheck(User u) {
+		return userDao.nameCheck(sqlSession, u);
+	}
+	
+	@Override
+	public int nameIdCheck(User u) {
+		return userDao.nameIdCheck(sqlSession, u);
+	}
 
+	@Override
+	public String findId(User u) {
+		return userDao.findId(sqlSession, u);
+	}
+
+	@Override
+	public int findPwd(User u) {
+		return userDao.findPwd(sqlSession, u);
+	}
 
 }

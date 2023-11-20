@@ -31,6 +31,16 @@ public interface UserService {
 	int selectKakao(String id);
 
 	int insertKakao(KakaoUser ku);
+
+	// 아이디 / 비밀번호 찾기 서비스
+	int nameCheck(User u);
+
+	int nameIdCheck(User u);
+	
+	String findId(User u);
+
+	int findPwd(User u);
+
 	
 
 }

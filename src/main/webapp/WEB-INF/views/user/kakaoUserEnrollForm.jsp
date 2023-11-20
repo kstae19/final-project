@@ -104,8 +104,8 @@
 					<div id="namecheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
-				</div>
-				<div class="enroll-border">
+					<br>
+				
 					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email">
 					<div class="floatleft">
 						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled>
