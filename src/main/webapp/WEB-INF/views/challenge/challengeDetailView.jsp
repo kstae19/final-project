@@ -110,13 +110,13 @@
     		function checkLikeCount(){
     			
     			$.ajax({
-    				url : 'check.like',
+    				url : 'checkLike.ch',
     				data : {
     					userNo : ${ loginUser.userNo },
     					challengeNo : ${ challenge.challengeNo }
     				},
-    				success : function(result){
-    					console.log("성공!");
+    				success : function(data){
+    					console.log(data);
     				},
     				error : function(){
     					console.log('체크라이크 실패');
@@ -133,7 +133,7 @@
     		function increaseLikeCount(){
 	
 		    			$.ajax({
-		    				url : 'increase.like',
+		    				url : 'increaseLike.ch',
 		    				data : {
 		    					userNo : ${ loginUser.userNo },
 		    					challengeNo : ${ challenge.challengeNo },

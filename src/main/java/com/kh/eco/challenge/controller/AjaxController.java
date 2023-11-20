@@ -17,7 +17,7 @@ public class AjaxController {
 	
 	
 	
-	@RequestMapping("check.like")
+	@RequestMapping(value="checkLike.ch", produces = "application/json")
 	public String checkLikeCount(int userNo, int challengeNo) {
 		
 		HashMap<String, Integer> map = new HashMap();
@@ -25,16 +25,18 @@ public class AjaxController {
 		map.put("challengerNo", challengeNo);
 		
 		if(challengeService.checkLikeCount(map) > 0) {
+			System.out.println("좋아요 여부 : " + challengeService.checkLikeCount(map) );
 			return "success";
 		} 
 		else {
+			System.out.println("좋아요 여부 : " + challengeService.checkLikeCount(map) );
 			return "fail";
 		}
 		
 	}
 	
 	
-	@RequestMapping("increase.like")
+	@RequestMapping("increaseLike.ch")
 	public String increaseLikeCount(int userNo, int challengeNo) {
 		
 		// 복합키인 userNo와 challengeNo를 map에 각각 담음
@@ -56,7 +58,7 @@ public class AjaxController {
 
 	
 	
-	@RequestMapping("decrease.like")
+	@RequestMapping("decreaseLike.ch")
 	public String decreaseLikeCount(int userNo, int challengeNo) {
 		
 		HashMap<String, Integer> map = new HashMap();

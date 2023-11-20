@@ -35,9 +35,11 @@ public class ProductController {
 			return result>0? "added":"failed to add like";		
 		}
 	}
+	
 	@ResponseBody
 	@GetMapping("check.like")
 	public String checkLike(ProductLike like) {
+		System.out.println("나를불렀니?");
 		return productService.checkLike(like);
 	}
 	

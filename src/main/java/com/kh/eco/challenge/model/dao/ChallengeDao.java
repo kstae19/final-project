@@ -67,7 +67,7 @@ public class ChallengeDao {
 	
 	// 좋아요
 	public int checkLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
-		
+	
 		return sqlSession.selectOne("challengeMapper.checkLikeCount", map);
 	}
 
