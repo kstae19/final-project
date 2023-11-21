@@ -89,7 +89,10 @@ public interface BookService {
 	public int ajaxUpdateReportReply(HashMap map);
 	
 	// 독후감 게시판 댓글 삭제
-	public int ajaxDeleteReportReply(HashMap map);
+	public int ajaxDeleteReportReply(int replyNo);
+	
+	// 독후감 게시판 댓글 신고
+	public int ajaxReplyBlack(HashMap map);
 	
 	
 	

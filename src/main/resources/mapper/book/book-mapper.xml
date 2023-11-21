@@ -27,6 +27,14 @@
 		<result column="ECO_HISTORY_NO" property="ecoNo" />
 	</resultMap>
 	
+	<!-- 독후감 게시글 댓글 -->
+	<resultMap id="bookReportReplyResultSet" type="bookReportReply">
+		<result column="BOOK_REPORT_REPLY_NO" property="bookReportReplyNo" />
+		<result column="BOOK_REPORT_REPLY_DATE" property="bookReportReplyDate" />
+		<result column="BOOK_REPORT_REPLY_CONTENT" property="bookReportReplyContent" />
+		<result column="USER_ID" property="userId" />
+		<result column="BOOK_REPORT_NO" property="bookReportNo" />
+	</resultMap>
 	
 	<!-- 도서 조회수 조회 -->
 	<select id="countList" resultType="book">
@@ -369,9 +377,9 @@
 		(SELECT COUNT(*)
 	    FROM TB_BOOK_REPORT_BLACK
 	    WHERE
-	        LOGIN_USER_NO = 2
+	        LOGIN_USER_NO = #{userNo}
 	    AND
-	        BOOK_REPORT_NO = 14) < 1
+	        BOOK_REPORT_NO = #{reportNo}) < 1
 	    ]]>
 		THEN
 		INTO
@@ -388,10 +396,83 @@
 		SELECT 1 FROM DUAL
 	</insert>
 	
+	<!-- 독후감 게시판 댓글 개수 조회 -->
+	<select id="selectReportReplyCount" parameterType="_int" resultType="_int">
+		SELECT COUNT(*)
+		FROM TB_BOOK_REPORT_REPLY
+		WHERE BOOK_REPORT_NO = #{reportNo}
+	</select>
 	
+	<!-- 독후감 게시판 댓글 조회 -->
+	<select id="selectReportReply" parameterType="_int" resultMap="bookReportReplyResultSet">
+		SELECT
+			BOOK_REPORT_REPLY_NO,
+			TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_REPLY_DATE",
+			BOOK_REPORT_REPLY_CONTENT,
+			USER_ID
+		FROM
+			TB_BOOK_REPORT_REPLY
+		JOIN
+			TB_USER USING(USER_NO)
+		WHERE
+			BOOK_REPORT_NO = #{reportNo}
+		ORDER
+		BY
+			BOOK_REPORT_REPLY_DATE DESC
+	</select>
 	
+	<!-- 독후감 게시판 댓글 등록 -->
+	<insert id="insertReportReply" parameterType="hashmap">
+		INSERT INTO TB_BOOK_REPORT_REPLY
+		VALUES (
+			SEQ_BOOK_REPORT_REPLY.NEXTVAL,
+			SYSDATE,
+			#{content},
+			#{userNo},
+			${reportNo}
+			)
+	</insert>
 	
+	<!-- 독후감 게시판 댓글 수정 -->
+	<update id="updateReportReply" parameterType="hashmap">
+		UPDATE TB_BOOK_REPORT_REPLY
+		SET BOOK_REPORT_REPLY_CONTENT = #{content}
+		WHERE
+			BOOK_REPORT_REPLY_NO = #{replyNo}
+	</update>
 	
+	<!-- 독후감 게시판 댓글 삭제 -->
+	<delete id="deleteReportReply" parameterType="_int">
+		DELETE FROM TB_BOOK_REPORT_REPLY
+		WHERE BOOK_REPORT_REPLY_NO = #{replyNo}
+	</delete>
+	
+	<!-- 독후감 게시판 댓글 신고 -->
+	<insert id="replyBlack" parameterType="hashmap">
+		INSERT ALL
+		WHEN
+		<![CDATA[
+		(SELECT COUNT(*)
+	    FROM TB_BOOK_REPORT_REPLY_BLACK
+	    WHERE
+	        LOGIN_USER_NO = #{userNo}
+	    AND
+	        BOOK_REPORT_REPLY_NO = #{reportReplyNo}) < 1
+	    ]]>
+		THEN
+		INTO
+			TB_BOOK_REPORT_REPLY_BLACK
+		VALUES
+			(
+			SEQ_BOOK_REPORT_REPLY_BLACK.NEXTVAL,
+			#{reportReplyNo},
+			(SELECT USER_NO
+			FROM TB_USER
+			WHERE USER_ID = #{blackId}),
+			#{userNo}
+			)
+		SELECT 1 FROM DUAL
+	</insert>
 	
 	
 	

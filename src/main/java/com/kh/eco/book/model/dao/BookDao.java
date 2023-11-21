@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
+import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.common.model.vo.PageInfo;
 
 @Repository
 public class BookDao {
@@ -102,7 +104,29 @@ public class BookDao {
 		return sqlSession.insert("bookMapper.reportBlack", map);
 	}
 	
+	public int ajaxSelectReportReplyCount(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.selectOne("bookMapper.selectReportReplyCount", reportNo);
+	}
 	
+	public ArrayList<BookReportReply> ajaxSelectReportReply(SqlSessionTemplate sqlSession, int reportNo, RowBounds rowBounds) {
+		return (ArrayList)sqlSession.selectList("bookMapper.selectReportReply", reportNo, rowBounds);
+	}
+
+	public int ajaxInsertReportReply(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.insertReportReply", map);
+	}
+
+	public int ajaxUpdateReportReply(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.update("bookMapper.updateReportReply", map);
+	}
+
+	public int ajaxDeleteReportReply(SqlSessionTemplate sqlSession, int replyNo) {
+		return sqlSession.delete("bookMapper.deleteReportReply", replyNo);
+	}
+	
+	public int ajaxReplyBlack(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.replyBlack", map);
+	}
 	
 	
 	

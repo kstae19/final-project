@@ -35,12 +35,12 @@
 			return false ;
 	}
 	
-	function selectBookReply(nowPage){
+	function selectReportReply(nowPage){
 		// 댓글 조회 ajax
 		$.ajax({
-			url : 'selectbookreply.bk',
+			url : 'selectreportreply.bk',
 			async : false,
-			type : 'get',
+			type : 'post',
 			data : {
 				reportNo : '${ br.bookReportNo }',
 				cPage : nowPage    				
@@ -55,16 +55,21 @@
 					let replyArr = result.replyList;
     				let replyValue = '';
     				for(let i in replyArr){
+    					replyValue += '<div>'
     					if(!isEmpty('${ sessionScope.loginUser.userId }')){
     						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
-        						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>';
-        					}
+        						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReportReply(this);">삭제</button>';
+        						replyValue += '<button type="button" class="btn btn-secondary" onclick="update(this);">수정</button>';
+    						}
+    						replyValue += '<button type="button" class="btn btn-dark" onclick="reportReplyBlack(this);">신고하기</button>'
     					}
-    					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
-    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].reportReplyDate + '</p>'
-    						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
+    				replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReportReplyDate + '</p>'
+    						   + '<p class="replyContent">' + replyArr[i].bookReportReplyContent + '</p>'
+    						   + '<input type="hidden" value="' + replyArr[i].bookReportReplyNo +'">'
+    						   + '</div>';
     				}
-    				$('#bookReply-area').html(replyValue);
+    				$('#reportReply-area').html(replyValue);
     				
     				let replyPi = result.replyPi;
     				let replyPiValue = '';
@@ -82,7 +87,7 @@
     					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
     				}
     				
-    				$('#bookReply-pagination').html(replyPiValue);
+    				$('#reportReply-pagination').html(replyPiValue);
 				}
 				},
 				error : () => {
@@ -92,8 +97,125 @@
 		}
 		
 		$(function(){
-			selectBookReply();
+			selectReportReply();
 		})
+		
+		function insertReportReply(){ // 댓글 등록 ajax
+			
+       		if($('#reportReplyContent').val().trim() != ''){
+   	    		$.ajax({
+   	    			url : 'insertreportreply.bk',
+   	    			type : 'post',
+   	    			data : {
+   	    				reportNo : '${ br.bookReportNo }',
+   	    				userNo : '${ loginUser.userNo }',
+   	    				content : $('#reportReplyContent').val()
+   	    			},
+   	    			success : result => {
+   	    				console.log(result);
+   	    				
+   	    				if(result === 'success'){
+   	    					$('#reportReplyContent').val('');
+   	    					selectReportReply();
+   	    				} else{
+   	    					alert('댓글 등록 실패');
+   	    				}
+   	    			},
+   	    			error : () => {
+   	    				console.log("댓글 통신 실패");
+   	    			}
+   	    		});
+       		}
+       	}
+		
+		function updateReportReply(e){// 댓글 수정 ajax
+			if($('#reportReplyContent').val().trim() != ''){
+	    		$.ajax({
+	    			url : 'updatereportreply.bk',
+	    			async : false,
+	    			type : 'post',
+	    			data : {
+	    				replyNo : $(e).next().next().next().next().next().val(),
+	    				content : $(e).next().next().next().next().val()
+	    			},
+	    			success : result => {
+	    				console.log(result);
+	    				
+	    				if(result === 'success'){
+	    					selectReportReply();
+	    				} else{
+	    					alert('댓글 수정 실패');
+	    				}
+	    			},
+	    			error : () => {
+	    				console.log("댓글 통신 실패");
+	    			}
+	    		});
+    		}
+		}
+		
+		function update(e){ 
+			
+			let replyContent = $(e).next().next().next().next();
+			let content = $(e).next().next().next().next().text();
+			
+			replyContent.after('<input type="text" id="reportReplyContent" value="'+ content + '">');
+			replyContent.remove();
+			$(e).attr("onclick", "updateReportReply(this);");
+    	}
+	    		
+   		function deleteReportReply(e){ // 댓글 삭제 ajax
+       		$.ajax({
+       			url : 'deletereportreply.bk',
+       			async : false,
+       			type : 'post',
+       			data : {
+       				replyNo : $(e).next().next().next().next().next().next().val(),
+       				userNo : '${ loginUser.userNo }'
+       			},
+       			success : result => {
+       				console.log(result);
+       				
+       				if(result === 'success'){
+       					selectReportReply();
+  	    				} else{
+  	    					alert('댓글 삭제 실패');
+  	    				}
+       			},
+       			error : () => {
+       				console.log("댓글 통신 실패");
+       			}
+       		})
+       	}
+   		
+   		function reportReplyBlack(e){ // 댓글 신고 ajax
+       		$.ajax({
+       			url : 'reportReplyBlack.bk',
+       			async : false,
+       			type : 'post',
+       			data : {
+       				reportReplyNo : $(e).next().next().next().next().val(),
+       				blackId : $(e).next().text(),
+					userNo : '${ loginUser.userNo }'
+       			},
+       			success : result => {
+       				console.log(result);
+       				
+       				if(result === 'success'){
+       					alert('신고 완료');
+       					selectReportReply();
+  	    				} else{
+  	    					alert('댓글 신고 실패');
+  	    				}
+       			},
+       			error : () => {
+       				console.log("댓글 통신 실패");
+       				console.log($(e).next().next().next().next().val());
+       				console.log($(e).next().text());
+       				console.log('${ loginUser.userNo }');
+       			}
+       		})
+       	}
     </script>
 </head>
 <body>
@@ -135,20 +257,14 @@
             </div>
             <br>
             <div id="reportReply-area">
-                <p style="margin-bottom: 0px;">아이디</p>
-                <p style="margin-bottom: 0px;">작성날짜</p>
-                <p>리뷰글행복스럽고 평화스러운 곳으로 인도하겠다는 커다란 이상을 품었기 때문이다 그러므로 그들은 길지 아니한 목숨을 사는가 싶이 살았으며 그들의 그림자는 천고에 사라지지 않는 것이다 이것은 현저하게 일월과 같은 예가 되려니와 그와 같지 못하다 할지라도</p>
             </div>
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            <ul class="pagination justify-content-center" id="reportReply-pagination">
             </ul>
-            <input type="text" placeholder="댓글을 남겨보세요" name="" style="height: 50px; width: 90%;">
-            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;">등록</button>
-            <p>0/50</p>
+            <input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent">
+            <c:if test="${ not empty loginUser }">
+	            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;" onclick="insertReportReply();">등록</button>
+	            <p>0/50</p>
+            </c:if>
         </div>
 
 

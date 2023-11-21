@@ -188,8 +188,8 @@
             					}
         					}
         					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
-        						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReportReplyDate + '</p>'
-        						   + '<p>' + replyArr[i].bookReportReplyContent + '</p>';
+        						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
+        						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
         				}
         				$('#bookReply-area').html(replyValue);
         				

@@ -138,6 +138,7 @@ public class AjaxBookController {
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
 		// 댓글 개수 조회
+		System.out.println(reportNo);
 		int count = bookService.ajaxSelectReportReplyCount(reportNo);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
 		
@@ -163,9 +164,9 @@ public class AjaxBookController {
 		map.put("reportNo", reportNo);
 		map.put("userNo", userNo);
 		map.put("content", content);
-
+		System.out.println(map);
 		
-		if(bookService.ajaxInsertReportReply(map) > 1) { // 성공
+		if(bookService.ajaxInsertReportReply(map) > 0) { // 성공
 			return "success";
 		} else { // 실패
 			System.out.println("실패!");
@@ -176,22 +177,46 @@ public class AjaxBookController {
 	// 댓글 수정
 	@ResponseBody
 	@RequestMapping("updatereportreply.bk")
-	public String ajaxUpdateReportReply() {
+	public String ajaxUpdateReportReply(int replyNo, String content) {
 		
-		return "";
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyNo", replyNo);
+		map.put("content", content);
+		
+		System.out.println(map);
+		
+		if(bookService.ajaxUpdateReportReply(map) > 0) { // 성공
+			return "success";
+		} else { // 실패
+			System.out.println("실패!");
+			return "fail";
+		}
 	}
-	
 	
 	// 댓글 삭제
 	@ResponseBody
 	@RequestMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxDeleteReportReply(int reportNo, int userNo) {
+	public String ajaxDeleteReportReply(int replyNo) {
+		
+		if(bookService.ajaxDeleteReportReply(replyNo) > 0) { // 삭제 성공
+			return "success";
+		} else { // 실패
+			return "fail";
+		}
+	}
+	
+	// 댓글 신고
+	@ResponseBody
+	@RequestMapping(value="reportReplyBlack.bk", produces="text/html; charset=UTF-8")
+	public String ajaxReplyBlack(int reportReplyNo, String blackId, int userNo) {
 		
 		HashMap<String, Object> map = new HashMap();
-		map.put("reportNo", reportNo);
+		map.put("reportReplyNo", reportReplyNo);
+		map.put("blackId", blackId);
 		map.put("userNo", userNo);
+		System.out.println(map);
 		
-		if(bookService.ajaxDeleteReportReply(map) > 1) { // 삭제 성공
+		if(bookService.ajaxReplyBlack(map) > 0) { // 댓글 신고 성공
 			return "success";
 		} else { // 실패
 			return "fail";

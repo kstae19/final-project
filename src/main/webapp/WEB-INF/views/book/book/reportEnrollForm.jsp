@@ -45,7 +45,7 @@
         <h3>글쓰기</h3>
 	        <form method="POST" action="reportEnrollForm.bk">
 	        	<input type="hidden" name="userNo" value="${ loginUser.userNo }">
-	        	<input type="hidden" name="bookReportNo" value="">
+	        	<input type="hidden" name="bookReportNo" value="0">
 		        <label><input type="checkbox" name="bookReportSecret" value="1">비밀글</label>
 		        <c:if test="${ loginUser.userStatus eq 'A' }">
 		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
