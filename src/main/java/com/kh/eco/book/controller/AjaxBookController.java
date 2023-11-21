@@ -174,6 +174,13 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 수정
+	@ResponseBody
+	@RequestMapping("updatereportreply.bk")
+	public String ajaxUpdateReportReply() {
+		
+		return "";
+	}
+	
 	
 	// 댓글 삭제
 	@ResponseBody

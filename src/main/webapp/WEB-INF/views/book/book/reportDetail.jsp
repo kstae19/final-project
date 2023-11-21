@@ -25,6 +25,76 @@
             margin-left: 10px;
         }
     </style>
+    <script>
+	
+	//문자열이 빈 문자열인지 체크하여 결과값을 리턴. 
+	function isEmpty(str){
+		if(typeof str == "undefined" || str == null || str == "")
+			return true;
+		else
+			return false ;
+	}
+	
+	function selectBookReply(nowPage){
+		// 댓글 조회 ajax
+		$.ajax({
+			url : 'selectbookreply.bk',
+			async : false,
+			type : 'get',
+			data : {
+				reportNo : '${ br.bookReportNo }',
+				cPage : nowPage    				
+			},
+			success : result => {
+				console.log(result);
+				
+				$('#reportReply-count').html(result.replyCount);
+				if(result.replyCount == 0){
+					$('#reportReply-area').html("댓글이 없습니다.");
+				} else {
+					let replyArr = result.replyList;
+    				let replyValue = '';
+    				for(let i in replyArr){
+    					if(!isEmpty('${ sessionScope.loginUser.userId }')){
+    						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+        						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>';
+        					}
+    					}
+    					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].reportReplyDate + '</p>'
+    						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
+    				}
+    				$('#bookReply-area').html(replyValue);
+    				
+    				let replyPi = result.replyPi;
+    				let replyPiValue = '';
+    				if(replyPi['currentPage'] == 1){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+    				}
+    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+    				}
+    				if(replyPi['currentPage'] == replyPi['endPage']){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+    				}
+    				
+    				$('#bookReply-pagination').html(replyPiValue);
+				}
+				},
+				error : () => {
+					console.log("댓글 통신 실패");
+				}
+			});
+		}
+		
+		$(function(){
+			selectBookReply();
+		})
+    </script>
 </head>
 <body>
 
@@ -61,11 +131,10 @@
         <div>
             <div>
                 <span>댓글</span>
-                <span>123개</span>
-                <button type="button" class="btn btn-secondary" style="float: right;">삭제</button>
+                <span id="reportReply-count"></span>
             </div>
             <br>
-            <div>
+            <div id="reportReply-area">
                 <p style="margin-bottom: 0px;">아이디</p>
                 <p style="margin-bottom: 0px;">작성날짜</p>
                 <p>리뷰글행복스럽고 평화스러운 곳으로 인도하겠다는 커다란 이상을 품었기 때문이다 그러므로 그들은 길지 아니한 목숨을 사는가 싶이 살았으며 그들의 그림자는 천고에 사라지지 않는 것이다 이것은 현저하게 일월과 같은 예가 되려니와 그와 같지 못하다 할지라도</p>
