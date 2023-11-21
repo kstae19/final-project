@@ -275,8 +275,18 @@
 	</select>
 	
 	
-	<!-- 좋아요수 증가 -->
-	<update id="increaseLikeCount" parameterType="hashmap">
+	<!-- 좋아요수 조회 -->
+	<select id="selectLikeCount" parameterType="_int" resultType="_int">
+		SELECT 
+						COUNT(*)
+		FROM
+						TB_LIKE_CHALLENGE
+		WHERE
+						CHALLENGE_NO = #{ challengeNo }
+	</select>
+	
+	<!-- 좋아요수 증가 : 좋아요수를 화면에 단순히 뿌려주는 용도면 challengeNo로 카운트한 개수만 화면에 뿌려줘도 괜찮음 즉 likecount컬럼과 이 쿼리문은 필요없음 -->
+<!-- 	<update id="increaseLikeCount" parameterType="hashmap">
 		UPDATE 
 						TB_CHALLENGE 
 		SET
@@ -290,8 +300,7 @@
 						USER_NO = #{ userNo }
 		AND
 						CHALLENGE_NO = #{ challengeNo }
-
-	</update>
+	</update> -->
 	
 	<!-- 좋아요테이블에 한 행 삽입 -->
 	<insert id="insertLike" parameterType="hashmap">
@@ -306,7 +315,7 @@
 	</insert>
 	
 	<!-- 좋아요수 감소 -->
-	<update id="decreaseLikeCount" parameterType="hashmap">
+<!-- 	<update id="decreaseLikeCount" parameterType="hashmap">
 		UPDATE 
 						TB_CHALLENGE 
 		SET
@@ -321,7 +330,7 @@
 		AND
 						CHALLENGE_NO = #{ challengeNo }
 		
-	</update>	
+	</update>	 -->
 	
 	<!-- 좋아요 테이블에 한 행 삭제 -->
 	<delete id="deleteLike" parameterType="hashmap">

@@ -77,11 +77,104 @@
     		
     		<article id="likeCount">
     			<div id="like">🤍</div>
-    			<div id="count">${challenge.likeCount }</div> 
+    			<div id="count">${ likeCount }</div> 
     		</article>
     		
     		<script>
-    		$('#likeCount').on('click', function(e){
+    		// checkLikeCount, increaseLikeCount, decreaseLikeCount
+    		
+    		$('#likeCount').on('click', function(){ // Promise를 써야 ajax비동기를 동기로 사용할 수 있음 
+    			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
+    			
+		    		var checkLikeCount = function(){
+		    			var deferred = $.Deferred();
+		    			//console.log('시작');
+		    			/* try{
+		    				deferred.resolve(message);
+		    				
+		    			} catch{
+		    				deferred.reject(error);
+		    			} */
+		    			
+		    			$.ajax({
+		    				url : 'checkLike.ch',
+		    				data : {
+		    					userNo : ${ sessionScope.loginUser.userNo },
+		    					challengeNo : ${ challenge.challengeNo }
+		    				},
+		    				success : function(data){ 
+		    					deferred.resolve(data);
+		    				},
+		    				error : function(err){
+		    					deferred.reject(err);
+		    				}
+		    				
+		    			});
+		    			
+		    			return deferred.promise();	
+		    		};// checkLikeCount
+		    		
+		    		checkLikeCount()
+		    		.done(function(data){
+		    			//console.log(data);// 시작 + 라이크체크성공 순차적 접근
+		    			if(data == 'success'){
+		    				
+			    				$.ajax({
+	    		    				url : 'deleteLike.ch',
+	    		    				data : {
+	    		    					userNo : ${ sessionScope.loginUser.userNo },
+	    		    					challengeNo : ${ challenge.challengeNo },
+	    		    				},
+	    		    				success : function(result){
+	    		    					console.log(result);
+	    		    					console.log("decrease연결 성공");
+	    		    					$('#like').html('🤍');
+	    		    					$('#count').html('${likeCount}');
+	    		    				},
+	    		    				error : function(){
+	    		    					
+	    		    					console.log('decraese연결 실패');
+	    		    					
+	    		    				}
+		    				})
+		    			}//if 
+		    			else {
+		    				
+			    				$.ajax({
+				    				url : 'insertLike.ch',
+				    				data : {
+				    					userNo : ${ sessionScope.loginUser.userNo },
+				    					challengeNo : ${ challenge.challengeNo },
+				    				},
+				    				success : function(result){
+				    					console.log(result);
+				    					console.log("increase연결 성공");
+				    					$('#like').html('💚');
+				    					$('#count').html('${likeCount}');
+				    				},
+				    				error : function(){					
+				    					console.log('increase연결 실패'); 
+				    				}
+		    			})
+		    			
+		    			}// else
+		    		})// done
+		    		.fail(function(message){
+		    			console.log(message);
+		    		});// fail
+		    		
+    			});// click
+    		
+   
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		
+    		/* $('#likeCount').on('click', function(e){
 			    		new Promise( (resolve, reject) => {
 			    			
 			    			$.ajax({
@@ -133,7 +226,9 @@
 			    				}
 			    		})
     				})
-    		})
+    		}) */
+    		
+    		
     	/* 	$(function(){
     			
     			

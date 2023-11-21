@@ -36,19 +36,19 @@ public class AjaxController {
 	}
 	
 	
-	@RequestMapping("increaseLike.ch")
-	public String increaseLikeCount(int userNo, int challengeNo) {
+	@RequestMapping("insertLike.ch")
+	public String insertLike(int userNo, int challengeNo) {
 		
 		// 복합키인 userNo와 challengeNo를 map에 각각 담음
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
-		map.put("challengerNo", challengeNo);
+		map.put("challengeNo", challengeNo);
 		
-		System.out.println("좋아요 수 증가 : " + challengeService.increaseLikeCount(map));
-		System.out.println("좋아요 한 행 추가 : " + challengeService.insertLike(map));
 		
-		if(challengeService.increaseLikeCount(map) *challengeService.insertLike(map) > 0 ) {
+		
+		if(challengeService.insertLike(map)  > 0 ) {
 			// 좋아요도 증가하고 좋아요테이블에도 한행추가
+			
 			return "success";
 			
 		} else {
@@ -62,18 +62,15 @@ public class AjaxController {
 
 	
 	
-	@RequestMapping("decreaseLike.ch")
-	public String decreaseLikeCount(int userNo, int challengeNo) {
+	@RequestMapping("deleteLike.ch")
+	public String deleteLike(int userNo, int challengeNo) {
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", Integer.valueOf(userNo));
-		map.put("challengerNo", Integer.valueOf(challengeNo));
+		map.put("challengeNo", Integer.valueOf(challengeNo));
 		
-		System.out.println("좋아요 수 감소 : " + challengeService.decreaseLikeCount(map));
-		System.out.println("좋아요 한 행 삭제 : " + challengeService.deleteLike(map));
+		if(challengeService.deleteLike(map)  > 0 ) {
 		
-		if(challengeService.decreaseLikeCount(map) *challengeService.deleteLike(map) > 0 ) {
-			
 			return "success";
 			
 		} else {

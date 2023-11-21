@@ -215,7 +215,8 @@ public class ChallengeController {
 			//System.out.println("내가 찍히면 조회수 증가" + challengeService.increaseViewCount(challengeNo));
 			
 			// 2. boardDetailView.jsp상 필요한 데이터를 조회 
-			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo)); 
+			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo));
+			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
 			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(challengeNo) );
 			return "challenge/challengeDetailView";
 			
