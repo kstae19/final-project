@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,6 +100,7 @@ h3{
 			<div style="width:20%;">주문 금액</div>
 		</div>
 
+		 <form action="listOrderForm" method="post">
 		 <c:choose>
 		 	<c:when test="${empty cartItems }">
 		 	<div class="item">
@@ -109,9 +111,8 @@ h3{
 				<div class="price">가격 
 				</div>
 		 	</c:when>
-		 	
 		 	<c:otherwise>
-			<c:forEach items="${cartItems}" var="i">
+			<c:forEach items="${cartItems}" var="i" varStatus="status">
 			<div class="item">
 			<span><input type="checkbox"></span>
 				<div class="item-info">
@@ -120,8 +121,8 @@ h3{
 					
 					<!-- 상품 정보 -->
 					<div>
-						<a href="#" class="brand-${i.brandNo }">${i.brandName }</a><br>
-						<a href="product.detail?productNo=${i.productNo }" class="product-name"><h3>${i.productName }</h3></a><br>
+						<a href="#" class="brand-${i.brandNo }">${i.brandName }</a> 
+						<a href="product.detail?productNo=${i.productNo }" class="product-name"><h3>${i.productName }</h3></a>
 						<div>${i.productInfo }</div>
 						<span class="option ${i.optionNo }">${i.optionName }</span>
 						<div class="price-one">${i.price }원</div>
@@ -140,19 +141,33 @@ h3{
 				<div class="price">
 					<span>${i.price * i.qty}원</span> 
 					<br>
-					<form action="orderForm" method="post">
-					<input type="hidden" name="optionNo" value="${i.optionNo }">
-					<input type="hidden" name="qty" value="${i.qty }"/>
-					<input type="hidden" name = "userNo" value="${sessionScope.loginUser.userNo }">
-					<button type="submit">이 상품 구매하기</button>
-					</form>
+					<input type="hidden" name="itemList[${status.index }].mainImg" value="${i.mainImg }">
+					<input type="hidden" name="itemList[${status.index }].productNo" value="${i.productNo }">
+					<input type="hidden" name="itemList[${status.index }].productName" value="${i.productName }">
+					<input type="hidden" name="itemList[${status.index }].optionName" value="${i.optionName }">
+					<input type="hidden" name="itemList[${status.index }].optionNo" value="${i.optionNo }">
+					<input type="hidden" name="itemList[${status.index }].qty" value="${i.qty }"/>
+					<input type="hidden" name="itemList[${status.index }].price" value="${i.price }"/>
+					<input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo }">
+					<button type="button" onclick="orderthis(${i.optionNo },${i.qty },${sessionScope.loginUser.userNo });">이 상품 구매하기</button>
 				</div>
 		</div>
 		</c:forEach>
 		 	</c:otherwise>
 		 </c:choose>
+		 
+		 
+		 <div>
+		 	<button type="submit">
+		 		전체 주문하기
+		 	</button>
+		 </div>
+		</form>
 		<script>
-			
+
+			function orderthis(optionNo, qty, userNo){
+					location.href="orderForm?optionNo="+optionNo+"&qty="+qty+"&userNo="+userNo;
+			}
 			function qtyChange(num, btn){
 				let $qtyspan = $(btn).siblings('input');
 				$qty = Number($qtyspan.val());
@@ -211,7 +226,6 @@ h3{
 					error : ()=>{
 						console.log('에이젝스 망이야');
 					}
-					
 				})
 			};
 			

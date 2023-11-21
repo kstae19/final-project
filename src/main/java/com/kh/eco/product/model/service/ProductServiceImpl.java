@@ -109,10 +109,22 @@ public class ProductServiceImpl implements ProductService {
 	public int orderProduct(Order order) {
 		int orderResult = dao.insertOrder(sqlSession, order);
 		int itemResult =1;
+		int cartResult = 1;
+		System.out.println("주문 넣기 : " +orderResult);
 		if(orderResult>0) {
 			itemResult = dao.insertOrderItem(sqlSession, order);
+			System.out.println("주문에 아이템 추가하기 : " + itemResult);
+			if(itemResult>0) {
+				Cart cart = new Cart();
+				cart.setUserNo(order.getUserNo());
+				cart.setOptionNo(order.getOptionNo());
+				if(checkCart(cart)!=null) {
+					cartResult = removeItem(cart);
+					System.out.println("카트 삭제하기 : "+ cartResult);					
+				}
+			}
 		}
-		return orderResult*itemResult;
+		return orderResult*itemResult*cartResult;
 	}
 
 }

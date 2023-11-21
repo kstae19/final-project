@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString 
+@NoArgsConstructor @AllArgsConstructor @Getter @ToString @Setter
 public class Order {
 	private int orderNo;
 	private int addressNo;
@@ -16,4 +16,5 @@ public class Order {
 	private int optionNo;
 	private int qty;
 	private String orderDate;
+	private ArrayList<OrderItem> items;
 }

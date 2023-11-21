@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.kh.eco.product.model.service.ProductService;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Order;
+import com.kh.eco.product.model.vo.OrderCart;
 import com.kh.eco.product.model.vo.ProductLike;
+import lombok.Setter;
+import lombok.ToString;
 
 @Controller
 public class ProductController {
@@ -47,21 +50,30 @@ public class ProductController {
 		model.addAttribute("cartItems", cartItems);
 		return "product/cart";
 	}
-	@PostMapping("orderForm")
+	@GetMapping("orderForm")
 	public String orderForm(Order o, Model model) {
 		//주문상품 정보에는 상품명, 상품사진, 가격 , 수량
 		model.addAttribute("item", productService.getCartItem(o.getOptionNo()));
 		model.addAttribute("order", o);		
-		
+		System.out.println(o);
+		System.out.println(model.getAttribute("item"));
+		return "product/orderForm";
+	}
+	@PostMapping("listOrderForm")
+	public String orderListForm(OrderCart orderCart, Model model) {
+		model.addAttribute("items",orderCart);
+		System.out.println(model.getAttribute("items"));
 		return "product/orderForm";
 	}
 	@PostMapping("product.order")
-	public String orderProduct(Order order) {
-		order.setAddressNo(1);
-		int result = productService.orderProduct(order);
-		if(result>0) {
-			System.out.println("주문 성공");
-		}
+	public String orderProduct(Order o, Model model) {
+		System.out.println(o);
+//		int result = productService.orderProduct(order);
+//		if(result>0) {
+//			System.out.println("주문 성공");
+//		}else {
+//			System.out.println("주문 실패");
+//		}
 		return "redirect:/";
 	}
 }

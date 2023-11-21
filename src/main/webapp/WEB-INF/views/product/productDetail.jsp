@@ -176,7 +176,7 @@ div {
 					<div id="briefInfo">${p.productInfo }</div>
 					
 					<div id="choice">
-						<form action="product.orderForm">
+						<form action="orderForm" method="get">
 							<select name="optionNo" required>
 								<option value="0">옵션을 선택하세요</option>
 								<c:forEach items="${p.optionList }" var="option">
@@ -187,15 +187,15 @@ div {
 							<span id="price"></span>
 							
 							<br> 
-							
-							<input type="number" value="1" min="1" max="10" required disabled>
+							<input type="hidden" value="${sessionScope.loginUser.userNo }" name="userNo">
+							<input type="number" value="1" min="1" max="10" required disabled name="qty">
 							<span id="totalPrice"></span><br>
 							
 							<br>
 						<c:choose>
 						<c:when test="${!empty sessionScope.loginUser }">	
 							<button type="button" onclick="addCart();">장바구니 추가</button>
-							<button type="submit">구매하기</button>
+							<button type="submit" onclick="return optionCheck();">구매하기</button>
 						</c:when>
 						<c:otherwise>
 							<p>로그인 후 상품 주문이 가능합니다.</p>
@@ -207,6 +207,12 @@ div {
 			</div>
 		</div>
 				<script>
+					function optionCheck(){
+						if($('#choice select').val() == 0){
+							alert('옵션을 먼저 선택 해주세요.');
+							return false;
+						}
+					}
 					function addCart(){
 						let $option = $('#choice select').val();
 						if($option == 0){
