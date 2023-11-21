@@ -66,14 +66,14 @@ public class ProductController {
 		return "product/orderForm";
 	}
 	@PostMapping("product.order")
-	public String orderProduct(Order o, Model model) {
-		System.out.println(o);
-//		int result = productService.orderProduct(order);
-//		if(result>0) {
-//			System.out.println("주문 성공");
-//		}else {
-//			System.out.println("주문 실패");
-//		}
+	public String orderProduct(Order order, Model model) {
+		System.out.println(order);
+		int result = productService.orderProduct(order);
+		if(result>0) {
+			System.out.println("주문 성공");
+		}else {
+			System.out.println("주문 실패");
+		}
 		return "redirect:/";
 	}
 }

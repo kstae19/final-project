@@ -276,4 +276,9 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 <insert id="insertOrderItem" parameterType="order">
 	INSERT INTO TB_ORDER_ITEM VALUES(SEQ_ORDER_NO.CURRVAL, #{optionNo}, #{qty})
 </insert>
+
+<insert id="insertOrderItems" parameterType="com.kh.eco.product.model.vo.OrderItem">
+	INSERT INTO TB_ORDER_ITEM VALUES(SEQ_ORDER_NO.CURRVAL, #{optionNo}, #{qty})
+</insert>
+
 </mapper>

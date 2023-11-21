@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Order;
+import com.kh.eco.product.model.vo.OrderItem;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductReview;
@@ -74,5 +75,11 @@ public class ProductDao {
 	public int insertOrderItem(SqlSessionTemplate sqlSession, Order order) {
 		return sqlSession.insert("productMapper.insertOrderItem", order);
 	}
+	public int insertOrderItem(SqlSessionTemplate sqlSession, OrderItem item) {
+		return sqlSession.insert("productMapper.insertOrderItems", item);
+	}
+//	public int insertOrderItems(SqlSessionTemplate sqlSession, Order order) {
+//		return sqlSession.insert("productMapper.insertOrderItems", order);
+//	}
 
 }
