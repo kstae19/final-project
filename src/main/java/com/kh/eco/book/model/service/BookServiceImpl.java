@@ -142,8 +142,30 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
-		return null;
+	public int ajaxSelectReportReplyCount(int reportNo) {
+		return bookDao.ajaxSelectReportReplyCount(sqlSession, reportNo);
+	}
+	
+	@Override
+	public ArrayList<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.ajaxSelectReportReply(sqlSession, reportNo, rowBounds);
+	}
+
+	@Override
+	public int ajaxInsertReportReply(HashMap map) {
+		return bookDao.ajaxInsertReportReply(sqlSession, map);
+	}
+
+	@Override
+	public int ajaxUpdateReportReply(HashMap map) {
+		return bookDao.ajaxUpdateReportReply(map);
+	}
+
+	@Override
+	public int ajaxDeleteReportReply(HashMap map) {
+		return bookDao.ajaxDeleteReportReply(map);
 	}
 
 

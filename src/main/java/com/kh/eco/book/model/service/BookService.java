@@ -74,11 +74,22 @@ public interface BookService {
 	public int reportDelete(int reportNo);
 	
 	// 독후감 게시글 신고
-	public int reportBlack(HashMap map);
-		
+	public int reportBlack(HashMap map);	
 	
 	// 독후감 게시판 댓글 조회
-	public ArrayList<BookReportReply> selectReportReply(int reportNo);
+	public ArrayList<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi);
+	
+	// 독후감 게시판 댓글 개수 조회
+	public int ajaxSelectReportReplyCount(int reportNo);
+	
+	// 독후감 게시판 댓글 등록
+	public int ajaxInsertReportReply(HashMap map);
+	
+	// 독후감 게시판 댓글 수정
+	public int ajaxUpdateReportReply(HashMap map);
+	
+	// 독후감 게시판 댓글 삭제
+	public int ajaxDeleteReportReply(HashMap map);
 	
 	
 	

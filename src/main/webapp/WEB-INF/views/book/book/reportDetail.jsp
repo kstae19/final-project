@@ -53,7 +53,6 @@
 	        </c:if>
         </c:if>
         <hr>
-
         <p>
         	${ br.bookReportContent }
         </p>

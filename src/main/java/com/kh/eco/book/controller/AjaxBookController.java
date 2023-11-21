@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
@@ -124,6 +125,66 @@ public class AjaxBookController {
 		map.put("userNo", userNo);
 		
 		if(bookService.ajaxDeleteBookReply(map) > 1) { // 삭제 성공
+			return "success";
+		} else { // 실패
+			return "fail";
+		}
+	}
+	
+	
+	// 댓글 조회
+	@ResponseBody
+	@RequestMapping(value="selectreportreply.bk", produces="application/json; charset=UTF-8")
+	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
+		
+		// 댓글 개수 조회
+		int count = bookService.ajaxSelectReportReplyCount(reportNo);
+		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
+		
+		ArrayList<BookReportReply> list = bookService.ajaxSelectReportReply(reportNo, pi);
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyCount", count);
+		map.put("replyList", list);
+		map.put("replyPi", pi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+
+	// 댓글 등록
+	@ResponseBody
+	@RequestMapping(value="insertreportreply.bk", produces="text/html; charset=UTF-8")
+	public String ajaxInsertReportReply(int reportNo, int userNo, String content) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportNo", reportNo);
+		map.put("userNo", userNo);
+		map.put("content", content);
+
+		
+		if(bookService.ajaxInsertReportReply(map) > 1) { // 성공
+			return "success";
+		} else { // 실패
+			System.out.println("실패!");
+			return "fail";
+		}
+	}
+	
+	// 댓글 수정
+	
+	// 댓글 삭제
+	@ResponseBody
+	@RequestMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
+	public String ajaxDeleteReportReply(int reportNo, int userNo) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportNo", reportNo);
+		map.put("userNo", userNo);
+		
+		if(bookService.ajaxDeleteReportReply(map) > 1) { // 삭제 성공
 			return "success";
 		} else { // 실패
 			return "fail";

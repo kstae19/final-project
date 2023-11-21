@@ -363,7 +363,17 @@
 	
 	<!-- 독후감 게시글 신고 -->
 	<insert id="reportBlack" parameterType="hashmap">
-		INSERT
+		INSERT ALL
+		WHEN
+		<![CDATA[
+		(SELECT COUNT(*)
+	    FROM TB_BOOK_REPORT_BLACK
+	    WHERE
+	        LOGIN_USER_NO = 2
+	    AND
+	        BOOK_REPORT_NO = 14) < 1
+	    ]]>
+		THEN
 		INTO
 			TB_BOOK_REPORT_BLACK
 		VALUES
@@ -375,15 +385,7 @@
 			#{userNo},
 			#{reportNo}
 			)
-		WHERE NOT EXISTS
-			(
-			SELECT 1
-			FROM TB_BOOK_REPORT_BLACK
-			WHERE
-				LOGIN_USER_NO = #{userNo}
-			AND
-				BOOK_REPORT_NO = #{reportNo}
-			)
+		SELECT 1 FROM DUAL
 	</insert>
 	
 	
