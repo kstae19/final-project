@@ -1,8 +1,10 @@
 package com.kh.eco.user.controller;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -65,8 +69,28 @@ public class UserController {
 		return mv;
 	}
 	
+	@RequestMapping("email.us")
+	public ModelAndView emailUser(User u,
+									HttpSession session,
+									ModelAndView mv) {
+		
+		User emailUser = userService.emailUser(u);
+		
+		if(emailUser != null && bcryptPasswordEncoder.matches(u.getUserPwd(), emailUser.getUserPwd())) {
+			session.setAttribute("loginUser", emailUser);
+			session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
+			mv.setViewName("redirect:/");
+		} else {
+			// model.addattribute
+			mv.addObject("errorMsg", "로그인에 실패했습니다...");
+			mv.setViewName("common/errorPage");
+		}
+		return mv;
+	}
+	
 	@RequestMapping("logout.us")
 	public String logoutMember(HttpSession session) throws IOException {
+		session.setAttribute("alertMsg", "Eco Friendly를 이용해 주셔서 갑사합니다!");
 		session.invalidate();
 		return "redirect:/";
 	}
@@ -75,6 +99,12 @@ public class UserController {
 	@RequestMapping("idCheck.me")
 	public String idCheck(String checkId) {
 		return userService.idCheck(checkId) > 0 ? "NNNNN" : "NNNNY";
+	}
+	
+	@ResponseBody
+	@RequestMapping("emailCheck.me")
+	public String emailCheck(String checkEmail) {
+		return userService.emailCheck(checkEmail) > 0 ? "NNNNN" : "NNNNY";
 	}
 	
 	@ResponseBody
@@ -126,7 +156,7 @@ public class UserController {
 						.certSecret(checkSecret)
 						.build();
 		int result = userService.vaildate(cert);
-		System.out.println(result);
+		// System.out.println(result);
 		return result > 0 ? "NNNNY" : "NNNNN";
 	}
 	
@@ -165,7 +195,6 @@ public class UserController {
 		if(kakaoLoginUser > 0) {
 			if (idCheck(id) == "NNNNY") {
 				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
-				userService.insertKakao(ku);
 				mv.addObject("userid", id);
 				mv.setViewName("user/kakaoUserEnrollForm");
 			} else {
@@ -189,13 +218,42 @@ public class UserController {
 		String accessNToken = userService.getNToken(code);
 		String email = userService.getNUserInfo(accessNToken);
 		// System.out.println(email);
+		int naverLoginUser = userService.selectNaver(email);
+		u.setEmail(email);
 		
+		nu.setNaverEmail(email);
 		
+		User emailUser = userService.emailUser(u);
+		
+		int checkEmail = 0;
+		
+		if(naverLoginUser > 0) {
+			if (emailCheck(email) == "NNNNY") {
+				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+				mv.addObject("email", email);
+				mv.setViewName("user/naverUserEnrollForm");
+			} else {
+				session.setAttribute("loginUser", emailUser);
+				session.setAttribute("accessNToken", accessNToken);
+				session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
+				mv.setViewName("redirect:/");
+			}
+		} else {
+			if (emailCheck(email) == "NNNNN") {
+				session.setAttribute("alertMsg", "이미 가입된 이메일 주소가 있습니다!");
+				mv.setViewName("redirect:/");
+			} else {
+				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+				userService.insertNaver(nu);
+				mv.addObject("email", email);
+				mv.setViewName("user/naverUserEnrollForm");
+			}
+		}
 		return mv;
 	}
 	
 	@RequestMapping("kakaologout.us")
-	public String kakaoLogout(HttpSession session, HttpServletResponse response) throws IOException, ParseException {
+	public String kakaoLogout(HttpSession session) throws IOException, ParseException {
 		String accessToken = (String)session.getAttribute("accessToken");
 		
 		String kakaoLogoutURL = "https://kapi.kakao.com/v1/user/logout";
@@ -213,15 +271,19 @@ public class UserController {
 		 while ((line = br.readLine()) != null) {
 			 responseData += line;
 	        }
-        System.out.println(responseData);
+        //System.out.println(responseData);
+        session.setAttribute("alertMsg", "Eco Friendly를 이용해 주셔서 갑사합니다!");
+		session.invalidate();
+		        
+		return "redirect:/";
+	}
+	
+	@RequestMapping("naverlogout.us")
+	public String naverLogout(HttpSession session) throws IOException, ParseException {
+
+		session.setAttribute("alertMsg", "Eco Friendly를 이용해 주셔서 갑사합니다!");
 		session.invalidate();
 		
-		// 특정 쿠키 삭제
-        Cookie accessTokenCookie = new Cookie("accessToken", null);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(0);
-        response.addCookie(accessTokenCookie);
-        
 		return "redirect:/";
 	}
 	
@@ -241,7 +303,7 @@ public class UserController {
 		u.setUserId(checkId);
 		u.setEmail(checkEmail);
 		
-		System.out.println(userService.nameIdCheck(u));
+		// System.out.println(userService.nameIdCheck(u));
 		
 		return userService.nameIdCheck(u) > 0 ? "NNNNY" : "NNNNN";
 	}
