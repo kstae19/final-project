@@ -124,7 +124,6 @@
 							<div>
 								<span>${ c.userNo }</span>
 								<span>${ c.viewCount }</span>
-								<span>${ c.likeCount }</span>
 							</div>
 				
 							<a href="detail.ch?challengeNo=${ c.challengeNo }"><img src="${ c.changeName }"/></a>

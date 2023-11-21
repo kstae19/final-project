@@ -114,6 +114,13 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.checkLikeCount(sqlSession, map);
 	}
 	
+	/*
+	 * @Override public int selectLikedUser(HashMap<String, Integer> map) {
+	 * 
+	 * return challengeDao.selectLikedUser(sqlSession, map); }
+	 */
+
+	
 	@Override
 	public int selectLikeCount(int challengeNo) {
 	
@@ -172,6 +179,7 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
+
 
 
 

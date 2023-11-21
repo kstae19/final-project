@@ -41,6 +41,7 @@ public interface ChallengeService {
 	
 	// 좋아요 기능
 	int checkLikeCount(HashMap<String, Integer> map);
+	//int selectLikedUser(HashMap<String, Integer> map);
 	int selectLikeCount(int challengeNo);
 	
 	int insertLike(HashMap<String, Integer> map);

@@ -75,97 +75,140 @@
     		</article>
     		
     		
-    		<article id="likeCount">
-    			<div id="like">🤍</div>
-    			<div id="count">${ likeCount }</div> 
+    		<article id="likeCount"><!-- 로그인유저가 좋아요체크한 회원이면 💚로 보이기 -->
+    			<c:choose>
+	    			<c:when test="${ not empty sessionScope.loginUser }"> 
+	    				<button id="like"></button>
+	    			</c:when>
+	    			<c:otherwise>
+	    				<button disabled>🤍</button>
+    				</c:otherwise>
+    			</c:choose>
+    				<div id="count">${ likeCount }</div> 
     		</article>
     		
-    		<script>
-    		// checkLikeCount, increaseLikeCount, decreaseLikeCount
     		
-    		$('#likeCount').on('click', function(){ // Promise를 써야 ajax비동기를 동기로 사용할 수 있음 
-    			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
-    			
-		    		var checkLikeCount = function(){
-    					console.log('${likeCount}');
-		    			var deferred = $.Deferred();
-		    			//console.log('시작');
-		    			/* try{
-		    				deferred.resolve(message);
-		    				
-		    			} catch{
-		    				deferred.reject(error);
-		    			} */
-		    			
-		    			$.ajax({
-		    				url : 'checkLike.ch',
-		    				data : {
-		    					userNo : ${ sessionScope.loginUser.userNo },
-		    					challengeNo : ${ challenge.challengeNo }
-		    				},
-		    				success : function(data){ 
-		    					$('#count').html(${likeCount});
-		    					deferred.resolve(data);
-		    				},
-		    				error : function(err){
-		    					deferred.reject(err);
-		    				}
-		    				
-		    			});
+    		<script>
+    		// 1. 전역함수 선언
+    			var checkLikeCount = function(){
+	    					console.log('checkLikeCount때 : ${likeCount}');
+			    			var deferred = $.Deferred();
+			    			
+			    			$.ajax({
+			    				url : 'checkLike.ch',
+			    				data : {
+			    					userNo : ${ sessionScope.loginUser.userNo },
+			    					challengeNo : ${ challenge.challengeNo }
+			    				},
+			    				// 체크여부 확인 완료
+			    				success : function(data){ 
+			    					console.log('체크여부 확인 완료');
+			    					if(data == 'success'){ // 체크한 회원이면
+			    						$('#like').html('💚');
+			    					} else{
+			    						$('#like').html('🤍');
+			    					}
+			    				},
+			    				// 체크여부 확인 불가
+			    				error : function(err){
+			    					deferred.reject(err);
+			    				}
+			    				
+			    			});
 		    			
 		    			return deferred.promise();	
 		    		};// checkLikeCount
 		    		
-		    		checkLikeCount()
-		    		.done(function(data){
-		    			//console.log(data);// 시작 + 라이크체크성공 순차적 접근
-		    			if(data == 'success'){
-		    				
-			    				$.ajax({
-	    		    				url : 'deleteLike.ch',
-	    		    				data : {
-	    		    					userNo : ${ sessionScope.loginUser.userNo },
-	    		    					challengeNo : ${ challenge.challengeNo },
-	    		    				},
-	    		    				success : function(result){
-	    		    					console.log(result);
-	    		    					
-	    		    					$('#like').html('🤍');
-	    	
-	    		    				},
-	    		    				error : function(){
-	    		    					
-	    		    					console.log('decraese연결 실패');
-	    		    					
-	    		    				}
-		    				})
-		    			}//if 
-		    			else {
-		    				
-			    				$.ajax({
-				    				url : 'insertLike.ch',
-				    				data : {
-				    					userNo : ${ sessionScope.loginUser.userNo },
-				    					challengeNo : ${ challenge.challengeNo },
-				    				},
-				    				success : function(result){
-				    					console.log(result);
-				    					
-				    					$('#like').html('💚');
-				    					$('#count').html(${likeCount} + 1);// + 는 String끼리 concat 하는 효과
-				    				},
-				    				error : function(){					
-				    					console.log('increase연결 실패'); 
-				    				}
-		    			})
+		    // 2. 페이지 로드되자마자 실행될 것
+    			$(function(){
+    				
+    				checkLikeCount();
+    			
+    			}); // jQuery끝
+    			
+    		
+    			// Promise를 써야 ajax비동기를 동기로 사용할 수 있음 
+    			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
+    			//	$('#content-area').on('click', '#likeCount', function(){
+    					
+    		  $(function(){		
+				// 클릭이벤트함수
+				$('likeCount').on('click', '#count', function(){
+			    		
+					checkLikeCount()
+		    		.done(function(checked){// 체크여부 확인 완료했을 때
 		    			
-		    			}// else
-		    		})// done
-		    		.fail(function(message){
-		    			console.log('좋아요수 체크 실패');
-		    		});// fail
-		    		
-    			});// click
+		    			
+		    				
+					    			if(checked == 'success'){ // 이미 체크한 회원이라면
+					    				console.log('done때 : ${likeCount}');
+						    				$.ajax({
+				    		    				url : 'deleteLike.ch',
+				    		    				data : {
+				    		    					userNo : ${ sessionScope.loginUser.userNo },
+				    		    					challengeNo : ${ challenge.challengeNo },
+				    		    				},
+				    		    				success : function(result){ // deleteLike 연결 성공
+				    		    					
+				    		    					console.log(result);
+				    		    				
+				    		    					if(result == 'success' ){// 좋아요 한행 삭제 성공
+				    		    						
+				    		    						console.log('좋아요 한행 삭제 성공');
+				    		    						$('#count').html(${likeCount}-1);// 디테일화면에 들어왔을 때 로드되는 좋아요수
+				    		    						//$('#like').html('🤍');
+				    		    						
+				    		    					} else {
+				    		    						console.log('좋아요 한행 삭제 실패');
+				    		    					}
+				    		    				},
+				    		    				error : function(){
+				    		    					
+				    		    					console.log('decraese연결 실패');
+				    		    					
+				    		    				}
+					    				})
+					    			}//if 
+					    			else { // 처음 체크하거나 취소후 재체크하는 회원이라면
+					    				
+						    				$.ajax({
+							    				url : 'insertLike.ch',
+							    				data : {
+							    					userNo : ${ sessionScope.loginUser.userNo },
+							    					challengeNo : ${ challenge.challengeNo },
+							    				},
+							    				success : function(result){ // insertLike에 연결 성공
+							    					
+							    					console.log(result);
+							    				
+							    					if(result == 'success'){ // 좋아요 한행 추가 성공
+							    						console.log('좋아요 한행 추가 성공');
+							    			
+							    						$('#count').html(${likeCount} + 1);
+							    						
+							    						
+							    						
+							    						//$('#like').html('💚');// + 는 String끼리 concat 하는 효과
+							    					} else {
+							    						console.log('좋아요 한행 추가 실패')
+							    					}
+			
+							    				},
+							    				error : function(){					
+							    					console.log('increase연결 실패'); 
+							    				}
+					    			})
+					    			
+					    			}// else	
+
+					    		})// done
+						    	.fail(function(message){// 체크여부 확인 실패했을 때
+						    			console.log('좋아요수 체크 실패');
+						    	});// fail
+				});// 클릭이벤트함수
+    		  })//jQuery끝
+    		
+    	
     		
    
     		
@@ -321,7 +364,7 @@
 		    </script>
 		    		
     		
-    		<c:if test="${  sessionScope.loginUser.userNo eq challenge.userNo }">
+    		<c:if test="${  loginUser.userNo eq challenge.userNo }">
     			<button><a href="#">수정</a></button><button><a href="#">삭제</a></button>
     		</c:if>
     		

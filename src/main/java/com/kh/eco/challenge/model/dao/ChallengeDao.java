@@ -71,6 +71,13 @@ public class ChallengeDao {
 		return sqlSession.selectOne("challengeMapper.checkLikeCount", map);
 	}
 
+	/*
+	 * public int selectLikedUser(SqlSessionTemplate sqlSession, HashMap<String,
+	 * Integer> map) {
+	 * 
+	 * return sqlSession.selectOne("challengeMapper.selectLikedUser", map); }
+	 */
+	
 	public int selectLikeCount(SqlSessionTemplate sqlSession, int challengeNo) {
 		
 		return  sqlSession.selectOne("challengeMapper.selectLikeCount", challengeNo);
@@ -103,6 +110,8 @@ public class ChallengeDao {
 		
 		return sqlSession.update("challengeMapper.deleteChallenge", challengeNo);
 	}
+
+
 
 
 

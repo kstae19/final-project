@@ -3,6 +3,7 @@ package com.kh.eco.challenge.controller;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,15 +19,19 @@ public class AjaxController {
 	
 	
 	@RequestMapping(value="checkLike.ch") // produce="json"안해야 success가 돌아감
-	public String checkLikeCount(int userNo, int challengeNo) {
+	public String checkLikeCount(int userNo, int challengeNo, Model model) {
 		System.out.println(userNo + "   " + challengeNo);
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
 		map.put("challengeNo", challengeNo);
 		
-		if(challengeService.checkLikeCount(map) > 0) {
-			//System.out.println("좋아요 여부 : " + challengeService.checkLikeCount(map) );
+		System.out.println("좋아요여부 : " + challengeService.checkLikeCount(map));
+		if(challengeService.checkLikeCount(map) > 0) { // 좋아요 이미 체크한 회원
+			
+			
+			//model.addAttribute("likedUser", challengeService.selectLikedUser(map)); => 가는 페이지가 detailView가 아닌가봐..
+			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
 			return "success";
 		} 
 		else {
