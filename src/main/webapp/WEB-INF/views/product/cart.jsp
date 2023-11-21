@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -75,6 +76,11 @@ h3{
 	padding: 0%;
 	margin:0;
 }
+.qty>input{
+	padding:5px 2px 5px 10px;
+	width:30px;
+	text-align:center;
+}
 
 </style>
 
@@ -93,55 +99,75 @@ h3{
 			<div style="width:20%;">수량</div>
 			<div style="width:20%;">주문 금액</div>
 		</div>
-		<!-- 
-		<div class="item">
-			<span><input type="checkbox"></span>
-			<div class="item-info">
-				<img src="resources/images/product/chocolaCokie1.jpg">
-				<div>
-					<a href="#">헬렌스 쿠키</a><br>
-					<a href="product.detail?productNo=2" class="product-name"><h3>비건 수제 쿠키 70g</h3></a><br>
-					<div>상품 설명이 어쩌고저쩌고 룰루루루 상품 설명이 어쩌고저쩌고 
-						룰루루루 상품 설명이 어쩌고저쩌고 룰루루루 상품 설명이 어쩌고저쩌고 룰루루루 상품 설명이 어쩌고저쩌고 룰루루루</div>
-					<span>레몬 쿠키</span>
-					<span> 12000원 </span>
+
+		 <form action="listOrderForm" method="post">
+		 <c:choose>
+		 	<c:when test="${empty cartItems }">
+		 	<div class="item">
+			<span><input type="checkbox" disabled></span>
+				<div class="item-info">		
 				</div>
-			</div>
-			<div class="qty"><button>-</button>1<button>+</button>
-				<br>
-				<a href="#">삭제하기</a></div>
-			<div class="price">가격 <br><button>결제하기</button></div>
-		</div>
-		 -->
-		<c:forEach items="${cartItems}" var="i">
+				<div class="qty">아이템을 추가하세요.</div>
+				<div class="price">가격 
+				</div>
+		 	</c:when>
+		 	<c:otherwise>
+			<c:forEach items="${cartItems}" var="i" varStatus="status">
 			<div class="item">
 			<span><input type="checkbox"></span>
 				<div class="item-info">
-					<img src="${i.product.mainImg }">
+					<!-- 상품 메인 이미지 -->
+					<img src="${i.mainImg }">
+					
+					<!-- 상품 정보 -->
 					<div>
-						<a href="#" class="brand-${i.product.brandNo }">${i.product.brandName }</a><br>
-						<a href="product.detail?productNo=${i.product.productNo }" class="product-name"><h3>${i.product.productName }</h3></a><br>
-						<div>${i.product.productInfo }</div>
-						<span class="option ${i.option.optionNo }">${i.option.optionName }</span>
-						${i.option.price }원
+						<a href="#" class="brand-${i.brandNo }">${i.brandName }</a> 
+						<a href="product.detail?productNo=${i.productNo }" class="product-name"><h3>${i.productName }</h3></a>
+						<div>${i.productInfo }</div>
+						<span class="option ${i.optionNo }">${i.optionName }</span>
+						<div class="price-one">${i.price }원</div>
 					</div>
 				</div>
-				<div class="qty"><button onclick="qtyChange(-1, this);">-</button>
-				<input type="number" min="1" max="10" value="${i.qty }" readonly>
-				<button onclick="qtyChange(1,this);">+</button>
+					<!-- 수량정보 및 삭제버튼-->
+				<div class="qty">
+					<button onclick="qtyChange(-1, this);">-</button>
+					<input type="number" min="1" max="10" value="${i.qty }" readonly>
+					<button onclick="qtyChange(1,this);">+</button>
 					<br>
-					<a href="#">삭제하기</a></div>
-				<div class="price">가격 
+					<button onclick="removeItem(this);">삭제하기</button>
+				</div>
+					<!-- 가격정보 및 구매버튼-->
+					
+				<div class="price">
+					<span>${i.price * i.qty}원</span> 
 					<br>
-					<form action="product.order" type="post">
-					<input type="hidden" name="optionNo" value="${i.option.optionNo }">
-					<input type="hidden" name="qty" value="${i.qty }"/>
-					<button type="submit">결제하기</button>
-					</form>
+					<input type="hidden" name="itemList[${status.index }].mainImg" value="${i.mainImg }">
+					<input type="hidden" name="itemList[${status.index }].productNo" value="${i.productNo }">
+					<input type="hidden" name="itemList[${status.index }].productName" value="${i.productName }">
+					<input type="hidden" name="itemList[${status.index }].optionName" value="${i.optionName }">
+					<input type="hidden" name="itemList[${status.index }].optionNo" value="${i.optionNo }">
+					<input type="hidden" name="itemList[${status.index }].qty" value="${i.qty }"/>
+					<input type="hidden" name="itemList[${status.index }].price" value="${i.price }"/>
+					<input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo }">
+					<button type="button" onclick="orderthis(${i.optionNo },${i.qty },${sessionScope.loginUser.userNo });">이 상품 구매하기</button>
 				</div>
 		</div>
 		</c:forEach>
+		 	</c:otherwise>
+		 </c:choose>
+		 
+		 
+		 <div>
+		 	<button type="submit">
+		 		전체 주문하기
+		 	</button>
+		 </div>
+		</form>
 		<script>
+
+			function orderthis(optionNo, qty, userNo){
+					location.href="orderForm?optionNo="+optionNo+"&qty="+qty+"&userNo="+userNo;
+			}
 			function qtyChange(num, btn){
 				let $qtyspan = $(btn).siblings('input');
 				$qty = Number($qtyspan.val());
@@ -162,6 +188,7 @@ h3{
 				}
 				$.ajax({
 					url:'update.cart',
+					method : 'POST',
 					data :{userNo:'${sessionScope.loginUser.userNo}',
 						  optionNo : $option.attr('class').substring(7),
 						  qty : $qty},
@@ -174,7 +201,35 @@ h3{
 					}
 				});
 				
-			}
+			};
+
+			function removeItem(btn){
+	
+				$item = $(btn).parents('.item');
+				$.ajax({
+					url : 'remove.item',
+					method : 'POST',
+					data : {
+						userNo : '${sessionScope.loginUser.userNo}',
+						optionNo : $item.find('span[class^=option]').attr('class').substring(7)
+					},
+					success: e =>{
+						console.log(e);
+						if(e=='completed'){
+							alert('삭제되었습니다.');
+							$item.empty();
+						}
+						else{
+							alert('삭제 실패..');
+						}
+					},
+					error : ()=>{
+						console.log('에이젝스 망이야');
+					}
+				})
+			};
+			
+
 		</script>
 	</div>
 </div>
