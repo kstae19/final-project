@@ -8,14 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.eco.product.model.service.ProductService;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.OrderCart;
 import com.kh.eco.product.model.vo.ProductLike;
-import lombok.Setter;
-import lombok.ToString;
 
 @Controller
 public class ProductController {
@@ -27,19 +26,6 @@ public class ProductController {
 	public String productHome(Model model) {
 		model.addAttribute("productList", productService.selectProductList());
 		return "product/productHome";
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "product.like", produces="text/html; charset=UTF-8")
-	public String like(ProductLike like) {
-		if(checkLike(like).equals("Y")) {
-			//이미 좋아요 되어있으니까 좋아요를 빼야대
-			return productService.removeLike(like)==1? "removed" : "remove failed";
-		}else {
-			//좋아요를 추가하면 돼
-			int result = productService.addLike(like);
-			return result>0? "added":"failed to add like";		
-		}
 	}
 	
 	@ResponseBody

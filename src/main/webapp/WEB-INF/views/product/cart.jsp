@@ -156,12 +156,13 @@ h3{
 		 	</c:otherwise>
 		 </c:choose>
 		 
-		 
+		 <c:if test="${!empty cartItems }">
 		 <div>
 		 	<button type="submit">
 		 		전체 주문하기
 		 	</button>
 		 </div>
+		 </c:if>
 		</form>
 		<script>
 

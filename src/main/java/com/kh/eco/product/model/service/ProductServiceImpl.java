@@ -108,7 +108,6 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	@Transactional
 	public int orderProduct(Order order) {
 		int orderResult = dao.insertOrder(sqlSession, order);
 		int itemResult =1;

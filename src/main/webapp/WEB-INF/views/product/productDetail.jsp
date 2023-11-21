@@ -144,10 +144,12 @@ div {
 				<img src="${p.mainImg }">
 			</div>
 			<div id="product-info">
+			<form action="listOrderForm" method="post">
 				<div id="productTitle">
 					<div id="productName">
 						<h1>${p.productName }</h1>
 					</div>
+					
 					<div id="like-star">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
@@ -176,7 +178,7 @@ div {
 					<div id="briefInfo">${p.productInfo }</div>
 					
 					<div id="choice">
-						<form action="orderForm" method="get">
+
 							<select name="optionNo" required>
 								<option value="0">옵션을 선택하세요</option>
 								<c:forEach items="${p.optionList }" var="option">
@@ -201,9 +203,9 @@ div {
 							<p>로그인 후 상품 주문이 가능합니다.</p>
 						</c:otherwise>
 						</c:choose>
-						</form>
 					</div><!-- 옵션 선택 영역 끝 -->
 				</div><!-- 제품 설명영역 끝 -->
+			</form>
 			</div>
 		</div>
 				<script>
