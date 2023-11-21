@@ -71,20 +71,25 @@ public class ChallengeDao {
 		return sqlSession.selectOne("challengeMapper.checkLikeCount", map);
 	}
 
-	public int increaseLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
+	/*
+	 * public int selectLikedUser(SqlSessionTemplate sqlSession, HashMap<String,
+	 * Integer> map) {
+	 * 
+	 * return sqlSession.selectOne("challengeMapper.selectLikedUser", map); }
+	 */
+	
+	public int selectLikeCount(SqlSessionTemplate sqlSession, int challengeNo) {
 		
-		return sqlSession.update("challengeMapper.increaseLikeCount", map);
+		return  sqlSession.selectOne("challengeMapper.selectLikeCount", challengeNo);
 	}
+
+
 	public int insertLike(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		
 		return sqlSession.insert("challengeMapper.insertLike", map);
 	}
-	
 
-	public int decreaseLikeCount(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
-		
-		return sqlSession.update("challengeMapper.decreaseLikeCount", map);
-	}
+
 	public int deleteLike(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
 		
 		return sqlSession.delete("challengeMapper.deleteLike", map);
@@ -105,6 +110,9 @@ public class ChallengeDao {
 		
 		return sqlSession.update("challengeMapper.deleteChallenge", challengeNo);
 	}
+
+
+
 
 
 

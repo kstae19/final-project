@@ -207,7 +207,12 @@ public class ChallengeController {
 	
 	// 게시글 상세조회
 	@RequestMapping("detail.ch")
-	public String selectChallengeDetail(int challengeNo, Model model) {
+	public String selectChallengeDetail(int challengeNo, /*int userNo,*/ Model model) {
+		
+		/*
+		 * // 변수 HashMap<String, Integer> map = new HashMap(); map.put("userNo",
+		 * userNo); map.put("challengeNo", challengeNo);
+		 */
 		
 		// 1. 성공적으로 조회수 증가시
 		if(challengeService.increaseViewCount(challengeNo) > 0) {
@@ -215,7 +220,10 @@ public class ChallengeController {
 			//System.out.println("내가 찍히면 조회수 증가" + challengeService.increaseViewCount(challengeNo));
 			
 			// 2. boardDetailView.jsp상 필요한 데이터를 조회 
-			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo)); 
+			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo));
+			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
+			//model.addAttribute("likedUser", challengeService.selectLikedUser(map));// detailView로 가야하기에 여기서 addAttribute
+			
 			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(challengeNo) );
 			return "challenge/challengeDetailView";
 			
