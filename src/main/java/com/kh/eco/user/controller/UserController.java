@@ -139,7 +139,7 @@ public class UserController {
 										+ "<h1>인증번호 : " + secret + "</h1>"
 									+ "</div>"
 									+ "<br>"
-									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>이 인증번호는 1시간 뒤 만료됩니다.</h3>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>인증번호를 통해서 본인의 이메일 인증을 하세요.</h3>"
 								+ "<div>"
 							+ "</body>"
 						+ "</html>", true);
@@ -225,25 +225,31 @@ public class UserController {
 		
 		User emailUser = userService.emailUser(u);
 		
-		int checkEmail = 0;
-		
 		if(naverLoginUser > 0) {
 			if (emailCheck(email) == "NNNNY") {
 				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+				session.setAttribute("checkEmail" , 1);
 				mv.addObject("email", email);
 				mv.setViewName("user/naverUserEnrollForm");
 			} else {
-				session.setAttribute("loginUser", emailUser);
-				session.setAttribute("accessNToken", accessNToken);
-				session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
-				mv.setViewName("redirect:/");
+				if((int)session.getAttribute("checkEmail") > 0) {
+					session.setAttribute("alertMsg", "이미 가입된 이메일 주소가 있습니다!");
+					mv.setViewName("redirect:/");
+				} else {
+					session.setAttribute("loginUser", emailUser);
+					session.setAttribute("accessNToken", accessNToken);
+					session.setAttribute("alertMsg", "로그인에 성공했습니다!!");
+					mv.setViewName("redirect:/");
+				}
 			}
+
 		} else {
 			if (emailCheck(email) == "NNNNN") {
 				session.setAttribute("alertMsg", "이미 가입된 이메일 주소가 있습니다!");
 				mv.setViewName("redirect:/");
 			} else {
 				session.setAttribute("alertMsg", "최초 로그인시 가입이 필요합니다!");
+				session.setAttribute("checkEmail" , 1);
 				userService.insertNaver(nu);
 				mv.addObject("email", email);
 				mv.setViewName("user/naverUserEnrollForm");
@@ -375,7 +381,7 @@ public class UserController {
 										+ "<h1> - 임시 비밀번호 - </h1><br><h1>" + fPwd + "</h1>"
 									+ "</div>"
 									+ "<br>"
-									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>임시 비밀번호를 통한 로그인 후 추후 변경해주세요.</h3>"
+									+ "<h3 style='color:darkgreen; margin-top:20px; text-align:center'>임시 비밀번호로 로그인 후 비밀번호를 변경해주세요.</h3>"
 								+ "<div>"
 							+ "</body>"
 						+ "</html>", true);
