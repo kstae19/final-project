@@ -99,11 +99,11 @@
 	 
 	 #sns-center {
 	 	margin: auto;
-	 	width : 232px;
+	 	width : 252px;
 	 }
 	 
 	 .sns-button > img {
-	 	width : 230px;
+	 	width : 250px;
 	 	height : 60px;
 	 	margin-top : 10px;
 	 	margin-bottom : 10px;
@@ -150,10 +150,10 @@
 				<h1>소셜 로그인</h1>
 				<div id="sns-center">
 					<a id="naver-login" class="sns-button">
-						<img src="resources/images/user/naver_btnG_success.png">
+						<img src="resources/images/user/Naver.png">
 					</a>
 					<a id="kakao-login" class="sns-button">
-						<img src="resources/images/user/kakao_login_large_narrow.png">
+						<img src="resources/images/user/Kakao.png">
 					</a>
 				</div>
 			</div>
