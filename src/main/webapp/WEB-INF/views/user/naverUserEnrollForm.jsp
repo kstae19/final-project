@@ -91,7 +91,7 @@
 					<b id="enroll-info">*필수 입력사항</b>
 				</div>
 				<div class="enroll-border rd">
-					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required>
+					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required >
 					<div id="idcheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
@@ -104,13 +104,13 @@
 					<div id="namecheckResult" style="font-size:0.8em; display:none;" class="Result">
 					
 					</div>
-					
 					<br>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email">
+				
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email" value="${ email }" readonly>
 					<div class="floatleft">
-						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled>
-						<input type="button" class="btn btn-secondary" id="secretbtn" onclick="send();" value="전송">
-						<div id="emailcheckResult" style="font-size:0.8em; display:none;" class="Result">
+						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled readonly>
+						<input type="button" class="btn btn-secondary" id="secretbtn" onclick="send();" value="전송" disabled>
+						<div id="emailcheckResult" style="font-size:0.8em; display:none;" class="Result" >
 					
 						</div>
 					</div>
@@ -158,38 +158,6 @@
 			const $enrollFormSubmit = $('#enroll-form :submit');
 			
 			var checksecret = 0;
-			
-			$secretInput.keyup(() => {
-			
-				if($secretInput.val().length >= 6){
-					$.ajax({
-						url : 'check',
-						data : {
-							checkSecret : $secretInput.val()
-						},
-						success : result => {
-							if(result.substr(4) === 'N'){ // 사용불가능
-								$checkEmailResult.show().css('color', 'crimson').text('인증번호 불일치..')
-								$enrollFormSubmit.attr('disabled', true);
-								checksecret = 0;
-							}
-							else { // 사용가능
-								$checkEmailResult.show().css('color', 'green').text('인증번호 일치!!')
-								$enrollFormSubmit.removeAttr('disabled');
-								checksecret = 1;
-							}
-						},
-						error : () => {
-							console.log('이메일 인증번호용 AJAX통신 실패~!')
-						}
-					});
-					console.log(checksecret);
-				}
-				else {
-					$checkEmailResult.hide();
-				}
-			});
-			
 			
 			$idInput.keyup(() => {
 				// console.log($idInput.val());
@@ -260,13 +228,10 @@
 			
 			$('body').on("click", () => {
 				
-				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 && $emailInput.val().length > 0){
+				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 ){
 					
 					// 입력값이 있는 경우
-					if ($emailInput.val().length > 0 && $secretInput.val().length === 0) {
-					    $enrollFormSubmit.attr('disabled', true);
-					} 
-					else if ($postInput.val().length > 0 && $detailAddressInput.val().length === 0) {
+					if ($postInput.val().length > 0 && $detailAddressInput.val().length === 0) {
 					    $enrollFormSubmit.attr('disabled', true);
 					} 
 					else {

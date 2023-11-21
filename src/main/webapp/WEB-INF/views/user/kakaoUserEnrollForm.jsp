@@ -39,7 +39,7 @@
 	 	margin: auto;
 	 	margin-bottom : 20px;
 	 	margin-top: 20px;
-	 	border : 1px solid lightgray;
+	 	border : 1px solid #28a745;
 	 	border-radius : 33px;
 	}
 	
@@ -114,7 +114,6 @@
 					
 						</div>
 					</div>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="휴대전화(-포함)" id="phone" name="phone">
 				</div>
 				<div class="enroll-border">
 					<div class="floatleft">
@@ -122,7 +121,8 @@
 						<input type="button" class="btn btn-secondary" onclick="DaumPostcode()" value="검색">
 					</div>
 					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="주소" id="address" name="address">
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="상세주소" id="detailAddress" name="detailAddress">
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="상세주소" id="detailAddress" name="detailAddress"><br>
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="휴대전화(-포함)" id="phone" name="phone">
 				</div>
 				<div class="btns" align="center">
                    	<button type="submit" class="btn btn-primary" disabled>회원가입</button>
@@ -260,7 +260,7 @@
 			
 			$('body').on("click", () => {
 				
-				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 ){
+				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 && $emailInput.val().length > 0){
 					
 					// 입력값이 있는 경우
 					if ($emailInput.val().length > 0 && $secretInput.val().length === 0) {
