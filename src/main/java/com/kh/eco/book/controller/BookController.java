@@ -3,12 +3,18 @@ package com.kh.eco.book.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,12 +38,12 @@ public class BookController {
 	@Autowired
 	public BookService bookService;
 	
-	public static final String SERVICEKEY = "ttbrkd_gus_wl1746003";
+	public static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
 	
 	// 알라딘 api 검색기능 메소드
 	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
-		url += "?TTBKey=" + SERVICEKEY;
+		url += "?TTBKey=" + ALADINSERVICEKEY;
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
 		url += "&MaxResults=" + maxResult;
 		url += "&output=JS";
@@ -123,7 +129,7 @@ public class BookController {
 	// 알라딘 api 상품조회 메소드
 	public Book bookLookUp(String ISBN) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
-		url += "?TTBKey=" + SERVICEKEY;
+		url += "?TTBKey=" + ALADINSERVICEKEY;
 		url += "&ItemId=" + ISBN;
 		url += "&ItemIdType=ISBN13";
 		url += "&Cover=Big";
@@ -333,11 +339,14 @@ public class BookController {
 	
 	// 독후감 게시판 작성
 	@RequestMapping("reportEnrollForm.bk")
-	public String reportEnrollForm() {
+	public String reportEnrollForm(BookReport bookReport) {
 		
-		
-		
-		
+		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
+			System.out.println("성공");
+		} else { // 작성 실패
+			System.out.println("실패!");
+		}
+		return "redirect:bookreport";
 	}
 	 
 	// 독후감 게시판 상세조회
@@ -357,6 +366,135 @@ public class BookController {
 		
 		return "book/book/reportDetail";
 	}
+	
+	// 독후감 게시글 수정 포워딩
+	@RequestMapping("reportUpdate.bk")
+	public String reportUpdate(int reportNo, Model model) {
+		
+		model.addAttribute("br", bookService.reportDetail(reportNo));
+		
+		return "book/book/reportEnrollForm";
+	}
+	
+	// 독후감 게시글 수정
+	@RequestMapping("reportUpdateForm.bk")
+	public String reportUpdateForm(BookReport bookReport) {
+		
+		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
+			System.out.println("성공");
+		} else { // 수정 실패
+			System.out.println("실패!");
+		}
+		
+		return "redirect:bookreport";
+	}
+	
+	// 독후감 게시글 삭제
+	@RequestMapping("reportDelete.bk")
+	public String reportDelete(int reportNo) {
+		
+		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
+			System.out.println("성공");
+		} else { // 삭제 실패
+			System.out.println("실패");
+		}
+		
+		return "redirect:bookreport";
+	}
+	
+	// 독후감 게시글 신고
+	@RequestMapping("reportBlack.bk")
+	public String reportBlack(int reportNo, String userId, int userNo, HttpSession session) {
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportNo", reportNo);
+		map.put("userId", userId);
+		map.put("userNo", userNo);
+		
+		if(bookService.reportBlack(map) > 0) {
+			session.setAttribute("alert", "신고 완료");
+		} else { // 신고 실패
+			System.out.println("실패");
+		}
+		return "redirect:bookreport";
+	}
+	
+	
+	// 환경사전 api
+	@RequestMapping("ecodictionary")
+	public String ecoDictionary() throws IOException {
+		String clientId = "vzhAW8vm_5bAc_CGqL5k"; //애플리케이션 클라이언트 아이디
+        String clientSecret = "S3pHBtYEka"; //애플리케이션 클라이언트 시크릿
+
+        String text = null;
+        try {
+            text = URLEncoder.encode("환경", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("검색어 인코딩 실패",e);
+        }
+
+	    String apiURL = "https://openapi.naver.com/v1/search/encyc.json"; // JSON 결과
+	    apiURL += "?query=" + text;    
+	    apiURL += "&display=100";
+	    apiURL += "&start=1";
+	    //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
+	
+	    Map<String, String> requestHeaders = new HashMap<>();
+	    requestHeaders.put("X-Naver-Client-Id", clientId);
+	    requestHeaders.put("X-Naver-Client-Secret", clientSecret);
+	    String responseBody = get(apiURL,requestHeaders);
+	    
+	    System.out.println(responseBody);
+	    
+	    return "book/book/ecoList";
+	}
+	// 네이버 api 메소드
+	private static String get(String apiUrl, Map<String, String> requestHeaders){
+	    HttpURLConnection con = connect(apiUrl);
+	    try {
+	        con.setRequestMethod("GET");
+	        for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
+	            con.setRequestProperty(header.getKey(), header.getValue());
+	        }
+	        int responseCode = con.getResponseCode();
+	        if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+	            return readBody(con.getInputStream());
+	        } else { // 오류 발생
+	            return readBody(con.getErrorStream());
+	        }
+	    } catch (IOException e) {
+	        throw new RuntimeException("API 요청과 응답 실패", e);
+	    } finally {
+	        con.disconnect();
+	    }
+	}
+	// 네이버 api 메소드
+	private static HttpURLConnection connect(String apiUrl){
+	    try {
+	        URL url = new URL(apiUrl);
+	        return (HttpURLConnection)url.openConnection();
+	    } catch (MalformedURLException e) {
+	        throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
+	    } catch (IOException e) {
+	        throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
+	    }
+	}
+	// 네이버 api 메소드
+	private static String readBody(InputStream body){
+	    InputStreamReader streamReader = new InputStreamReader(body);
+	
+	    try (BufferedReader lineReader = new BufferedReader(streamReader)) {
+	        StringBuilder responseBody = new StringBuilder();
+	        String line;
+	        while ((line = lineReader.readLine()) != null) {
+	            responseBody.append(line);
+	        }
+	        return responseBody.toString();
+	    } catch (IOException e) {
+	        throw new RuntimeException("API 응답을 읽는 데 실패했습니다.", e);
+	    }
+	}
+	
 	
 	
 	
