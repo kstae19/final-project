@@ -102,6 +102,7 @@
 			    				},
 			    				// 체크여부 확인 완료
 			    				success : function(data){ 
+			    					deferred.resolve(data);
 			    					console.log('체크여부 확인 완료');
 			    					if(data == 'success'){ // 체크한 회원이면
 			    						$('#like').html('💚');
@@ -133,13 +134,13 @@
     					
     		  $(function(){		
 				// 클릭이벤트함수
-				$('likeCount').on('click', '#count', function(){
+				$('#like').on('click',  function(){
 			    		
 					checkLikeCount()
 		    		.done(function(checked){// 체크여부 확인 완료했을 때
 		    			
-		    			
-		    				
+		    			const count = parseInt($('#count').html());
+		    		
 					    			if(checked == 'success'){ // 이미 체크한 회원이라면
 					    				console.log('done때 : ${likeCount}');
 						    				$.ajax({
@@ -155,8 +156,9 @@
 				    		    					if(result == 'success' ){// 좋아요 한행 삭제 성공
 				    		    						
 				    		    						console.log('좋아요 한행 삭제 성공');
-				    		    						$('#count').html(${likeCount}-1);// 디테일화면에 들어왔을 때 로드되는 좋아요수
-				    		    						//$('#like').html('🤍');
+				    		    						//$('#count').html(${likeCount}-1);// 디테일화면에 들어왔을 때 로드되는 좋아요수
+				    		    						$('#count').html(count - 1);
+				    		    						$('#like').html('🤍');
 				    		    						
 				    		    					} else {
 				    		    						console.log('좋아요 한행 삭제 실패');
@@ -183,12 +185,10 @@
 							    				
 							    					if(result == 'success'){ // 좋아요 한행 추가 성공
 							    						console.log('좋아요 한행 추가 성공');
+							    						$('#count').html(count + 1);
 							    			
-							    						$('#count').html(${likeCount} + 1);
-							    						
-							    						
-							    						
-							    						//$('#like').html('💚');// + 는 String끼리 concat 하는 효과
+							    						//$('#count').html($ {likeCount} + 1);
+							    						$('#like').html('💚');// + 는 String끼리 concat 하는 효과
 							    					} else {
 							    						console.log('좋아요 한행 추가 실패')
 							    					}

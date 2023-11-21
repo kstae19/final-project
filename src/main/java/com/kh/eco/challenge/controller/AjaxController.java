@@ -17,7 +17,7 @@ public class AjaxController {
 	private ChallengeService challengeService;
 	
 	
-	
+	// Model을 쓸거면 ajax를 쓰면 안돼 Java랑 JS섞어쓰지마
 	@RequestMapping(value="checkLike.ch") // produce="json"안해야 success가 돌아감
 	public String checkLikeCount(int userNo, int challengeNo, Model model) {
 		System.out.println(userNo + "   " + challengeNo);
@@ -28,10 +28,9 @@ public class AjaxController {
 		
 		System.out.println("좋아요여부 : " + challengeService.checkLikeCount(map));
 		if(challengeService.checkLikeCount(map) > 0) { // 좋아요 이미 체크한 회원
-			
-			
+
 			//model.addAttribute("likedUser", challengeService.selectLikedUser(map)); => 가는 페이지가 detailView가 아닌가봐..
-			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
+			//model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
 			return "success";
 		} 
 		else {
