@@ -434,7 +434,8 @@ public class BookController {
         }
 
 	    String apiURL = "https://openapi.naver.com/v1/search/encyc.json"; // JSON 결과
-	    apiURL += "?query=" + text;    
+	    apiURL += "?query=" + text;  
+	    apiURL += "&sort=sim";
 	    apiURL += "&display=100";
 	    apiURL += "&start=1";
 	    //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
