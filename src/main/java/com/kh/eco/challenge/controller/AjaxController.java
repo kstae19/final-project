@@ -20,6 +20,7 @@ public class AjaxController {
 	@RequestMapping(value="checkLike.ch") // produce="json"안해야 success가 돌아감
 	public String checkLikeCount(int userNo, int challengeNo) {
 		System.out.println(userNo + "   " + challengeNo);
+		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
 		map.put("challengeNo", challengeNo);

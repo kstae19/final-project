@@ -87,6 +87,7 @@
     			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
     			
 		    		var checkLikeCount = function(){
+    					console.log('${likeCount}');
 		    			var deferred = $.Deferred();
 		    			//console.log('시작');
 		    			/* try{
@@ -103,6 +104,7 @@
 		    					challengeNo : ${ challenge.challengeNo }
 		    				},
 		    				success : function(data){ 
+		    					$('#count').html(${likeCount} - 1);
 		    					deferred.resolve(data);
 		    				},
 		    				error : function(err){
@@ -127,9 +129,9 @@
 	    		    				},
 	    		    				success : function(result){
 	    		    					console.log(result);
-	    		    					console.log("decrease연결 성공");
+	    		    					
 	    		    					$('#like').html('🤍');
-	    		    					$('#count').html('${likeCount}');
+	    		    					$('#count').html(${likeCount} - 1);
 	    		    				},
 	    		    				error : function(){
 	    		    					
@@ -148,9 +150,9 @@
 				    				},
 				    				success : function(result){
 				    					console.log(result);
-				    					console.log("increase연결 성공");
+				    					
 				    					$('#like').html('💚');
-				    					$('#count').html('${likeCount}');
+				    					$('#count').html(${likeCount} + 1);// + 는 String끼리 concat 하는 효과
 				    				},
 				    				error : function(){					
 				    					console.log('increase연결 실패'); 
@@ -160,7 +162,7 @@
 		    			}// else
 		    		})// done
 		    		.fail(function(message){
-		    			console.log(message);
+		    			console.log('좋아요수 체크 실패');
 		    		});// fail
 		    		
     			});// click
