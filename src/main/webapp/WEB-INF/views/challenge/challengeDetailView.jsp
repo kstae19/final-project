@@ -104,7 +104,7 @@
 		    					challengeNo : ${ challenge.challengeNo }
 		    				},
 		    				success : function(data){ 
-		    					$('#count').html(${likeCount} - 1);
+		    					$('#count').html(${likeCount});
 		    					deferred.resolve(data);
 		    				},
 		    				error : function(err){
@@ -131,7 +131,7 @@
 	    		    					console.log(result);
 	    		    					
 	    		    					$('#like').html('🤍');
-	    		    					$('#count').html(${likeCount} - 1);
+	    	
 	    		    				},
 	    		    				error : function(){
 	    		    					
