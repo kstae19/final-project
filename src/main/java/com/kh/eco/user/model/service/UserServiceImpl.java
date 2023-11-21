@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.kh.eco.user.model.dao.UserDao;
 import com.kh.eco.user.model.vo.Cert;
 import com.kh.eco.user.model.vo.KakaoUser;
+import com.kh.eco.user.model.vo.NaverUser;
 import com.kh.eco.user.model.vo.User;
 
 @Service
@@ -36,12 +37,22 @@ public class UserServiceImpl implements UserService{
 	public User loginUser(User u) {
 		return userDao.loginUser(sqlSession, u);
 	}
+	
+	@Override
+	public User emailUser(User u) {
+		return userDao.emailUser(sqlSession, u);
+	}
 
 	@Override
 	public int idCheck(String checkId) {
 		return userDao.idCheck(sqlSession, checkId);
 	}
-
+	
+	@Override
+	public int emailCheck(String checkEmail) {
+		return userDao.emailCheck(sqlSession, checkEmail);
+	}
+	
 	@Override
 	public int sendMail(Cert cert) {
 		return userDao.insertSecret(sqlSession, cert);
@@ -211,6 +222,16 @@ public class UserServiceImpl implements UserService{
 	public int insertKakao(KakaoUser ku) {
 		return userDao.insertKakao(sqlSession, ku);
 	}
+	
+	@Override
+	public int selectNaver(String email) {
+		return userDao.selectNaver(sqlSession, email);
+	}
+	
+	@Override
+	public int insertNaver(NaverUser nu) {
+		return userDao.insertNaver(sqlSession, nu);
+	}
 
 	@Override
 	public int nameCheck(User u) {
@@ -233,6 +254,5 @@ public class UserServiceImpl implements UserService{
 	}
 
 	
-
 
 }
