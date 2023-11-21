@@ -7,10 +7,14 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.challenge.model.dao.ChallengeDao;
 import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.vo.PageInfo;
+
+
 
 @Service
 public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 implements
@@ -22,6 +26,7 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	private SqlSessionTemplate sqlSession;
 	
 	
+	// 게시글 전체조회
 	@Override
 	public int countChallengeList() {
 		
@@ -40,10 +45,11 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	}
 
 
+	// 게시글 검색결과 조회
 	@Override
-	public int countChallengeSearch(HashMap<String, String> map) {
+	public int countSearchList(HashMap<String, String> map) {
 		
-		return challengeDao.countChallengeSearch(sqlSession, map);
+		return challengeDao.countSearchList(sqlSession, map);
 	}
 	
 	/**
@@ -61,6 +67,31 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.selectSearchList(sqlSession, map, rowBounds);
 	}
 
+	
+	
+	
+	// 게시글 정렬 조회
+	@Override
+	public int countChallengeStatus(HashMap<String, String> map) {
+		
+		return challengeDao.countChallengeStatus(sqlSession, map);
+	}
+	
+	
+	@Override
+	public ArrayList<Challenge> selectChallengeStatus(HashMap<String, String> map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+
+		
+		return challengeDao.selectChallengeStatus(sqlSession, map, rowBounds);
+	}
+	
+	
+	
+	
+	// 상세조회 
 	@Override
 	public int increaseViewCount(int challengeNo) {
 		
@@ -73,18 +104,64 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.selectChallengeDetail(sqlSession, challengeNo);
 	}
 
-	@Override
-	public int increaseLikeCount(HashMap<String, Integer> map) {
 	
-		return challengeDao.increaseLikeCount(sqlSession, map);
+	
+	
+	// 좋아요
+	@Override
+	public int checkLikeCount(HashMap<String, Integer> map) {
+		
+		return challengeDao.checkLikeCount(sqlSession, map);
+	}
+	
+	/*
+	 * @Override public int selectLikedUser(HashMap<String, Integer> map) {
+	 * 
+	 * return challengeDao.selectLikedUser(sqlSession, map); }
+	 */
+
+	
+	@Override
+	public int selectLikeCount(int challengeNo) {
+	
+		return challengeDao.selectLikeCount(sqlSession, challengeNo);
 	}
 
 	@Override
-	public int decreaseLikeCount(HashMap<String, Integer> map) {
+	public int insertLike(HashMap<String, Integer> map) {
 	
-		return  challengeDao.decreaseLikeCount(sqlSession, map);
+		return challengeDao.insertLike(sqlSession, map);
 	}
 
+	@Override
+	public int deleteLike(HashMap<String, Integer> map) {
+		
+		return challengeDao.deleteLike(sqlSession, map);
+	}
+
+	/*
+	 * @Override public int increaseLikeCount(HashMap<String, Integer> map) {
+	 * 
+	 * int update = challengeDao.increaseLikeCount(sqlSession, map); int insert =
+	 * challengeDao.insertLike(sqlSession, map);
+	 * 
+	 * return update*insert; }
+	 * 
+	 * 
+	 * 
+	 * @Override public int decreaseLikeCount(HashMap<String, Integer> map) {
+	 * 
+	 * int update = challengeDao.decreaseLikeCount(sqlSession, map); int delete =
+	 * challengeDao.deleteLike(sqlSession, map);
+	 * 
+	 * return update*delete; }
+	 */
+
+
+	 
+	
+	
+	// 게시글 등록 수정 삭제
 	@Override
 	public int insertChallenge(Challenge c) {
 		
@@ -102,6 +179,18 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	
 }

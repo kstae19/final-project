@@ -28,6 +28,29 @@ public class ProductController {
 		model.addAttribute("productList", productService.selectProductList());
 		return "product/productHome";
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "product.like", produces="text/html; charset=UTF-8")
+	public String like(ProductLike like) {
+		if(checkLike(like).equals("Y")) {
+			//이미 좋아요 되어있으니까 좋아요를 빼야대
+			return productService.removeLike(like)==1? "removed" : "remove failed";
+		}else {
+			//좋아요를 추가하면 돼
+			int result = productService.addLike(like);
+			return result>0? "added":"failed to add like";		
+		}
+	}
+	
+	@ResponseBody
+	@GetMapping("check.like")
+	public String checkLike(ProductLike like) {
+		return productService.checkLike(like);
+	}
+	public int removeLike(ProductLike like) {
+		return productService.removeLike(like);
+	}	
+
 	
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {

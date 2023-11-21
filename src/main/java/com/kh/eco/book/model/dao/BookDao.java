@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
+import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.common.model.vo.PageInfo;
 
 @Repository
 public class BookDao {
@@ -58,6 +60,10 @@ public class BookDao {
 		return sqlSession.delete("bookMapper.ajaxDeleteBookReply", map);
 	}
 	
+	public int ajaxDeleteBookEco(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.delete("bookMapper.ajaxDeleteBookEco", map);
+	}
+	
 	public int reportCount(SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("bookMapper.reportCount");
 	}
@@ -74,6 +80,10 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.searchReportList", map, rowBounds);
 	}
 	
+	public int reportEnrollForm(SqlSessionTemplate sqlSession, BookReport bookReport) {
+		return sqlSession.insert("bookMapper.reportEnrollForm", bookReport);
+	}
+	
 	public int countReport(SqlSessionTemplate sqlSession, int rno) {
 		return sqlSession.update("bookMapper.countReport", rno);
 	}
@@ -81,5 +91,55 @@ public class BookDao {
 	public BookReport reportDetail(SqlSessionTemplate sqlSession, int rno) {
 		return sqlSession.selectOne("bookMapper.reportDetail", rno);
 	}
+	
+	public int reportUpdateForm(SqlSessionTemplate sqlSession, BookReport bookReport) {
+		return sqlSession.update("bookMapper.reportUpdateForm", bookReport);
+	}
+	
+	public int reportDelete(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.update("bookMapper.reportDelete", reportNo);
+	}
+	
+	public int reportBlack(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.reportBlack", map);
+	}
+	
+	public int ajaxSelectReportReplyCount(SqlSessionTemplate sqlSession, int reportNo) {
+		return sqlSession.selectOne("bookMapper.selectReportReplyCount", reportNo);
+	}
+	
+	public ArrayList<BookReportReply> ajaxSelectReportReply(SqlSessionTemplate sqlSession, int reportNo, RowBounds rowBounds) {
+		return (ArrayList)sqlSession.selectList("bookMapper.selectReportReply", reportNo, rowBounds);
+	}
+
+	public int ajaxInsertReportReply(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.insertReportReply", map);
+	}
+
+	public int ajaxUpdateReportReply(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.update("bookMapper.updateReportReply", map);
+	}
+
+	public int ajaxDeleteReportReply(SqlSessionTemplate sqlSession, int replyNo) {
+		return sqlSession.delete("bookMapper.deleteReportReply", replyNo);
+	}
+	
+	public int ajaxReplyBlack(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.insert("bookMapper.replyBlack", map);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -58,14 +58,41 @@ public interface BookService {
 	// 독후감 게시판 검색 조회
 	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi);
 	
+	// 독후감 게시판 작성
+	public int reportEnrollForm(BookReport bookReport);
+	
 	// 독후감 게시판 조회수 증가
 	public int countReport(int reportNo);
 	
 	// 독후감 게시판 상세조회
 	public BookReport reportDetail(int reportNo);
 	
+	// 독후감 게시판 수정
+	public int reportUpdateForm(BookReport bookReport);
+	
+	// 독후감 게시판 삭제
+	public int reportDelete(int reportNo);
+	
+	// 독후감 게시글 신고
+	public int reportBlack(HashMap map);	
+	
 	// 독후감 게시판 댓글 조회
-	public ArrayList<BookReportReply> selectReportReply(int reportNo);
+	public ArrayList<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi);
+	
+	// 독후감 게시판 댓글 개수 조회
+	public int ajaxSelectReportReplyCount(int reportNo);
+	
+	// 독후감 게시판 댓글 등록
+	public int ajaxInsertReportReply(HashMap map);
+	
+	// 독후감 게시판 댓글 수정
+	public int ajaxUpdateReportReply(HashMap map);
+	
+	// 독후감 게시판 댓글 삭제
+	public int ajaxDeleteReportReply(int replyNo);
+	
+	// 독후감 게시판 댓글 신고
+	public int ajaxReplyBlack(HashMap map);
 	
 	
 	

@@ -17,7 +17,7 @@
 
 <style>
 	div{
-		border : 2px solid darkgreen;
+		/*border : 2px solid darkgreen;*/
 		box-sizing: border-box;
 	
 	}
@@ -99,19 +99,26 @@
 	 
 	 #sns-center {
 	 	margin: auto;
-	 	width : 232px;
+	 	width : 252px;
 	 }
 	 
 	 .sns-button > img {
-	 	width : 230px;
+	 	width : 250px;
 	 	height : 60px;
 	 	margin-top : 10px;
 	 	margin-bottom : 10px;
+	 	cursor:pointer;
+	 }
+	 
+	 .regist-cursor{
+	 	cursor:pointer;
 	 }
 
 </style>
 </head>
 <body>
+	
+	
 	<jsp:include page="../common/header.jsp" />
 	
 	<div id="login-main">
@@ -119,26 +126,49 @@
 			<form action="login.us" method="post">
 				<div id="login-id" class="login">
 					<h1>로그인</h1>
-					<div class="login-center">
-						<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required>
-						<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required>
-						<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
-						<input type="checkbox"/> 아이디 저장
-					</div>
+					<c:choose>
+						<c:when test="${ empty cookie.saveId.value }">
+							<div class="login-center">
+								<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required value="${ cookie.saveId.value }">
+								<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required>
+								<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
+								<input type="checkbox" id="saveId" disabled/> 아이디 저장
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="login-center">
+								<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required value="${ cookie.saveId.value }">
+								<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required>
+								<button type="submit" class="btn btn-success" id="login-btn">로그인</button>
+								<input type="checkbox" id="saveId" checked/> 아이디 저장
+							</div>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</form>
 			<div id="login-sns" class="login">
 				<h1>소셜 로그인</h1>
 				<div id="sns-center">
 					<a id="naver-login" class="sns-button">
-						<img src="resources/images/user/naver_btnG_success.png">
+						<img src="resources/images/user/Naver.png">
 					</a>
 					<a id="kakao-login" class="sns-button">
-						<img src="resources/images/user/kakao_login_large_narrow.png">
+						<img src="resources/images/user/Kakao.png">
 					</a>
 				</div>
 			</div>
 		</div>
+		
+		<script>
+			$('#userId').click(() => {
+				if($('#userId').val() == ''){
+					$('#saveId').attr('disabled', true);
+				} 
+				else {
+					$('#saveId').removeAttr('disabled');
+				}	
+			})
+		</script>
 		
 		<script>
 			$('#kakao-login').click(() => {
@@ -146,21 +176,57 @@
 			});
 		</script>
 		
+		<script>
+			$('#naver-login').click(() => {
+				location.href = 'https://nid.naver.com/oauth2.0/authorize?client_id=Bm7N4g9KvV8b3Wl6cjN0&redirect_uri=http://localhost:8001/eco/ncode&response_type=code&state=test';
+			});
+		</script>
+		
+		<script>
+			$('#saveId').click(() => {
+			    if ($('#saveId').prop('checked')) {
+			        $.ajax({
+			            url: 'createCookie',
+			            data: {
+			                cookie: $('#userId').val()
+			            },
+			            success: (result) => {
+			            },
+			            error: () => {
+			                console.log('쿠키 생성용 AJAX통신 실패~!');
+			            }
+			        });
+			    } else {
+			        $.ajax({
+			            url: 'deleteCookie',
+			            data: {
+			                cookie: $('#userId').val()
+			            },
+			            success: (result) => {
+			            },
+			            error: () => {
+			                console.log('쿠키 삭제용 AJAX통신 실패~!');
+			            }
+			        });
+			    }
+			});
+		</script>
+		
 		<div id="regist-user">
 			<div id="regist">
-				<div id="search-id" onclick="location.href='#'">
+				<div id="search-id" onclick="location.href='findId'" class="regist-cursor">
 					<h4>아이디 찾기</h4>
 				</div>
 				<div id="bar">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
-				<div id="search-pwd" onclick="location.href='#'">
+				<div id="search-pwd" onclick="location.href='findPwd'" class="regist-cursor">
 					<h4>비밀번호 찾기</h4>
 				</div>
 				<div id="bar">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</div>
-				<div id="enroll-user" onclick="location.href='enroll'">
+				<div id="enroll-user" onclick="location.href='enroll'" class="regist-cursor">
 					<h4>회원가입</h4>
 				</div>
 			</div>
