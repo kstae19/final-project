@@ -9,7 +9,7 @@
 		<result column="EVENT_NO" property="eventNo"/>
 		<result column="EVENT_TITLE" property="eventTitle"/>
 		<result column="EVENT_CONTENT" property="eventContent"/>
-		<result column="EVENT_PLACE" property="evenetPlace"/>
+		<result column="EVENT_PLACE" property="eventPlace"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="UPLOAD_DATE" property="uploadDate"/>
 		<result column="PARTICIPANTS" property="participants"/>

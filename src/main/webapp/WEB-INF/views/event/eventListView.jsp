@@ -19,7 +19,15 @@
           initialView: 'dayGridMonth',
 		  events: [
 			  
-				<c:if test="${ not empty list}">
+			  title: 'BCH237',
+		      start: '2019-08-12T10:30:00',
+		      end: '2019-08-12T11:30:00',
+		      extendedProps: {
+		        department: 'BioChemistry'
+		      },
+		      description: 'Lecture'
+			  
+		/* 		<c:if test="${ not empty list}">
 					<c:forEach var="e" items="${list}">
 						{ 
 							id : ${e.eventNo},
@@ -34,17 +42,11 @@
 							 }
 						}
 					</c:forEach>
-				</c:if>
+				</c:if> */
 			]
         });
 
-		// var calendar = new FullCalendar.Calendar(calendarEl, {
-		// plugins: [ 'dayGrid','interaction' ],
-		// dateClick: function (info) {
-		// 		alert('Clicked on: ' + info.dateStr);
-		// }
-        
-      	// });
+
 	  calendar.render();
 	})
     </script>

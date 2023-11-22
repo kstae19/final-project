@@ -2,6 +2,7 @@ package com.kh.eco.event.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.eco.event.model.service.EventService;
@@ -25,38 +26,46 @@ public class EventController {
 	private EventService eventService;
 	
 	@RequestMapping("event")
-    public String selectEventList(){
+    public String selectEventList(Model model){
 
+		// eventListView로 갈 때 list 들고 가기
+		model.addAttribute("list", eventService.selectEventList());
+		
         return "event/eventListView";
         
     }
 	
-	@RequestMapping("enrollForm.ev")
-	public String eventEnrollForm() {
-		
-		return "event/eventErollForm";
-		
-	}
-	
-	@RequestMapping("detail.ev")
-	public String selectEventDetail() {
-		
-	}
-	
-	@RequestMapping("insert.ev")
-	public String insertEvent() {
-		
-	}
-	
-	@RequestMapping("update.ev")
-	public String updateEvent() {
-		
-	}
-
-	@RequestMapping("delete.ev")
-	public String deleteEvent() {
-		
-	}
+	/*
+	 * @RequestMapping("enrollForm.ev") public String eventEnrollForm() {
+	 * 
+	 * // 단순 페이지 forward return "event/eventErollForm";
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping("updateForm.ev") public String eventUpdateForm() {
+	 * 
+	 * // 단순 페이지 forward return "event/eventUpdateForm";
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping("detail.ev") public String selectEventDetail(int eventNo) {
+	 * 
+	 * 
+	 * 
+	 * return "event/eventDetailView"; // }
+	 * 
+	 * @RequestMapping("insert.ev") public String insertEvent(Event e) {
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping("update.ev") public String updateEvent(Event e) {
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping("delete.ev") public String deleteEvent(int eventNo) {
+	 * 
+	 * }
+	 */
     
 
 	

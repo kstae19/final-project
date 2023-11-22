@@ -13,7 +13,7 @@ public class Event {
 	private int eventNo;
 	private String eventTitle;
 	private String eventContent;
-	private String evenetPlace;
+	private String eventPlace;
 	
 	private String status;
 	private String originName;
