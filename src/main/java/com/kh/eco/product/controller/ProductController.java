@@ -43,6 +43,7 @@ public class ProductController {
 		String likeCheck = like.getUserNo() !=0 ? productService.checkLike(like) : "N";
 		model.addAttribute("like", likeCheck);
 		model.addAttribute("p", productService.selectProduct(like.getProductNo()));
+		System.out.println(model.getAttribute("p"));
 		model.addAttribute("images", productService.getImages(like.getProductNo()));
 		model.addAttribute("brand", productService.getBrand(like.getProductNo()));
 		model.addAttribute("review", productService.getRate(like.getProductNo()));
@@ -59,13 +60,11 @@ public class ProductController {
 		model.addAttribute("cartItems", cartItems);
 		return "product/cart";
 	}
-	@GetMapping("orderForm")
+	@PostMapping("orderForm")
 	public String orderForm(Order o, Model model) {
 		//주문상품 정보에는 상품명, 상품사진, 가격 , 수량
 		model.addAttribute("item", productService.getCartItem(o.getOptionNo()));
 		model.addAttribute("order", o);		
-		System.out.println(o);
-		System.out.println(model.getAttribute("item"));
 		return "product/orderForm";
 	}
 	@PostMapping("listOrderForm")
@@ -84,5 +83,9 @@ public class ProductController {
 			System.out.println("주문 실패");
 		}
 		return "redirect:/";
+	}
+	@GetMapping("orderList")
+	public String getOrderList() {
+		return "product/orderList";
 	}
 }

@@ -28,6 +28,7 @@ div {
 	height: 1000px;
 	margin: auto;
 }
+
 #criteria>div{
 text-align : center;
 font-size:18px;

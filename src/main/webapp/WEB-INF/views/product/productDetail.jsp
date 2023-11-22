@@ -144,7 +144,7 @@ div {
 				<img src="${p.mainImg }">
 			</div>
 			<div id="product-info">
-			<form action="listOrderForm" method="post">
+			<form action="orderForm" method="post">
 				<div id="productTitle">
 					<div id="productName">
 						<h1>${p.productName }</h1>
@@ -189,6 +189,7 @@ div {
 							<span id="price"></span>
 							
 							<br> 
+
 							<input type="hidden" value="${sessionScope.loginUser.userNo }" name="userNo">
 							<input type="number" value="1" min="1" max="10" required disabled name="qty">
 							<span id="totalPrice"></span><br>
