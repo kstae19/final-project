@@ -73,8 +73,8 @@ h2 {
 					<h2>주문 상품 정보</h2>
 						<c:if test="${not empty item }">
 							<div class="order-item">
-							<input type="hidden" name="optionNo" value="${item.optionNo }">
-							<input type="hidden" name="qty" value="${order.qty }">
+							<input type="hidden" name="items[0].optionNo" value="${item.optionNo }">
+							<input type="hidden" name="items[0].qty" value="${order.qty }">
 							<img src="${item.mainImg }">
 							<div>
 								<h5>${item.productName}</h5>

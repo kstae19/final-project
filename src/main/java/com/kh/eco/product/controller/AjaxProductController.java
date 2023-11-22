@@ -22,16 +22,14 @@ public class AjaxProductController {
 	@RequestMapping(value = "product.like", produces="text/html; charset=UTF-8")
 	public String like(ProductLike like) {
 		if(checkLike(like).equals("Y")) {
-			//이미 좋아요 되어있으니까 좋아요를 빼야대
 			return productService.removeLike(like)==1? "removed" : "remove failed";
 		}else {
-			//좋아요를 추가하면 돼
 			int result = productService.addLike(like);
 			return result>0? "added":"failed to add like";		
 		}
 	}
 	@ResponseBody
-	@GetMapping("check.like")
+	@GetMapping(value="check.like", produces="text/html; charset=UTF-8")
 	public String checkLike(ProductLike like) {
 		return productService.checkLike(like);
 	}
@@ -39,7 +37,7 @@ public class AjaxProductController {
 		return productService.removeLike(like);
 	}	
 	@ResponseBody
-	@GetMapping(value ="getPrice")
+	@GetMapping(value ="getPrice", produces="text/html; charset=UTF-8")
 	public String getPrice(int optionNo) {
 		String price = productService.getPrice(optionNo);
 		return price;
