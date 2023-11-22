@@ -121,18 +121,14 @@
 					<c:forEach var="c" items="${ list }">
 				
 						<div class="content-item">
-							<div>
-								<span>${ c.userNo }</span>
-								<span>${ c.viewCount }</span>
-							</div>
-				
+						
 							<a href="detail.ch?challengeNo=${ c.challengeNo }"><img src="${ c.changeName }"/></a>
 							<h6>${ c.challengeTitle }</h6>
 							
 							<div>
-								<span>${ c.categoryNo }</span>
-								<span>${ c.successLimit }</span>
-								<span>${ c.startDate }</span>
+								<span>${ c.viewCount }조회수 |</span>
+								<span>${ c.successLimit }% 목표 |</span>
+								<span>${ c.startDate }부터 시작</span>
 							</div>
 						</div>
 						

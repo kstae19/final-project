@@ -201,9 +201,20 @@
 		SET 
 						VIEW_COUNT = VIEW_COUNT + 1
 		WHERE 	
-						CHALLENGE_NO = #{challengeNo}
+						CHALLENGE_NO = #{ challengeNo }
 	</update>	
 	
+	<!-- 유저아이디 조회 -->
+	<select id="selectUserId" parameterType="_int" resultType="string">
+		SELECT
+						USER_ID
+		FROM
+						TB_USER
+		JOIN
+						TB_CHALLENGE USING(USER_NO)
+		WHERE
+						CHALLENGE_NO = #{ challengeNo }
+	</select>
 	
 	<!-- 카테고리이름 조회 -->
 	<select id="selectCategoryName" parameterType="_int" resultType="string">
@@ -214,7 +225,7 @@
 		JOIN
 						TB_CHALLENGE USING (CATEGORY_NO)
 		WHERE
-						CATEGORY_NO = #{categoryNo}
+						CHALLENGE_NO = #{ challengeNo }
 	
 	</select>
 	
