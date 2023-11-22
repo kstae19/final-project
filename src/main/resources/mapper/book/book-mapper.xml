@@ -46,16 +46,20 @@
 	</select>
 
 	<!-- 도서정보insert -->
-	<insert id="insertBook" parameterType="String">
+	<insert id="insertBook" parameterType="Book">
 		INSERT INTO TB_BOOK
 						(
 						ISBN13,
-						BOOK_COUNT
+						BOOK_COUNT,
+						BOOK_TITLE,
+						BOOK_IMG
 						)
 		VALUES
 						(
-						#{ISBN},
-						1
+						#{ISBN13},
+						1,
+						#{bookTitle},
+						#{bookImg}
 						)
 	</insert>
 	

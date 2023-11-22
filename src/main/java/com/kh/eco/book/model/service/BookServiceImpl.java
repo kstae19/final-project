@@ -35,8 +35,8 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public int insertBook(String ISBN) {
-		return bookDao.insertBook(sqlSession, ISBN);
+	public int insertBook(Book book) {
+		return bookDao.insertBook(sqlSession, book);
 	}
 
 	@Override

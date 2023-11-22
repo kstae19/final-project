@@ -282,7 +282,7 @@ public class BookController {
 		Book book = bookLookUp(ISBN);
 		
 		if(count == 0) { // 조회수가 0일때
-			int bookCount = bookService.insertBook(ISBN);
+			int bookCount = bookService.insertBook(book);
 			if(bookCount > 0) { // 조회수 추가 성공
 				book.setBookCount(bookCount);
 			} else { // 조회수 추가 실패
@@ -421,6 +421,7 @@ public class BookController {
 	
 	
 	// 환경사전 api
+	// 나중에 해야지
 	@RequestMapping("ecodictionary")
 	public String ecoDictionary() throws IOException {
 		String clientId = "vzhAW8vm_5bAc_CGqL5k"; //애플리케이션 클라이언트 아이디
@@ -497,7 +498,14 @@ public class BookController {
 	}
 	
 	
-	
+	// 마이페이지 포워딩(원래는 로그인하지 않으면 들어가지 못함)
+	@RequestMapping("bookmypage")
+	public String bookMyPage() {
+		
+		
+		
+		return "book/mypage/bookMyPage";
+	}
 	
 	
 	

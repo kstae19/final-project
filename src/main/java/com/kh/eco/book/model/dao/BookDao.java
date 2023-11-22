@@ -20,8 +20,8 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.countList");
 	}
 	
-	public int insertBook(SqlSessionTemplate sqlSession, String ISBN) {
-		return sqlSession.insert("bookMapper.insertBook", ISBN);
+	public int insertBook(SqlSessionTemplate sqlSession, Book book) {
+		return sqlSession.insert("bookMapper.insertBook", book);
 	}
 	
 	public int increaseBook(SqlSessionTemplate sqlSession, String ISBN) {
