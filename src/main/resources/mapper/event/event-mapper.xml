@@ -22,6 +22,8 @@
 						EVENT_NO,
 						EVENT_TITLE,
 						EVENT_PLACE,
+						CHANGE_NAME,
+						UPLOAD_DATE,
 						CATEGORY_NO
 		FROM
 						TB_EVENT
