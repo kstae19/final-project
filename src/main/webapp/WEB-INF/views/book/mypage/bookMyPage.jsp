@@ -55,7 +55,9 @@
 </head>
 <body>
 
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
+	<jsp:include page="../common/myPageLeftBanner.jsp" />
 	
     <div class="outer">
         <h3>북마크 도서 목록</h3>

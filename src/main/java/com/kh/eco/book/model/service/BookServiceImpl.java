@@ -35,8 +35,8 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public int insertBook(String ISBN) {
-		return bookDao.insertBook(sqlSession, ISBN);
+	public int insertBook(Book book) {
+		return bookDao.insertBook(sqlSession, book);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	@Transactional
+	@Transactional("transactionManager")
 	public int ajaxDeleteBookReply(HashMap map) {
 		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
 		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);

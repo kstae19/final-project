@@ -16,7 +16,7 @@ public interface BookService {
 	public ArrayList<Book> countList();
 	
 	// 도서정보 조회수 추가
-	public int insertBook(String ISBN);
+	public int insertBook(Book book);
 	
 	// 도서정보 조회수 증가
 	public int increaseBook(String ISBN);
