@@ -128,6 +128,21 @@ public class BookDao {
 		return sqlSession.insert("bookMapper.replyBlack", map);
 	}
 	
+	public int bookmarkCountMyPage(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("bookMapper.bookmarkCountMyPage", userNo);
+	}
+	
+	public ArrayList<Book> bookmarkMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.bookmarkMyPage", userNo, rowBounds);
+	}
+	
+	public int bookReplyCountMyPage(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("bookMapper.bookReplyCountMyPage", userNo);
+	}
+	
+	public ArrayList<Book> bookReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.bookReplyMyPage", userNo, rowBounds);
+	}
 	
 	
 	

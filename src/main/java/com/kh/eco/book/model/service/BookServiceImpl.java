@@ -175,6 +175,30 @@ public class BookServiceImpl implements BookService{
 		return bookDao.ajaxReplyBlack(sqlSession, map);
 	}
 
+	@Override
+	public int bookmarkCountMyPage(int userNo) {
+		return bookDao.bookmarkCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int bookReplyCountMyPage(int userNo) {
+		return bookDao.bookReplyCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
 
 	
 

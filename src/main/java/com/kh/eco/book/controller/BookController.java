@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.Book;
+import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
@@ -498,11 +499,15 @@ public class BookController {
 	}
 	
 	
-	// 마이페이지 포워딩(원래는 로그인하지 않으면 들어가지 못함)
+	// 마이페이지 포워딩
 	@RequestMapping("bookmypage")
-	public String bookMyPage() {
+	public String bookMyPage(@RequestParam(value="cPage", defaultValue="1") int bookCurrentPage, @RequestParam(value="cPage", defaultValue="1") int replyCurrentPage,Model model, int userNo) {
 		
+		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), bookCurrentPage, 4, 0);
+		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), replyCurrentPage, 4, 0);
 		
+		ArrayList<Book> list1 = bookService.bookmarkMyPage(userNo, bookPi);
+		ArrayList<BookReply> list2 = bookService.bookReplyMyPage(userNo, replyPi);
 		
 		return "book/mypage/bookMyPage";
 	}
