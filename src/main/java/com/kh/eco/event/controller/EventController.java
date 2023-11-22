@@ -25,7 +25,7 @@ public class EventController {
 	 * 
 	 */
 	
-	@GetMapping("list.ev")
+	@GetMapping("event")
     public String selectEventList(){
 
         return "event/eventListView";

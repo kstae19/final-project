@@ -60,6 +60,8 @@
     <div id="wrapper">
     	<header id="header-area">
     		<h1>${ challenge.challengeTitle }</h1>
+    		<h6>${ categoryName }</h6>
+    		<h6>${ userId }</h6>
     	</header>
     	
     	<section id="content-area">
@@ -139,7 +141,7 @@
 					checkLikeCount()
 		    		.done(function(checked){// 체크여부 확인 완료했을 때
 		    			
-		    			const count = parseInt($('#count').html());
+		    			const count = parseInt($('#count').html()); 
 		    		
 					    			if(checked == 'success'){ // 이미 체크한 회원이라면
 					    				console.log('done때 : ${likeCount}');

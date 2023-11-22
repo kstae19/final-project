@@ -222,6 +222,10 @@ public class ChallengeController {
 			// 2. boardDetailView.jsp상 필요한 데이터를 조회 
 			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo));
 			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
+			
+			model.addAttribute("userId",  challengeService.selectUserId(challengeNo));
+			model.addAttribute("categoryName",  challengeService.selectCategoryName(challengeNo));
+			
 			//model.addAttribute("likedUser", challengeService.selectLikedUser(map));// detailView로 가야하기에 여기서 addAttribute
 			
 			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(challengeNo) );
