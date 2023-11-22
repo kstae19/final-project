@@ -26,4 +26,6 @@ public class ForwardController {
 	public String findPwdPage() {
 		return "user/findPwd";	
 	}
+	
+
 }
