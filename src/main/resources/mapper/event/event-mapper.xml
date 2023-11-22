@@ -24,6 +24,7 @@
 						EVENT_PLACE,
 						CHANGE_NAME,
 						UPLOAD_DATE,
+						PARTICIPANTS,
 						CATEGORY_NO
 		FROM
 						TB_EVENT
@@ -59,7 +60,7 @@
 						EVENT_PLACE,
 						CHANGE_NAME,
 						UPLOAD_DATE,
-						PARTICIPANTS,
+					
 						CATEGORY_NO
 						)
 						
@@ -70,7 +71,7 @@
 						#{ eventPlace },
 						#{ changeName },
 						#{ uploadDate },
-						#{ participants },
+						
 						#{ categoryNo },
 					)
 	

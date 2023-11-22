@@ -105,6 +105,8 @@
 		  
 		})// var calendar
 		calendar.render();
+        
+        //calendar.addEvent( event [, source ] )
      })//DOMContentLoaded
     </script>
   </head>
@@ -114,7 +116,92 @@
   
  	<div id="wrapper">
    		<div id='calendar'></div>
-    </div>
+    
+    
+    
+		<!-- Modal -->
+		
+		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <form id="eventEnrollForm" action="insert.ev" method="post">
+				
+				   <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">이벤트 등록하기</h5>
+				      </div>
+				      
+				      <div class="modal-body">
+				       	<input class="event" name="eventNo" type="hidden"/>
+				       	<input class="event" name="uploadDate" type="hidden" value="$(this).event."/>
+				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
+				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
+				       	<label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
+				       	<label for="changeName">첨부파일 : <input id="changeName" class="event" name="changeName" type="file" required/></label>
+				       	<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="text" required/></label>
+				      </div>
+				      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="insertEvent()">등록</button>
+				        <button type="button" class="btn btn-secondary" onclick="revokeEvent()">취소</button>
+				      </div>
+				</div> 
+				</div>    
+				
+		  </form> 
+		</div>
+		
+</div><!-- wrapper -->
+		<style>
+		#insertModal{
+			width: 50%;
+			height :  50%;
+			margin : auto;
+			background-color : white;
+		}
+		#eventEnrollForm{
+			
+		}
+		.modal-body{
+			display : flex;
+			flex-flow : column nowrap;
+			/*align-items : center;*/
+			justify-content : center;
+		}
+		.event{
+		
+		}
+			
+		</style>
+    	<script>
+		$(this).click(function(e){
+			e.preventDefault();
+			$('#insertModal').modal("show");
+		});
+		
+	</script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   </body>
 </html>
 
