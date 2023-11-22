@@ -196,7 +196,7 @@ public class BookServiceImpl implements BookService{
 	public ArrayList<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
+		return (ArrayList)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
 	}
 
 

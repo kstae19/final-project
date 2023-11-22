@@ -37,7 +37,7 @@
 
 	<c:if test="${ not empty alert }">
 		<script>
-			alertify.alert("성공", '${alert}', function(){alertify.success('띠용')});
+			alertify.alert("알림", '${alert}', function(){alertify.success('띠용')});
 		</script>
 		<c:remove var="alert" scope="session"/>
 	</c:if>
