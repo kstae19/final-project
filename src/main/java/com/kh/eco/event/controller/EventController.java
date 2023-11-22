@@ -1,14 +1,10 @@
 package com.kh.eco.event.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kh.eco.event.model.service.EventService;
-
-import lombok.RequiredArgsConstructor;
 
    
 //@RequiredArgsConstructor     
@@ -25,13 +21,43 @@ public class EventController {
 	 * 
 	 */
 	
-	@GetMapping("event")
+	@Autowired
+	private EventService eventService;
+	
+	@RequestMapping("event")
     public String selectEventList(){
 
         return "event/eventListView";
         
     }
+	
+	@RequestMapping("enrollForm.ev")
+	public String eventEnrollForm() {
+		
+		return "event/eventErollForm";
+		
+	}
+	
+	@RequestMapping("detail.ev")
+	public String selectEventDetail() {
+		
+	}
+	
+	@RequestMapping("insert.ev")
+	public String insertEvent() {
+		
+	}
+	
+	@RequestMapping("update.ev")
+	public String updateEvent() {
+		
+	}
 
+	@RequestMapping("delete.ev")
+	public String deleteEvent() {
+		
+	}
     
 
+	
 }
