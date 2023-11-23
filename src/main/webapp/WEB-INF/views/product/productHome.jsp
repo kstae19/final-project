@@ -39,7 +39,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border : 1px solid transparent;
+
 }
 
 .outer {
@@ -74,7 +74,7 @@ div {
 }
 
 #controll-area>select {
-	margin-left: 790px;
+	margin-left: 788px;
 	padding: 5px;
 	font-size: 20px;
 }
@@ -96,19 +96,17 @@ div {
 
 #products {
 	width: 100%;
-	display:flex;
 }
-
-
 .product {
 	float:left;
-	width: 400px;
+	width: 394px;
 	height: 400px;
 	cursor:pointer;
+	margin:2px;
 }
 .product-info{
 	width:100%;
-	height:330px;
+	height:310px;
 }
 
 .product table {
@@ -225,6 +223,7 @@ div {
 							})
 						</script>
 					</c:forEach>
+					
 					</div>
 				</div>
 				

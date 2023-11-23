@@ -1,12 +1,19 @@
 package com.kh.eco.product.model.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.json.simple.parser.ParseException;
+
+import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.KakaoPay;
 import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
 public interface ProductService {
@@ -28,4 +35,10 @@ public interface ProductService {
 	int removeItem(Cart cart);
 	Cart getCartItem(int optionNo);
 	int orderProduct(Order order);
+	String getPcUrl(KakaoPay pay) throws IOException, ParseException;
+	String payResult(String pcUrl) throws IOException;
+	ApproveRequest getRequestParam();
+	String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException;
+	ProductOption getProductOption(int optionNo);
+
 }

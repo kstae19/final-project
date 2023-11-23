@@ -511,7 +511,7 @@
 		WHERE USER_NO = #{userNo}
 	</select>
 	
-	<!-- 마이페이지 한줄평 도서목록 조회 -->
+	<!-- 마이페이지 한줄평 도서목록 조회
 	<select id="bookReplyMyPage" parameterType="_int" resultMap="">
 		SELECT 
 			BOOK_TITLE,
@@ -521,6 +521,7 @@
 		JOIN TB_BOOK USING(ISBN)
 		WHERE USER_NO = #{userNo}
 	</select>
+	 -->
 	
 	
 	
