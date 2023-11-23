@@ -117,7 +117,7 @@
 			    					deferred.reject(err);
 			    				}
 			    				
-			    			});
+			    			});//ajax
 		    			
 		    			return deferred.promise();	
 		    		};// checkLikeCount

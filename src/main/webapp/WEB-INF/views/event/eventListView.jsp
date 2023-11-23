@@ -41,9 +41,8 @@
     
 
     <script>
-
       document.addEventListener('DOMContentLoaded', function() {
-    	  
+
 	        var calendarEl = document.getElementById('calendar');
 	        var calendar = new FullCalendar.Calendar(calendarEl, {
 		
@@ -62,7 +61,7 @@
 								{ 
 									id : ${e.eventNo},
 									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
-									start: '${e.uploadDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
+									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
 									imageurl : '${e.changeName}',
 									 extendedProps: {
 										 //content : ${e.eventContent},
@@ -77,7 +76,7 @@
 					],
 					 eventDidMount: function(info) {
 						    console.log(info.event.extendedProps.imageurl);
-						  
+							
 					 },
 					 eventContent: function (arg) {
 	
@@ -106,11 +105,9 @@
 		  
 			})// var calendar
 			calendar.render();
-	        
 
-	        
-        
-     })//DOMContentLoaded
+     	})//DOMContentLoaded
+
     </script>
   </head>
   <body>
@@ -125,7 +122,7 @@
 		<!-- Modal -->
 		
 		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		  <form id="eventEnrollForm" action="insert.ev" method="post">
+		  <form enctype="multipart/form-data" id="eventEnrollForm" action="insert.ev" method="post">
 				
 				   <div class="modal-dialog">
 				    <div class="modal-content">
@@ -134,18 +131,20 @@
 				      </div>
 				      
 				      <div class="modal-body">
-				       	<input class="event" name="eventNo" type="hidden"/>
-				       	<input class="event" name="uploadDate" type="hidden" value="$(this).event.start"/><!-- console.log로 찍어보기 -->
+				       	<input class="event" name="eventNo" type="hidden" />
+				       	<input class="event" name="eventDate" type="hidden" value="${ startDate}"/>    
+				       
 				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
 				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
-				       	<label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
-				       	<label for="changeName">첨부파일 : <input id="changeName" class="event" name="changeName" type="file" required/></label>
-				       	<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="text" required/></label>
+				        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
+				       
+				       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" required/></label>
+				       	<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
 				      </div>
 				      
 				      <div class="modal-footer">
-				        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="insertEvent()">등록</button>
-				        <button type="button" class="btn btn-secondary" onclick="revokeEvent()">취소</button>
+				        <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="insertEvent();">등록</button>
+				        <button type="button" class="btn btn-secondary" >취소</button>
 				      </div>
 				</div> 
 				</div>    
@@ -176,10 +175,50 @@
 			
 		</style>
     	<script>
-		$(this).click(function(e){
-			e.preventDefault();
-			$('#insertModal').modal("show");
-		});
+    	$(function(){
+	        
+				 //console.log(event);//undefined
+				 //console.log(calendar); // Object
+				 
+				 // eventDate;를 할 거
+					 // 1. 바보같은방법
+					 //console.log($('#calendar').children().children().children().children().children().children().children().children().children().children().children().children().eq(8).children());
+				
+		   
+		    	// 날짜 클릭시 insert모달창 뜸 : 클릭한 날짜 가리키는 요소 필요
+				$('#calendar').click(function(e){ 
+					
+					// 2. 현명한 방법
+					console.log(  $(e.target).parent().data('date').substring(2,10) );
+				
+					// 기본이벤트 막고 모달창 띄우기
+					e.preventDefault();
+					$('#insertModal').modal("show");
+				}) // click이벤트
+				
+				function insertEvent(){
+		    		
+		    		
+		    		
+		    		
+		    	}
+					// ajax로 데이터 넘기기
+					$.ajax({
+						url : 'enrollForm.ev',
+						data : {
+							// 날짜만 넘기기
+							startDate : $(e.target).parent().data('date').substring(2,10)		
+						},
+						success : function(data){
+							console.log(data);
+						},
+						error : function(){
+							console.log('연결실패');
+						},
+					})//ajax
+					
+		
+ 		})//jQuery
 		
 	
 	</script>
