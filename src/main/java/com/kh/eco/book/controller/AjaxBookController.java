@@ -267,7 +267,7 @@ public class AjaxBookController {
 	@ResponseBody
 	@RequestMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
 	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
-		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 4, 0);
+		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 5, 5);
 		
 		ArrayList<BookReport> list = bookService.reportMyPage(userNo, reportPi);
 		
