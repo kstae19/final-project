@@ -111,7 +111,7 @@
 		       		</c:otherwise>
 		       	</c:choose>
 		           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-		           		<li class="page-item"><a class="page-link now" href="book?cPage=${p}">${p}</a></li>
+		           		<li class="page-item"><a id="${p}" class="page-link now" href="book?cPage=${p}">${p}</a></li>
 		           </c:forEach>
 		           <c:choose>
 		       		<c:when test="${ pi.currentPage eq pi.maxPage }">
@@ -127,18 +127,16 @@
         			$(function(){
         				let selectBook = '${selectBook}';
         				let searchBook = '${searchBook}';
-        				console.log(selectBook);
-        				console.log(searchBook);
+        				let attrNow = "searchbook.bk" + "?searchBook=" + searchBook + "&selectBook=" + selectBook + "&cPage="; 
+        				$.each($('.now'), function(index, item){
+        					Now = attrNow + (index + 1);
+        					$(item).attr("href", Now);
+        				})
         				
-        				let attrPrevious = $('#page-previous').attr("href").concat("&searchBook=" + searchBook + "&selectBook=" + selectBook);
-        				let attrNow = $('.page-link now').attr("href");
-        				let attrNext = $('#page-next').attr("href");
-        				console.log(attrPrevious);
-        				console.log(attrNow);
-        				console.log(attrNext);
+        				let attrPrevious = "searchbook.bk" + "?cPage=" + ${ pi.currentPage - 1 } + "&searchBook=" + searchBook + "&selectBook=" + selectBook;
+        				let attrNext = "searchbook.bk" + "?cPage=" + ${ pi.currentPage + 1 } + "&searchBook=" + searchBook + "&selectBook=" + selectBook;
         				
         				$('#page-previous').attr("href", attrPrevious);
-        				$('.page-link now').attr("href", attrNow);
         				$('#page-next').attr("href", attrNext);
         			})
         		</script>
