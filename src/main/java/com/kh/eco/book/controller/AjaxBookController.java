@@ -29,7 +29,6 @@ public class AjaxBookController {
 	public BookService bookService;
 	
 	// 북마크 있나없나 조회
-	@ResponseBody
 	@RequestMapping(value="markbook.bk", produces="text/html; charset=UTF-8")
 	public String ajaxSelectBookMark(String ISBN13, int userNo) {
 		String className="";
@@ -49,7 +48,6 @@ public class AjaxBookController {
 	}
 	
 	//북마크 추가/삭제
-	@ResponseBody
 	@RequestMapping(value="bookmark.bk", produces="text/html; charset=UTF-8")
 	public String ajaxBookMark(String className, String ISBN13, int userNo) {
 		
@@ -80,7 +78,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 등록
-	@ResponseBody
 	@RequestMapping(value="insertbookreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxInsertBookReply(String ISBN13, int userNo, String content) {
 		
@@ -100,7 +97,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 조회
-	@ResponseBody
 	@RequestMapping(value="selectbookreply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) {
 		
@@ -121,7 +117,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 삭제
-	@ResponseBody
 	@RequestMapping(value="deletebookreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteBookReply(String ISBN13, int userNo) {
 		
@@ -138,7 +133,6 @@ public class AjaxBookController {
 	
 	
 	// 댓글 조회
-	@ResponseBody
 	@RequestMapping(value="selectreportreply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
@@ -161,7 +155,6 @@ public class AjaxBookController {
 	
 
 	// 댓글 등록
-	@ResponseBody
 	@RequestMapping(value="insertreportreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxInsertReportReply(int reportNo, int userNo, String content) {
 		
@@ -180,7 +173,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 수정
-	@ResponseBody
 	@RequestMapping("updatereportreply.bk")
 	public String ajaxUpdateReportReply(int replyNo, String content) {
 		
@@ -199,7 +191,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 삭제
-	@ResponseBody
 	@RequestMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteReportReply(int replyNo) {
 		
@@ -211,7 +202,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 신고
-	@ResponseBody
 	@RequestMapping(value="reportReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String ajaxReplyBlack(int reportReplyNo, String blackId, int userNo) {
 		
@@ -229,7 +219,6 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 북마크 책 조회
-	@ResponseBody
 	@RequestMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
 	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
@@ -246,7 +235,6 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 한줄평 조회
-	@ResponseBody
 	@RequestMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
 	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		
@@ -264,7 +252,6 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 게시글 조회
-	@ResponseBody
 	@RequestMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
 	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 5, 5);
@@ -281,7 +268,6 @@ public class AjaxBookController {
 	}
 		
 	// 마이페이지 게시글 댓글 조회
-	@ResponseBody
 	@RequestMapping(value="reportreplymypage.bk", produces="application/json; charset=UTF-8")
 	public String reportReplyMyPage(@RequestParam(value="rrPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		
