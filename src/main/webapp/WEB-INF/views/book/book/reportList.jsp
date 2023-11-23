@@ -76,44 +76,44 @@
           		<c:choose>
           			<c:when test="${ r.bookReportStar eq 0 }">
           				<tr style="color:red;">
-				          <td class="rno">${ r.bookReportNo }</td>
+				          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 				          <td>공지</td>
-				          <td>${ r.bookReportTitle }</td>
-				          <td>${ r.userId }</td>
-				          <td>${ r.bookReportDate }</td>
-				          <td>${ r.bookReportCount }</td>
+				          <td><c:out value="${ r.bookReportTitle }" /></td>
+				          <td><c:out value="${ r.userId }" /></td>
+				          <td><c:out value="${ r.bookReportDate }" /></td>
+				          <td><c:out value="${ r.bookReportCount }" /></td>
 				        </tr>
           			</c:when>
           			<c:when test="${ r.bookReportSecret eq 1 }">
         				<c:choose>
         					<c:when test="${ r.userId eq loginUser.userId }">
         						<tr>
-						          <td class="rno">${ r.bookReportNo }</td>
+						          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 						          <td>
 						          	<c:forEach var="i" begin="1" end="${ r.bookReportStar }">
 						          		★
 						          	</c:forEach>
 						          </td>
-						          <td>[비밀글] ${ r.bookReportTitle }</td>
-						          <td>${ r.userId }</td>
-						          <td>${ r.bookReportDate }</td>
-						          <td>${ r.bookReportCount }</td>
+						          <td>[비밀글] <c:out value="${ r.bookReportTitle }" /></td>
+						          <td><c:out value="${ r.userId }" /></td>
+						          <td><c:out value="${ r.bookReportDate }" /></td>
+						          <td><c:out value="${ r.bookReportCount }" /></td>
 						        </tr>
         					</c:when>
         				</c:choose>
           			</c:when>
           			<c:otherwise>
           				<tr>
-				          <td class="rno">${ r.bookReportNo }</td>
+				          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 				          <td>
 				          <c:forEach var="i" begin="1" end="${ r.bookReportStar }">
 			          		  ★
 			          	  </c:forEach>
 						  </td>
-				          <td>${ r.bookReportTitle }</td>
-				          <td>${ r.userId }</td>
-				          <td>${ r.bookReportDate }</td>
-				          <td>${ r.bookReportCount }</td>
+				          <td><c:out value="${ r.bookReportTitle }" /></td>
+				          <td><c:out value="${ r.userId }" /></td>
+				          <td><c:out value="${ r.bookReportDate }" /></td>
+				          <td><c:out value="${ r.bookReportCount }" /></td>
 				        </tr>
           			</c:otherwise>
           		</c:choose>

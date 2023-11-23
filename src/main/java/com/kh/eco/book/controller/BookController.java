@@ -434,9 +434,32 @@ public class BookController {
 		return "redirect:bookreport";
 	}
 	
+	// 도서 마이페이지 포워딩
+	@RequestMapping("bookmypage")
+	public String BookMyPage() {
+		return "book/mypage/bookMyPage";
+	}
 	
-	// 환경사전 api
-	// 나중에 해야지
+	// 독후감 게시판 마이페이지 포워딩
+	@RequestMapping("reportmypage")
+	public String ReportMyPage() {
+		return "book/mypage/reportMyPage";
+	}
+	
+	// 독서캘린더 마이페이지 포워딩
+	
+	
+	// 신고게시판 포워딩
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* 환경사전 api
 	@RequestMapping("ecodictionary")
 	public String ecoDictionary() throws IOException {
 		String clientId = "vzhAW8vm_5bAc_CGqL5k"; //애플리케이션 클라이언트 아이디
@@ -510,33 +533,6 @@ public class BookController {
 	    } catch (IOException e) {
 	        throw new RuntimeException("API 응답을 읽는 데 실패했습니다.", e);
 	    }
-	}
-	
-	// 도서 마이페이지 포워딩
-	@RequestMapping("bookmypage")
-	public String BookMyPage() {
-		return "book/mypage/bookMyPage";
-	}
-	
-	// 독후감 게시판 마이페이지 포워딩
-	@RequestMapping("reportmypage")
-	public String ReportMyPage() {
-		return "book/mypage/reportMyPage";
-	}
-	
-	// 독서캘린더 마이페이지 포워딩
-	
-	
-	// 신고게시판 포워딩
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}*/
 
 }
