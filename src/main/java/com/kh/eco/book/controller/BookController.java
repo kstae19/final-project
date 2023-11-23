@@ -512,20 +512,22 @@ public class BookController {
 	    }
 	}
 	
-	
-	// 마이페이지 포워딩
+	// 도서 마이페이지 포워딩
 	@RequestMapping("bookmypage")
-	public String bookMyPage(@RequestParam(value="cPage", defaultValue="1") int bookCurrentPage, @RequestParam(value="cPage", defaultValue="1") int replyCurrentPage,Model model, int userNo) {
-		
-		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), bookCurrentPage, 4, 0);
-		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), replyCurrentPage, 4, 0);
-		
-		ArrayList<Book> list1 = bookService.bookmarkMyPage(userNo, bookPi);
-		ArrayList<BookReply> list2 = bookService.bookReplyMyPage(userNo, replyPi);
-		
+	public String BookMyPage() {
 		return "book/mypage/bookMyPage";
 	}
 	
+	// 독후감 게시판 마이페이지 포워딩
+	@RequestMapping("reportmypage")
+	public String ReportMyPage() {
+		return "book/mypage/reportMyPage";
+	}
+	
+	// 독서캘린더 마이페이지 포워딩
+	
+	
+	// 신고게시판 포워딩
 	
 	
 	

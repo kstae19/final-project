@@ -1,9 +1,11 @@
 package com.kh.eco.common.model.vo;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class PageInfo {
 	
@@ -12,8 +14,8 @@ public class PageInfo {
 	private int boardLimit; // 한 페이지에서 보이는 게시글의 개수
 	private int pageLimit; // 페이징버튼의 개수
 	
-	private int maxPage;
-	private int startPage;
-	private int endPage;
+	private int maxPage; // 마지막 페이지
+	private int startPage; // 페이징 버튼의 시작
+	private int endPage; // 페이징 버튼의 끝
 	
 }

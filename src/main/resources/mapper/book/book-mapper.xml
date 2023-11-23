@@ -11,6 +11,7 @@
 		<result column="BOOK_COUNT" property="bookCount" />
 		<result column="BOOK_TITLE" property="bookTitle" />
 		<result column="BOOK_IMG" property="bookImg" />
+		<result column="BOOK_REPLY_CONTENT" property="bookReply" />
 	</resultMap>
 	
 	<!-- 한줄평 -->
@@ -496,11 +497,12 @@
 	<!-- 마이페이지 북마크 도서목록 조회 -->
 	<select id="bookmarkMyPage" parameterType="_int" resultMap="bookResultSet">
 		SELECT 
-			b.ISBN13,
-			BOOK_TITLE,
-			BOOK_IMG
-		FROM TB_BOOK b
-		JOIN TB_LIKE_BOOK USING(ISBN13)
+		    B.ISBN13,
+		    BOOK_TITLE,
+		    BOOK_IMG
+		FROM TB_BOOK B
+		JOIN TB_LIKE_BOOK LB
+		ON B.ISBN13 = LB.ISBN13
 		WHERE USER_NO = #{userNo}
 	</select>
 	
@@ -512,17 +514,58 @@
 	</select>
 	
 	<!-- 마이페이지 한줄평 도서목록 조회 -->
-	<!-- <select id="bookReplyMyPage" parameterType="_int" resultMap="book">
+	<select id="bookReplyMyPage" parameterType="_int" resultMap="bookResultSet">
 		SELECT 
 			BOOK_TITLE,
 			BOOK_IMG,
 			BOOK_REPLY_CONTENT
 		FROM TB_BOOK_REPLY
-		JOIN TB_BOOK USING(ISBN)
+		JOIN TB_BOOK USING(ISBN13)
 		WHERE USER_NO = #{userNo}
-	</select> -->
+	</select>
 	
+	<!-- 마이페이지 독후감 게시글 개수 조회 -->
+	<select id="reportCountMyPage" parameterType="_int" resultType="_int">
+		SELECT COUNT(*)
+		FROM TB_BOOK_REPORT
+		WHERE USER_NO = #{userNo}
+	</select>
 	
+	<!-- 마이페이지 독후감 게시글 조회 -->
+	<select id="reportMyPage" parameterType="_int" resultMap="bookReportResultSet">
+		SELECT 
+			BOOK_REPORT_NO,
+			BOOK_REPORT_TITLE,
+			BOOK_REPORT_SECRET,
+			BOOK_REPORT_STAR
+		FROM TB_BOOK_REPORT
+		WHERE USER_NO = #{userNo}
+		AND BOOK_REPORT_STATUS = 'Y'
+	</select>
+	
+	<!-- 마이페이지 독후감 게시글 댓글 개수 조회 -->
+	<select id="reportReplyCountMyPage" parameterType="_int" resultType="_int">
+		SELECT COUNT(TBRR.book_report_no)
+		FROM TB_BOOK_REPORT_REPLY TBRR
+		JOIN TB_BOOK_REPORT TBR
+        ON TBRR.BOOK_REPORT_NO = TBR.BOOK_REPORT_NO
+		WHERE TBRR.USER_NO = #{userNo}
+		AND BOOK_REPORT_STATUS = 'Y'
+	</select>
+	
+	<!-- 마이페이지 독후감 게시글 댓글 조회 -->
+	<select id="reportReplyMyPage" parameterType="_int" resultMap="bookReportReplyResultSet">
+		SELECT
+		    BOOK_REPORT_REPLY_NO,
+		    TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_REPLY_DATE",
+		    BOOK_REPORT_REPLY_CONTENT,
+		    TBRR.BOOK_REPORT_NO
+		FROM TB_BOOK_REPORT_REPLY TBRR
+		JOIN TB_BOOK_REPORT TBR
+		ON TBRR.BOOK_REPORT_NO = TBR.BOOK_REPORT_NO
+		WHERE TBRR.USER_NO = #{userNo}
+		AND BOOK_REPORT_STATUS = 'Y'
+	</select>
 	
 	
 	

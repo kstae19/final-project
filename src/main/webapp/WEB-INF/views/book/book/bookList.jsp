@@ -107,18 +107,18 @@
 		             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
 		       		</c:when>
 		       		<c:otherwise>
-		       		 	<li class="page-item"><a id="page-previous" class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+		       		 	<li class="page-item"><a class="page-link page-previous" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
 		       		</c:otherwise>
 		       	</c:choose>
 		           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-		           		<li class="page-item"><a id="${p}" class="page-link now" href="book?cPage=${p}">${p}</a></li>
+		           		<li class="page-item"><a id="${p}" class="page-link page-now" href="book?cPage=${p}">${p}</a></li>
 		           </c:forEach>
 		           <c:choose>
 		       		<c:when test="${ pi.currentPage eq pi.maxPage }">
 		       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
 		       		</c:when>
 		       		<c:otherwise>
-		       		 	<li class="page-item"><a id="page-next" class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
+		       		 	<li class="page-item"><a class="page-link page-next" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
 		       		</c:otherwise>
 		       	</c:choose>
        		</ul>
@@ -128,16 +128,17 @@
         				let selectBook = '${selectBook}';
         				let searchBook = '${searchBook}';
         				let attrNow = "searchbook.bk" + "?searchBook=" + searchBook + "&selectBook=" + selectBook + "&cPage="; 
-        				$.each($('.now'), function(index, item){
-        					Now = attrNow + (index + 1);
+        				
+        				$.each($('.page-now'), function(index, item){
+        					Now = attrNow + $(item).text();
         					$(item).attr("href", Now);
         				})
         				
         				let attrPrevious = "searchbook.bk" + "?cPage=" + ${ pi.currentPage - 1 } + "&searchBook=" + searchBook + "&selectBook=" + selectBook;
         				let attrNext = "searchbook.bk" + "?cPage=" + ${ pi.currentPage + 1 } + "&searchBook=" + searchBook + "&selectBook=" + selectBook;
         				
-        				$('#page-previous').attr("href", attrPrevious);
-        				$('#page-next').attr("href", attrNext);
+        				$('.page-previous').attr("href", attrPrevious);
+        				$('.page-next').attr("href", attrNext);
         			})
         		</script>
         	</c:if>

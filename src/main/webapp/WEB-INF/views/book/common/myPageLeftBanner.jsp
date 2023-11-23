@@ -50,9 +50,9 @@
     <div class="floatdiv">
         <ul>
             <li style="font-size: 30px; margin-bottom: 15px;">도서목록 마이페이지</li>
-            <li onclick="location.href='book'">도서</li>
-            <li onclick="location.href='bookreport'">독후감 게시판</li>
-            <li onclick="location.href='bookcalendar'">독서캘린더</li>
+            <li onclick="location.href='bookmypage'">도서</li>
+            <li onclick="location.href='reportmypage'">독후감 게시판</li>
+            <li onclick="location.href='calendarmypage'">독서캘린더</li>
         </ul>
     </div>
 </body>

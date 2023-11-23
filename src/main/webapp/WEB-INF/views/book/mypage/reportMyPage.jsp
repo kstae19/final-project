@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,10 +20,121 @@
             overflow:visible;
         }
     </style>
+    <script>
+    	function selectMyPageReport(nowPage){
+    		$.ajax({
+    			url : 'reportmypage.bk',
+    			async : false,
+    			type : 'post',
+    			data : {
+    				userNo : '${ loginUser.userNo }',
+					bPage : nowPage    				
+    			},
+    			success : result => {
+    				console.log(result);
+    				
+    				/*let book = result.bookList;
+					let bookPi = result.bookPi;
+    				if(book.size){
+    					$('#book-mypage').html("북마크한 도서가 없습니다.");
+    				} else {
+    					let buttonBefore = $('#book-mypage').children().first();
+    					let buttonNext = $('#book-mypage').children().last();
+    					
+        				let bookValue = '';
+        				for(let i in book){
+        					bookValue += '<div>'
+        							   + '<img src="' + book[i].bookImg + '">'
+        							   + '<p>' + book[i].bookTitle + '</p>'
+        							   + '</div>';
+        				}
+        				$('#mypage-book').html(bookValue);
+        				
+        				if(bookPi.currentPage == 1){
+        					$(buttonBefore).attr("disabled", true);
+        				} else{
+        					$(buttonBefore).attr("disabled", false);
+        					$(buttonBefore).attr("onclick", "selectMyPageBook(" + (bookPi.currentPage -1) +")");
+        				}
+        				if(book.length < bookPi.boardLimit){
+        					$(buttonNext).attr("disabled", true);
+        				} else{
+        					$(buttonNext).attr("disabled", false);
+        					$(buttonNext).attr("onclick", "selectMyPageBook(" + (bookPi.currentPage + 1) +")");
+        				}
+    				}*/
+    			},
+   				error : function(){
+   					console.log("통신 실패");
+   				}
+    		})
+    	}
+    	
+    	function selectMyPageReply(nowPage){
+			$.ajax({
+				url : 'reportreplymypage.bk',
+    			async : false,
+    			type : 'post',
+    			data : {
+    				userNo : '${ loginUser.userNo }',
+					rPage : nowPage    				
+    			},
+    			success : result => {
+    				console.log(result);
+    				/*
+    				let reply = result.replyList;
+					let replyPi = result.replyPi;
+    				if(reply.size){
+    					$('#bookReply-area').html("작성한 한줄평이 없습니다.");
+    				} else {
+        				let replyValue = '';
+        				for(let i in reply){
+        					replyValue += '<tr>'
+        								+ '<td>'
+        								+ '<img src="' + reply[i].bookImg + '"></td>'
+        								+ '<td>' + reply[i].bookTitle + '</td>'
+        								+ '<td>' + reply[i].bookReply + '</td>'
+        								+ '</tr>';
+        				}
+        				$('#mypagebookreply').html(replyValue);
+        				
+        				let replyPiValue = '';
+        				if(replyPi.currentPage == 1){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+        				}
+        				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+        				}
+        				if(replyPi.currentPage == replyPi.endPage){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+        				}
+        				
+        				$('#mypagebookReply').html(replyPiValue);
+    				}*/
+        				
+        				
+    			},
+				error : function(){
+					console.log("통신 실패");
+				}
+    		})
+    	}
+    
+    	$(function(){
+    		selectMyPageReport();
+    		selectMyPageReply();
+    	})
+    </script>
 </head>
 <body>
 
+	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
+	<jsp:include page="../common/myPageLeftBanner.jsp" />
 
     <div class="outer">
         <h3>게시글 목록</h3>

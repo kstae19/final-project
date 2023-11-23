@@ -108,12 +108,16 @@ public interface BookService {
 	public ArrayList<BookReply> bookReplyMyPage(int userNo, PageInfo pi);
 	
 	// 마이페이지 독후감 게시글 목록 개수 조회
+	public int reportCountMyPage(int userNo);
 	
 	// 마이페이지 독후감 게시글 목록 조회
+	public ArrayList<BookReport> reportMyPage(int userNo, PageInfo pi);
 	
 	// 마이페이지 독후감 게시글 댓글 개수 조회
+	public int reportReplyCountMyPage(int userNo);
 	
 	// 마이페이지 독후감 게시글 댓글 조회
+	public ArrayList<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi);
 	
 	
 	// 관리자페이지 신고게시글 개수 조회

@@ -199,6 +199,30 @@ public class BookServiceImpl implements BookService{
 		return (ArrayList)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
 	}
 
+	@Override
+	public int reportCountMyPage(int userNo) {
+		return bookDao.reportCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReport> reportMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int reportReplyCountMyPage(int userNo) {
+		return bookDao.reportReplyCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
 
 	
 

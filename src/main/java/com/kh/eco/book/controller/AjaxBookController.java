@@ -5,18 +5,23 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kh.eco.book.model.service.BookService;
+import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
+@RestController
 @Controller
 public class AjaxBookController {
 	
@@ -221,6 +226,76 @@ public class AjaxBookController {
 		} else { // 실패
 			return "fail";
 		}
+	}
+	
+	// 마이페이지 북마크 책 조회
+	@ResponseBody
+	@RequestMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
+	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
+		
+		ArrayList<Book> list = bookService.bookmarkMyPage(userNo, bookPi);
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("bookList", list);
+		map.put("bookPi", bookPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+	// 마이페이지 한줄평 조회
+	@ResponseBody
+	@RequestMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
+	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		
+		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), currentPage, 5, 5);
+		
+		ArrayList<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyList", list);
+		map.put("replyPi", replyPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+	// 마이페이지 게시글 조회
+	@ResponseBody
+	@RequestMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
+	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 4, 0);
+		
+		ArrayList<BookReport> list = bookService.reportMyPage(userNo, reportPi);
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportList", list);
+		map.put("reportPi", reportPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+		
+	// 마이페이지 게시글 댓글 조회
+	@ResponseBody
+	@RequestMapping(value="reportreplymypage.bk", produces="application/json; charset=UTF-8")
+	public String reportReplyMyPage(@RequestParam(value="rrPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		
+		PageInfo replyPi = Pagination.getPageInfo(bookService.reportReplyCountMyPage(userNo), currentPage, 5, 5);
+		
+		ArrayList<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyList", list);
+		map.put("replyPi", replyPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
 	}
 	
 	
