@@ -366,8 +366,28 @@
 		    </script>
 		    		
     		
-    		<c:if test="${  loginUser.userNo eq challenge.userNo }">
-    			<button><a href="#">수정</a></button><button><a href="#">삭제</a></button>
+    		<c:if test="${  sessionScope.loginUser.userNo eq challenge.userNo }">
+    		
+    			<!-- 수정 : 넘겨야할 파라미터가 객체라 그냥 input hidden으로 넘김 -->
+    			<form  enctype="multipart/form-data"  action="updateForm.ch" method="get">
+    				<input type="hidden" name="challengeNo" value="${ challenge.challengeNo }" />
+    				<input type="hidden" name="challengeTitle" value="${ challenge.challengeTitle }" />
+    				<input type="hidden" name="categoryNo" value="${ challenge.categoryNo }" />
+    				<input type="hidden" name="challengePlace" value="${ challenge.challengePlace }" />
+    				<input type="hidden" name="startDate" value="${ challenge.startDate }" />
+    				<input type="hidden" name="endDate" value="${ challenge.endDate }" />
+    				<input type="hidden" name="achievementCount" value="${ challenge.achievementCount }" />
+    				<input type="hidden" name="successLimit" value="${ challenge.successLimit }" />
+    				<input type="hidden" name="minParticipant" value="${ challenge.minParticipant }" />
+    				<input type="hidden" name="maxParticipant" value="${ challenge.maxParticipant }" />
+  					<input type="hidden" name="upfile" value="${ challenge.changeName }" />
+    				<textarea style="display:none;" name="challengeContent">${ challenge.challengeContent }</textarea>
+    			
+    			<button type="submit">수정</button>
+    			</form>
+    			
+    			<!-- 삭제 : 넘기는 파라미터가 1개라서 a태그 쿼리스트링으로 넘김 -->
+    			<button><a href="delete.ch?challengeNo=${ challenge.challengeNo }">삭제</a></button>
     		</c:if>
     		
     	</section>

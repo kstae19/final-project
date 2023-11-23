@@ -43,70 +43,73 @@
     <script>
 
       document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-	
-	          initialView: 'dayGridMonth',
+    	  
+	        var calendarEl = document.getElementById('calendar');
+	        var calendar = new FullCalendar.Calendar(calendarEl, {
+		
+		          initialView: 'dayGridMonth',
+		          
+		          //expandRows: true, // 화면에 맞게 높이 재설정
+		          //selectable: true,    // 영역 선택
+		          editable: true,      // event(일정) 
+		          //dayMaxEventRows: true,  // Row 높이보다 많으면 +숫자 more 링크 보임!
 	          
-	          //expandRows: true, // 화면에 맞게 높이 재설정
-	          //selectable: true,    // 영역 선택
-	          editable: true,      // event(일정) 
-	          //dayMaxEventRows: true,  // Row 높이보다 많으면 +숫자 more 링크 보임!
-          
-          
-          
-			  events: [
-			 		<c:if test="${ not empty list}">
-						<c:forEach var="e" items="${list}">
-							{ 
-								id : ${e.eventNo},
-								title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
-								start: '${e.uploadDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
-								imageurl : '${e.changeName}',
-								 extendedProps: {
-									 //content : ${e.eventContent},
-									 place : '${e.eventPlace}',
-									 //participant : ${e.participants},
-									 categoryNo : ${e.categoryNo},
-								 },
+	          
+	          
+				  events: [
+				 		<c:if test="${ not empty list}">
+							<c:forEach var="e" items="${list}">
+								{ 
+									id : ${e.eventNo},
+									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
+									start: '${e.uploadDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
+									imageurl : '${e.changeName}',
+									 extendedProps: {
+										 //content : ${e.eventContent},
+										 place : '${e.eventPlace}',
+										 //participant : ${e.participants},
+										 categoryNo : ${e.categoryNo},
+									 },
+		
+								},
+							</c:forEach>
+						</c:if> 
+					],
+					 eventDidMount: function(info) {
+						    console.log(info.event.extendedProps.imageurl);
+						  
+					 },
+					 eventContent: function (arg) {
 	
-							},
-						</c:forEach>
-					</c:if> 
-				],
-				 eventDidMount: function(info) {
-					    console.log(info.event.extendedProps.imageurl);
-					  
-				 },
-				 eventContent: function (arg) {
-
-			            var event = arg.event;
-			            
-			            var customHtml = '';
-			            
-			            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
-			            
-			            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
-			                        
-			            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
-			            
-			            customHtml += "<img  style='width:100px; height : 100px;' src=" + event.extendedProps.imageurl +  "/>";
-			            
-			            return { html: customHtml }
-			        }
-			
-				/* ver5부터 안 쓰임 
-					eventRender: function(event, eventElement) {
-					    if (event.imageurl) {
-					        eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='10' height='10'>");
-						}
-					}*/
+				            var event = arg.event;
+				            
+				            var customHtml = '';
+				            
+				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
+				            
+				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
+				                        
+				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
+				            
+				            customHtml += "<img  style='width:100px; height : 100px;' src=" + event.extendedProps.imageurl +  "/>";
+				            
+				            return { html: customHtml }
+				        }
+				
+					/* ver5부터 안 쓰임 
+						eventRender: function(event, eventElement) {
+						    if (event.imageurl) {
+						        eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='10' height='10'>");
+							}
+						}*/
 
 		  
-		})// var calendar
-		calendar.render();
+			})// var calendar
+			calendar.render();
+	        
+
+	        
         
-        //calendar.addEvent( event [, source ] )
      })//DOMContentLoaded
     </script>
   </head>
@@ -132,7 +135,7 @@
 				      
 				      <div class="modal-body">
 				       	<input class="event" name="eventNo" type="hidden"/>
-				       	<input class="event" name="uploadDate" type="hidden" value="$(this).event."/>
+				       	<input class="event" name="uploadDate" type="hidden" value="$(this).event.start"/><!-- console.log로 찍어보기 -->
 				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
 				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 				       	<label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
@@ -178,29 +181,9 @@
 			$('#insertModal').modal("show");
 		});
 		
+	
 	</script>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
   </body>
 </html>

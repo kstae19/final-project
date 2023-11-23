@@ -95,18 +95,19 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="startDate">
-							시작일<input id="startDate" type="date" value="LocalDate.now();" name="startDate">
+							시작일<input id="startDate" type="date" name="startDate">
 					</label>
             	</div>
             	 	<div class="content-item">
 	            	<label for="endDate">
-							종료일<input id="endDate" type="date" value="2023-11-11" name="endDate">
+							종료일<input id="endDate" type="date"  name="endDate">
 					</label>
             	</div>
             	<div class="content-item">
 					 <select id="achievementCount" name="achievementCount">
+					 		<option selected>인증주기</option>
 	            			<option value="everyday">매일</option>
-							<option value="everyweek">매주<option>
+							<option value="everyweek">매주</option>
 					</select>
             	</div>
           	     <div class="content-item">
@@ -136,11 +137,37 @@
             	</div>
 
             </article>
-            
-            
+
             <br><br>
             <script>
-              
+              	$(function(){
+              		
+              		// 시작일/종료일 디폴트값 지정
+              		let now = new Date();// 오늘
+              		
+              		$('#startDate').val( now.toISOString().substring(0,10) );
+              		now.setMonth( now.getMonth() + 1 );//setting
+              		$('#endDate').val( now.toISOString().substring(0,10)  );
+              		
+              		
+              		// 카테고리/인증주기 미선택시 팝업창
+              		//console.log($('#achievementCount').val());
+              		$('#insert-btn').on('click', function(e){
+              			
+              			if($('#achievementCount').val() == '인증주기'){
+              				e.preventDefault();
+              				alert('인증주기를 선택해주세요');
+              			};
+              			if($('#category').val() == '카테고리'){
+              				e.preventDefault();
+              				alert('카테고리를 선택해주세요');
+              			}
+              				
+              		})//click이벤트
+              	
+              	})
+              	
+         
             </script>
             
             <div align="center">

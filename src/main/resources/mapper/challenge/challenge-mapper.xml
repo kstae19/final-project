@@ -18,8 +18,8 @@
 		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
 		<!-- <result column="USER_ID" property="userId" />
 		<result column="CATEGORY_NAME" property="categoryName" /> -->
-		<result column="USER_NO" property="user" />
-		<result column="CATEGORY_NO" property="category" />
+		<result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" />
 		
 		<result column="END_DATE" property="endDate" />
 		<result column="CHALLENGE_PLACE" property="challengePlace" />
@@ -62,8 +62,8 @@
 						TB_USER USING(USER_NO)
 		JOIN 
 						TB_CATEGORY USING (CATEGORY_NO)
-<!-- 		WHERE 
-						STATUS = 'Y' -->
+		WHERE 
+						STATUS = 'Y' 
 		ORDER
 		BY	
 						UPLOAD_DATE DESC
@@ -250,15 +250,10 @@
 						START_DATE,
 						END_DATE,
 			
-						USER_ID,
-						CATEGORY_NAME
-					
+						USER_NO,
+						CATEGORY_NO				
 		FROM 
 						TB_CHALLENGE
-		JOIN 
-						TB_USER USING (USER_NO)
-		JOIN 
-						TB_CATEGORY USING (CATEGORY_NO)
 		WHERE 
 						CHALLENGE_NO = #{challengeNo}
 	</select>
@@ -406,31 +401,32 @@
 	</insert>
 	
 	<!-- 게시글 수정 -->
-	<update id="updateChallenge">
+	<update id="updateChallenge" parameterType="challenge">
 		UPDATE 
 						TB_CHALLENGE
 		SET  
-						CHALLENGE_TITLE = #{c.challengeTitle},
-						CHALLENGE_CONTENT = #{c.challengeContent},
-						CHALLENGE_PLACE = #{c.challengePlace},
-						ACHIEVEMENT_COUNT=#{c.achievementCount},
-						SUCCESS_LIMIT = #{c.successLImit},
-						MIN_PARTICIPANT=#{c.minParticipant},
-						MAX_PARTICIPANT=#{c.maxParticipant},
-						ORIGIN_NAME = #{c.originName},
-						CHANGE_NAME = #{c.changeName},
+				
+						CHALLENGE_TITLE = #{challengeTitle},
+						CHALLENGE_CONTENT = #{challengeContent},
+						CHALLENGE_PLACE = #{challengePlace},
+						ACHIEVEMENT_COUNT=#{achievementCount},
+						SUCCESS_LIMIT = #{successLimit},
+						MIN_PARTICIPANT=#{minParticipant},
+						MAX_PARTICIPANT=#{maxParticipant},
+						ORIGIN_NAME = #{originName},
+						CHANGE_NAME = #{changeName},
 						MODIFY_DATE = SYSDATE,
-						START_DATE = #{c.startDate},
-						END_DATE = #{c.endDate},
-						CATEGORY_NO = #{c.categoryNo}
+						START_DATE = #{startDate},
+						END_DATE = #{endDate},
+						CATEGORY_NO = #{categoryNo}
 		WHERE 
-						CHALLENGE_NO = #{c.challengeNo}
+						CHALLENGE_NO = #{challengeNo} 
 	</update>
 	
 	
 	
 	<!-- 게시글 삭제 -->
-	<update id="deleteChallenge">
+	<update id="deleteChallenge" parameterType="_int">
 	UPDATE 
 					TB_CHALLENGE
 	SET
