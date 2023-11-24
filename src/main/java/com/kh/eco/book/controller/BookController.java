@@ -200,6 +200,7 @@ public class BookController {
 		
 		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
 		// bookList가 아니라 isbn키값을 가지는 hashmap을 만들어서 그걸 db단에서 조회시키면서 새로운 vo를 만들어 키값을 덮어씌...테이블구조를 바꿔야할까
+		// 마이바티스 갱신?
 		ArrayList<Book> countList = bookService.countList();
 		
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
@@ -288,7 +289,7 @@ public class BookController {
 	
 	
 	// 상세페이지 메소드(api 조회하지 않게 바꿨지만..)
-	@RequestMapping("bookdetail.bk")
+	@RequestMapping("bookDetail.bk")
 	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		
 		book.setISBN13(ISBN);
@@ -301,7 +302,7 @@ public class BookController {
 				model.addAttribute("b", book);
 				return "book/book/bookDetail";
 			} else { // 조회수 추가 실패
-				session.setAttribute("alert", "조회수 추가 실패");
+				session.setAttribute("failBookAlert", "조회 실패");
 				return "redirect:book";
 			}
 		} else { // 조회수가 1 이상일때
@@ -312,14 +313,14 @@ public class BookController {
 				model.addAttribute("b", book);
 				return "book/book/bookDetail";
 			} else { // 조회수 증가 실패
-				session.setAttribute("alert", "조회수 증가 실패");
+				session.setAttribute("failBookAlert", "조회 실패");
 				return "redirect:book";
 			}
 		}
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회
-	@RequestMapping("bookreport")
+	@RequestMapping("bookReport")
 	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
 		model.addAttribute("list", bookService.selectReportList(pi));
@@ -358,16 +359,16 @@ public class BookController {
 	public String reportEnrollForm(BookReport bookReport, HttpSession session) {
 		
 		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 작성 실패
 			session.setAttribute("failBookAlert", "게시글 작성 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 		
 	}
 	 
 	// 독후감 게시판 상세조회
-	@RequestMapping("reportdetail.bk")
+	@RequestMapping("reportDetail.bk")
 	public String reportDetail(int rno, Model model, HttpSession session) {
 		
 		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
@@ -399,10 +400,10 @@ public class BookController {
 		
 		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
 			session.setAttribute("successBookAlert", "게시글 수정 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 수정 실패
 			session.setAttribute("failBookAlert", "게시글 수정 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
@@ -412,10 +413,10 @@ public class BookController {
 		
 		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
 			session.setAttribute("successBookAlert", "게시글 삭제 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 삭제 실패
 			session.setAttribute("failBookAlert", "게시글 삭제 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
@@ -430,21 +431,21 @@ public class BookController {
 		
 		if(bookService.reportBlack(map) > 0) {
 			session.setAttribute("successBookAlert", "게시글 신고 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 신고 실패
 			session.setAttribute("failBookAlert", "게시글 신고 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
 	// 도서 마이페이지 포워딩
-	@RequestMapping("bookmypage")
+	@RequestMapping("bookMyPage")
 	public String BookMyPage() {
 		return "book/mypage/bookMyPage";
 	}
 	
 	// 독후감 게시판 마이페이지 포워딩
-	@RequestMapping("reportmypage")
+	@RequestMapping("reportMyPage")
 	public String ReportMyPage() {
 		return "book/mypage/reportMyPage";
 	}

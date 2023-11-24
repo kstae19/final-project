@@ -3,6 +3,8 @@ package com.kh.eco.book.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +31,7 @@ public class AjaxBookController {
 	public BookService bookService;
 	
 	// 북마크 있나없나 조회
-	@RequestMapping(value="markbook.bk", produces="text/html; charset=UTF-8")
+	@RequestMapping(value="selectBookMark.bk", produces="text/html; charset=UTF-8")
 	public String ajaxSelectBookMark(String ISBN13, int userNo) {
 		String className="";
 		HashMap<String, Object> map = new HashMap();
@@ -48,56 +50,52 @@ public class AjaxBookController {
 	}
 	
 	//북마크 추가/삭제
-	@RequestMapping(value="bookmark.bk", produces="text/html; charset=UTF-8")
-	public String ajaxBookMark(String className, String ISBN13, int userNo) {
+	@RequestMapping(value="bookMark.bk", produces="text/html; charset=UTF-8")
+	public String ajaxBookMark(String className, String ISBN13, int userNo, HttpSession session) {
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN", ISBN13);
 		map.put("userNo", userNo);
 		
 		if(className.equals("bookmark")) { // 북마크 하기 전
-			System.out.println("ㅎㅇ");
 			int result = bookService.insertBookMark(map);
 			if(result > 0) { // 북마크 잘됨
 				className = "bookmark abled";
 			} else { // 북마크 안됨
-				System.out.println("실패!");
+				session.setAttribute("failBookAlert", "북마크 조작 실패");
 			}
 		} else if(className.equals("bookmark abled")) { // 북마크 이후
-			System.out.println("ㅂㅇ");
 			int result = bookService.removeBookMark(map);
 			if(result > 0) { // 북마크 제거 잘됨
 				className = "bookmark";
 			} else { // 북마크 제거 안됨
-				System.out.println("실패!");
+				session.setAttribute("failBookAlert", "북마크 조작 실패");
 			}
 		} else { // 그 외
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "북마크 조작 실패");
 		}
 		return className;
 	}
 	
 	// 한줄평 등록
-	@RequestMapping(value="insertbookreply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxInsertBookReply(String ISBN13, int userNo, String content) {
+	@RequestMapping(value="insertBookReply.bk", produces="text/html; charset=UTF-8")
+	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) {
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN13", ISBN13);
 		map.put("userNo", userNo);
 		map.put("content", content);
-		System.out.println(map);
-
 		
 		if(bookService.ajaxInsertBookReply(map) > 1) { // 성공
 			return "success";
 		} else { // 실패
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "한줄평 작성 실패");
 			return "fail";
 		}
 	}
 	
 	// 한줄평 조회
-	@RequestMapping(value="selectbookreply.bk", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="selectBookReply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) {
 		
 		// 댓글 개수 조회
@@ -117,7 +115,7 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 삭제
-	@RequestMapping(value="deletebookreply.bk", produces="text/html; charset=UTF-8")
+	@RequestMapping(value="deleteBookReply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteBookReply(String ISBN13, int userNo) {
 		
 		HashMap<String, Object> map = new HashMap();
@@ -133,7 +131,7 @@ public class AjaxBookController {
 	
 	
 	// 댓글 조회
-	@RequestMapping(value="selectreportreply.bk", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="selectReportReply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
 		// 댓글 개수 조회

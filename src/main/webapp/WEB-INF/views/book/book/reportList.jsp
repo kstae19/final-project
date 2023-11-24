@@ -134,7 +134,7 @@
         	$(function(){ // 테이블의 행을 클릭시 상세조회
        			$('#report-table > tbody > tr').click(function(){
        				if($('#report-table').find('td').length > 1){
-	           			location.href='reportdetail.bk?rno='+$(this).children(('.rno')).text();
+	           			location.href='reportDetail.bk?rno='+$(this).children(('.rno')).text();
        				}
            		})
         	})

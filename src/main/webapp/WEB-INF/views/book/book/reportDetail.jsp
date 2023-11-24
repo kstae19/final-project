@@ -38,7 +38,7 @@
 	function selectReportReply(nowPage){
 		// 댓글 조회 ajax
 		$.ajax({
-			url : 'selectreportreply.bk',
+			url : 'selectReportReply.bk',
 			async : false,
 			type : 'post',
 			data : {
@@ -224,7 +224,7 @@
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 
     <div class="outer">
-        <button type="button" class="btn btn-secondary" onclick="location.href='bookreport'">목록</button>
+        <button type="button" class="btn btn-secondary" onclick="location.href='bookReport'">목록</button>
         <hr>
 
         <h3>
