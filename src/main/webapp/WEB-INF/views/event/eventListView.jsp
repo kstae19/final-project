@@ -5,48 +5,204 @@
 <html lang='en'>
   <head>
     <meta charset='utf-8' />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+     <!-- css -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+<!-- javascript -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+
+<!-- overal -->
+<style>
+    #wrapper{
+		border : 1px solid teal;
+        width: 1200px;
+        height: 1000px; 
+       margin: auto;
+        background-color: white;
+    }
+
+
+    #content-area{
+
+       border : 1px solid teal;
+        height : 75%; 
+        width : 100%;
+    }
+
+</style>
+
+
+ 	
+ 	
+    
+
     <script>
 
       document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+	
+	          initialView: 'dayGridMonth',
+	          
+	          //expandRows: true, // 화면에 맞게 높이 재설정
+	          //selectable: true,    // 영역 선택
+	          editable: true,      // event(일정) 
+	          //dayMaxEventRows: true,  // Row 높이보다 많으면 +숫자 more 링크 보임!
+          
+          
+          
+			  events: [
+			 		<c:if test="${ not empty list}">
+						<c:forEach var="e" items="${list}">
+							{ 
+								id : ${e.eventNo},
+								title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
+								start: '${e.uploadDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
+								imageurl : '${e.changeName}',
+								 extendedProps: {
+									 //content : ${e.eventContent},
+									 place : '${e.eventPlace}',
+									 //participant : ${e.participants},
+									 categoryNo : ${e.categoryNo},
+								 },
+	
+							},
+						</c:forEach>
+					</c:if> 
+				],
+				 eventDidMount: function(info) {
+					    console.log(info.event.extendedProps.imageurl);
+					  
+				 },
+				 eventContent: function (arg) {
 
-        $(function () {
-            var request = $.ajax({
-                url: "/full-calendar/calendar-admin", // 변경하기
-                method: "GET",
-                dataType: "json"
-            });
+			            var event = arg.event;
+			            
+			            var customHtml = '';
+			            
+			            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
+			            
+			            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
+			                        
+			            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
+			            
+			            customHtml += "<img  style='width:100px; height : 100px;' src=" + event.extendedProps.imageurl +  "/>";
+			            
+			            return { html: customHtml }
+			        }
+			
+				/* ver5부터 안 쓰임 
+					eventRender: function(event, eventElement) {
+					    if (event.imageurl) {
+					        eventElement.find("div.fc-content").prepend("<img src='" + event.imageurl +"' width='10' height='10'>");
+						}
+					}*/
 
-            request.done(function (data) {// Get방식으로 데이터 요청한 값이 불러오기 완료되면
-                console.log(data);
-
-                    var calendarEl = document.getElementById('calendar');
-                    var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    editable: true,
-                    droppable: true, // this allows things to be dropped onto the calendar
-                    drop: function (arg) {
-                        // is the "remove after drop" checkbox checked?
-                        if (document.getElementById('drop-remove').checked) {
-                            // if so, remove the element from the "Draggable Events" list
-                            arg.draggedEl.parentNode.removeChild(arg.draggedEl);
-                        }
-                    },
-                   
-                    events: data // data값이 events란 변수에 담김
-                     
-                    });
-            });
-            calendar.render();
-        });
-    });
-
+		  
+		})// var calendar
+		calendar.render();
+        
+        //calendar.addEvent( event [, source ] )
+     })//DOMContentLoaded
     </script>
   </head>
   <body>
-    <div id='calendar'></div>
+  
+  <jsp:include page="../common/header.jsp" />
+  
+ 	<div id="wrapper">
+   		<div id='calendar'></div>
+    
+    
+    
+		<!-- Modal -->
+		
+		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <form id="eventEnrollForm" action="insert.ev" method="post">
+				
+				   <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">이벤트 등록하기</h5>
+				      </div>
+				      
+				      <div class="modal-body">
+				       	<input class="event" name="eventNo" type="hidden"/>
+				       	<input class="event" name="uploadDate" type="hidden" value="$(this).event."/>
+				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
+				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
+				       	<label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
+				       	<label for="changeName">첨부파일 : <input id="changeName" class="event" name="changeName" type="file" required/></label>
+				       	<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="text" required/></label>
+				      </div>
+				      
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="insertEvent()">등록</button>
+				        <button type="button" class="btn btn-secondary" onclick="revokeEvent()">취소</button>
+				      </div>
+				</div> 
+				</div>    
+				
+		  </form> 
+		</div>
+		
+</div><!-- wrapper -->
+		<style>
+		#insertModal{
+			width: 50%;
+			height :  50%;
+			margin : auto;
+			background-color : white;
+		}
+		#eventEnrollForm{
+			
+		}
+		.modal-body{
+			display : flex;
+			flex-flow : column nowrap;
+			/*align-items : center;*/
+			justify-content : center;
+		}
+		.event{
+		
+		}
+			
+		</style>
+    	<script>
+		$(this).click(function(e){
+			e.preventDefault();
+			$('#insertModal').modal("show");
+		});
+		
+	</script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
   </body>
 </html>
+
+		

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eventMapper">
+
+	<!-- resultMap 영역 -->
+	<resultMap id="eventResultSet" type="event">
+		<result column="EVENT_NO" property="eventNo"/>
+		<result column="EVENT_TITLE" property="eventTitle"/>
+		<result column="EVENT_CONTENT" property="eventContent"/>
+		<result column="EVENT_PLACE" property="eventPlace"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="UPLOAD_DATE" property="uploadDate"/>
+		<result column="PARTICIPANTS" property="participants"/>
+		<result column="CATEGORY_NO" property="categoryNo"/>
+	</resultMap>
+
+	<!-- 모든 이벤트리스트 조회 with 조건(월별) -->
+	<select id="selectEventList" resultMap="eventResultSet">
+		SELECT
+						EVENT_NO,
+						EVENT_TITLE,
+						EVENT_PLACE,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+						PARTICIPANTS,
+						CATEGORY_NO
+		FROM
+						TB_EVENT
+		<!-- 컨트롤러에서 해당월만 조건으로 달기 -->
+	</select>
+	
+	<!-- 세부이벤트 조회 -->
+	<select id="selectEventDetail" parameterType="_int" resultMap="eventResultSet">
+		SELECT
+						EVENT_NO,
+						EVENT_TITLE,
+						EVENT_CONTENT,
+						EVENT_PLACE,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+						PARTICIPANTS,
+						CATEGORY_NO
+		FROM
+						TB_EVENT
+		WHERE
+						EVENT_NO = #{ eventNo }
+	</select>
+
+	<!-- 이벤트 등록 -->
+	<insert id="insertEvent" parameterType="event">
+		INSERT
+			INTO
+						TB_EVENT
+						(
+						EVENT_NO,
+						EVENT_TITLE,
+						EVENT_CONTENT,
+						EVENT_PLACE,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+					
+						CATEGORY_NO
+						)
+						
+		VALUES(
+						SEQ_EVENT_NEXTVAL,
+						#{ eventTitle },
+						#{ eventContent },
+						#{ eventPlace },
+						#{ changeName },
+						#{ uploadDate },
+						
+						#{ categoryNo },
+					)
+	
+	</insert>
+	<!-- 이벤트 수정 -->
+	<update id="updateEvent" parameterType="event">
+		UPDATE
+						TB_EVENT
+		SET
+						EVENT_TITLE = #{ eventTitle }
+						EVENT_CONTENT = #{ eventContent }
+						EVENT_PLACE = #{ eventPlace }
+						CHANGE_NAME = #{ changeName }
+						UPLOAD_DATE = #{ uploadDate }
+						PARTICIPANTS = #{ participants }
+						CATEGORY_NO = #{ categoryNo }
+		WHERE
+						EVENT_NO = #{ eventNo }
+	
+	</update>
+
+	<!-- 이벤트 삭제 -->
+	<update id="deleteEvent" parameterType="_int">
+		UPDATE
+						TB_EVENT
+		SET
+						STATUS = 'N'
+		WHERE
+						EVENT_NO = #{ eventNo }
+	</update>
+</mapper>

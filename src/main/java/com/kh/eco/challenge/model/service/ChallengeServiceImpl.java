@@ -104,6 +104,18 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.selectChallengeDetail(sqlSession, challengeNo);
 	}
 
+	@Override
+	public String selectUserId(int challengeNo) {
+		
+		return challengeDao.selectUserId(sqlSession, challengeNo);
+	}
+
+	@Override
+	public String selectCategoryName(int challengeNo) {
+		
+		return challengeDao.selectCategoryName(sqlSession, challengeNo);
+	}
+
 	
 	
 	
@@ -179,6 +191,7 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		
 		return challengeDao.deleteChallenge(sqlSession, challengeNo);
 	}
+
 
 
 

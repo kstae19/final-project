@@ -62,6 +62,17 @@ public class ChallengeDao {
 		return sqlSession.selectOne("challengeMapper.selectChallengeDetail", challengeNo);
 	}
 	
+	public String selectUserId(SqlSessionTemplate sqlSession, int challengeNo) {
+	
+		return sqlSession.selectOne("challengeMapper.selectUserId", challengeNo);
+	}
+
+	public String selectCategoryName(SqlSessionTemplate sqlSession, int challengeNo) {
+		
+		return sqlSession.selectOne("challengeMapper.selectCategoryName", challengeNo);
+	}
+
+
 	
 
 	

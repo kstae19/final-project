@@ -36,6 +36,9 @@ public interface ChallengeService {
 	
 	Challenge selectChallengeDetail(int challengeNo);
 	
+	String selectUserId(int challengeNo);
+	
+	String selectCategoryName(int challengeNo);
 
 	
 	

@@ -76,7 +76,7 @@
 		<div class="menu" onclick="location.href='event'"><h1>EVENT</h1></div>
 		<div class="menu" onclick="location.href='challenge'"><h1>CHALLENGE</h1></div>
 		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
-		<div class="menu"><h1>MOVE</h1></div>
+		<div class="menu" onclick="location.href='move'"><h1>MOVE</h1></div>
 		<c:choose>
 			<c:when test="${ empty sessionScope.loginUser }">
 				<div class="lm login-menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
