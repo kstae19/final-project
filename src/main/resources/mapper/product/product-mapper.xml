@@ -22,22 +22,6 @@
 	<result property="addDate" column="ADD_DATE"/>
 </resultMap>
 
-<resultMap id="resultCartMap" type ="cart">
-	<result property="qty" column="QTY"/>
-	<association property = "product" javaType="product">
-		<result property="brandNo" column="BRAND_NO"/>
-		<result property="brandName" column="BRAND_NAME"/>
-		<result property="productNo" column="PRODUCT_NO"/>
-		<result property="productName" column="PRODUCT_NM"/>
-		<result property="productInfo" column="PRODUCT_INFO"/>
-		<result property="mainImg" column="MAIN_IMG"/>
-	</association>
-	<association property="option" javaType="option">
-		<result property="optionNo" column="OPTION_NO"/>
-		<result property="optionName" column="OPTION_NM"/>
-		<result property="price" column="PRICE"/>
-	</association>
-</resultMap>
 <resultMap id="cartMap" type ="cart">
 	<result property="qty" column="QTY"/>
 	<result property="brandNo" column="BRAND_NO"/>
@@ -49,6 +33,15 @@
 	<result property="optionNo" column="OPTION_NO"/>
 	<result property="optionName" column="OPTION_NM"/>
 	<result property="price" column="PRICE"/>
+	<result property="userNo" column="USER_NO"/>
+</resultMap>
+
+<resultMap id="shoppingListMap" type="order">
+	<result property="orderNo" column="ORDER_NO" />
+	<result property="userNo" column="USER_NO" />
+	<result property="orderDate" column="ORDER_DATE"/>
+	<result property="addressNo" column="ADDRESS_NO"/>
+	<collection property="orderDetail" ofType="cart" resultMap="cartMap"/>
 </resultMap>
 
 <select id="selectProductList" resultMap="resultProductMap">
@@ -107,6 +100,10 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 			PRODUCT_NO = #{productNo} 
 		AND STATUS= 'Y'
 </select>
+
+<update id="updateProductCount" parameterType="_int">
+	UPDATE TB_PRODUCT SET COUNT=COUNT+1 WHERE PRODUCT_NO = #{productNo}
+</update>
 
 <select id="getBrand" parameterType="_int" resultType="brand">
 	SELECT 
@@ -322,6 +319,35 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 			TB_PRODUCT_OPTION 
 		WHERE 
 			OPTION_NO = #{optionNo}
+</select>
+
+<select id="getShoppingList" parameterType="_int" resultMap="shoppingListMap">
+	SELECT 
+	        ORDER_NO
+	        , ADDRESS_NO
+	        , USER_NO
+	        , TO_CHAR(ORDER_DATE,'YYYY-MM-DD PM HH:MI:SS')
+	        , OPTION_NO
+	        , OPTION_NM
+	        , QTY
+	        , PRICE 
+	        , PRODUCT_NO 
+	        , PRODUCT_NM 
+	        , BRAND_NO 
+	        , BRAND_NAME 
+	        , MAIN_IMG 
+	FROM 
+		TB_ORDER 
+	JOIN 
+		TB_ORDER_ITEM USING(ORDER_NO) 
+	JOIN 
+		TB_PRODUCT_OPTION USING(OPTION_NO) 
+	JOIN 
+		TB_PRODUCT USING(PRODUCT_NO) 
+	JOIN 
+		TB_BRAND USING(BRAND_NO) 
+	WHERE 
+		USER_NO=#{userNo} 
 </select>
 
 </mapper>

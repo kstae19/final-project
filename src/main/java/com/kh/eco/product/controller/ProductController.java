@@ -50,6 +50,7 @@ public class ProductController {
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {
 		String likeCheck = like.getUserNo() !=0 ? productService.checkLike(like) : "N";
+		productService.updateProductCount(like.getProductNo());
 		model.addAttribute("like", likeCheck);
 		model.addAttribute("p", productService.selectProduct(like.getProductNo()));
 		model.addAttribute("images", productService.getImages(like.getProductNo()));
@@ -73,7 +74,6 @@ public class ProductController {
 		
 		ArrayList<Cart> itemList = orderCart.getItemList();
 		if(itemList.isEmpty()) {
-			System.out.println("한 개만 주문하는 상태~~");
 			ProductOption option = productService.getProductOption(item.getOptionNo());
 			item.setOptionName(option.getOptionName());
 			item.setPrice(option.getPrice());
@@ -84,7 +84,7 @@ public class ProductController {
 		int numOfItem = itemList.size();
 		int totalPrice = 0;
 		for(int i =0 ; i<numOfItem;i++) {
-			totalPrice+= itemList.get(i).getPrice();
+			totalPrice+= itemList.get(i).getPrice()*itemList.get(i).getQty();
 		}
 		model.addAttribute("shipping", (totalPrice>=40000)? true : false);
 		model.addAttribute("numOfItem", numOfItem);
@@ -104,15 +104,23 @@ public class ProductController {
 	@RequestMapping(value="pay", produces="html/text; charset=UTF-8")
 	public String makePayment(KakaoPay pay) throws IOException, ParseException{
 		//TC0ONETIME
-		System.out.println("카카오 페이를 위해 필요한 값 : "+pay);
 		String pcUrl = productService.getPcUrl(pay);
-		//String payResult = productService.payResult(pcUrl);
-		
 		return pcUrl;
 	}
 	
 	@GetMapping("shoppingList")
-	public String getShoppingList(@RequestParam(value="userNo", defaultValue="0") int userNo) {
+	public String getShoppingList(@RequestParam(value="userNo", defaultValue="0") int userNo,
+									Model model) {
+		ArrayList<Order> orders = productService.getShoppingList(userNo);
+		for(Order o : orders) {
+			int totalPrice =0;
+			o.setItemQty(o.getOrderDetail().size());
+			for(Cart c : o.getOrderDetail()) {
+				totalPrice+=c.getPrice();
+			}
+			o.setTotalPrice(totalPrice);
+		}
+		model.addAttribute("orders", orders);
 		return "product/shoppingList";
 	}
 	@GetMapping("paySuccess")
@@ -127,10 +135,6 @@ public class ProductController {
 	@GetMapping("payReady")
 	public String payReady() {
 		return "product/payReady";
-	}
-	@GetMapping("list.shopping")
-	public String shoppingList(int userNo) {
-		return "product/shoppingList";
 	}
 	
 	

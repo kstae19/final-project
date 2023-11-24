@@ -10,6 +10,5 @@ import lombok.ToString;
 public class OrderItem {
 	private int orderNo;
 	private int optionNo;
-	private String orderDate;
 	private int qty;
 }
