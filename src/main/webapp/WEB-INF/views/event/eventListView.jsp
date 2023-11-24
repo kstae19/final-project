@@ -83,27 +83,45 @@
         // 날짜 클릭이벤트
         calendar.on('dateClick', function(info) {
         	
-            $(function(){
-           		// eventDate를 넘기기 (ajax)
+            new Promise( (succ, fail) => {
+            	// eventDate를 넘기기 (ajax)
               	console.log(info.dateStr);
               	$.ajax({
               		
               		url : 'enrollForm.ev',
               		data : { startDate : info.dateStr},
               		success : function(data){
-              			console.log(data);
+              			$('#insertModal').modal('show');
               		},
               		error : function(){
               			console.log('폼 연결 실패');
               		} 	
-              	});//ajax 
-
-            	// 모달창 띄우기
-            	$('#insertModal').attr('show', true);
-              });//jQuery
-            	
+          
+              	});//ajax
+            }).then( (arg) => {
             
-            	
+            	console.log('이제 등록해야지 : ' + arg);
+      			$.ajax({
+              		
+              		url : 'insert.ev',
+              		data : { 
+              			eventNo : $('#eventNo').val(),
+              			eventDate : info.dateStr,
+              			eventTitle :  $('#eventTitle').val(),
+              			eventContent :  $('#eventContent').val(),
+              			eventPlace :  $('#eventPlace').val(),
+              			changeName :  $('#upfile').val(),
+              			categoryNo :  $('#categoryNo').val()
+              		},
+              		success : function(data){
+              			console.log('등록 성공!!');
+              		},
+              		error : function(){
+              			console.log('등록 실패!!');
+              		}
+            })//ajax
+
+            })//then
             	
        
         	
@@ -150,7 +168,7 @@
 				      </div>
 				      
 				      <div class="modal-footer">
-				        <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="insertEvent();">등록</button>
+				        <button type="submit" class="btn btn-primary" data-dismiss="modal">등록</button>
 				        <button type="button" class="btn btn-secondary" >취소</button>
 				      </div>
 				</div> 
