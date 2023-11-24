@@ -105,8 +105,6 @@ public class ProductController {
 	public String makePayment(KakaoPay pay) throws IOException, ParseException{
 		//TC0ONETIME
 		String pcUrl = productService.getPcUrl(pay);
-		//String payResult = productService.payResult(pcUrl);
-		
 		return pcUrl;
 	}
 	
@@ -121,7 +119,6 @@ public class ProductController {
 				totalPrice+=c.getPrice();
 			}
 			o.setTotalPrice(totalPrice);
-			System.out.println(o);
 		}
 		model.addAttribute("orders", orders);
 		return "product/shoppingList";
