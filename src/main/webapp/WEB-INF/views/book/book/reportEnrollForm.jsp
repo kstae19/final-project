@@ -50,9 +50,9 @@
 		        <c:if test="${ loginUser.userStatus eq 'A' }">
 		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
 		        </c:if>
-		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle">
+		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle" maxlength="40">
 		        <br><br>
-		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent"></textarea>
+		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent" maxlength="1900"></textarea>
 		        <br><br>
 		        <span>별점</span>
 		        <select name="bookReportStar">
@@ -72,7 +72,8 @@
     
     <c:if test="${ not empty br }">
     	<script>
-    		function isTrue(str){
+    		// 체크목적으로 만든 함수
+    		function Check(str){
     			if(str != '1'){
     				return false;
     			}
@@ -82,8 +83,8 @@
     		}
     		
     		$(function(){
-    			$('input[name=bookReportSecret]').attr("checked", isTrue('${br.bookReportSecret}'));
-    			$('input[name=bookReportNotice]').attr("checked", isTrue('${br.bookReportNotice}'));
+    			$('input[name=bookReportSecret]').attr("checked", Check('${br.bookReportSecret}'));
+    			$('input[name=bookReportNotice]').attr("checked", Check('${br.bookReportNotice}'));
     			$('input[name=bookReportTitle]').val('${br.bookReportTitle}');
     			$('textarea[name=bookReportContent]').val('${br.bookReportContent}');
     			$('option[value=${br.bookReportStar}]').attr("selected", true);
@@ -91,11 +92,6 @@
     			
     			$('form').attr("action", "reportUpdateForm.bk");
     		})
-    		
-    	
-    	
-    	
-    		
     	</script>
     </c:if>
     

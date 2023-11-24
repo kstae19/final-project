@@ -70,6 +70,12 @@
 		</script>
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>
+	<c:if test="${ not empty loginAlert }">
+		<script>
+			alert('${loginAlert}')
+		</script>
+		<c:remove var="loginAlert" scope="session" />
+	</c:if>
 
 	<div id="menubar">
 		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
