@@ -199,6 +199,7 @@ public class BookController {
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
 		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
+		// bookList가 아니라 isbn키값을 가지는 hashmap을 만들어서 그걸 db단에서 조회시키면서 새로운 vo를 만들어 키값을 덮어씌...테이블구조를 바꿔야할까
 		ArrayList<Book> countList = bookService.countList();
 		
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
@@ -220,8 +221,8 @@ public class BookController {
 	
 	
 	// 검색 메소드
-	@RequestMapping("searchbook.bk")
-	public String bookSearch(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model, String selectBook, String searchBook) throws IOException {
+	@RequestMapping("searchBook.bk")
+	public String bookSearch(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model, String selectBookOption, String searchBookValue) throws IOException {
 		
 		ArrayList<Book> allList = new ArrayList();
 		for(int i = 1; i <= 4; i++) {
@@ -232,24 +233,24 @@ public class BookController {
 		}
 		
 		ArrayList<Book> searchList = new ArrayList();
-		switch(selectBook) {
+		switch(selectBookOption) {
 		case "title" : 
 			for(int i = 0; i < allList.size(); i++) {
-				if((allList.get(i).getBookTitle()).contains(searchBook)) {
+				if((allList.get(i).getBookTitle()).contains(searchBookValue)) {
 					searchList.add(allList.get(i));
 				}
 			}
 			break;
 		case "writer" : 
 			for(int i = 0; i < allList.size(); i++) {
-				if((allList.get(i).getBookWriter()).contains(searchBook)) {
+				if((allList.get(i).getBookWriter()).contains(searchBookValue)) {
 					searchList.add(allList.get(i));
 				}
 			}
 			break;
 		case "category" : 
 			for(int i = 0; i < allList.size(); i++) {
-				if((allList.get(i).getBookCategory()).contains(searchBook)) {
+				if((allList.get(i).getBookCategory()).contains(searchBookValue)) {
 					searchList.add(allList.get(i));
 				}
 			}
@@ -279,8 +280,8 @@ public class BookController {
 		
 		model.addAttribute("bookList", searchList.subList(startList, endList));
 		model.addAttribute("pi", pi);
-		model.addAttribute("selectBook", selectBook);
-		model.addAttribute("searchBook", searchBook);
+		model.addAttribute("selectBook", selectBookOption);
+		model.addAttribute("searchBook", searchBookValue);
 		
 		return "book/book/bookList";
 	}
@@ -327,21 +328,21 @@ public class BookController {
 	}
 	
 	// 독후감 게시판 검색목록 리스트 조회
-	@RequestMapping("reportsearch.bk")
-	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, ModelAndView mv, String reportcondition, String reportsearch) {
+	@RequestMapping("reportSearch.bk")
+	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, ModelAndView mv, String reportSearchOption, String reportSearchValue, HttpSession session) {
 		
 		HashMap<String, String> map = new HashMap();
-		map.put("condition", reportcondition);
-		map.put("keyword", reportsearch);
+		map.put("condition", reportSearchOption);
+		map.put("keyword", reportSearchValue);
 		
 		PageInfo pi = Pagination.getPageInfo(bookService.searchReportCount(map), currentPage, 10, 10);
 		
 		ArrayList<BookReport> list = bookService.searchReportList(map, pi);
 		
 		if(list != null) { // 리스트 조회 성공
-			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportcondition).addObject("keyword", reportsearch).setViewName("book/book/reportList");
+			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportSearchOption).addObject("keyword", reportSearchValue).setViewName("book/book/reportList");
 		} else { // 리스트 조회 실패
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "조회수 증가 실패");
 		}
 		return mv;
 	}
@@ -354,29 +355,30 @@ public class BookController {
 	
 	// 독후감 게시판 작성
 	@RequestMapping("reportEnrollForm.bk")
-	public String reportEnrollForm(BookReport bookReport) {
+	public String reportEnrollForm(BookReport bookReport, HttpSession session) {
 		
 		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
-			System.out.println("성공");
+			return "redirect:bookreport";
 		} else { // 작성 실패
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "게시글 작성 실패");
+			return "redirect:bookreport";
 		}
-		return "redirect:bookreport";
+		
 	}
 	 
 	// 독후감 게시판 상세조회
 	@RequestMapping("reportdetail.bk")
-	public String reportDetail(int rno, Model model) {
+	public String reportDetail(int rno, Model model, HttpSession session) {
 		
 		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
 			BookReport bookReport = bookService.reportDetail(rno);
 			if(bookReport != null) { // 상세조회 성공
 				model.addAttribute("br", bookReport);
 			} else { // 상세조회 실패
-				System.out.println("실패!");
+				session.setAttribute("failBookAlert", "상세조회 실패");
 			}
 		} else { // 조회수 증가 실패
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "상세조회 실패");
 		}
 		
 		return "book/book/reportDetail";
@@ -393,28 +395,28 @@ public class BookController {
 	
 	// 독후감 게시글 수정
 	@RequestMapping("reportUpdateForm.bk")
-	public String reportUpdateForm(BookReport bookReport) {
+	public String reportUpdateForm(BookReport bookReport, HttpSession session) {
 		
 		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
-			System.out.println("성공");
+			session.setAttribute("successBookAlert", "게시글 수정 성공");
+			return "redirect:bookreport";
 		} else { // 수정 실패
-			System.out.println("실패!");
+			session.setAttribute("failBookAlert", "게시글 수정 실패");
+			return "redirect:bookreport";
 		}
-		
-		return "redirect:bookreport";
 	}
 	
 	// 독후감 게시글 삭제
 	@RequestMapping("reportDelete.bk")
-	public String reportDelete(int reportNo) {
+	public String reportDelete(int reportNo, HttpSession session) {
 		
 		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
-			System.out.println("성공");
+			session.setAttribute("successBookAlert", "게시글 삭제 성공");
+			return "redirect:bookreport";
 		} else { // 삭제 실패
-			System.out.println("실패");
+			session.setAttribute("failBookAlert", "게시글 삭제 실패");
+			return "redirect:bookreport";
 		}
-		
-		return "redirect:bookreport";
 	}
 	
 	// 독후감 게시글 신고
@@ -427,11 +429,12 @@ public class BookController {
 		map.put("userNo", userNo);
 		
 		if(bookService.reportBlack(map) > 0) {
-			session.setAttribute("alert", "신고 완료");
+			session.setAttribute("successBookAlert", "게시글 신고 성공");
+			return "redirect:bookreport";
 		} else { // 신고 실패
-			System.out.println("실패");
+			session.setAttribute("failBookAlert", "게시글 신고 실패");
+			return "redirect:bookreport";
 		}
-		return "redirect:bookreport";
 	}
 	
 	// 도서 마이페이지 포워딩

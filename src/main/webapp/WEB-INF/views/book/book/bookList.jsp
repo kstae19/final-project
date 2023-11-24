@@ -63,13 +63,13 @@
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 
     <div class="outer">
-        <form id="book-search" class="search-form" action="searchbook.bk" >
-            <select name="selectBook">
+        <form id="book-search" class="search-form" action="searchBook.bk" >
+            <select name="selectBookOption">
                 <option value="title">제목</option>
                 <option value="writer">작가</option>
                 <option value="category">카테고리</option>
             </select>
-            <input type="text" name="searchBook">
+            <input type="text" name="searchBookValue" maxlength="50">
             <button type="submit">검색</button>
         </form>
         <br><br>

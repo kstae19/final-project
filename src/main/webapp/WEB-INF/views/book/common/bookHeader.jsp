@@ -35,16 +35,22 @@
 </head>
 <body>
 
-	<c:if test="${ not empty alert }">
+	<c:if test="${ not empty successBookAlert }">
 		<script>
-			alertify.alert("알림", '${alert}', function(){alertify.success('띠용')});
+			alertify.alert("성공", '${successBookAlert}', function(){alertify.success('띠용')});
 		</script>
-		<c:remove var="alert" scope="session"/>
+		<c:remove var="successBookAlert" scope="session"/>
+	</c:if>
+	<c:if test="${ not empty failBookAlert }">
+		<script>
+			alertify.alert("실패", '${failBookAlert}', function(){alertify.success('띠용')});
+		</script>
+		<c:remove var="failBookAlert" scope="session"/>
 	</c:if>
 
     <div class="main_image">
         <img src="https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/07/resize-images-banner.jpeg" width="100%" height="200px">
-        <h1 class="main_image_text" style="font-size:50px">가운데에 글씨 쓰기</h1>
+        <h1 class="main_image_text" style="font-size:50px"><c:out value="${ middelLetter }" /></h1>
     </div>
     <br><br>
 </body>

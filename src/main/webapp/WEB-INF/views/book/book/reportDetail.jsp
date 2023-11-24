@@ -46,7 +46,6 @@
 				cPage : nowPage    				
 			},
 			success : result => {
-				console.log(result);
 				
 				$('#reportReply-count').html(result.replyCount);
 				if(result.replyCount == 0){
