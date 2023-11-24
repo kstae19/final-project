@@ -21,6 +21,6 @@ public class Book {
 	private String bookDate;
 	private String bookCategory;
 	private String bookLink;
-	
+	private String bookReply;
 	
 }

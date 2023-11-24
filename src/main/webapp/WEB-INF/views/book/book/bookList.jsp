@@ -32,7 +32,7 @@
             justify-content: center;
             padding: initial;
         }
-        #book-container>div{
+        #book-container div{
             list-style-type: none;
             border: 1px solid gray;
             padding: 5px;
@@ -40,11 +40,11 @@
             height: 450px;
             background-color: lightgray;
         }
-        #book-container>div>img{
+        #book-container div>img{
             width: 100%;
             height: 210px;
         }
-        #book-container>div>p{
+        #book-container div>p{
             margin-bottom: 5px;
         }
     </style>
@@ -73,76 +73,85 @@
             <button type="submit">검색</button>
         </form>
         <br><br>
-
-        <div id="book-container">
-            <c:forEach items="${ bookList }" var="b">
-            	<div>
-            		<img src="${ b.bookImg }">
-            		<p>${ b.bookTitle }</p>
-            		<p>${ b.bookWriter }</p>
-            		<p>조회수 : </p>
-            		<p id="book-count">${ b.bookCount }</p>
-	            	<input type="hidden" name="ISBN" value="${ b.ISBN13 }">
-            	</div>
-            </c:forEach>
-        </div>
+        
+		
+	        <div id="book-container">
+	            <c:forEach items="${ bookList }" var="b">
+	            	<form id="book" method="post" action="">
+	            		<div>
+		            		<img src="${ b.bookImg }">
+		            		<p class="book-title">${ b.bookTitle }</p>
+		            		<p>${ b.bookWriter }</p>
+		            		<p class="book-count">조회수 : ${ b.bookCount }</p>
+			            	<input type="hidden" name="ISBN" value="${ b.ISBN13 }">
+			            	<input type="hidden" name="bookTitle" value="${ b.bookTitle }">
+			            	<input type="hidden" name="bookWriter" value="${ b.bookWriter }">
+			            	<input type="hidden" name="bookCategory" value="${ b.bookCategory }">
+			            	<input type="hidden" name="bookImg" value="${ b.bookImg }">
+			            	<input type="hidden" name="bookContent" value="${ b.bookContent }">
+			            	<input type="hidden" name="bookDate" value="${ b.bookDate }">
+			            	<input type="hidden" name="bookLink" value="${ b.bookLink }">
+			            	<input type="hidden" name="bookPublisher" value="${ b.bookPublisher }">
+			            	<input type="hidden" name="bookCount" value="${ b.bookCount }">
+	            		</div>
+	            	</form>
+	            </c:forEach>
+	        </div>
+        
         <br>
-		
-		<c:choose>
-			<c:when test="${ empty selectBook }">
-				<ul class="pagination justify-content-center">
-		        	<c:choose>
-			       		<c:when test="${ pi.currentPage eq 1 }">
-			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-			       		</c:when>
-			       		<c:otherwise>
-			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
-			       		</c:otherwise>
-			       	</c:choose>
-			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-			           		<li class="page-item"><a class="page-link" href="book?cPage=${p}">${p}</a></li>
-			           </c:forEach>
-			           <c:choose>
-			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
-			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-			       		</c:when>
-			       		<c:otherwise>
-			       		 	<li class="page-item"><a class="page-link" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
-			       		</c:otherwise>
-			       	</c:choose>
-        		</ul>
-			</c:when>
-			<c:otherwise>
-				<ul class="pagination justify-content-center">
-		        	<c:choose>
-			       		<c:when test="${ pi.currentPage eq 1 }">
-			             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-			       		</c:when>
-			       		<c:otherwise>
-			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage - 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Previous</a></li>
-			       		</c:otherwise>
-			       	</c:choose>
-			           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
-			           		<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${p}&searchBook=${searchBook}&selectBook=${selectBook}">${p}</a></li>
-			           </c:forEach>
-			           <c:choose>
-			       		<c:when test="${ pi.currentPage eq pi.maxPage }">
-			       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-			       		</c:when>
-			       		<c:otherwise>
-			       		 	<li class="page-item"><a class="page-link" href="searchbook.bk?cPage=${ pi.currentPage + 1 }&searchBook=${searchBook}&selectBook=${selectBook}">Next</a></li>
-			       		</c:otherwise>
-			       	</c:choose>
-	        	</ul>
-			</c:otherwise>
-		</c:choose>
-		
-		
-		
+        
+        <c:if test="${ bookList.size() > pi.pageLimit }">
+        	<ul class="pagination justify-content-center">
+	        	<c:choose>
+		       		<c:when test="${ pi.currentPage eq 1 }">
+		             	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		       		</c:when>
+		       		<c:otherwise>
+		       		 	<li class="page-item"><a class="page-link page-previous" href="book?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+		       		</c:otherwise>
+		       	</c:choose>
+		           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+		           		<li class="page-item"><a id="${p}" class="page-link page-now" href="book?cPage=${p}">${p}</a></li>
+		           </c:forEach>
+		           <c:choose>
+		       		<c:when test="${ pi.currentPage eq pi.maxPage }">
+		       			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+		       		</c:when>
+		       		<c:otherwise>
+		       		 	<li class="page-item"><a class="page-link page-next" href="book?cPage=${ pi.currentPage + 1 }">Next</a></li>
+		       		</c:otherwise>
+		       	</c:choose>
+       		</ul>
+        	<c:if test="${ not empty selectBook }">
+        		<script>
+        			$(function(){
+        				let selectBook = '${selectBook}';
+        				let searchBook = '${searchBook}';
+        				let attrNow = "searchbook.bk" + "?searchBook=" + searchBook + "&selectBook=" + selectBook + "&cPage="; 
+        				
+        				$.each($('.page-now'), function(index, item){
+        					Now = attrNow + $(item).text();
+        					$(item).attr("href", Now);
+        				})
+        				
+        				let attrPrevious = attrNow + ${ pi.currentPage - 1 };
+        				let attrNext = attrNow + ${ pi.currentPage + 1 };
+        				
+        				$('.page-previous').attr("href", attrPrevious);
+        				$('.page-next').attr("href", attrNext);
+        			})
+        		</script>
+        	</c:if>
+        </c:if>
+        
 		<script>
 			$(function(){
 				$('#book-container div').click(function(){
-					location.href='bookdetail.bk?ISBN='+$(this).children('input[name=ISBN]').val() + '&count=' + $(this).children('#book-count').text();
+					let ISBN13 = $(this).children('input[name=ISBN]').val();
+					let count = $(this).children('.book-count').text().slice(-1);
+					//location.href='bookdetail.bk?ISBN='+$(this).children('input[name=ISBN]').val() + '&count=' + $(this).children('#book-count').text();
+					$(this).parent().attr("action", "bookdetail.bk?ISBN13=" + ISBN13);
+					$(this).parent().submit();
 				})
 			})
 		</script>

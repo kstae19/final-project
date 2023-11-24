@@ -127,7 +127,7 @@ public class BookController {
 		return bookList;
 	}
 	
-	// 알라딘 api 상품조회 메소드
+	/* 알라딘 api 상품조회 메소드
 	public Book bookLookUp(String ISBN) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
@@ -175,7 +175,7 @@ public class BookController {
 	        "originalTitle": "The Developing Genome: An Introduction to Behavioral Epigenetics (2015년)",
 	        "itemPage": 540
       		}
-		 */
+		 
 		JsonObject item = itemArr.get(0).getAsJsonObject();
 		
 		Book book = new Book();
@@ -191,7 +191,7 @@ public class BookController {
 		book.setBookImg(item.get("cover").getAsString());
 		
 		return book;
-	}
+	}*/
 	
 	
 	// 메인화면 메소드
@@ -256,6 +256,16 @@ public class BookController {
 			break;
 		}
 		
+		ArrayList<Book> countList = bookService.countList();
+		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
+		for(int i = 0; i < searchList.size(); i++) {
+			for(int n = 0; n < countList.size(); n++) {
+				if((searchList.get(i).getISBN13()).equals(countList.get(n).getISBN13())) {
+					searchList.get(i).setBookCount(countList.get(n).getBookCount());
+				}
+			}
+		}
+		
 		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 20, 10);
 		// 만약 현재페이지 1 : 0 ~ 19(20)
 		// 2 : 20 ~ 39(40)
@@ -276,31 +286,35 @@ public class BookController {
 	}
 	
 	
-	// 상세페이지 메소드(이거 조회 필요없을것같음)
+	// 상세페이지 메소드(api 조회하지 않게 바꿨지만..)
 	@RequestMapping("bookdetail.bk")
-	public String bookDetail(String ISBN, Model model, int count) throws IOException {
+	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		
-		Book book = bookLookUp(ISBN);
+		book.setISBN13(ISBN);
+		int count = book.getBookCount();
 		
 		if(count == 0) { // 조회수가 0일때
 			int bookCount = bookService.insertBook(book);
 			if(bookCount > 0) { // 조회수 추가 성공
 				book.setBookCount(bookCount);
+				model.addAttribute("b", book);
+				return "book/book/bookDetail";
 			} else { // 조회수 추가 실패
-				System.out.println("실패!");
+				session.setAttribute("alert", "조회수 추가 실패");
+				return "redirect:book";
 			}
 		} else { // 조회수가 1 이상일때
 			int bookCount = bookService.increaseBook(ISBN);
 			if(bookCount > 0) { // 조회수 증가 성공
 				int countBook = bookService.countBook(ISBN);
 				book.setBookCount(countBook);
+				model.addAttribute("b", book);
+				return "book/book/bookDetail";
 			} else { // 조회수 증가 실패
-				System.out.println("실패!");
+				session.setAttribute("alert", "조회수 증가 실패");
+				return "redirect:book";
 			}
 		}
-		
-		model.addAttribute("b", book);
-		return "book/book/bookDetail";
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회
@@ -420,9 +434,32 @@ public class BookController {
 		return "redirect:bookreport";
 	}
 	
+	// 도서 마이페이지 포워딩
+	@RequestMapping("bookmypage")
+	public String BookMyPage() {
+		return "book/mypage/bookMyPage";
+	}
 	
-	// 환경사전 api
-	// 나중에 해야지
+	// 독후감 게시판 마이페이지 포워딩
+	@RequestMapping("reportmypage")
+	public String ReportMyPage() {
+		return "book/mypage/reportMyPage";
+	}
+	
+	// 독서캘린더 마이페이지 포워딩
+	
+	
+	// 신고게시판 포워딩
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* 환경사전 api
 	@RequestMapping("ecodictionary")
 	public String ecoDictionary() throws IOException {
 		String clientId = "vzhAW8vm_5bAc_CGqL5k"; //애플리케이션 클라이언트 아이디
@@ -496,31 +533,6 @@ public class BookController {
 	    } catch (IOException e) {
 	        throw new RuntimeException("API 응답을 읽는 데 실패했습니다.", e);
 	    }
-	}
-	
-	
-	// 마이페이지 포워딩
-	@RequestMapping("bookmypage")
-	public String bookMyPage(@RequestParam(value="cPage", defaultValue="1") int bookCurrentPage, @RequestParam(value="cPage", defaultValue="1") int replyCurrentPage,Model model, int userNo) {
-		
-		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), bookCurrentPage, 4, 0);
-		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), replyCurrentPage, 4, 0);
-		
-		ArrayList<Book> list1 = bookService.bookmarkMyPage(userNo, bookPi);
-		ArrayList<BookReply> list2 = bookService.bookReplyMyPage(userNo, replyPi);
-		
-		return "book/mypage/bookMyPage";
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}*/
 
 }

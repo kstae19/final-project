@@ -144,6 +144,22 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.bookReplyMyPage", userNo, rowBounds);
 	}
 	
+	public int reportCountMyPage(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("bookMapper.reportCountMyPage", userNo);
+	}
+	
+	public ArrayList<BookReport> reportMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.reportMyPage", userNo, rowBounds);
+	}
+	
+	public int reportReplyCountMyPage(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("bookMapper.reportReplyCountMyPage", userNo);
+	}
+	
+	public ArrayList<BookReportReply> reportReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyMyPage", userNo, rowBounds);
+	}
+	
 	
 	
 	

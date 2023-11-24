@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,16 +27,22 @@
             height: 300px;
             justify-content: space-evenly;
         }
-        #book-mypage>div{
+        #mypage-book{
+        	display: inline-flex;
+            width: 100%;
+            height: 300px;
+            justify-content: space-evenly;
+        }
+        #mypage-book div{
             width: 250px;
             background-color: lightgray;
         }
-        #book-mypage img{
+        #mypage-book img{
             height: 80%;
             width: 100%;
             margin-bottom: 10px;
         }
-        #book-mypage p{
+        #mypage-book p{
             margin-left: 5px;
             font-size: 20px;
         }
@@ -48,10 +55,114 @@
             width: 100%;
             height: 200px;
         }
-
-
-
     </style>
+    <script>
+    	function selectMyPageBook(nowPage){
+    		$.ajax({
+    			url : 'bookmypage.bk',
+    			async : false,
+    			type : 'post',
+    			data : {
+    				userNo : '${ loginUser.userNo }',
+					bPage : nowPage    				
+    			},
+    			success : result => {
+    				let book = result.bookList;
+					let bookPi = result.bookPi;
+    				if(book.size){
+    					$('#book-mypage').html("북마크한 도서가 없습니다.");
+    				} else {
+    					let buttonBefore = $('#book-mypage').children().first();
+    					let buttonNext = $('#book-mypage').children().last();
+    					
+        				let bookValue = '';
+        				for(let i in book){
+        					bookValue += '<div>'
+        							   + '<img src="' + book[i].bookImg + '">'
+        							   + '<p>' + book[i].bookTitle + '</p>'
+        							   + '</div>';
+        				}
+        				$('#mypage-book').html(bookValue);
+        				
+        				if(bookPi.currentPage == 1){
+        					$(buttonBefore).attr("disabled", true);
+        				} else{
+        					$(buttonBefore).attr("disabled", false);
+        					$(buttonBefore).attr("onclick", "selectMyPageBook(" + (bookPi.currentPage -1) +")");
+        				}
+        				if(book.length < bookPi.boardLimit){
+        					$(buttonNext).attr("disabled", true);
+        				} else{
+        					$(buttonNext).attr("disabled", false);
+        					$(buttonNext).attr("onclick", "selectMyPageBook(" + (bookPi.currentPage + 1) +")");
+        				}
+    				}
+    			},
+   				error : function(){
+   					console.log("통신 실패");
+   				}
+    		})
+    	}
+    	
+    	function selectMyPageReply(nowPage){
+			$.ajax({
+				url : 'bookreplymypage.bk',
+    			async : false,
+    			type : 'post',
+    			data : {
+    				userNo : '${ loginUser.userNo }',
+					rPage : nowPage    				
+    			},
+    			success : result => {
+    				console.log(result);
+    				let reply = result.replyList;
+					let replyPi = result.replyPi;
+    				
+    				if(reply.size){
+    					$('#bookReply-area').html("작성한 한줄평이 없습니다.");
+    				} else {
+        				let replyValue = '';
+        				for(let i in reply){
+        					replyValue += '<tr>'
+        								+ '<td>'
+        								+ '<img src="' + reply[i].bookImg + '"></td>'
+        								+ '<td>' + reply[i].bookTitle + '</td>'
+        								+ '<td>' + reply[i].bookReply + '</td>'
+        								+ '</tr>';
+        				}
+        				$('#mypagebookreply').html(replyValue);
+        				
+        				let replyPiValue = '';
+        				if(replyPi.currentPage == 1){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+        				}
+        				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+        				}
+        				if(replyPi.currentPage == replyPi.endPage){
+        					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+        				} else{
+        					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+        				}
+        				
+        				$('#mypagebookReply').html(replyPiValue);
+    				}
+        				
+        				
+    			},
+				error : function(){
+					console.log("통신 실패");
+				}
+    		})
+    	}
+    
+    	$(function(){
+    		selectMyPageBook();
+    		selectMyPageReply();
+    	})
+    </script>
 </head>
 <body>
 
@@ -62,30 +173,17 @@
     <div class="outer">
         <h3>북마크 도서 목록</h3>
         <div id="book-mypage">
-            <button type="button">&lt;</button>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
+            <button class="before" type="button" onclick="">&lt;</button>
+            <div id="mypage-book">
+            
             </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-            </div>
-            <div>
-                <img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg">
-                <p>제목</p>
-            </div>
-            <button type="button">&gt;</button>
+            <button class="next" type="button" onclick="">&gt;</button>
         </div>
         
         <br><br>
 
         <h3>한줄평 도서 목록</h3>
-        <table class="table table-bordered" id="bookreply-img">
+        <table class="table table-bordered">
             <thead>
               <tr>
                 <th>도서사진</th>
@@ -93,30 +191,12 @@
                 <th>적은 한줄평</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg"></td>
-                <td>Doe</td>
-                <td>john@example.com</td>
-              </tr>
-              <tr>
-                <td><img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg"></td>
-                <td>Moe</td>
-                <td>mary@example.com</td>
-              </tr>
-              <tr>
-                <td><img src="https://www.urbanbrush.net/web/wp-content/uploads/edd/2022/12/urbanbrush-20221214144619159434.jpg"></td>
-                <td>Dooley</td>
-                <td>july@example.com</td>
-              </tr>
+            <tbody id="mypagebookreply">
+              
             </tbody>
           </table>
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          <ul class="pagination justify-content-center" id="mypagebookReply">
+            
           </ul>
     </div>
 </body>

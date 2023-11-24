@@ -5,18 +5,23 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kh.eco.book.model.service.BookService;
+import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
+import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
+@RestController
 @Controller
 public class AjaxBookController {
 	
@@ -24,7 +29,6 @@ public class AjaxBookController {
 	public BookService bookService;
 	
 	// 북마크 있나없나 조회
-	@ResponseBody
 	@RequestMapping(value="markbook.bk", produces="text/html; charset=UTF-8")
 	public String ajaxSelectBookMark(String ISBN13, int userNo) {
 		String className="";
@@ -44,7 +48,6 @@ public class AjaxBookController {
 	}
 	
 	//북마크 추가/삭제
-	@ResponseBody
 	@RequestMapping(value="bookmark.bk", produces="text/html; charset=UTF-8")
 	public String ajaxBookMark(String className, String ISBN13, int userNo) {
 		
@@ -75,7 +78,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 등록
-	@ResponseBody
 	@RequestMapping(value="insertbookreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxInsertBookReply(String ISBN13, int userNo, String content) {
 		
@@ -95,7 +97,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 조회
-	@ResponseBody
 	@RequestMapping(value="selectbookreply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) {
 		
@@ -116,7 +117,6 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 삭제
-	@ResponseBody
 	@RequestMapping(value="deletebookreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteBookReply(String ISBN13, int userNo) {
 		
@@ -133,7 +133,6 @@ public class AjaxBookController {
 	
 	
 	// 댓글 조회
-	@ResponseBody
 	@RequestMapping(value="selectreportreply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
@@ -156,7 +155,6 @@ public class AjaxBookController {
 	
 
 	// 댓글 등록
-	@ResponseBody
 	@RequestMapping(value="insertreportreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxInsertReportReply(int reportNo, int userNo, String content) {
 		
@@ -175,7 +173,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 수정
-	@ResponseBody
 	@RequestMapping("updatereportreply.bk")
 	public String ajaxUpdateReportReply(int replyNo, String content) {
 		
@@ -194,7 +191,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 삭제
-	@ResponseBody
 	@RequestMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteReportReply(int replyNo) {
 		
@@ -206,7 +202,6 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 신고
-	@ResponseBody
 	@RequestMapping(value="reportReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String ajaxReplyBlack(int reportReplyNo, String blackId, int userNo) {
 		
@@ -221,6 +216,72 @@ public class AjaxBookController {
 		} else { // 실패
 			return "fail";
 		}
+	}
+	
+	// 마이페이지 북마크 책 조회
+	@RequestMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
+	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
+		
+		ArrayList<Book> list = bookService.bookmarkMyPage(userNo, bookPi);
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("bookList", list);
+		map.put("bookPi", bookPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+	// 마이페이지 한줄평 조회
+	@RequestMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
+	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		
+		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), currentPage, 5, 5);
+		
+		ArrayList<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyList", list);
+		map.put("replyPi", replyPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+	// 마이페이지 게시글 조회
+	@RequestMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
+	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 5, 5);
+		
+		ArrayList<BookReport> list = bookService.reportMyPage(userNo, reportPi);
+		
+		HashMap<String, Object> map = new HashMap();
+		map.put("reportList", list);
+		map.put("reportPi", reportPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+		
+	// 마이페이지 게시글 댓글 조회
+	@RequestMapping(value="reportreplymypage.bk", produces="application/json; charset=UTF-8")
+	public String reportReplyMyPage(@RequestParam(value="rrPage", defaultValue="1") int currentPage, Model model, int userNo) {
+		
+		PageInfo replyPi = Pagination.getPageInfo(bookService.reportReplyCountMyPage(userNo), currentPage, 5, 5);
+		
+		ArrayList<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("replyList", list);
+		map.put("replyPi", replyPi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
 	}
 	
 	
