@@ -18,5 +18,4 @@ public class Cart {
 	private String mainImg;
 	private String optionName;
 	private int price;
-	private int orderNo;
 }

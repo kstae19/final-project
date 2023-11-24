@@ -13,8 +13,9 @@ public class Order {
 	private int orderNo;
 	private int addressNo;
 	private int userNo;
-	private int optionNo;
-	private int qty;
 	private String orderDate;
+	private int itemQty;
+	private int totalPrice;
 	private ArrayList<OrderItem> items;
+	private ArrayList<Cart> orderDetail;
 }

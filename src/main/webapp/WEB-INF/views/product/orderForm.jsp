@@ -64,6 +64,14 @@ h2 {
 	padding: 0;
 	background:rgb(216, 207, 186);
 }
+#orderbtn{
+	padding:10px 200px 10px 200px;
+	background:orange;
+	border : none;
+	border-radius:10px;
+	margin: 10px 150px 100px 150px;
+	font-size:20px;
+}
 </style>
 </head>
 <body>
@@ -158,8 +166,7 @@ h2 {
 					</c:choose>
 					</div>
 					<input type="hidden" name="quantity" value="${numOfItem }"/>
-					<button type="button" onclick="letsgo()">AJAX카톡결제 하자젭알루</button>
-					<button type="submit">Form 주문하기</button>
+					<button type="submit" id="orderbtn">주문하기</button>
 				</div>
 			</form>
 			<script>

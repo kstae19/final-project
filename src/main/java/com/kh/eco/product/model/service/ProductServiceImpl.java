@@ -262,4 +262,14 @@ public class ProductServiceImpl implements ProductService {
 	public ProductOption getProductOption(int optionNo) {
 		return dao.getProductOption(sqlSession, optionNo);
 	}
+
+	@Override
+	public ArrayList<Order> getShoppingList(int userNo) {
+		return dao.getShoppingList(sqlSession, userNo);
+	}
+
+	@Override
+	public int updateProductCount(int productNo) {
+		return dao.updateProductCount(sqlSession, productNo);
+	}
 }

@@ -92,5 +92,11 @@ public class ProductDao {
 	public ProductOption getProductOption(SqlSessionTemplate sqlSession, int optionNo) {
 		return sqlSession.selectOne("productMapper.getProductOption", optionNo);
 	}
+	public ArrayList<Order>getShoppingList(SqlSessionTemplate sqlSession, int userNo){
+		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", userNo);
+	}
+	public int updateProductCount(SqlSessionTemplate sqlSession, int productNo) {
+		return sqlSession.update("productMapper.updateProductCount", productNo);
+	}
 
 }

@@ -16,7 +16,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border : 1px solid orange;
+	border : 1px solid transparent;
 }
 
 .outer {
@@ -46,18 +46,21 @@ font-size:18px;
 	padding-top:65px;
 }
 .item{
-	align-items: center;	
-}
-.item>.item-info{
-	height:200px;
+	align-items: center;
+	background:beige;	
+	border-radius : 5px;
+	padding:5px;
+	margin:10px;
 }
 .item-info{
+	height:200px;
 	width:60%;
 	align-items: center;	
 }
 .item-info>img{
 	width : 200px;
 	height : 100%;
+	border-radius : 5px;
 }
 .item-info>div{
 	padding-left:10px;
@@ -130,7 +133,7 @@ h3{
 					</div>
 				</div>
 					<!-- 수량정보 및 삭제버튼-->
-				<div class="qty">
+				<div class="qty ${i }">
 					<button type="button" onclick="qtyChange(-1, this);">-</button>
 					<input type="number" min="1" max="10" value="${i.qty }" readonly>
 					<button type="button" onclick="qtyChange(1,this);">+</button>
@@ -140,7 +143,7 @@ h3{
 					<!-- 가격정보 및 구매버튼-->
 					
 				<div class="price">
-					<span>${i.price * i.qty}</span>원 
+					<span class = "total">${i.price * i.qty}</span>원 
 					<br>
 					<input type="hidden" name="itemList[${status.index }].mainImg" value="${i.mainImg }">
 					<input type="hidden" name="itemList[${status.index }].productNo" value="${i.productNo }">
@@ -148,19 +151,19 @@ h3{
 					<input type="hidden" name="itemList[${status.index }].optionName" value="${i.optionName }">
 					<input type="hidden" name="itemList[${status.index }].optionNo" value="${i.optionNo }">
 					<input type="hidden" name="itemList[${status.index }].qty" value="${i.qty }"/>
-					<input type="hidden" name="itemList[${status.index }].price" value="${i.price }"/>
+					<input type="hidden"  class="itemprice" name="itemList[${status.index }].price" value="${i.price }"/>
 					<input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo }">
 					<button type="button" onclick="orderthis('${i.mainImg}', '${i.productNo }',
-					'${i.productName}', '${i.optionNo}', '${i.qty }');">이 상품 구매하기</button>
+					'${i.productName}', '${i.optionNo}', this);">이 상품 구매하기</button>
 				</div>
 				<script>
-					function orderthis(img, pno, pnm, ono, qty){
+					function orderthis(img, pno, pnm, ono, btn){
 						location.href="listOrderForm?userNo="+'${sessionScope.loginUser.userNo}'
-								+'&mainImg='+img
-								+'&productNo='+pno
-								+'&productName='+pnm
-								+'&optionNo='+ono
-								+'&qty='+qty;
+						+'&mainImg='+img
+						+'&productNo='+pno
+						+'&productName='+pnm
+						+'&optionNo='+ono
+						+'&qty='+$(btn).parents('.item').find('input[type=number]').val();
 					}
 				</script>
 		</div>
@@ -176,11 +179,14 @@ h3{
 		 </div>
 		 </c:if>
 		</form>
+		 	
 		<script>
 			function qtyChange(num, btn){
 				let $qtyspan = $(btn).siblings('input');
 				$qty = Number($qtyspan.val());
 				$option = $(btn).parents('.item').find('span[class^=option]');
+				$totalprice = $(btn).parents('.item').find('.total');
+				$itemprice = $(btn).parents('.item').find('.itemprice').val();
 				if(num != -1){
 					if($qty >=10){
 						alert('최대 수량은 10개입니다.');
@@ -202,8 +208,8 @@ h3{
 						  optionNo : $option.attr('class').substring(7),
 						  qty : $qty},
 					success: e=>{
-						console.log(e);
 						$qtyspan.val($qty);
+						$totalprice.text($qty*$itemprice);
 					},
 					error : ()=>{
 						console.log('ajax망..');
@@ -241,6 +247,7 @@ h3{
 
 		</script>
 	</div>
+	<a href="shoppingList?userNo=${sessionScope.loginUser.userNo }">주문내역 확인</a>
 </div>
 <br>
 <br>

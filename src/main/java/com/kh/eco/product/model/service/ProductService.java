@@ -40,5 +40,7 @@ public interface ProductService {
 	ApproveRequest getRequestParam();
 	String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException;
 	ProductOption getProductOption(int optionNo);
+	ArrayList<Order> getShoppingList(int userNo);
+	int updateProductCount(int productNo);
 
 }
