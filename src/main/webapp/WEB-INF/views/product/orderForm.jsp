@@ -7,7 +7,12 @@
 <meta charset="UTF-8">
 <title>상품 주문</title>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+</script>
+
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js" 
+integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4" 
+crossorigin="anonymous"></script>
 <style>
 /*--공통 스타일 --*/
 div {
@@ -120,10 +125,62 @@ h2 {
 				</div>
 				<div class="order-summary">
 					<h3>주문 요약</h3>
-
-					<button type="submit">결제하기</button>
+					<div>
+						<c:choose>
+						<c:when test="${numOfItem ne 1 }">
+						주문 상품 : 
+						<span id="itemName">
+						${items.itemList[0].optionName }(외 ${numOfItem-1 }건)
+						</span>
+						<input type="hidden" name="itemName" value="${items.itemList[0].optionName }(외 ${numOfItem-1 }건)"/>
+						</c:when>
+						<c:otherwise>
+						주문 상품 : 
+						<span id="itemName">
+						${items.itemList[0].optionName }(1건)
+						</span>
+						<input type="hidden" name="itemName" value="${items.itemList[0].optionName }(1건)"/>
+						</c:otherwise>
+						</c:choose>
+					</div>
+					<div>
+					<c:choose>
+					<c:when test="${shipping}">
+						배송 : 무료배송 <br/>
+						총 금액 : <span id="totalPrice">${totalPrice }</span>
+						<input type="hidden" name="totalAmount" value="${totalPrice }"/>
+					</c:when>
+					<c:otherwise>
+						배송 : 3,000원 <br/>
+						총 금액 :<span id="totalPrice">${totalPrice+3000 }</span>
+						<input type="hidden" name="totalAmount" value="${totalPrice+3000}"/>
+					</c:otherwise>
+					</c:choose>
+					</div>
+					<input type="hidden" name="quantity" value="${numOfItem }"/>
+					<button type="button" onclick="letsgo()">AJAX카톡결제 하자젭알루</button>
+					<button type="submit">Form 주문하기</button>
 				</div>
 			</form>
+			<script>
+				function letsgo(){
+					$.ajax({
+						url :'pay',
+						data : {
+							userNo : '${sessionScope.loginUser.userNo}',
+							totalAmount : $('#totalPrice').text(),
+							itemName : $('#itemName').text(),
+							quantity : '${numOfItem}'
+						},
+						success : e => {
+							location.href=e;
+						},
+						error : ()=> {
+							console.log('개똥 api..');
+						}
+					})
+				}
+			</script>
 		</div>
 	</div>
 </body>

@@ -144,12 +144,11 @@ div {
 				<img src="${p.mainImg }">
 			</div>
 			<div id="product-info">
-			<form action="orderForm" method="post">
+			<form action="listOrderForm" method="post">
 				<div id="productTitle">
 					<div id="productName">
 						<h1>${p.productName }</h1>
-					</div>
-					
+					</div>				
 					<div id="like-star">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
@@ -189,7 +188,9 @@ div {
 							<span id="price"></span>
 							
 							<br> 
-
+							<input type="hidden" name="mainImg" value="${p.mainImg }">
+							<input type="hidden" name="productNo" value="${p.productNo }">
+							<input type="hidden" name="productName" value="${p.productName }">
 							<input type="hidden" value="${sessionScope.loginUser.userNo }" name="userNo">
 							<input type="number" value="1" min="1" max="10" required disabled name="qty">
 							<span id="totalPrice"></span><br>
@@ -305,7 +306,7 @@ div {
 							}else{
 								
 							let price = $('#choice span').text();
-							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input').val());
+							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input[type=number]').val());
 							$('#totalPrice').text(totalPrice.toLocaleString()+'원');
 							}
 							

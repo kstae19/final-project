@@ -131,16 +131,16 @@ h3{
 				</div>
 					<!-- 수량정보 및 삭제버튼-->
 				<div class="qty">
-					<button onclick="qtyChange(-1, this);">-</button>
+					<button type="button" onclick="qtyChange(-1, this);">-</button>
 					<input type="number" min="1" max="10" value="${i.qty }" readonly>
-					<button onclick="qtyChange(1,this);">+</button>
+					<button type="button" onclick="qtyChange(1,this);">+</button>
 					<br>
-					<button onclick="removeItem(this);">삭제하기</button>
+					<button type="button" onclick="removeItem(this);">삭제하기</button>
 				</div>
 					<!-- 가격정보 및 구매버튼-->
 					
 				<div class="price">
-					<span>${i.price * i.qty}원</span> 
+					<span>${i.price * i.qty}</span>원 
 					<br>
 					<input type="hidden" name="itemList[${status.index }].mainImg" value="${i.mainImg }">
 					<input type="hidden" name="itemList[${status.index }].productNo" value="${i.productNo }">
@@ -150,8 +150,19 @@ h3{
 					<input type="hidden" name="itemList[${status.index }].qty" value="${i.qty }"/>
 					<input type="hidden" name="itemList[${status.index }].price" value="${i.price }"/>
 					<input type="hidden" name="userNo" value="${sessionScope.loginUser.userNo }">
-					<button type="button" onclick="orderthis(${i.optionNo },${i.qty },${sessionScope.loginUser.userNo });">이 상품 구매하기</button>
+					<button type="button" onclick="orderthis('${i.mainImg}', '${i.productNo }',
+					'${i.productName}', '${i.optionNo}', '${i.qty }');">이 상품 구매하기</button>
 				</div>
+				<script>
+					function orderthis(img, pno, pnm, ono, qty){
+						location.href="listOrderForm?userNo="+'${sessionScope.loginUser.userNo}'
+								+'&mainImg='+img
+								+'&productNo='+pno
+								+'&productName='+pnm
+								+'&optionNo='+ono
+								+'&qty='+qty;
+					}
+				</script>
 		</div>
 		</c:forEach>
 		 	</c:otherwise>
@@ -166,10 +177,6 @@ h3{
 		 </c:if>
 		</form>
 		<script>
-
-			function orderthis(optionNo, qty, userNo){
-					location.href="orderForm?optionNo="+optionNo+"&qty="+qty+"&userNo="+userNo;
-			}
 			function qtyChange(num, btn){
 				let $qtyspan = $(btn).siblings('input');
 				$qty = Number($qtyspan.val());
@@ -235,7 +242,14 @@ h3{
 		</script>
 	</div>
 </div>
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 </body>

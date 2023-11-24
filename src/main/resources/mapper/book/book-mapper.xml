@@ -510,9 +510,9 @@
 		FROM TB_BOOK_REPLY
 		WHERE USER_NO = #{userNo}
 	</select>
-	
+
 	<!-- 마이페이지 한줄평 도서목록 조회 -->
-	<!-- <select id="bookReplyMyPage" parameterType="_int" resultMap="book">
+	<select id="bookReplyMyPage" parameterType="_int" resultMap="book">
 		SELECT 
 			BOOK_TITLE,
 			BOOK_IMG,
@@ -520,7 +520,7 @@
 		FROM TB_BOOK_REPLY
 		JOIN TB_BOOK USING(ISBN)
 		WHERE USER_NO = #{userNo}
-	</select> -->
+	</select>
 	
 	
 	

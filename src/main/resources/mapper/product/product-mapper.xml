@@ -271,7 +271,8 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </select>
 
 <insert id="insertOrder" parameterType="order">
-	INSERT INTO TB_ORDER VALUES(SEQ_ORDER_NO.NEXTVAL, #{addressNo}, #{userNo}, SYSDATE)
+	INSERT 
+			INTO TB_ORDER VALUES(SEQ_ORDER_NO.NEXTVAL, #{addressNo}, #{userNo}, SYSDATE)
 </insert>
 <insert id="insertOrderItem" parameterType="order">
 	INSERT INTO TB_ORDER_ITEM VALUES(SEQ_ORDER_NO.CURRVAL, #{optionNo}, #{qty})
@@ -280,5 +281,47 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 <insert id="insertOrderItems" parameterType="com.kh.eco.product.model.vo.OrderItem">
 	INSERT INTO TB_ORDER_ITEM VALUES(SEQ_ORDER_NO.CURRVAL, #{optionNo}, #{qty})
 </insert>
+
+<insert id="insertReady" parameterType="approveRequest">
+	INSERT 
+		INTO 
+			TB_KAKAO_READY(
+							PAY_NO
+							, USER_NO
+							, TID) 
+					VALUES(
+							SEQ_PAY_NO.NEXTVAL
+							,#{userNo} 
+							,#{tid}
+							)
+</insert>
+
+<select id="getRequestParam" resultType="approveRequest">
+	SELECT 
+			CID, 
+			TID, 
+			PARTNER_ORDER_ID partnerOrderId, 
+			USER_NO userNo 
+	FROM 
+		TB_KAKAO_READY 
+	WHERE 
+		PAY_NO = (
+					SELECT 
+							MAX(PAY_NO) 
+						FROM 
+							TB_KAKAO_READY
+							)
+</select>
+
+<select id="getProductOption" resultType="option" parameterType="_int">
+	SELECT 
+			OPTION_NO optionNo 
+			, OPTION_NM optionName 
+			, PRICE price 
+		FROM 
+			TB_PRODUCT_OPTION 
+		WHERE 
+			OPTION_NO = #{optionNo}
+</select>
 
 </mapper>
