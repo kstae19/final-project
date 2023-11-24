@@ -1,20 +1,29 @@
 package com.kh.eco.product.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.eco.product.model.service.ProductService;
+import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.KakaoPay;
 import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.OrderCart;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.product.model.vo.ProductOption;
+
 
 @Controller
 public class ProductController {
@@ -43,7 +52,6 @@ public class ProductController {
 		String likeCheck = like.getUserNo() !=0 ? productService.checkLike(like) : "N";
 		model.addAttribute("like", likeCheck);
 		model.addAttribute("p", productService.selectProduct(like.getProductNo()));
-		System.out.println(model.getAttribute("p"));
 		model.addAttribute("images", productService.getImages(like.getProductNo()));
 		model.addAttribute("brand", productService.getBrand(like.getProductNo()));
 		model.addAttribute("review", productService.getRate(like.getProductNo()));
@@ -60,32 +68,70 @@ public class ProductController {
 		model.addAttribute("cartItems", cartItems);
 		return "product/cart";
 	}
-	@PostMapping("orderForm")
-	public String orderForm(Order o, Model model) {
-		//주문상품 정보에는 상품명, 상품사진, 가격 , 수량
-		model.addAttribute("item", productService.getCartItem(o.getOptionNo()));
-		model.addAttribute("order", o);		
-		return "product/orderForm";
-	}
-	@PostMapping("listOrderForm")
-	public String orderListForm(OrderCart orderCart, Model model) {
+	@RequestMapping("listOrderForm")
+	public String orderListForm(OrderCart orderCart, Cart item, Model model) {
+		
+		ArrayList<Cart> itemList = orderCart.getItemList();
+		if(itemList.isEmpty()) {
+			System.out.println("한 개만 주문하는 상태~~");
+			ProductOption option = productService.getProductOption(item.getOptionNo());
+			item.setOptionName(option.getOptionName());
+			item.setPrice(option.getPrice());
+			itemList.add(item);
+		}
 		model.addAttribute("items",orderCart);
-		System.out.println(model.getAttribute("items"));
+		
+		int numOfItem = itemList.size();
+		int totalPrice = 0;
+		for(int i =0 ; i<numOfItem;i++) {
+			totalPrice+= itemList.get(i).getPrice();
+		}
+		model.addAttribute("shipping", (totalPrice>=40000)? true : false);
+		model.addAttribute("numOfItem", numOfItem);
+		model.addAttribute("totalPrice", totalPrice);
 		return "product/orderForm";
 	}
 	@PostMapping("product.order")
-	public String orderProduct(Order order, Model model) {
-		System.out.println(order);
-		int result = productService.orderProduct(order);
-		if(result>0) {
-			System.out.println("주문 성공");
-		}else {
-			System.out.println("주문 실패");
-		}
-		return "redirect:/";
+	public String orderProduct(Order order
+								, KakaoPay pay
+								, Model model
+								, HttpSession session) throws IOException, ParseException {
+		session.setAttribute("order", order);
+		model.addAttribute("pcUrl", productService.getPcUrl(pay));
+		return "product/payReady";
 	}
-	@GetMapping("orderList")
-	public String getOrderList() {
-		return "product/orderList";
+	@ResponseBody
+	@RequestMapping(value="pay", produces="html/text; charset=UTF-8")
+	public String makePayment(KakaoPay pay) throws IOException, ParseException{
+		//TC0ONETIME
+		System.out.println("카카오 페이를 위해 필요한 값 : "+pay);
+		String pcUrl = productService.getPcUrl(pay);
+		//String payResult = productService.payResult(pcUrl);
+		
+		return pcUrl;
 	}
+	
+	@GetMapping("shoppingList")
+	public String getShoppingList(@RequestParam(value="userNo", defaultValue="0") int userNo) {
+		return "product/shoppingList";
+	}
+	@GetMapping("paySuccess")
+	public String getSuccessPage(String pg_token, Model model, HttpSession session) throws IOException, ParseException {
+		//db에서 방금 추가된 정보들 가져오기
+		ApproveRequest approveRequest = productService.getRequestParam();
+		approveRequest.setPgToken(pg_token);
+		model.addAttribute("itemName", productService.approvePayment(approveRequest, (Order)session.getAttribute("order")));
+		session.removeAttribute("order");
+		return "product/paySuccess";
+	}
+	@GetMapping("payReady")
+	public String payReady() {
+		return "product/payReady";
+	}
+	@GetMapping("list.shopping")
+	public String shoppingList(int userNo) {
+		return "product/shoppingList";
+	}
+	
+	
 }

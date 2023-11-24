@@ -6,12 +6,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.OrderItem;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
 @Repository
@@ -81,5 +83,14 @@ public class ProductDao {
 //	public int insertOrderItems(SqlSessionTemplate sqlSession, Order order) {
 //		return sqlSession.insert("productMapper.insertOrderItems", order);
 //	}
+	public int insertReady(SqlSessionTemplate sqlSession, ApproveRequest approveRequest) {
+		return sqlSession.insert("productMapper.insertReady", approveRequest);
+	}
+	public ApproveRequest getRequestParam(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("productMapper.getRequestParam");
+	}
+	public ProductOption getProductOption(SqlSessionTemplate sqlSession, int optionNo) {
+		return sqlSession.selectOne("productMapper.getProductOption", optionNo);
+	}
 
 }
