@@ -40,12 +40,14 @@
 
 	//DOMContentLoaded Event DOM Tree가 모두 로딩된 이후에 발생하는 이벤트
 	document.addEventListener('DOMContentLoaded', function() {
-		console.log('현재데이터 내용 : ${list}');
+		//console.log('현재데이터 내용 : ${list}');
         var calendarEl = document.getElementById('calendar');
         
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
+        
           editable : true,
+          timeZone : 'local',
           
   		 <c:if test="not empty ${list}">
   		 	<c:forEach var="e" items="${list}">
@@ -80,57 +82,79 @@
     	 // calendar렌더링
         calendar.render(); 
         
-        // 날짜 클릭이벤트
+        // step1. 날짜 클릭이벤트
         calendar.on('dateClick', function(info) {
         	
-            new Promise( (succ, fail) => {
-            	// eventDate를 넘기기 (ajax)
-              	console.log(info.dateStr);
-              	$.ajax({
-              		
-              		url : 'enrollForm.ev',
-              		data : { startDate : info.dateStr},
-              		success : function(data){
-              			$('#insertModal').modal('show');
-              		},
-              		error : function(){
-              			console.log('폼 연결 실패');
-              		} 	
-          
-              	});//ajax
-            }).then( (arg) => {
-            
-            	console.log('이제 등록해야지 : ' + arg);
-      			$.ajax({
-              		
-              		url : 'insert.ev',
-              		data : { 
-              			eventNo : $('#eventNo').val(),
-              			eventDate : info.dateStr,
-              			eventTitle :  $('#eventTitle').val(),
-              			eventContent :  $('#eventContent').val(),
-              			eventPlace :  $('#eventPlace').val(),
-              			changeName :  $('#upfile').val(),
-              			categoryNo :  $('#categoryNo').val()
-              		},
-              		success : function(data){
-              			console.log('등록 성공!!');
-              		},
-              		error : function(){
-              			console.log('등록 실패!!');
-              		}
-            })//ajax
+           // enrollForm.ev로 가야함
+           $.ajax({
+        	   url : 'enrollForm.ev',
+        	   type : 'POST',
+           	   data : {
+           		   eventDate : info.dateStr,
+           	   },
+           	   success : function(){
+           		   console.log('enrollForm 가기 성공');
+           		   $('#insertModal').modal('show');
+           	   },
+           	   error : function(){
+           		   console.log('enrollForm 가기 실패');
+           	   }
+           })
 
-            })//then
-            	
-       
-        	
-        	
         });// 날짜클릭이벤트
         
-      });// calendar생성
+	        // step2.등록 클릭이벤트
+	    $('button[type=submit]').on('click', function(){
+	    	
+	    	
+	    		let requestData = {
+	    			
+	    				eventDate : $('#eventDate').val(),
+	          			eventTitle :  $('#eventTitle').val(),
+	          			eventContent :  $('#eventContent').val(),
+	          			
+	          			eventPlace : $('#eventPlace').val(),
+	          			categoryNo : $('#categoryNo').val(),
+	    		 }
+	          
+	    	   
 
-      
+	    	    let formData = new FormData();
+	    	/*     formData.append("eventNo", $('#eventNo').val());
+	    	    formData.append("eventDate", '${eventDate}');
+	    	    formData.append("eventTitle", "$('#eventTitle').val()");
+	    	    formData.append("eventContent", "$('#eventContent').val()");
+	    	    formData.append("eventPlace", "$('#eventPlace').val()");
+	    	    formData.append("upfile", "$('#upfile').val()");
+	    	    formData.append("categoryNo", $('#categoryNo').val()); */
+	    	    formData.append("upfile", $('#upfile'));
+	    	    formData.append("request", new Blob([JSON.stringify(requestData)], {type: "application/json"}));
+
+	    	    $.ajax({
+	    	    	url: 'insert.ev',
+	    	        type: "POST",
+	    	        enctype: 'multipart/form-data',
+	    	        data: formData,
+	    	        contentType: false, // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지
+	    	        processData: false,  // 필수: contentType을 false로 줬을 때 QueryString 자동 설정됨. 해제
+	    	        success: function () {
+	    	            alert('등록 성공');
+	    	        },
+	    	        error : function(){
+	    	        	console.log('실패');
+	    	        }
+	    	    });
+	    	    
+				
+	    });//버튼 클릭이벤트
+	   
+    });// calendar생성    
+            	
+    
+    
+    
+	    		
+   
 
 </script>
    
@@ -147,7 +171,7 @@
 		<!-- Modal -->
 		
 		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		  <form enctype="multipart/form-data" id="eventEnrollForm" action="insert.ev" method="post">
+		 
 				
 				   <div class="modal-dialog">
 				    <div class="modal-content">
@@ -156,8 +180,8 @@
 				      </div>
 				      
 				      <div class="modal-body">
-				       	<input class="event" name="eventNo" type="hidden" />
-				       	<input class="event" name="eventDate" type="hidden" value="${ startDate}"/>    
+				       	
+				       	<input class="event" name="eventDate" type="hidden" value="${ eventDate}"/>    
 				       
 				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
 				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
@@ -171,10 +195,9 @@
 				        <button type="submit" class="btn btn-primary" data-dismiss="modal">등록</button>
 				        <button type="button" class="btn btn-secondary" >취소</button>
 				      </div>
-				</div> 
+				</div>
 				</div>    
-				
-		  </form> 
+	
 		</div>
 		
 </div><!-- wrapper -->
