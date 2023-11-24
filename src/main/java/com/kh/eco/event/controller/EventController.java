@@ -2,49 +2,58 @@ package com.kh.eco.event.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.eco.event.model.service.EventService;
 import com.kh.eco.event.model.vo.Event;
 
    
-//@RequiredArgsConstructor     
-//@RequestMapping("/full-calendar")           
+
 @Controller 
 public class EventController {
 
-//    private static final Logger log = LoggerFactory.getLogger(EventController.class);
-//
-//    private final EventService eventService;
 
 	/*
 	 * @ResponseBody => "event/eventListView" 자체가 화면에 나옴
+	 * 
 	 * 
 	 */
 	
 	@Autowired
 	private EventService eventService;
 	
-	@RequestMapping("event")
-    public String selectEventList(Model model){
+	
 
-		// eventListView로 갈 때 list 들고 가기
+			
+	// 이벤트 전체조회
+	@RequestMapping(value="event")
+    public String selectEventList(Model model) {
+
+		
 		model.addAttribute("list", eventService.selectEventList());
+		
+
 		
         return "event/eventListView";
         
     }
 	
-	
+	// 이벤트 등록폼
 	  @RequestMapping("enrollForm.ev") 
 	  public String eventEnrollForm(String startDate, Model model) {
 	 
@@ -54,6 +63,7 @@ public class EventController {
 	  
 	  }
 	  
+	  // 이벤트 수정폼
 	  @RequestMapping("updateForm.ev") 
 	  public String eventUpdateForm() {
 	  
@@ -61,6 +71,7 @@ public class EventController {
 		  return "";
 	  }
 	  
+	  // 이벤트 세부모달
 	  @RequestMapping("detail.ev") 
 	  public String selectEventDetail(int eventNo) {
 	  
@@ -69,12 +80,13 @@ public class EventController {
 		  return "event/eventDetailView"; 
 	  }
 	
-	
+	// 이벤트 등록
 	 @RequestMapping("insert.ev") 
 	 public String insertEvent(Event e, MultipartFile upfile, Model model, HttpSession session) {
 	 
 		  System.out.println(e);
 		 
+		  // 이벤트 등록
 		  if( !upfile.getOriginalFilename().contentEquals("")) {
 			  
 			  e.setOriginName(upfile.getOriginalFilename());
@@ -92,6 +104,7 @@ public class EventController {
 		  
 	  }
 	 
+	 // 파일저장메서드
 	 public String saveFile(MultipartFile upfile, HttpSession session) {
 			
 			// 원본파일명 뽑기(필드명과 같게)
@@ -125,10 +138,12 @@ public class EventController {
 			
 		}
 
+	 // 이벤트 수정
 	  @RequestMapping("update.ev") public String updateEvent(Event e) {
 		  return "event/eventDetailView"; 
 	  }
 	  
+	  // 이벤트 삭제
 	  @RequestMapping("delete.ev") public String deleteEvent(int eventNo) {
 		  return "event/eventDetailView"; 
 	  }
