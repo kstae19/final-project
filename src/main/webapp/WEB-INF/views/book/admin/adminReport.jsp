@@ -25,7 +25,7 @@
 	
 	<jsp:include page="../../common/header.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
-	<jsp:include page="../common/myPageLeftBanner.jsp" />
+	<jsp:include page="../common/bookLeftBanner.jsp" />
 	
     <div class="outer">
         <h3>신고 게시글 목록</h3>

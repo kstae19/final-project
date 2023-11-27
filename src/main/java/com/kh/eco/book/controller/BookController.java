@@ -127,7 +127,7 @@ public class BookController {
 		return bookList;
 	}
 	
-	/* 알라딘 api 상품조회 메소드
+	// 알라딘 api 상품조회 메소드
 	public Book bookLookUp(String ISBN) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
@@ -174,7 +174,7 @@ public class BookController {
 	        "subTitle": "환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
 	        "originalTitle": "The Developing Genome: An Introduction to Behavioral Epigenetics (2015년)",
 	        "itemPage": 540
-      		}
+      		}*/
 		 
 		JsonObject item = itemArr.get(0).getAsJsonObject();
 		
@@ -191,7 +191,7 @@ public class BookController {
 		book.setBookImg(item.get("cover").getAsString());
 		
 		return book;
-	}*/
+	}
 	
 	
 	// 메인화면 메소드
@@ -292,31 +292,41 @@ public class BookController {
 	@RequestMapping("bookDetail.bk")
 	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		
-		book.setISBN13(ISBN);
-		int count = book.getBookCount();
-		
-		if(count == 0) { // 조회수가 0일때
-			int bookCount = bookService.insertBook(book);
-			if(bookCount > 0) { // 조회수 추가 성공
-				book.setBookCount(bookCount);
-				model.addAttribute("b", book);
-				return "book/book/bookDetail";
-			} else { // 조회수 추가 실패
-				session.setAttribute("failBookAlert", "조회 실패");
-				return "redirect:book";
-			}
-		} else { // 조회수가 1 이상일때
-			int bookCount = bookService.increaseBook(ISBN);
-			if(bookCount > 0) { // 조회수 증가 성공
-				int countBook = bookService.countBook(ISBN);
-				book.setBookCount(countBook);
-				model.addAttribute("b", book);
-				return "book/book/bookDetail";
-			} else { // 조회수 증가 실패
-				session.setAttribute("failBookAlert", "조회 실패");
-				return "redirect:book";
-			}
+		int count;
+		System.out.println(book);
+		if(book != null) {
+			book.setISBN13(ISBN);
+			count = book.getBookCount();
+		} else {
+			book = bookLookUp(ISBN);
+			count = 1;
 		}
+			
+			if(count == 0) { // 조회수가 0일때
+				int bookCount = bookService.insertBook(book);
+				if(bookCount > 0) { // 조회수 추가 성공
+					book.setBookCount(bookCount);
+					model.addAttribute("b", book);
+					return "book/book/bookDetail";
+				} else { // 조회수 추가 실패
+					session.setAttribute("failBookAlert", "조회 실패");
+					return "redirect:book";
+				}
+			} else { // 조회수가 1 이상일때
+				int bookCount = bookService.increaseBook(ISBN);
+				if(bookCount > 0) { // 조회수 증가 성공
+					int countBook = bookService.countBook(ISBN);
+					book.setBookCount(countBook);
+					model.addAttribute("b", book);
+					return "book/book/bookDetail";
+				} else { // 조회수 증가 실패
+					session.setAttribute("failBookAlert", "조회 실패");
+					return "redirect:book";
+				}
+			}
+		
+		
+		
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회
@@ -454,6 +464,10 @@ public class BookController {
 	
 	
 	// 신고게시판 포워딩
+	@RequestMapping("adminReport")
+	public String adminReport() {
+		return "book/admin/adminReport";
+	}
 	
 	
 	

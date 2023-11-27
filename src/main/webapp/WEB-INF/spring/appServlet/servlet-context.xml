@@ -30,6 +30,10 @@
 			<mapping path="/reportEnroll.bk" />
 			<beans:bean class="com.kh.eco.common.interceptor.LoginInterceptor" id="loginInterceptor" />
 		</interceptor>
+		<interceptor>
+			<mapping path="/adminReport" />
+			<beans:bean class="com.kh.eco.common.interceptor.AdminInterceptor" id="adminInterceptor" />
+		</interceptor>
 	</interceptors>
 	
 	

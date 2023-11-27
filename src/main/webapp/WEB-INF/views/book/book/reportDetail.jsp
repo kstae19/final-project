@@ -48,6 +48,8 @@
 			success : result => {
 				
 				$('#reportReply-count').html(result.replyCount);
+				let replyPi = result.replyPi;
+				let replyPiValue = '';
 				if(result.replyCount == 0){
 					$('#reportReply-area').html("댓글이 없습니다.");
 				} else {
@@ -62,30 +64,26 @@
     						}
     						replyValue += '<button type="button" class="btn btn-dark" onclick="reportReplyBlack(this);">신고하기</button>'
     					}
-    				replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
-    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReportReplyDate + '</p>'
-    						   + '<p class="replyContent">' + replyArr[i].bookReportReplyContent + '</p>'
-    						   + '<input type="hidden" value="' + replyArr[i].bookReportReplyNo +'">'
-    						   + '</div>';
+	    				replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+	    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReportReplyDate + '</p>'
+	    						   + '<p class="replyContent">' + replyArr[i].bookReportReplyContent + '</p>'
+	    						   + '<input type="hidden" value="' + replyArr[i].bookReportReplyNo +'">'
+	    						   + '</div>';
+	    				if(replyPi['currentPage'] == 1){
+	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+	    				} else{
+	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+	    				}
+	    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+	    				}
+	    				if(replyPi['currentPage'] == replyPi['endPage']){
+	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+	    				} else{
+	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+	    				}
     				}
     				$('#reportReply-area').html(replyValue);
-    				
-    				let replyPi = result.replyPi;
-    				let replyPiValue = '';
-    				if(replyPi['currentPage'] == 1){
-    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
-    				} else{
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
-    				}
-    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
-    				}
-    				if(replyPi['currentPage'] == replyPi['endPage']){
-    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
-    				} else{
-    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
-    				}
-    				
     				$('#reportReply-pagination').html(replyPiValue);
 				}
 				},
@@ -262,9 +260,37 @@
             <input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent">
             <c:if test="${ not empty loginUser }">
 	            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;" onclick="insertReportReply();">등록</button>
-	            <p>0/50</p>
+	            <p id="reportReplyKeyup">0/100</p>
             </c:if>
         </div>
+        <script>
+       		$(function(){
+       			
+       			$('#bookReplyContent').keyup(function(){
+       				let content = $('#reportReplyContent').val();
+       				let contentLength = $('#reportReplyContent').val().length;
+       				maxByte = 100;
+       				
+       				let length = 0;
+       				
+       				for(let i = 0; i < contentLength; i++){
+       					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
+        					length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
+                       }else{
+                       	length = length + 1;
+                       }
+       				}
+       				
+       				if(length < maxByte){
+        				$('#reportReplyKeyup').text(length + "/100");
+       				} else{
+       					alert("제한을 초과했습니다.");
+       					$('#reportReplyContent').val('');
+       				}
+       				
+       			})
+       		})
+	     </script>
 
 
 

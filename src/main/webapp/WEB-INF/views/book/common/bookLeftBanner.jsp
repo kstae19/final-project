@@ -57,6 +57,9 @@
             <li onclick="location.href='bookcalendar'">독서캘린더</li> -->
             <c:if test="${ not empty loginUser }">
             	<li onclick="location.href='bookMyPage'">마이페이지</li>
+            	<c:if test="${ loginUser.userStatus eq 'A' }">
+            		<li onclick="location.href='adminReport'">관리자페이지</li>
+            	</c:if>
             </c:if>
         </ul>
     </div>

@@ -24,21 +24,21 @@
         #book-mypage{
             display: inline-flex;
             width: 100%;
-            height: 300px;
+            height: 500px;
             justify-content: space-evenly;
         }
         #mypage-book{
         	display: inline-flex;
             width: 100%;
-            height: 300px;
+            height: 500px;
             justify-content: space-evenly;
         }
         #mypage-book div{
-            width: 250px;
+            width: 265px;
             background-color: lightgray;
         }
         #mypage-book img{
-            height: 80%;
+            height: 60%;
             width: 100%;
             margin-bottom: 10px;
         }
@@ -78,6 +78,7 @@
         				let bookValue = '';
         				for(let i in book){
         					bookValue += '<div>'
+        							   + '<input type="hidden" name="ISBN13" value="' + book[i].ISBN13 + '"/>'
         							   + '<img src="' + book[i].bookImg + '">'
         							   + '<p>' + book[i].bookTitle + '</p>'
         							   + '</div>';
@@ -161,7 +162,13 @@
     	$(function(){
     		selectMyPageBook();
     		selectMyPageReply();
+    		$('#mypage-book>div').click(function(){
+    			let attr = "bookDetail.bk?ISBN="+$(this).find('input[name=ISBN13]').val();
+    			
+        		location.href = attr;
+        	})
     	})
+ 	
     </script>
 </head>
 <body>
