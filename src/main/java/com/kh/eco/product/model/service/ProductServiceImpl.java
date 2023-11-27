@@ -8,14 +8,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.dao.ProductDao;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
@@ -37,8 +41,15 @@ public class ProductServiceImpl implements ProductService {
 	private SqlSessionTemplate sqlSession;
 	
 	@Override
-	public ArrayList<Product> selectProductList() {
-		return dao.selectProductList(sqlSession);
+	public ArrayList<Product> selectProductList(HashMap map, PageInfo pi) {
+		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return dao.selectProductList(sqlSession, map, rowBounds);
+	}
+	
+	@Override
+	public ArrayList<Product> searchProduct(String keyword) {
+		return dao.searchProduct(sqlSession, keyword);
 	}
 
 	@Override
@@ -118,7 +129,8 @@ public class ProductServiceImpl implements ProductService {
 	public Cart getCartItem(int optionNo) {
 		return dao.getCartItem(sqlSession, optionNo);
 	}
-
+	
+	@Transactional
 	@Override
 	public int orderProduct(Order order) {
 		int orderResult = dao.insertOrder(sqlSession, order);
@@ -180,7 +192,6 @@ public class ProductServiceImpl implements ProductService {
 		JSONParser parser = new JSONParser();
 		JSONObject element = (JSONObject)parser.parse(responseData);
 		String tid = element.get("tid").toString();
-		System.out.println("tid : "+tid);
 		String pcUrl = element.get("next_redirect_pc_url").toString();
 		ApproveRequest approveRequest = new ApproveRequest();
 		
@@ -219,7 +230,7 @@ public class ProductServiceImpl implements ProductService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Transactional
 	@Override
 	public String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException {
 		String url = "https://kapi.kakao.com/v1/payment/approve";
@@ -272,4 +283,26 @@ public class ProductServiceImpl implements ProductService {
 	public int updateProductCount(int productNo) {
 		return dao.updateProductCount(sqlSession, productNo);
 	}
+
+	@Override
+	public int selectProductCount() {
+		return dao.selectProductCount(sqlSession);
+	}
+
+	@Override
+	public int selectCategoryCount(String category) {
+		return dao.selectCategoryCount(sqlSession, category);
+	}
+
+	@Override
+	public int selectOrderCount(int userNo) {
+		return dao.selectOrderCount(sqlSession, userNo);
+	}
+
+	@Override
+	public int insertReview(ProductReview review) {
+		return dao.insertReview(sqlSession, review);
+	}
+
+
 }
