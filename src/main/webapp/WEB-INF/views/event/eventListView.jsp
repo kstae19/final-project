@@ -44,10 +44,7 @@
   <jsp:include page="../common/header.jsp" />
   
  	<div id="wrapper">
-   		
-    
-    
-    
+
 		<!-- Modal -->
 		
 		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -67,7 +64,7 @@
 					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
 					       
-					       	<!-- <input class="event" id="eventDate" name="eventDate" type="hidden" value=""/>  -->
+					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value=""/>
 					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
 

@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -83,7 +84,7 @@ public class EventController {
 	  }
 	
 	// 이벤트 등록
-	 @RequestMapping(value="insert.ev") 
+	 @PostMapping(value="insert.ev") 
 	 public String insertEvent(	
 											MultipartFile upfile, 
 											 Event e, 
@@ -117,6 +118,7 @@ public class EventController {
 	 // 파일저장메서드
 	 public String saveFile(MultipartFile upfile, HttpSession session) {
 			
+		 
 			// 원본파일명 뽑기(필드명과 같게)
 			String originName = upfile.getOriginalFilename();
 			
