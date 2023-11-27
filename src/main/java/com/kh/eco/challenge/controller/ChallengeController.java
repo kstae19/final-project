@@ -140,7 +140,8 @@ public class ChallengeController {
 												Model model) {
 		
 		
-		  System.out.println(c); System.out.println(upfile);
+		  System.out.println(c); 
+		  System.out.println(upfile);
 		 
 		
 		if( !upfile.getOriginalFilename().equals("") ) {

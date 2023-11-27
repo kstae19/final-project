@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,14 +56,14 @@ public class EventController {
     }
 	
 	// 이벤트 등록폼
-	  @RequestMapping("enrollForm.ev") 
-	  public String eventEnrollForm(String eventDate, Model model) {
-	 
-		  System.out.println("이벤트등록날짜 : " + eventDate);
-		  model.addAttribute("eventDate", eventDate);
-		  return "redirect:/";
-	  
-	  }
+	/*
+	 * @RequestMapping("enrollForm.ev") public String eventEnrollForm(String
+	 * eventDate, Model model) {
+	 * 
+	 * //System.out.println("이벤트등록날짜 : " + eventDate);
+	 * //model.addAttribute("eventDate", eventDate); //return "redirect:/"; //return
+	 * "event/eventListView"; //return "redirect:/event"; return "redirect:/"; }
+	 */
 	  
 	  // 이벤트 수정폼
 	  @RequestMapping("updateForm.ev") 
@@ -82,10 +83,10 @@ public class EventController {
 	  }
 	
 	// 이벤트 등록
-	 @RequestMapping("insert.ev") 
+	 @RequestMapping(value="insert.ev") 
 	 public String insertEvent(	
-											 @RequestPart(value="file", required=false) MultipartFile upfile, 
-											 @RequestPart(value="request") Event e,
+											MultipartFile upfile, 
+											 Event e, 
 											 Model model, 
 											 HttpSession session) {
 	 

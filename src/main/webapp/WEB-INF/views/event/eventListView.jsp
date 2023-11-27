@@ -36,6 +36,59 @@
 </style>
 
 
+
+   
+  </head>
+  <body>
+  
+  <jsp:include page="../common/header.jsp" />
+  
+ 	<div id="wrapper">
+   		
+    
+    
+    
+		<!-- Modal -->
+		
+		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		 
+				
+				   <div class="modal-dialog">
+				    <div class="modal-content">
+				    
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="staticBackdropLabel">이벤트 등록하기</h5>
+				      </div>
+				      
+				      <form id="insert-form" enctype="multipart/form-data" action="insert.ev" method="post">
+				      	<div class="modal-body">
+
+					       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
+					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
+					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
+					       
+					       	<!-- <input class="event" id="eventDate" name="eventDate" type="hidden" value=""/>  -->
+					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
+				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
+
+					      <div class="modal-footer">
+					        <button type="submit" class="btn btn-primary" data-dismiss="modal">등록</button>
+					        <button type="button" class="btn btn-secondary" >취소</button>
+					      </div>
+					      
+						</div><!-- body -->
+					</form>
+					
+				</div>   <!-- content -->
+			</div><!-- dialog -->
+			
+		</div><!-- insertModal -->
+		
+		<div id='calendar'></div>
+		
+</div><!-- wrapper -->
+
+
 <script>
 
 	//DOMContentLoaded Event DOM Tree가 모두 로딩된 이후에 발생하는 이벤트
@@ -82,125 +135,31 @@
     	 // calendar렌더링
         calendar.render(); 
         
-        // step1. 날짜 클릭이벤트
+        // step1. 날짜 클릭이벤트 => 클릭한 값을 바로 insert.ev로 넘기기
         calendar.on('dateClick', function(info) {
         	
-           // enrollForm.ev로 가야함
-           $.ajax({
-        	   url : 'enrollForm.ev',
-        	   type : 'POST',
-           	   data : {
-           		   eventDate : info.dateStr,
-           	   },
-           	   success : function(){
-           		   console.log('enrollForm 가기 성공');
-           		   $('#insertModal').modal('show');
-           	   },
-           	   error : function(){
-           		   console.log('enrollForm 가기 실패');
-           	   }
-           })
+			$('#insertModal').modal('show');
 
+        	
+ 			   // step2.등록 클릭이벤트
+		/* 	    $('button[type=submit]').on('click', function(){
+			    	
+			    	console.log(info.dateStr);
+			    	$('#eventDate').val('info.dateStr');
+			    	
+						
+			    });//버튼 클릭이벤트 */ 
+			    
         });// 날짜클릭이벤트
         
-	        // step2.등록 클릭이벤트
-	    $('button[type=submit]').on('click', function(){
-	    	
-	    	
-	    		let requestData = {
-	    			
-	    				eventDate : $('#eventDate').val(),
-	          			eventTitle :  $('#eventTitle').val(),
-	          			eventContent :  $('#eventContent').val(),
-	          			
-	          			eventPlace : $('#eventPlace').val(),
-	          			categoryNo : $('#categoryNo').val(),
-	    		 }
-	          
-	    	   
-
-	    	    let formData = new FormData();
-	    	/*     formData.append("eventNo", $('#eventNo').val());
-	    	    formData.append("eventDate", '${eventDate}');
-	    	    formData.append("eventTitle", "$('#eventTitle').val()");
-	    	    formData.append("eventContent", "$('#eventContent').val()");
-	    	    formData.append("eventPlace", "$('#eventPlace').val()");
-	    	    formData.append("upfile", "$('#upfile').val()");
-	    	    formData.append("categoryNo", $('#categoryNo').val()); */
-	    	    formData.append("upfile", $('#upfile'));
-	    	    formData.append("request", new Blob([JSON.stringify(requestData)], {type: "application/json"}));
-
-	    	    $.ajax({
-	    	    	url: 'insert.ev',
-	    	        type: "POST",
-	    	        enctype: 'multipart/form-data',
-	    	        data: formData,
-	    	        contentType: false, // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지
-	    	        processData: false,  // 필수: contentType을 false로 줬을 때 QueryString 자동 설정됨. 해제
-	    	        success: function () {
-	    	            alert('등록 성공');
-	    	        },
-	    	        error : function(){
-	    	        	console.log('실패');
-	    	        }
-	    	    });
-	    	    
-				
-	    });//버튼 클릭이벤트
+	     
 	   
     });// calendar생성    
             	
-    
-    
-    
-	    		
-   
 
 </script>
-   
-  </head>
-  <body>
-  
-  <jsp:include page="../common/header.jsp" />
-  
- 	<div id="wrapper">
-   		<div id='calendar'></div>
-    
-    
-    
-		<!-- Modal -->
-		
-		<div class="modal fade" id="insertModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		 
-				
-				   <div class="modal-dialog">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h5 class="modal-title" id="staticBackdropLabel">이벤트 등록하기</h5>
-				      </div>
-				      
-				      <div class="modal-body">
-				       	
-				       	<input class="event" name="eventDate" type="hidden" value="${ eventDate}"/>    
-				       
-				       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
-				        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
-				        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
-				       
-				       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" required/></label>
-				       	<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
-				      </div>
-				      
-				      <div class="modal-footer">
-				        <button type="submit" class="btn btn-primary" data-dismiss="modal">등록</button>
-				        <button type="button" class="btn btn-secondary" >취소</button>
-				      </div>
-				</div>
-				</div>    
-	
-		</div>
-		
-</div><!-- wrapper -->
+
+
 		<style>
 		#insertModal{
 			width: 50%;

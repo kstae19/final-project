@@ -69,7 +69,7 @@
 
 
 		<!--파일을 첨부하는 요청을 할 때는 반드시 form태그에 enctype="multipart/form-data" 를 추가해줘야함!!-->
-        <form enctype="multipart/form-data" action="insert.ch" id="enrollform" method="post">
+        <form enctype="multipart/form-data" action="insert.ch" id="enroll-form" method="post">
 			<input type="hidden" name="userNo" value="${loginUser.userNo }" />
             <article id="content-items">
             	<div class="content-item">
@@ -126,8 +126,8 @@
 					</label>
             	</div>
             	 <div class="content-item">
-	            	<label for="file" id="file">
-							File🖼️<input id="upfile" type="file" name="upfile"/><!-- fileInput의 name을 multiFileRequest의 이름과 맞춰야  -->
+	            	<label for="file">
+							File🖼️<input id="file" type="file" name="upfile"/><!-- fileInput의 name을 multiFileRequest의 이름과 맞춰야  -->
 					</label>
             	</div>
                 <div class="content-item">
