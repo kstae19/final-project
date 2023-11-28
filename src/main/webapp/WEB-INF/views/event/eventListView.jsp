@@ -97,33 +97,27 @@
           initialView: 'dayGridMonth',
           editable : true,
           timeZone : 'local',
-          
+
+         
           events: [
-        	  
-        		 <c:if test="not empty ${list}">
-		       		 <c:forEach var="e" items="${list}">
-		        	    {
-			        	      id : '${e.eventNo}',
-			        	      title : '${e.eventTitle}',
-			        	      start : '${e.eventDate}',
-			             	   extendedProps : {
-			        	      	place : '${e.eventPlace}',
-			        	      	participants : ${e.participants},
-			        	      	category : ${e.categoryNo}
-			        	      }, 
-			        	      imageurl : '${e.changeName}'  
-		        	    },    
-		        	   </c:forEach>
-         		 </c:if>
-         		
+        	 <c:if test="not empty ${list}">
+	        	  <c:forEach var="e" items="${list}">
+		        	  {
+		        	      id : '${e.eventNo}',
+		        	      title : '${e.eventTitle}',
+		        	      start : '${e.eventDate}',
+		        	      imgeurl : '${e.changeName}'
+		    	    	},    
+	    	      </c:forEach>
+		     </c:if>  
         	  ],
-        	 
-        	  eventDidMount: function(info) {
+
+        	   eventDidMount: function(info) {
         	    console.log(info.event.extendedProps);
         	    // {description: "Lecture", department: "BioChemistry"}
-        	  },
+        	  }, 
         	 
-        	  eventContent: function(arg) {
+         	  eventContent: function(arg) {
 					console.log(arg);
 					
 		           var event = arg.event;
@@ -136,10 +130,10 @@
 		                        
 		            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
 		            
-		            //customHtml += "<img  style='width:100px; height : 100px;' src=" + event.imageurl +  "/>";
+		            customHtml += "<img  style='width:100px; height : 100px;' src=" + event.imageurl +  "/>";
 		            
 		            return { html: customHtml } 
-		        }
+		        } 
          
           
         });//calendar정의
