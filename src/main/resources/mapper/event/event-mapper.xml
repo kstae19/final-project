@@ -74,7 +74,7 @@
 						#{ eventContent },
 						#{ eventPlace },
 						#{ eventDate},
-						#{ uploadDate},
+						SYSDATE,
 						#{ changeName },
 						#{ categoryNo }
 					)
@@ -90,7 +90,7 @@
 						EVENT_PLACE = #{ eventPlace },
 						CHANGE_NAME = #{ changeName },
 						EVENT_DATE = #{ eventDate },
-						MODIFY_DATE = #{ modifyDate},
+						MODIFY_DATE = SYSDATE,
 						CATEGORY_NO = #{ categoryNo }
 		WHERE
 						EVENT_NO = #{ eventNo }

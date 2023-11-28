@@ -64,13 +64,13 @@
 					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
 					       
-					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value=""/>
+					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value="23-11-11"/>
 					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
 
 					      <div class="modal-footer">
-					        <button type="submit" class="btn btn-primary" data-dismiss="modal">등록</button>
-					        <button type="button" class="btn btn-secondary" >취소</button>
+					        <button type="submit" class="btn btn-primary">등록</button>
+					        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 					      </div>
 					      
 						</div><!-- body -->
@@ -117,14 +117,17 @@
         	    }
         	    // more events ...
         	  ],
+        	  
+        	 
         	 </c:forEach>
   		 </c:if>
         	  eventDidMount: function(info) {
         	    console.log(info.event.extendedProps);
         	    // {description: "Lecture", department: "BioChemistry"}
-        	  }
+        	  },
+        	  eventContent: { html: '<span>title</span>' }
         	  
-          //eventContent : 
+         
           
         });//calendar정의
         
@@ -139,13 +142,13 @@
 
         	
  			   // step2.등록 클릭이벤트
-		/* 	    $('button[type=submit]').on('click', function(){
+			    $('button[type=submit]').on('click', function(){
 			    	
 			    	console.log(info.dateStr);
-			    	$('#eventDate').val('info.dateStr');
+			    	$('#eventDate').val(info.dateStr);
 			    	
 						
-			    });//버튼 클릭이벤트 */ 
+			    });//버튼 클릭이벤트 
 			    
         });// 날짜클릭이벤트
         
