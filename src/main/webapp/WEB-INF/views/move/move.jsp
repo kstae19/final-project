@@ -180,9 +180,15 @@
 		text-decoration: none;
 		color: black;
 	}
-	.more button{
-		border: none;
 	
+	.more button, #bikeinfo > button{
+		border: none;
+		background-color: white;
+	}
+	
+	#bikeinfo > button {
+		margin-right: 3px;
+		margin-bottom: 3px;
 	}
 	
 	.label{
@@ -207,7 +213,7 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 	
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d6ee5a80094907acaaed993806e68028"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e73308cfe55f562948dee9ae8bcd721e"></script>
 	
 	<div id="move-main">
 		<div id="move-search">
@@ -275,6 +281,8 @@
 	    var today;
 		
 	    var areas = [];
+	    var markers = [];
+	    var infowindows = [];
 	    
 	    $.getJSON("resources/json/seoul.json", function(geojson) {
 			var units = geojson.features; // 파일에서 key값이 "features"인 것의 value를 통으로 가져옴(이것은 여러지역에 대한 정보를 모두 담고있음)			
@@ -315,9 +323,10 @@
 			$('#btnBus .fas').css("color", "#28a745");
 			$('#btnBus').css("pointer-events", "auto");
 		    
-			removeOverLay();
 			createPolygon();
-			map.setDraggable(false);
+			removeOverLay();
+			removeInfowindow();
+			//map.setDraggable(false);
 		});
 		
 		$('#btnBicycle').on('click', () => {
@@ -336,11 +345,10 @@
 			$('#btnBus .fas').css("color", "#28a745");
 			$('#btnBus').css("pointer-events", "auto");
 			
-			removePolygon();
 			createOverLay();
 			createOverLay2();
 			createOverLay3();
-			
+			removePolygon();
 		});
 		
 		$('#btnBus').on('click', () => {
@@ -361,6 +369,7 @@
 			
 			removePolygon();
 			removeOverLay();
+			removeInfowindow();
 		});
 				
 		// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
@@ -530,28 +539,64 @@
 				success : data => {
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
-					// console.log(bicycles);
+					console.log(bicycles);
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+				    var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(12, 15)};
+				    var bikestation = '';
+					
+				    for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+						
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
 					}
-				},
-				error : ()=> {
-					
 				}
 			});
+			
 		}
 		
 		function createOverLay2() {
@@ -562,25 +607,62 @@
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
 					// console.log(bicycles);
+					var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+					    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+					    imageOption = {offset: new kakao.maps.Point(12, 15)};
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+				    var bikestation= '';
+					
+				    for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						    
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
+
 					}
-				},
-				error : ()=> {
-					
+			    	
 				}
 			});
 		}
@@ -593,32 +675,75 @@
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
 					// console.log(bicycles);
+					var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(12, 15)};
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+					var bikestation= '';
+					
+					for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						    
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
+
 					}
-				},
-				error : ()=> {
-					
+			    	
 				}
 			});
 		}
 		
 		function removeOverLay() {
-			$('.label').remove();
-			$('.label').parent().remove();
+			for(let i = 0; i < Object.keys(markers).length; i++){
+				markers[i].setMap(null);
+			}
+		}
+		
+		function removeInfowindow() {
+			for(let i = 0; i < Object.keys(infowindows).length; i++){
+				infowindows[i].close();
+			}
 		}
 		
 	});
