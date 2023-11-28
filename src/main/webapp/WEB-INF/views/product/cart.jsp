@@ -85,7 +85,6 @@ h3{
 	width:30px;
 	text-align:center;
 }
-
 </style>
 
 </head>
@@ -94,9 +93,9 @@ h3{
 <br>
 <br>
 <br>
-<br>
 <div class="outer">
 	<div class="content">
+	<a href="shoppingList?userNo=${sessionScope.loginUser.userNo }">주문내역 확인</a>
 		<div id = "criteria">
 			<span><input type="checkbox"></span>
 			<div style="width:60%;">상품정보</div>
@@ -247,7 +246,7 @@ h3{
 
 		</script>
 	</div>
-	<a href="shoppingList?userNo=${sessionScope.loginUser.userNo }">주문내역 확인</a>
+	
 </div>
 <br>
 <br>
