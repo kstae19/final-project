@@ -158,7 +158,7 @@
 		margin-left: 40px;
 	}
 	
-	.info .temp{
+	.temp, .today, .air{
 		font-size: 25px;
 		font-weight: bold;
 		color: #28a745;
@@ -166,15 +166,29 @@
 		margin-left: 30px;
 	}
 	
-	.info .more{
+	.today > div {
+		float: left;
+	}
+	
+	.more{
 		float: right;
-		margin-right: 30px;
+		margin-right: 20px;
 		margin-top: 10px;
 	}
 	
 	.more > a{
 		text-decoration: none;
 		color: black;
+	}
+	
+	.more button, #bikeinfo > button{
+		border: none;
+		background-color: white;
+	}
+	
+	#bikeinfo > button {
+		margin-right: 3px;
+		margin-bottom: 3px;
 	}
 	
 	.label{
@@ -188,12 +202,18 @@
 		text-align: center;
 	}
 	
+	#move-info{
+		display : none;
+	}
+	
+	
+	
 </style>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
 	
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d6ee5a80094907acaaed993806e68028"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e73308cfe55f562948dee9ae8bcd721e"></script>
 	
 	<div id="move-main">
 		<div id="move-search">
@@ -215,8 +235,32 @@
     		</div>
 		</div>
 		
-		<div id="move-info">
-			
+		<div id="move-info" >
+			<div class="info">  
+				 <div class="title"></div>
+				 <div class="floatleft">
+			     	<div class="content">현재 기온  </div>
+   					<div class="temp">
+
+					</div>
+  				</div><br><br><br>
+  				<div class="floatleft">
+					<div class="content">오늘 날씨  </div>
+					<div class="today">    						
+						<div class="ltemp"> </div>
+   						<div class="htemp"> </div>
+					</div>
+  				</div><br><br><br>
+ 				<div class="floatleft">
+					<div class="content">대기 상태  </div>
+  					<div class="air">
+
+					</div><br><br>
+ 				</div>
+ 				<div class="more"> 
+ 					
+ 				</div><br><br>
+			</div>
 		</div>
 	</div>
 	
@@ -231,8 +275,14 @@
 		var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 		var customOverlay = new kakao.maps.CustomOverlay({});
 	    var infowindow = new kakao.maps.InfoWindow({removable: true});
+	    
+	    var place;
+	    var local;
+	    var today;
 		
 	    var areas = [];
+	    var markers = [];
+	    var infowindows = [];
 	    
 	    $.getJSON("resources/json/seoul.json", function(geojson) {
 			var units = geojson.features; // 파일에서 key값이 "features"인 것의 value를 통으로 가져옴(이것은 여러지역에 대한 정보를 모두 담고있음)			
@@ -273,9 +323,10 @@
 			$('#btnBus .fas').css("color", "#28a745");
 			$('#btnBus').css("pointer-events", "auto");
 		    
-			removeOverLay();
 			createPolygon();
-			
+			removeOverLay();
+			removeInfowindow();
+			//map.setDraggable(false);
 		});
 		
 		$('#btnBicycle').on('click', () => {
@@ -294,11 +345,10 @@
 			$('#btnBus .fas').css("color", "#28a745");
 			$('#btnBus').css("pointer-events", "auto");
 			
-			removePolygon();
 			createOverLay();
 			createOverLay2();
 			createOverLay3();
-			
+			removePolygon();
 		});
 		
 		$('#btnBus').on('click', () => {
@@ -319,24 +369,9 @@
 			
 			removePolygon();
 			removeOverLay();
+			removeInfowindow();
 		});
-		
-		/* 지도타입 컨트롤의 지도 또는 스카이뷰 버튼을 클릭하면 호출되어 지도타입을 바꾸는 함수입니다
-		function setMapType(maptype) { 
-		    var roadmapControl = document.getElementById('btnRoadmap');
-		    var skyviewControl = document.getElementById('btnSkyview'); 
-		    if (maptype === 'roadmap') {
-		        map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);    
-		        roadmapControl.className = 'selected_btn';
-		        skyviewControl.className = 'btn';
-		    } else {
-		        map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);    
-		        skyviewControl.className = 'selected_btn';
-		        roadmapControl.className = 'btn';
-		    }
-		}
-		*/
-		
+				
 		// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
 		$('#zoomIn').on('click', ()=> {
 		    map.setLevel(map.getLevel() - 1);
@@ -391,31 +426,111 @@
 		
 		    // 다각형에 click 이벤트를 등록하고 이벤트가 발생하면 다각형의 이름과 면적을 인포윈도우에 표시합니다 
 		    kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
-		        var content = '<div class="info">' + 
-			                  '   <div class="title">' + area.name + '</div>' +
-			                  '   <div class="floatleft">' +
-			                  '		<div class="content">현재 기온  </div>' +
-			                  '	  	<div class="temp">' + Math.floor(polygon.getArea()) + '<sup>o</sup>C</div>' + 
-			                  '	  </div><br><br><br>' +
-			                  '   <div class="floatleft">' +
-			                  '		<div class="content">오늘 날씨  </div>' +
-			                  '	  	<div class="temp">' + Math.floor(polygon.getArea()) + '<sup>o</sup>C</div>' + 
-			                  '	  </div><br><br><br>' +
-			                  '   <div class="floatleft">' +
-			                  '		<div class="content">대기 상태  </div>' +
-			                  '	  	<div class="temp">' + Math.floor(polygon.getArea()) + '<sup>o</sup>C</div>' + 
-			                  '	  </div><br><br>' +
-			                  '   <div class="more"> <a href="#">상세보기</a> </div><br><br>' +
-			                  '</div>';
-		
-		        $('#move-info').html(content);
+		    	
+		    	var ajax1 = $.ajax({
+		    		url : 'air.mo',
+		    		async: false, // 동기 처리
+		    		success : data => {
+		    			// console.log(data.response.body.items);
+		    			const place = data.response.body.items;
+		    			let moreresult = '';
+		    			let title = '';
+		    			let airresult = '';
+		    			for(let i in place){
+		    				air = place[i];
+		    				if(air.stationName == area.name){
+			    				$.ajax({
+			    					url : 'temp.mo',
+			    					data : {
+			    						areaName : air.stationName
+			    					},
+			    					async: false, // 동기 처리
+			    					success: result => {
+			    						const local = result.response.body.items.item;
+			    						//console.log(local);
+			    						
+			    						let tempresult = '';
+			    						
+			    						moreresult += '<form action="airInfo">'
+			    						
+			    						for(let i in local){
+			    							temp = local[i];
+			    							// console.log(temp.obsrValue);
+			    							if(temp.category == 'T1H'){
+					    						tempresult += temp.obsrValue + '<sup>o</sup>C';
+					    						moreresult += '<input type="hidden" name="temp" value="' + temp.obsrValue +'"/>'
+					    						$.ajax({
+			    			    					url : 'today.mo',
+			    			    					data : {
+			    			    						areaName : air.stationName
+			    			    					},
+			    			    					async: false, // 동기 처리
+			    			    					success: answer => {
+			    			    						const today = answer.response.body.items.item;
+			    			    						console.log(today);
+			    			    						let todayLresult = '';
+			    			    						let todayHresult = '';
+			    			    						
+			    			    						for(let i in today){
+			    			    							todaytemp = today[i];
+			    			    							// console.log(temp.obsrValue);
+			    			    							if(todaytemp.category == 'TMN'){
+			    			    								todayLresult += '최저 온도 | ' + todaytemp.fcstValue + '<sup>o</sup>C';
+			    			    								moreresult += '<input type="hidden" name="mintemp" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    							else if(todaytemp.category == 'TMX') {
+		    			    									todayHresult += ' &nbsp;&nbsp;&nbsp;최고 온도 | ' + todaytemp.fcstValue + '<sup>o</sup>C';
+		    			    									moreresult += '<input type="hidden" name="maxtemp" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    							else if(todaytemp.category == 'SKY' && todaytemp.fcstTime == '0800'){
+			    			    								moreresult += '<input type="hidden" name="morsky" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    							else if(todaytemp.category == 'SKY' && todaytemp.fcstTime == '1800'){
+			    			    								moreresult += '<input type="hidden" name="nigsky" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    							else if(todaytemp.category == 'PTY' && todaytemp.fcstTime == '0800'){
+			    			    								moreresult += '<input type="hidden" name="morpty" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    							else if(todaytemp.category == 'PTY' && todaytemp.fcstTime == '1800'){
+			    			    								moreresult += '<input type="hidden" name="nigpty" value="' + todaytemp.fcstValue +'"/>'
+			    			    							}
+			    			    						}
+			    			    					$('#move-info .ltemp').html(todayLresult);
+			    			    					$('#move-info .htemp').html(todayHresult);
+			    			    					}
+			    			    				});
+			    							}
+			    						}
+			    					$('#move-info .temp').html(tempresult);
+			    					}
+			    				});
+		    					title += air.stationName,
+		    					airresult += '미세먼지 | ' + air.pm10Value 
+					    	              + ' &nbsp;&nbsp;&nbsp;'
+					    	              + '통합대기환경수치 | ' + air.khaiValue ;
+		    					moreresult += '<input type="hidden" name="pm10" value="' + air.pm10Value +'"/>'
+		    								+ '<input type="hidden" name="khai" value="' + air.khaiValue +'"/>'
+		    								+ '<input type="hidden" name="co" value="' + air.coValue +'"/>'
+		    								+ '<input type="hidden" name="no2" value="' + air.no2Value +'"/>'
+		    								+ '<input type="hidden" name="o3" value="' + air.o3Value +'"/>'
+		    								+ '<input type="hidden" name="so2" value="' + air.so2Value +'"/>'
+		    								+ '<input type="hidden" name="name" value="' + air.stationName+'"/>'
+			    			}
+		    			}
+		    			$('#move-info .title').html(title);
+		    			$('#move-info .air').html(airresult);
+				    	$('#move-info').css('display', 'block');
+				    	moreresult += '<button>상세보기</button>'
+				    				+ '</form> ';	
+    					$('#move-info .more').html(moreresult);
+		    		}
+		    	});
 		    });
 		}
 		
 		function removePolygon() {
 		    $('path').remove();
 		}
-		
 		
 		function createOverLay() {
 			$.ajax({
@@ -424,28 +539,64 @@
 				success : data => {
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
-					// console.log(bicycles);
+					console.log(bicycles);
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+				    var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(12, 15)};
+				    var bikestation = '';
+					
+				    for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+						
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
 					}
-				},
-				error : ()=> {
-					
 				}
 			});
+			
 		}
 		
 		function createOverLay2() {
@@ -456,25 +607,62 @@
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
 					// console.log(bicycles);
+					var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+					    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+					    imageOption = {offset: new kakao.maps.Point(12, 15)};
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+				    var bikestation= '';
+					
+				    for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						    
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
+
 					}
-				},
-				error : ()=> {
-					
+			    	
 				}
 			});
 		}
@@ -487,33 +675,75 @@
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
 					// console.log(bicycles);
+					var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
+				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(12, 15)};
 					
-					for(let i in bicycles){
-						bike = bicycles[i];
-						// console.log(bike);
-					    // 마커를 생성합니다
-					    var overlayposition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude),
-					    	content = '<div class ="label" > '
-									+ bike.parkingBikeTotCnt 	
-									+ '</div>';
+					var bikestation= '';
+					
+					for (let i in bicycles) {
+		                const bike = bicycles[i];
+		                
+		                const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(bike.stationLatitude, bike.stationLongitude);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
 					    
-						var customOverlay = new kakao.maps.CustomOverlay({
-						    position: overlayposition,
-						    content: content   
+				    	marker.setMap(map);
+				    	
+				    	markers.push(marker);
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var iwContent = '<div style="width:220px; height:100%"> ' +
+				    					bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br>' + 
+										'<div style="text-align:right"> ' +
+										'<form action="bikeinfo" id="bikeinfo">' +
+										'	<button>상세보기</button>' +
+										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+										'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+										'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+										'</form></div></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var infowindow = new kakao.maps.InfoWindow({
+						    content : iwContent,
+						    removable : iwRemoveable
 						});
-						customOverlay.setMap(map);
+						    
+						infowindows.push(infowindow);
+						    
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
+						//marker click event/
+						function makeClickListener(map, marker, infowindow) {
+							return function() {
+								removeInfowindow();
+								infowindow.open(map, marker);
+							};
+						}
+
 					}
-				},
-				error : ()=> {
-					
+			    	
 				}
 			});
 		}
 		
 		function removeOverLay() {
-			$('.label').remove();
-			$('.label').parent().remove();
-			$('.label').parent().parent().remove();
+			for(let i = 0; i < Object.keys(markers).length; i++){
+				markers[i].setMap(null);
+			}
+		}
+		
+		function removeInfowindow() {
+			for(let i = 0; i < Object.keys(infowindows).length; i++){
+				infowindows[i].close();
+			}
 		}
 		
 	});
