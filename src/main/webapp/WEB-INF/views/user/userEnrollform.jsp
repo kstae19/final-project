@@ -39,7 +39,7 @@
 	 	margin: auto;
 	 	margin-bottom : 20px;
 	 	margin-top: 20px;
-	 	border : 1px solid lightgray;
+	 	border : 1px solid #28a745;
 	 	border-radius : 33px;
 	}
 	
@@ -60,6 +60,10 @@
 		display: inline-block;
 	}
 	
+	#floatleft > div {
+		float: left;
+	}
+	
 	.btn {
 		height : 45px;
 		margin-bottom: 5px;
@@ -78,6 +82,20 @@
 	.Result {
 		margin-left : 5px;
 		margin-bottom : 5px;
+		font-size: 0.8em; 
+		display: none;
+	}
+	
+	#secretTimer {
+		font-size: 0.9em; 
+		float: right; 
+		display: none;
+		margin-left: 25px;
+		color: red;
+	}
+	
+	.ecr {
+		width : 275px;
 	}
 </style>
 </head>
@@ -91,27 +109,33 @@
 					<b id="enroll-info">*필수 입력사항</b>
 				</div>
 				<div class="enroll-border rd">
-					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required>
-					<div id="idcheckResult" style="font-size:0.8em; display:none;" class="Result">
+					<input type="text" class="form-control mb-2 mr-sm-2" placeholder="아이디" id="userId" name="userId" required maxlength="20">
+					<div id="idcheckResult"class="Result">
 					
 					</div>
-					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required>
-					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호 확인" id="checkPwd" required>
-					<div id="pwdcheckResult" style="font-size:0.8em; display:none;" class="Result">
+					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호" id="userPwd" name="userPwd" required maxlength="20">
+					<input type="password" class="form-control mb-2 mr-sm-2"  placeholder="비밀번호 확인" id="checkPwd" required maxlength="20">
+					<div id="pwdcheckResult" class="Result">
 					
 					</div>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이름(닉네임)" id="userName" name="userName" required>
-					<div id="namecheckResult" style="font-size:0.8em; display:none;" class="Result">
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이름(닉네임)" id="userName" name="userName" required maxlength="12">
+					<div id="namecheckResult"class="Result">
 					
 					</div>
 					
 					<br>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email">
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="이메일" id="email" name="email" maxlength="30">
 					<div class="floatleft">
-						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled>
-						<input type="button" class="btn btn-secondary" id="secretbtn" onclick="send();" value="전송">
-						<div id="emailcheckResult" style="font-size:0.8em; display:none;" class="Result">
-					
+						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="인증번호" id="secret" name="secret" disabled maxlength="6">
+						<input type="button" class="btn btn-secondary" id="secretbtn" onclick="send();" value="전송" disabled>
+						<div id="floatleft">
+							<div id="emailcheckResult" class="Result ecr">
+								
+							</div>
+							<div id="secretTimer">
+								<span id="secretTimer_min">5</span> :
+            					<span id="secretTimer_sec">00</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -120,9 +144,9 @@
 						<input type="text" class="form-control mb-2 mr-sm-2 st"  placeholder="우편번호" id="postNo" name="postNo">
 						<input type="button" class="btn btn-secondary" onclick="DaumPostcode()" value="검색">
 					</div>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="주소" id="address" name="address">
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="상세주소" id="detailAddress" name="detailAddress"><br>
-					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="휴대전화(-포함)" id="phone" name="phone">
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="주소" id="address" name="address" >
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="상세주소" id="detailAddress" name="detailAddress" maxlength="20"><br>
+					<input type="text" class="form-control mb-2 mr-sm-2"  placeholder="휴대전화" id="phone" name="phone" maxlength="13">
 				</div>
 				<div class="btns" align="center">
                    	<button type="submit" class="btn btn-primary" disabled>회원가입</button>
@@ -135,9 +159,10 @@
 	<!-- 다음 우편번호 Api  -->
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
-
 	    
     	$(function(){
+    		
+			const regExp = /^[A-Za-z0-9_\-]{5,20}$/;
     		
 			const $idInput = $('.enroll-border #userId');
 			const $pwdInput = $('.enroll-border #userPwd');
@@ -190,12 +215,42 @@
 				}
 			});
 			
+			$emailInput.keyup(() => {
+				if(($emailInput.val().includes('@') && ($emailInput.val().includes('.com') || $emailInput.val().includes('.net') || $emailInput.val().includes('.kr'))) != 0){
+					$.ajax({
+						url : 'emailCheck.me',
+						data : {
+							checkEmail : $emailInput.val()
+						},
+						success : result => {
+							//console.log(result);
+							if(result.substr(4) === 'N'){ // 사용불가능
+								$checkEmailResult.show().css('color', 'crimson').text('이미 가입한 이메일입니다.')
+								$('.enroll-border #secretbtn').attr('disabled', true);
+								
+							}
+							else { // 사용가능
+								$checkEmailResult.show().css('color', 'green').text('사용할 수 있는 이메일입니다!')
+								$('.enroll-border #secretbtn').removeAttr('disabled');
+							}
+						},
+						error : () => {
+							console.log('아이디 중복체크용 AJAX통신 실패~!')
+						}
+					});
+				}
+				else {
+					$checkEmailResult.hide();
+				}
+
+			});
+			
 			
 			$idInput.keyup(() => {
 				// console.log($idInput.val());
-				
+
 				// 최소 다섯 글자 이상으로 입력했을때만 AJAX요청을 보내서 중복체크
-				if($idInput.val().length >= 5){
+				if($idInput.val().length >= 5 && regExp.test($idInput.val())){
 					
 					$.ajax({
 						url : 'idCheck.me',
@@ -220,7 +275,7 @@
 					});
 				}
 				else {
-					$checkIdResult.hide();
+					$checkIdResult.show().css('color', 'crimson').text('5자리 이상이고 영문인 아이디를 입력해주세요')
 					//$enrollFormSubmit.attr('disabled', true);
 				}
 			});
@@ -260,7 +315,7 @@
 			
 			$('body').on("click", () => {
 				
-				if($idInput.val().length > 0 && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 && $emailInput.val().length > 0){
+				if($idInput.val().length > 0 && regExp.test($idInput.val()) && $pwdInput.val() == $checkPwdInput.val() && $pwdInput.val().length >= 5 && $checkPwdInput.val().length >= 5 && $nameInput.val().length > 0 && $emailInput.val().length > 0){
 					
 					// 입력값이 있는 경우
 					if ($emailInput.val().length > 0 && $secretInput.val().length === 0) {
@@ -277,31 +332,65 @@
 					$enrollFormSubmit.attr('disabled', true);
 				}
 			});
+			
+			// 번호 하이픈(-) 추가 기능
+			$(document).on("keyup", "#phone", function() { 
+				$(this).val( $(this).val().replace(/[^0-9]/g, "").replace(/(^02|^0505|^1[0-9]{3}|^0[0-9]{2})([0-9]+)?([0-9]{4})$/,"$1-$2-$3").replace("--", "-") );
+			});
+
     	});
     	
     	// 이메일 인증 기능
 		function send() {
-			const $emailInput = $('.enroll-border #email');
-	   		 $.ajax({
-	   			 url : 'mail',
-	   			 data : {
-					email : $emailInput.val()
-				 },
-				 success : result => {
-					 if(result.substr(4) === 'N'){ // 사용불가능
-						 alert('이메일 주소를 다시 입력해주세요!');
-					}
-					else { // 사용가능
-				 		alert($('#email').val() + '으로 인증번호가 발송되었습니다!');
-				 		$('.enroll-border #secret').removeAttr('disabled');
-					}
-				},
-				error : () => {
-					alert('이메일 주소를 입력해주세요!');
-					console.log('이메일 인증용 AJAX통신 실패~!')
-				}
-	   		 });
-	   	 }
+		    const $emailInput = $('.enroll-border #email');
+		    const $secretTimer = $('#secretTimer');
+		    const $sctMin = $('#secretTimer_min');
+		    const $sctSec = $('#secretTimer_sec');
+		    let timerInterval;
+		    let times = 300;
+		
+		    const startCountdown = () => {
+		        clearInterval(timerInterval); // 이전 타이머 중지
+		
+		        timerInterval = setInterval(() => {
+		            if (times > 0) {
+		                times = times - 1;
+		                const minutes = Math.floor(times / 60);
+		                const seconds = String(times % 60).padStart(2, "0");
+		
+		                $sctMin.text(minutes);
+		                $sctSec.text(seconds);
+		            } else {
+		                clearInterval(timerInterval); // 타이머 종료
+		                $('.enroll-border #secretbtn').attr('disabled', true);
+		            }
+		        }, 1000);
+		    };
+		
+		    $.ajax({
+		        url: 'mail',
+		        data: {
+		            email: $emailInput.val()
+		        },
+		        success: result => {
+		            if (result.substr(4) === 'N') { // 사용불가능
+		                alert('이메일 주소를 다시 입력해주세요!');
+		            } else { // 사용가능
+		                alert($('#email').val() + '으로 인증번호가 발송되었습니다!');
+		                $('.enroll-border #secret').removeAttr('disabled');
+		                $('.enroll-border #secretbtn').attr('disabled', true);
+		                $secretTimer.show();
+		
+		                times = 300; // 타이머 초기화
+		                startCountdown(); // 새로운 타이머 시작
+		            };
+		        },
+		        error: () => {
+		            alert('이메일 주소를 입력해주세요!');
+		            console.log('이메일 인증용 AJAX 통신 실패~!');
+		        }
+		    });
+		}
     	
     	// 다음 우편번호 Api
 	    function DaumPostcode() {
@@ -329,8 +418,7 @@
 	        }).open();
 		}
     	
-		
-
+    	
     	
     </script>
 </body>

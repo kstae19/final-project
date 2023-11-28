@@ -43,22 +43,57 @@
 
     <div class="outer">
         <h3>글쓰기</h3>
-        <form>
-            <label><input type="checkbox">비밀글</label>
-            <label><input type="checkbox">공지등록</label>
-            <input type="text" placeholder="제목을 입력해 주세요.">
-            <br><br>
-            <textarea placeholder="내용을 입력해주세요."></textarea>
-            <br><br>
-            <span>별점 ★★★★★</span>
-            <button type="button" class="btn btn-secondary">등록</button>
-            <button type="button" class="btn btn-dark">취소</button>
-        </form>
+	        <form method="POST" action="reportEnrollForm.bk">
+	        	<input type="hidden" name="userNo" value="${ loginUser.userNo }">
+	        	<input type="hidden" name="bookReportNo" value="0">
+		        <label><input type="checkbox" name="bookReportSecret" value="1">비밀글</label>
+		        <c:if test="${ loginUser.userStatus eq 'A' }">
+		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
+		        </c:if>
+		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle" maxlength="40">
+		        <br><br>
+		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent" maxlength="1900"></textarea>
+		        <br><br>
+		        <span>별점</span>
+		        <select name="bookReportStar">
+		         <c:if test="${ loginUser.userStatus eq 'A' }">
+		         	<option value="0">공지</option>
+		         </c:if>
+		        	<option value="1">★</option>
+		        	<option value="2">★★</option>
+		        	<option value="3">★★★</option>
+		        	<option value="4">★★★★</option>
+		        	<option value="5">★★★★★</option>
+		        </select>
+		        <button type="submit" class="btn btn-secondary">등록</button>
+		        <button type="button" class="btn btn-dark" onclick="location.href='bookReport'">취소</button>
+	    	</form>
     </div>
-
-
-
-
+    
+    <c:if test="${ not empty br }">
+    	<script>
+    		// 체크목적으로 만든 함수
+    		function Check(str){
+    			if(str != '1'){
+    				return false;
+    			}
+    			else{
+    				return true;
+    			}
+    		}
+    		
+    		$(function(){
+    			$('input[name=bookReportSecret]').attr("checked", Check('${br.bookReportSecret}'));
+    			$('input[name=bookReportNotice]').attr("checked", Check('${br.bookReportNotice}'));
+    			$('input[name=bookReportTitle]').val('${br.bookReportTitle}');
+    			$('textarea[name=bookReportContent]').val('${br.bookReportContent}');
+    			$('option[value=${br.bookReportStar}]').attr("selected", true);
+    			$('input[name=bookReportNo]').val('${br.bookReportNo}');
+    			
+    			$('form').attr("action", "reportUpdateForm.bk");
+    		})
+    	</script>
+    </c:if>
     
 </body>
 </html>

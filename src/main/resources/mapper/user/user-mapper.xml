@@ -24,6 +24,28 @@
 		   AND
 		       USER_STATUS IN('U', 'A')
 	</select>
+	
+	<select id="emailUser" parameterType="user" resultType="user">
+		SELECT
+			   USER_NO userNo,
+		       USER_ID userId,
+		       USER_PWD userPwd,
+		       USER_NAME userName,
+		       EMAIL email,
+		       PHONE phone,
+		       POINT point,
+		       POST post,
+		       ADDRESS address,
+		       DETAIL_ADDRESS detailAdress,
+		       USER_STATUS userStatus,
+		       ENROLL_DATE enrollDate
+		  FROM
+		       TB_USER
+		 WHERE
+		       EMAIL = #{email}
+		   AND
+		       USER_STATUS IN('U', 'A')
+	</select>
 
 	<select id="idCheck" parameterType="string" resultType="_int">
 		SELECT
@@ -32,6 +54,15 @@
 		  	   TB_USER
 		 WHERE
 		 	   USER_ID = #{checkId}
+	</select>
+	
+	<select id="emailCheck" parameterType="string" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_USER
+		 WHERE
+		 	   EMAIL = #{checkEmail}
 	</select>
 
 	<insert id="insertSecret" parameterType="cert">
@@ -124,6 +155,28 @@
 			VALUES 
 				   (
 				   	#{kakaoId}
+				   ) 	
+	</insert>
+	
+	<select id="selectNaver" parameterType="string" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_NAVER_USER
+		 WHERE
+		 	   NAVER_EMAIL = #{email}
+	</select>
+	
+	<insert id="insertNaver">
+		INSERT
+			  INTO
+			       TB_NAVER_USER
+			       (
+			        NAVER_EMAIL
+			       )
+			VALUES 
+				   (
+				   	#{naverEmail}
 				   ) 	
 	</insert>
 	

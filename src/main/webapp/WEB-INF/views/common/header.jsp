@@ -70,13 +70,19 @@
 		</script>
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>
+	<c:if test="${ not empty loginAlert }">
+		<script>
+			alert('${loginAlert}')
+		</script>
+		<c:remove var="loginAlert" scope="session" />
+	</c:if>
 
 	<div id="menubar">
 		<div class="menu" onclick="location.href='book'"><h1>BOOK</h1></div>
 		<div class="menu" onclick="location.href='event'"><h1>EVENT</h1></div>
 		<div class="menu" onclick="location.href='challenge'"><h1>CHALLENGE</h1></div>
 		<div class="menu" onclick="location.href='product'"><h1>PRODUCT</h1> </div>
-		<div class="menu"><h1>MOVE</h1></div>
+		<div class="menu" onclick="location.href='move'"><h1>MOVE</h1></div>
 		<c:choose>
 			<c:when test="${ empty sessionScope.loginUser }">
 				<div class="lm login-menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
@@ -92,7 +98,7 @@
 					</c:when>
 					<c:otherwise>
 						<c:choose>
-							<c:when test="${ empty sessionScope.accessToken }">
+							<c:when test="${ empty sessionScope.accessToken and empty sessionScope.accessNToken }">
 								<div>
 									<div class="lm login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
 									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
@@ -103,14 +109,30 @@
 					            </div>
 							</c:when>
 							<c:otherwise>
-								<div>
-									<div class="lm login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
-									<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-									<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-									<div class="im">
-										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-						            </div>
-					            </div>
+								<c:choose>
+									<c:when test="${ not empty sessionScope.accessNToken }">
+										<div>
+											<div class="lm login-menu" onclick="location.href='naverlogout.us'"><h3>네이버 LOGOUT</h3> </div>
+											<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+											<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
+											<div class="im">
+												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+								            </div>
+							            </div>
+									</c:when>
+									<c:when test="${ not empty sessionScope.accessToken }">
+										<div>
+											<div class="lm login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
+											<div class="lm login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
+											<div class="lm cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
+											<div class="im">
+												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+								            </div>
+							            </div>
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose>
 							</c:otherwise>
 						</c:choose>
 					</c:otherwise>

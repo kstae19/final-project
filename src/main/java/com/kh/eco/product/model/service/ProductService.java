@@ -1,15 +1,29 @@
 package com.kh.eco.product.model.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.json.simple.parser.ParseException;
+
+import com.kh.eco.common.model.vo.PageInfo;
+import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.KakaoPay;
+import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
 public interface ProductService {
-	ArrayList<Product> selectProductList();
+	
+	int selectProductCount();
+	int selectCategoryCount(String category);
+	ArrayList<Product> selectProductList(HashMap map, PageInfo pi);
+	ArrayList<Product> searchProduct(String keyword);
+	
 	int addLike(ProductLike like);
 	Product selectProduct(int productNo);
 	String getPrice(int optionNo);
@@ -22,4 +36,21 @@ public interface ProductService {
 	int removeLike(ProductLike like);
 	ArrayList<Cart> selectCartItems(int userNo);
 	int updateQty(Cart cart);
+	int addCart(Cart cart);
+	String checkCart(Cart cart);
+	int removeItem(Cart cart);
+	Cart getCartItem(int optionNo);
+	int orderProduct(Order order);
+	String getPcUrl(KakaoPay pay) throws IOException, ParseException;
+	String payResult(String pcUrl) throws IOException;
+	ApproveRequest getRequestParam();
+	String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException;
+	ProductOption getProductOption(int optionNo);
+	
+	int selectOrderCount(int userNo);
+	ArrayList<Order> getShoppingList(int userNo);
+	int updateProductCount(int productNo);
+	int insertReview(ProductReview review);
+
+
 }

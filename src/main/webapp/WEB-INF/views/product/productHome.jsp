@@ -34,12 +34,14 @@
 	font-weight: normal;
 	font-style: normal;
 }
-
+*{
+	border : 1px solid orange;
+}
 div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border : 1px solid transparent;
+
 }
 
 .outer {
@@ -58,7 +60,7 @@ div {
 	margin: auto;
 }
 
-#searching-area>input[type=text] {
+#searching-area input[type=text] {
 	width: 80%;
 	height: 90%;
 	border-left-width: 0;
@@ -66,15 +68,21 @@ div {
 	border-top-width: 0;
 	border-bottom-width: 1;
 }
-
-#searching-area>img {
-	width: 18%;
+#searching-area button{
+	width : 40px; 
+	height 40px;
+	background : none;
+	border : none;
+}
+#searching-area img {
+	width: 90%;
 	height: 90%;
 	float: right;
+	cursor : pointer;
 }
 
 #controll-area>select {
-	margin-left: 790px;
+	margin-left: 740px;
 	padding: 5px;
 	font-size: 20px;
 }
@@ -90,25 +98,24 @@ div {
 }
 
 #product-area {
+	margin-top : 20px;
 	font-family: 'SBAggroB';
 	width: 100%;
 }
 
 #products {
 	width: 100%;
-	display:flex;
 }
-
-
 .product {
 	float:left;
-	width: 400px;
+	width: 394px;
 	height: 400px;
 	cursor:pointer;
+	margin:2px;
 }
 .product-info{
 	width:100%;
-	height:330px;
+	height:310px;
 }
 
 .product table {
@@ -134,27 +141,50 @@ div {
 	text-align: center;
 	line-height: 300px;
 }
+.paging-area{
+	padding-top : 50px;
+	margin:auto;
+	clear:both;
+}
+.paging-area>ul{
+	list-style : none;
+	display:flex;
+	padding-left:600px;
+}
+.paing-area li{
+	width : 20px;
+	height:20px;
+}
 </style>
 </head>
 <body>
 <jsp:include page="../common/header.jsp"/>
+<br><br>
 	<div class="outer">
 		<br> <br>
 		<div class="content">
 			<div id="searching-area">
-				<input type="text" placeholder="검색어를 입력하세요."> <img
-					src="resources/images/searhIcon.svg">
+			<form action = "product" method="get">
+				<input type="hidden" name = "category" value=""> 
+				<input type="hidden" name = "orderBy" value=""> 
+				<input type="text" name = "keyword" placeholder="검색어를 입력하세요."> 
+				<button type="submit">
+				<img src="resources/images/searhIcon.svg">
+				</button>
+			</form>
 			</div>
 
 			<div id="controll-area">
 				<button onclick="sort('F');">FOOD</button>
-				<button onclick="sort('P');">Eco Friendly Items</button>
+				<button onclick="sort('G');">Eco Friendly Items</button>
+				<button onclick="sort('all');">ALL</button>
 
 				<select>
-					<option>최신순</option>
-					<option>좋아요순</option>
-					<option>가격 높은순</option>
-					<option>가격 낮은순</option>
+					<option value="latest">최신순</option>
+					<option value="view">조회순</option>
+					<option value="like">좋아요순</option>
+					<option value="priceDesc">가격 높은순</option>
+					<option value="priceAsc">가격 낮은순</option>
 				</select>
 			</div>
 
@@ -224,10 +254,14 @@ div {
 							})
 						</script>
 					</c:forEach>
+					
 					</div>
 				</div>
 				
 				<script>
+					function sort(category){
+						location.href='product?category='+category;
+					};
 					function askLogin(){
 						alertify.confirm('로그인','로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?',
 								()=>{
@@ -236,7 +270,7 @@ div {
 								()=>{
 									alertify.error('비회원으로 계속합니다.');
 								});
-					}
+					};
 					function like(pno, th){
 						console.log(pno);
 						$.ajax({
@@ -257,10 +291,7 @@ div {
 								console.log('세상은 요지경~~');
 							}
 						})
-					}
-					function sort(type){
-						
-					}
+					};
 					$(()=>{
 						
 						$.ajax({
@@ -279,7 +310,11 @@ div {
 							error: ()=>{
 								console.log('에이젝스 망했어...');
 							}
-						})
+						});
+						
+						$('#controll-area>select').change(e =>{
+							location.href='product?category='+'${map.category}'+'&orderBy='+$(e.target).val();
+						});
 					})
 				</script>
 				<c:if test = "${!empty loginUser}">
@@ -287,9 +322,46 @@ div {
 
 					</script>
 				</c:if>
-				
-			
+				<c:if test="${not empty map.orderBy }">
+					<script>
+						$(()=>{
+							$('#controll-area option[value="${map.orderBy}"]').attr('selected', true);
+						})
+					</script>
+				</c:if>			
+			<div class="paging-area">
+				<ul>
+				<c:choose>
+					<c:when test="${pi.currentPage eq 1 }">
+					<li><a disabled> &lt; </a></li>
+					</c:when>
+					<c:when test="${not empty keyword and not empty category }">
+					<li><a href="product?keyword=${keyword }&category=${category }&cPage=${pi.currentPage-1 }"> &lt; </a></li>
+					</c:when>
+					<c:otherwise>
+					<li><a href="product?cPage=${pi.currentPage-1 }"> &lt; </a></li>
+					</c:otherwise>
+				</c:choose>	
+					
+					<c:forEach begin="${pi.startPage }" end="${pi.endPage }" var="p">
+						<li><a href="product?keyword=${keyword }&category=${category}&cPage=${p}"> ${p } </a></li>
+                    </c:forEach>
+                    
+                <c:choose>
+					<c:when test="${pi.currentPage eq pi.maxPage }">
+					<li><a disabled> &gt; </a></li>
+					</c:when>
+					<c:when test="${not empty keyword and not empty category }">
+					<li><a href="product?keyword=${keyword }&category=${category }&cPage=${pi.currentPage-1 }"> &gt; </a></li>
+					</c:when>
+					<c:otherwise>
+					<li><a href="product?cPage=${pi.currentPage+1 }"> &gt; </a></li>
+					</c:otherwise>
+				</c:choose>	    
+                </ul>
 			</div>
+			</div>
+			
 		</div>
 	</div>
 </body>

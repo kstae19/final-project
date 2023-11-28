@@ -144,10 +144,11 @@ div {
 				<img src="${p.mainImg }">
 			</div>
 			<div id="product-info">
+			<form action="listOrderForm" method="post">
 				<div id="productTitle">
 					<div id="productName">
 						<h1>${p.productName }</h1>
-					</div>
+					</div>				
 					<div id="like-star">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
@@ -176,7 +177,7 @@ div {
 					<div id="briefInfo">${p.productInfo }</div>
 					
 					<div id="choice">
-						<form action="product.orderForm">
+
 							<select name="optionNo" required>
 								<option value="0">옵션을 선택하세요</option>
 								<c:forEach items="${p.optionList }" var="option">
@@ -187,26 +188,70 @@ div {
 							<span id="price"></span>
 							
 							<br> 
-							
-							<input type="number" value="1" min="1" max="10" required>
-							<span id="totalPrice"></span>
+							<input type="hidden" name="mainImg" value="${p.mainImg }">
+							<input type="hidden" name="productNo" value="${p.productNo }">
+							<input type="hidden" name="productName" value="${p.productName }">
+							<input type="hidden" value="${sessionScope.loginUser.userNo }" name="userNo">
+							<input type="number" value="1" min="1" max="10" required disabled name="qty">
+							<span id="totalPrice"></span><br>
 							
 							<br>
 						<c:choose>
 						<c:when test="${!empty sessionScope.loginUser }">	
-							<button type="button">장바구니 추가</button>
-							<button type="submit">구매하기</button>
+							<button type="button" onclick="addCart();">장바구니 추가</button>
+							<button type="submit" onclick="return optionCheck();">구매하기</button>
 						</c:when>
 						<c:otherwise>
 							<p>로그인 후 상품 주문이 가능합니다.</p>
 						</c:otherwise>
 						</c:choose>
-						</form>
 					</div><!-- 옵션 선택 영역 끝 -->
 				</div><!-- 제품 설명영역 끝 -->
+			</form>
 			</div>
 		</div>
 				<script>
+					function optionCheck(){
+						if($('#choice select').val() == 0){
+							alert('옵션을 먼저 선택 해주세요.');
+							return false;
+						}
+					}
+					function addCart(){
+						let $option = $('#choice select').val();
+						if($option == 0){
+							alert('상품 옵션을 선택해주세요.');
+							return false;
+						}
+						else{
+							$.ajax({
+								url : 'add.cart',
+								method : 'POST',
+								data : {
+									userNo : '${sessionScope.loginUser.userNo}',
+									optionNo : $option,
+									qty : $('#choice input[type=number]').val()
+								},
+								success : e =>{
+									if(e == 'added'){
+										alert('장바구니에 추가되었습니다.');
+									}
+									else if(e == 'failed'){
+										alert('장바구니 추가에 실패했습니다. 다시 한 번 도전해주세요.');
+									}
+									else{
+										alert('이미 장바구니에 존재하는 상품입니다.\n 추가일자 :'+e);
+									}
+								},
+								error : ()=>{
+									console.log('ajax망..'); 
+								}
+								
+							})
+							
+						}
+						
+					}
 					function askLogin(){
 						if(confirm('로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?')){
 						location.href='login';
@@ -245,16 +290,25 @@ div {
 									//console.log($price);
 									//console.log($qty);
 									$('#price').text(price+'원');
+									$('#totalPrice').text(price+'원');
+									$('#choice input').attr('disabled', false);
 								},
 								error : ()=>{
 									console.log('공부 더해 이자기식아!');
 								}
 							})
 						});
+
 						$('#choice input').change(()=>{
+							if($('#choice select').val() == 0){
+								alert('옵션을 먼저 선택 해주세요.');
+								$('#choice select').focus();
+							}else{
+								
 							let price = $('#choice span').text();
-							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input').val());
+							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input[type=number]').val());
 							$('#totalPrice').text(totalPrice.toLocaleString()+'원');
+							}
 							
 						})
 					})

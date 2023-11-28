@@ -8,6 +8,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.book.model.dao.BookDao;
 import com.kh.eco.book.model.vo.Book;
@@ -16,6 +18,7 @@ import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
 import com.kh.eco.common.model.vo.PageInfo;
 
+@EnableTransactionManagement
 @Service
 public class BookServiceImpl implements BookService{
 	
@@ -32,8 +35,8 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public int insertBook(String ISBN) {
-		return bookDao.insertBook(sqlSession, ISBN);
+	public int insertBook(Book book) {
+		return bookDao.insertBook(sqlSession, book);
 	}
 
 	@Override
@@ -79,8 +82,11 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
+	@Transactional("transactionManager")
 	public int ajaxDeleteBookReply(HashMap map) {
-		return bookDao.ajaxDeleteBookReply(sqlSession, map);
+		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
+		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);
+		return result1 + result2;
 	}
 
 	@Override
@@ -108,6 +114,11 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
+	public int reportEnrollForm(BookReport bookReport) {
+		return bookDao.reportEnrollForm(sqlSession, bookReport);
+	}
+	
+	@Override
 	public int countReport(int reportNo) {
 		return bookDao.countReport(sqlSession, reportNo);
 	}
@@ -116,11 +127,104 @@ public class BookServiceImpl implements BookService{
 	public BookReport reportDetail(int reportNo) {
 		return bookDao.reportDetail(sqlSession, reportNo);
 	}
+	
+	@Override
+	public int reportUpdateForm(BookReport bookReport) {
+		return bookDao.reportUpdateForm(sqlSession, bookReport);
+	}
+	
+	@Override
+	public int reportDelete(int reportNo) {
+		return bookDao.reportDelete(sqlSession, reportNo);
+	}
+	
+	@Override
+	public int reportBlack(HashMap map) {
+		return bookDao.reportBlack(sqlSession, map);
+	}
+	
+	@Override
+	public int ajaxSelectReportReplyCount(int reportNo) {
+		return bookDao.ajaxSelectReportReplyCount(sqlSession, reportNo);
+	}
+	
+	@Override
+	public ArrayList<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.ajaxSelectReportReply(sqlSession, reportNo, rowBounds);
+	}
 
 	@Override
-	public ArrayList<BookReportReply> selectReportReply(int reportNo) {
-		return null;
+	public int ajaxInsertReportReply(HashMap map) {
+		return bookDao.ajaxInsertReportReply(sqlSession, map);
 	}
+
+	@Override
+	public int ajaxUpdateReportReply(HashMap map) {
+		return bookDao.ajaxUpdateReportReply(sqlSession, map);
+	}
+
+	@Override
+	public int ajaxDeleteReportReply(int replyNo) {
+		return bookDao.ajaxDeleteReportReply(sqlSession, replyNo);
+	}
+
+	@Override
+	public int ajaxReplyBlack(HashMap map) {
+		return bookDao.ajaxReplyBlack(sqlSession, map);
+	}
+
+	@Override
+	public int bookmarkCountMyPage(int userNo) {
+		return bookDao.bookmarkCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int bookReplyCountMyPage(int userNo) {
+		return bookDao.bookReplyCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return (ArrayList)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int reportCountMyPage(int userNo) {
+		return bookDao.reportCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReport> reportMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int reportReplyCountMyPage(int userNo) {
+		return bookDao.reportReplyCountMyPage(sqlSession, userNo);
+	}
+
+	@Override
+	public ArrayList<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
+
+	
 
 	
 

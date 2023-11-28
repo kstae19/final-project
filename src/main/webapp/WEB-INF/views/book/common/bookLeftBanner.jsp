@@ -54,6 +54,7 @@
             <li onclick="location.href='bookreport'">독후감 게시판</li>
             <li onclick="location.href='ecodictionary'">환경용어사전</li>
             <li onclick="location.href='bookcalendar'">독서캘린더</li>
+            <li onclick="location.href='bookmypage'">마이페이지</li>
         </ul>
     </div>
 </body>

@@ -8,10 +8,14 @@ import lombok.ToString;
 @NoArgsConstructor @Getter @Setter @ToString
 public class Cart {
 	private int userNo;
-	private String addDate;
 	private int qty;
-	private Product product;
-	private ProductOption option;
-
-
+	private int optionNo;
+	private int brandNo;
+	private int productNo;
+	private String productName;
+	private String brandName;
+	private String productInfo;
+	private String mainImg;
+	private String optionName;
+	private int price;
 }

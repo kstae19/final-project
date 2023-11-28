@@ -8,9 +8,12 @@ import lombok.ToString;
 @NoArgsConstructor @Getter @Setter @ToString
 public class ProductReview {
 	private int reviewNo;
+	private int optionNo;
 	private String option;
 	private int orderNo;
 	private String reviewTitle;
 	private String reviewContent;
 	private double starRate;
+	private String originName;
+	private String changeName;
 }

@@ -14,8 +14,8 @@ import lombok.ToString;
 public class BookReportReply {
 	
 	private int bookReportReplyNo;
-	private String bookReportDate;
-	private String bookReportContent;
+	private String bookReportReplyDate;
+	private String bookReportReplyContent;
 	private String userId;
 	private int bookReportNo;
 	

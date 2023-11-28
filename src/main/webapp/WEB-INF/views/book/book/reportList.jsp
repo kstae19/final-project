@@ -44,13 +44,13 @@
     <div class="outer">
         <div>
           <h3 style="display: inline-block;">독후감 게시판</h3>
-          <form class="search-form" action="reportsearch.bk" id="reportsearch-area">
-              <select name="reportcondition">
+          <form class="search-form" action="reportSearch.bk" id="reportsearch-area">
+              <select name="reportSearchOption">
                   <option value="title">제목</option>
                   <option value="content">내용</option>
                   <option value="writer">작성자</option>
               </select>
-              <input type="text" name="reportsearch">
+              <input type="text" name="reportSearchValue" maxlength="50">
               <button type="submit">검색</button>
           </form>
         </div>
@@ -72,60 +72,71 @@
             </tr>
           </thead>
           <tbody>
-          	<c:forEach items="${ list }" var="r" varStatus="i">
-          		<c:choose>
-          			<c:when test="${ r.bookReportStar eq 0 }">
-          				<tr style="color:red;">
-				          <td class="rno">${ r.bookReportNo }</td>
-				          <td>공지</td>
-				          <td>${ r.bookReportTitle }</td>
-				          <td>${ r.userId }</td>
-				          <td>${ r.bookReportDate }</td>
-				          <td>${ r.bookReportCount }</td>
-				        </tr>
-          			</c:when>
-          			<c:when test="${ r.bookReportSecret eq 1 }">
-        				<c:choose>
-        					<c:when test="${ r.userId eq loginUser.userId }">
-        						<tr>
-						          <td class="rno">${ r.bookReportNo }</td>
-						          <td>
-						          	<c:forEach var="i" begin="1" end="${ r.bookReportStar }">
-						          		★
-						          	</c:forEach>
-						          </td>
-						          <td>[비밀글] ${ r.bookReportTitle }</td>
-						          <td>${ r.userId }</td>
-						          <td>${ r.bookReportDate }</td>
-						          <td>${ r.bookReportCount }</td>
+          	<c:choose>
+          		<c:when test="${ empty list }">
+          			<tr>
+          				<td colspan="6" align="center">작성된 게시글이 없습니다.</td>
+          			</tr>
+          		</c:when>
+          		<c:otherwise>
+		          	<c:forEach items="${ list }" var="r" varStatus="i">
+		          		<c:choose>
+		          			<c:when test="${ r.bookReportStar eq 0 }">
+		          				<tr style="color:red;">
+						          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
+						          <td>공지</td>
+						          <td><c:out value="${ r.bookReportTitle }" /></td>
+						          <td><c:out value="${ r.userId }" /></td>
+						          <td><c:out value="${ r.bookReportDate }" /></td>
+						          <td><c:out value="${ r.bookReportCount }" /></td>
 						        </tr>
-        					</c:when>
-        				</c:choose>
-          			</c:when>
-          			<c:otherwise>
-          				<tr>
-				          <td class="rno">${ r.bookReportNo }</td>
-				          <td>
-				          <c:forEach var="i" begin="1" end="${ r.bookReportStar }">
-			          		  ★
-			          	  </c:forEach>
-						  </td>
-				          <td>${ r.bookReportTitle }</td>
-				          <td>${ r.userId }</td>
-				          <td>${ r.bookReportDate }</td>
-				          <td>${ r.bookReportCount }</td>
-				        </tr>
-          			</c:otherwise>
-          		</c:choose>
-          	</c:forEach>
+		          			</c:when>
+		          			<c:when test="${ r.bookReportSecret eq 1 }">
+		        				<c:choose>
+		        					<c:when test="${ r.userId eq loginUser.userId }">
+		        						<tr>
+								          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
+								          <td>
+								          	<c:forEach var="i" begin="1" end="${ r.bookReportStar }">
+								          		★
+								          	</c:forEach>
+								          </td>
+								          <td>[비밀글] <c:out value="${ r.bookReportTitle }" /></td>
+								          <td><c:out value="${ r.userId }" /></td>
+								          <td><c:out value="${ r.bookReportDate }" /></td>
+								          <td><c:out value="${ r.bookReportCount }" /></td>
+								        </tr>
+		        					</c:when>
+		        				</c:choose>
+		          			</c:when>
+		          			<c:otherwise>
+		          				<tr>
+						          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
+						          <td>
+						          <c:forEach var="i" begin="1" end="${ r.bookReportStar }">
+					          		  ★
+					          	  </c:forEach>
+								  </td>
+						          <td><c:out value="${ r.bookReportTitle }" /></td>
+						          <td><c:out value="${ r.userId }" /></td>
+						          <td><c:out value="${ r.bookReportDate }" /></td>
+						          <td><c:out value="${ r.bookReportCount }" /></td>
+						        </tr>
+		          			</c:otherwise>
+		          		</c:choose>
+		          	</c:forEach>
+	          	</c:otherwise>
+          	</c:choose>
           </tbody>
         </table>
         
         <script>
-        	$(function(){
-        		$('#report-table > tbody > tr').click(function(){
-        			location.href='reportdetail.bk?rno='+$(this).children(('.rno')).text();
-        		})
+        	$(function(){ // 테이블의 행을 클릭시 상세조회
+       			$('#report-table > tbody > tr').click(function(){
+       				if($('#report-table').find('td').length > 1){
+	           			location.href='reportdetail.bk?rno='+$(this).children(('.rno')).text();
+       				}
+           		})
         	})
         </script>
         
@@ -137,7 +148,52 @@
 				})				
 			</script>
 		</c:if>
-          
+        
+       	<ul class="pagination justify-content-center">
+        	<li class="page-item li-previous"><a class="page-link page-previous" href="bookreport?cPage=${ pi.currentPage - 1 }">Previous</a></li>
+           <c:forEach begin="${ pi.startPage }" end="${ pi.endPage }" var="p">
+           		<li class="page-item"><a id="${p}" class="page-link page-now" href="bookreport?cPage=${p}">${p}</a></li>
+           </c:forEach>
+	       	<li class="page-item li-next"><a class="page-link page-next" href="bookreport?cPage=${ pi.currentPage + 1 }">Next</a></li>
+    	</ul>
+      	<script>
+      		$(function(){
+      			if(${ pi.currentPage } == 1){
+      				$('.page-previous').attr("href", "#");
+      				$('.li-previous').addClass('disabled');
+      			}
+      			if("${ pi.maxPage }"){
+      				$('.page-next').attr("href", "#");
+      				$('.li-next').addClass('disabled');
+      			}
+      			if(${pi.currentPage} > ${ pi.maxPage }){
+      				$('.li-previous').after('<li class="page-item"><a class="page-link disabled" href="#">1</a></li>');
+      			}
+      		})
+      	</script>
+       	<c:if test="${ not empty reportsearch }">
+       		<script>
+       			$(function(){
+       				let reportSearchOption = '${reportSearchOption}';
+       				let reportSearchValue = '${reportSearchValue}';
+       				let attrNow = "reportsearch.bk" + "?reportSearchOption=" + reportSearchOption + "&reportSearchValue=" + reportSearchValue + "&cPage="; 
+       				
+       				$.each($('.page-now'), function(index, item){
+       					Now = attrNow + $(item).text();
+       					$(item).attr("href", Now);
+       				})
+       				
+       				let attrPrevious = attrNow + ${ pi.currentPage - 1 };
+       				let attrNext = attrNow + ${ pi.currentPage + 1 };
+       				
+       				$('.page-previous').attr("href", attrPrevious);
+       				$('.page-next').attr("href", attrNext);
+       			})
+       		</script>
+       	</c:if>
+         
+         
+        <!-- 
         <c:choose>
 			<c:when test="${ empty condition }">
 				<ul class="pagination justify-content-center">
@@ -185,7 +241,7 @@
 			       	</c:choose>
 	        	</ul>
 			</c:otherwise>
-		</c:choose>
+		</c:choose> --> 
     </div>
 </body>
 </html>

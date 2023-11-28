@@ -1,22 +1,34 @@
 package com.kh.eco.product.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.Order;
+import com.kh.eco.product.model.vo.OrderItem;
 import com.kh.eco.product.model.vo.Product;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
 @Repository
 public class ProductDao {
+	public int selectProductCount(SqlSession sqlSession) {
+		return sqlSession.selectOne("productMapper.selectProductCount");
+	}
 		
-	public ArrayList<Product> selectProductList(SqlSession sqlSession){
-		return (ArrayList)sqlSession.selectList("productMapper.selectProductList");
+	public ArrayList<Product> selectProductList(SqlSession sqlSession, HashMap map, RowBounds rowbounds){
+		return (ArrayList)sqlSession.selectList("productMapper.selectProductList", map, rowbounds);
+	}
+	public ArrayList<Product> searchProduct(SqlSession sqlSession, String keyword){
+		return (ArrayList)sqlSession.selectList("productMapper.searchProduct", keyword);
 	}
 	public int addLike(SqlSession sqlSession, ProductLike like) {
 		return sqlSession.insert("productMapper.addLike", like);
@@ -54,6 +66,57 @@ public class ProductDao {
 	}
 	public int updateQty(SqlSessionTemplate sqlSession, Cart cart) {
 		return sqlSession.update("productMapper.updateQty", cart);
+	}
+	public int addCart(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.insert("productMapper.addCart", cart);
+	}
+	public String checkCart(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.selectOne("productMapper.checkCart", cart);
+	}
+	public int removeItem(SqlSessionTemplate sqlSession, Cart cart) {
+		return sqlSession.delete("productMapper.removeItem", cart);
+	}
+	public Cart getCartItem(SqlSessionTemplate sqlSession, int optionNo) {
+		return sqlSession.selectOne("productMapper.getCartItem", optionNo);
+	}
+	public int insertOrder(SqlSessionTemplate sqlSession, Order order) {
+		return sqlSession.insert("productMapper.insertOrder", order);
+	}
+	public int insertOrderItem(SqlSessionTemplate sqlSession, Order order) {
+		return sqlSession.insert("productMapper.insertOrderItem", order);
+	}
+	public int insertOrderItem(SqlSessionTemplate sqlSession, OrderItem item) {
+		return sqlSession.insert("productMapper.insertOrderItems", item);
+	}
+//	public int insertOrderItems(SqlSessionTemplate sqlSession, Order order) {
+//		return sqlSession.insert("productMapper.insertOrderItems", order);
+//	}
+	public int insertReady(SqlSessionTemplate sqlSession, ApproveRequest approveRequest) {
+		return sqlSession.insert("productMapper.insertReady", approveRequest);
+	}
+	public ApproveRequest getRequestParam(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("productMapper.getRequestParam");
+	}
+	public ProductOption getProductOption(SqlSessionTemplate sqlSession, int optionNo) {
+		return sqlSession.selectOne("productMapper.getProductOption", optionNo);
+	}
+	public ArrayList<Order>getShoppingList(SqlSessionTemplate sqlSession, int userNo){
+		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", userNo);
+	}
+	public int updateProductCount(SqlSessionTemplate sqlSession, int productNo) {
+		return sqlSession.update("productMapper.updateProductCount", productNo);
+	}
+
+	public int selectCategoryCount(SqlSessionTemplate sqlSession, String category) {
+		return sqlSession.selectOne("productMapper.selectCategoryCount", category);
+	}
+
+	public int selectOrderCount(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("productMapper.selectOrderCount", userNo);
+	}
+
+	public int insertReview(SqlSessionTemplate sqlSession, ProductReview review) {
+		return sqlSession.insert("productMapper.insertReview", review);
 	}
 
 }
