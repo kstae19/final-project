@@ -26,6 +26,11 @@ div {
 	height: 1500px;
 	background: rgb(245, 238, 220);
 }
+.orderer-info button{
+	width : 100px;
+	height : 30px;
+	backgound:none;
+}
 
 #order-content {
 	width: 800px;
@@ -112,7 +117,7 @@ h2 {
 						</c:if>
 					</div>
 				<div class="orderer-info">
-					<h2>주문자 정보</h2>
+					<h2>주문자 정보 <button type="button" onclick="shipping();">배송지 선택</button></h2>
 					<input type="hidden" name="userNo"
 						value="${sessionScope.loginUser.userNo }"> <br> 이름 :
 					<input type="text" readonly

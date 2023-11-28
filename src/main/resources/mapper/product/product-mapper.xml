@@ -43,8 +43,14 @@
 	<result property="addressNo" column="ADDRESS_NO"/>
 	<collection property="orderDetail" ofType="cart" resultMap="cartMap"/>
 </resultMap>
+<select id = "selectProductCount" resultType="_int">
+	SELECT COUNT(*) FROM TB_PRODUCT WHERE STATUS = 'Y'
+</select>
+<select id = "selectCategoryCount" resultType="_int" parameterType="string">
+	SELECT COUNT(*) FROM TB_PRODUCT WHERE STATUS = 'Y' AND CATEGORY= #{category}
+</select>
 
-<select id="selectProductList" resultMap="resultProductMap">
+<select id="selectProductList" resultMap="resultProductMap" parameterType="hashmap">
 SELECT 
 		PRODUCT_NO, 
 		PRODUCT_NM, 
@@ -59,7 +65,45 @@ SELECT
 	WHERE 
 		O.STATUS IN ('Y', 'O') 
 	AND 
-		P.STATUS = 'Y'
+		P.STATUS = 'Y' 
+	<if test="category != 'all'">
+	AND CATEGORY = #{category} 
+	</if>
+	
+	<if test="keyword != null">
+	AND OPTION_NM LIKE '%${keyword}%' OR PRODUCT_NM LIKE '%${keyword}%' 
+	</if>
+	
+	<if test="orderBy == 'latest' ">
+	ORDER BY CREATE_DATE DESC 
+	</if>
+	<if test="orderBy == 'view'">
+	ORDER BY COUNT DESC 
+	</if>
+	<if test="orderBy == 'priceDesc'">
+	ORDER BY PRICE DESC 
+	</if>
+	<if test="orderBy == 'priceAsc'">
+	ORDER BY PRICE ASC 
+	</if>
+</select>
+<select id="searchProduct" resultMap="resultProductMap" parameterType="string">
+SELECT 
+		PRODUCT_NO, 
+		PRODUCT_NM, 
+		MAIN_IMG, 
+		OPTION_NO, 
+		OPTION_NM, 
+		PRICE
+	FROM 
+		TB_PRODUCT P
+	JOIN 
+		TB_PRODUCT_OPTION O USING (PRODUCT_NO)
+	WHERE 
+		O.STATUS IN ('Y', 'O') 
+	AND 
+		P.STATUS = 'Y' 
+    AND PRODUCT_NM LIKE '%#{keyword}%' OR OPTION_NM LIKE '%keyword%'
 </select>
 
 <insert id="addLike" parameterType="productLike">
@@ -85,7 +129,8 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	WHERE 
 		O.STATUS IN ('Y', 'O') 
 	AND 
-		PRODUCT_NO = #{productNo}
+		PRODUCT_NO = #{productNo} 
+	
 </select>
 
 <select id="getPrice" parameterType="_int" resultType="string">
@@ -321,6 +366,10 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 			OPTION_NO = #{optionNo}
 </select>
 
+<select id = "selectOrderCount" parameterType="_int" resultType="_int">
+	SELECT COUNT(*) FROM TB_ORDER WHERE USER_NO = #{userNo}
+</select>
+
 <select id="getShoppingList" parameterType="_int" resultMap="shoppingListMap">
 	SELECT 
 	        ORDER_NO
@@ -349,5 +398,22 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	WHERE 
 		USER_NO=#{userNo} 
 </select>
+
+<insert id = "insertReview" parameterType="productReview">
+	INSERT 
+		INTO 
+			TB_PRODUCT_REVIEW 
+							VALUES(
+							SEQ_PRODUCT_RNO.NEXTVAL,
+							#{optionNo},
+							#{orderNo},
+							#{reviewTitle},
+							#{reviewContent},
+							#{starRate},
+							DEFAULT,
+							#{originName},
+							#{changeName}
+							)
+</insert>
 
 </mapper>

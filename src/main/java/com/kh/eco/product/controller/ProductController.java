@@ -1,7 +1,11 @@
 package com.kh.eco.product.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.io.File;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,7 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.eco.common.model.template.Pagination;
+import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.service.ProductService;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Cart;
@@ -23,6 +30,7 @@ import com.kh.eco.product.model.vo.Order;
 import com.kh.eco.product.model.vo.OrderCart;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductOption;
+import com.kh.eco.product.model.vo.ProductReview;
 
 
 @Controller
@@ -32,8 +40,28 @@ public class ProductController {
 	private ProductService productService;
 	
 	@RequestMapping("product")
-	public String productHome(Model model) {
-		model.addAttribute("productList", productService.selectProductList());
+	public String productHome(@RequestParam(value="cPage", defaultValue="1") 
+								int currentPage,
+								@RequestParam(value="orderBy", defaultValue="latest") 
+								String orderBy, 
+								@RequestParam(value="category", defaultValue="all") 
+								String category,
+								String keyword, 
+								Model model) {
+		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
+		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), 
+				 							currentPage, 6, 5);
+		model.addAttribute("pi", pi);				
+		
+		HashMap map = new HashMap();
+		map.put("orderBy", orderBy);	//정렬 기준
+		map.put("category", category);	//상품 종류
+		map.put("keyword", keyword);	//검색 키워드
+		
+		model.addAttribute("map", map);
+		model.addAttribute("productList", productService.selectProductList(map, pi));
+		
+		System.out.println(model.getAttribute("productList"));
 		return "product/productHome";
 	}
 	
@@ -58,6 +86,7 @@ public class ProductController {
 		model.addAttribute("review", productService.getRate(like.getProductNo()));
 		return "product/productDetail";
 	}
+	
 	@RequestMapping("product.orderForm")
 	public String orderForm() {		
 		return "redirect:/";
@@ -109,8 +138,14 @@ public class ProductController {
 	}
 	
 	@GetMapping("shoppingList")
-	public String getShoppingList(@RequestParam(value="userNo", defaultValue="0") int userNo,
-									Model model) {
+	public String getShoppingList(@RequestParam(value="cPage", defaultValue="1") 
+								int currentPage, 
+								@RequestParam(value="userNo", defaultValue="0") 
+								int userNo,
+								Model model) {
+		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), 
+											 currentPage, 4, 3);
+		model.addAttribute("pi", pi);	
 		ArrayList<Order> orders = productService.getShoppingList(userNo);
 		for(Order o : orders) {
 			int totalPrice =0;
@@ -135,6 +170,41 @@ public class ProductController {
 	@GetMapping("payReady")
 	public String payReady() {
 		return "product/payReady";
+	}
+	@GetMapping("reviewForm")
+	public String reviewForm() {
+		return "product/reviewForm";
+	}
+	@PostMapping("insert.review")
+	public String insertReview(ProductReview review,
+								MultipartFile upfile
+								, HttpSession session
+								,Model model) {
+		String originName = upfile.getOriginalFilename();
+		if(!originName.equals("")) {
+			review.setOriginName(originName);
+			review.setChangeName(saveFile(upfile, session));
+		}
+		int result = productService.insertReview(review);
+		String alertMsg = result>0? "후기 등록 성공":"후기 등록 실패";
+		model.addAttribute("alertMsg", alertMsg);
+
+		return "redirect:/";
+	}
+	public String saveFile(MultipartFile upfile, HttpSession session) {
+		String originName = upfile.getOriginalFilename();
+		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		int ranNum = (int)Math.random()*90000 + 10000;
+		String ext =originName.substring(originName.lastIndexOf("."));
+		String changeName = currentTime + ranNum + ext;
+		String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/");
+		try {
+			upfile.transferTo(new File(savePath+changeName));
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+
+		return "resources/uploadFiles/"+changeName;
 	}
 	
 	
