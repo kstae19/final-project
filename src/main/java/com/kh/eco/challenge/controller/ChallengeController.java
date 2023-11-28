@@ -172,7 +172,8 @@ public class ChallengeController {
 	
 	// 파일원본명, 서버업로드할 경로+바뀐이름 2개를 challenge에 담는 메서드
 	// ex. 'bonobono.jsp' => 2023111610383.jsp
-	public String saveFile(MultipartFile upfile, HttpSession session) {
+	// 정적 Static 메서드 선언!!!!!
+	public static String saveFile(MultipartFile upfile, HttpSession session) {
 		
 		// 원본파일명 뽑기(필드명과 같게)
 		String originName = upfile.getOriginalFilename();

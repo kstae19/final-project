@@ -134,6 +134,7 @@
     			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
     			//	$('#content-area').on('click', '#likeCount', function(){
     					
+    		// jQuery시작
     		  $(function(){		
 				// 클릭이벤트함수
 				$('#like').on('click',  function(){
@@ -221,148 +222,7 @@
     		
     		
     		
-    		/* $('#likeCount').on('click', function(e){
-			    		new Promise( (resolve, reject) => {
-			    			
-			    			$.ajax({
-			    				url : 'checkLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo }
-			    				},
-			    				success : function(data){ 
-			    					resolve(data);
-			    				},
-			    				error : function(){
-			    					
-			    				}
-			    				
-			    			});
-			
-			    		})
-			    		.then( (arg)  => {
-			    			
-			    			$.ajax({
-			    				url : 'increaseLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo },
-			    				},
-			    				success : function(result){
-			    					
-			    					console.log("좋아요 증가 성공");
-			    				},
-			    				error : function(){					
-			    					console.log('좋아요 증가 실패'); 
-			    				}
-			    		})
-    				})
-    				.then( (arg)  => {
-			    			
-			    			$.ajax({
-			    				url : 'decreaseLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo },
-			    				},
-			    				success : function(result){			
-			    					console.log("좋아요 감소 성공");
-			    				},
-			    				error : function(){		
-			    					console.log('좋아요 감소 실패');	
-			    				}
-			    		})
-    				})
-    		}) */
     		
-    		
-    	/* 	$(function(){
-    			
-    			
-				// 클릭했을 때 이벤트    		
-    		
-    				
-    				checkLikeCount();
-
-
-    			});
-    			
-				
-    			// 좋아요 했는지 확인
-    			function checkLikeCount(){
-        			
-        			$.ajax({
-        				url : 'checkLike.ch',
-        				data : {
-        					userNo : ${ loginUser.userNo },
-        					challengeNo : ${ challenge.challengeNo }
-        				},
-        				success : function(data){ 
-        
-        					console.log(data);
-        				},
-        				error : function(){
-        					console.log('좋아요 했는지 여부 확인불가');
-        				}
-        				
-        				
-        				
-        			});
-        			
-        			
-        		};
-        			
-        		// 좋아요 증가함수
-        		function increaseLikeCount(){
-    	
-    		    			$.ajax({
-    		    				url : 'increaseLike.ch',
-    		    				data : {
-    		    					userNo : ${ loginUser.userNo },
-    		    					challengeNo : ${ challenge.challengeNo },
-    		    				},
-    		    				success : function(result){
-    		    					
-    		    					console.log("좋아요 증가 성공");
-    		    				},
-    		    				error : function(){
-    		    					
-    		    					console.log('좋아요 증가 실패');
-    		    					
-    		    				}
-    		    			
-    		    		
-    	
-    	
-        			})
-        		
-        		};
-
-        		// 좋아요 감소함수
-        		function decreaseLikeCount(){
-    	
-    		    			$.ajax({
-    		    				url : 'decreaseLike.ch',
-    		    				data : {
-    		    					userNo : ${ loginUser.userNo },
-    		    					challengeNo : ${ challenge.challengeNo },
-    		    				},
-    		    				success : function(result){
-    		    					
-    		    					console.log("좋아요 감소 성공");
-    		    				},
-    		    				error : function(){
-    		    					
-    		    					console.log('좋아요 감소 실패');
-    		    					
-    		    				}
-
-    	
-        			})
-        		
-        		};
-        		
-    		}) */
 		    </script>
 		    		
     		
@@ -392,6 +252,8 @@
     		
     	</section>
     
+    	<button id="achievement-toggle-btn">인증글 보기</button>
+    	
     	<section id="achievement-area">
     	
     		<article id="achievement-enroll" >
@@ -417,6 +279,23 @@
     	
     	</section>
 	
+	<script>
+		$(function(){
+			
+			$('#achievement-toggle-btn').on('click', function(){
+				
+				$('#achievement-area').css('visibility', 'visible');
+				
+			});
+			
+		
+			
+			
+			
+		});
+    			
+	
+	</script>
     	
     <!-- content -->
     <style>
@@ -427,6 +306,10 @@
     
     <!-- achievement  -->
 	<style>
+	#achievement-area{
+		visibility:hidden; /*visibility:visible*/ 
+	
+	}
 	#achievement-list{
       	display : grid;
       	justify-content : center;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.eco.challenge.model.service.ChallengeService;
 
 @RestController 
-public class AjaxController {
+public class AjaxChallengeController {
 
 	@Autowired
 	private ChallengeService challengeService;

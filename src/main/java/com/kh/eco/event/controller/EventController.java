@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.eco.challenge.controller.ChallengeController;
 import com.kh.eco.event.model.service.EventService;
 import com.kh.eco.event.model.vo.Event;
 
@@ -66,21 +67,14 @@ public class EventController {
 	 * "event/eventListView"; //return "redirect:/event"; return "redirect:/"; }
 	 */
 	  
-	  // 이벤트 수정폼
-	  @RequestMapping("updateForm.ev") 
-	  public String eventUpdateForm() {
-	  
-	  // 단순 페이지 forward return "event/eventUpdateForm";
-		  return "";
-	  }
-	  
+
 	  // 이벤트 세부모달
 	  @RequestMapping("detail.ev") 
-	  public String selectEventDetail(int eventNo) {
+	  public String selectEventDetail(int eventNo, Model model) {
 	  
-	  
+		 model.addAttribute("e", eventService.selectEventDetail(eventNo));
 	 
-		  return "event/eventDetailView"; 
+		  return "event/eventListView"; 
 	  }
 	
 	// 이벤트 등록
@@ -92,13 +86,13 @@ public class EventController {
 											 HttpSession session) {
 	 
 		  System.out.println(e);
-		  System.out.println(upfile);
+		  System.out.println("파일 : " + upfile);
 		 
 		  // 이벤트 등록
 		  if( !upfile.getOriginalFilename().contentEquals("")) {
 			  
 			  e.setOriginName(upfile.getOriginalFilename());
-			  e.setChangeName(saveFile(upfile, session));
+			  e.setChangeName(ChallengeController.saveFile(upfile, session));
 			  
 			  
 			
@@ -107,56 +101,37 @@ public class EventController {
 		  
 		 if(eventService.insertEvent(e) > 0) {
 			 session.setAttribute("alertMsg", "이벤트 등록 성공!");
-			 model.addAttribute("event", e);
+			 model.addAttribute("e", e);
+			 System.out.println("OriginName : " + e.getOriginName());
+			 System.out.println("changeName : " + e.getChangeName());
 			 return "redirect:/event"; 
+			 //return "event/eventListView";// 이렇게 포워딩하면 기존정보가 그대로??
 		 } else {
 			 return "common/errorPage"; 
 		 }
 		  
 	  }
 	 
-	 // 파일저장메서드
-	 public String saveFile(MultipartFile upfile, HttpSession session) {
-			
-		 
-			// 원본파일명 뽑기(필드명과 같게)
-			String originName = upfile.getOriginalFilename();
-			
-			// 현재시각 문자열 특정형식으로 담기
-			String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()); // 왜 sql이 아니지?
-			
-			// 랜덤값 얻기 (*범위 + 초기값)
-			int ranNum = (int)Math.random() * 90000 + 10000;
-			
-			// 확장자 뽑기
-			String ext = originName.substring(originName.lastIndexOf("."));
-			
-			// 새파일명 정의(필드명과 같게)
-			String changeName = currentTime + ranNum + ext; // String끼리 더하면 그냥 이어붙인 결과
-			
-			// 업로드한 파일을 저장할 경로 설정
-			String savePath = session.getServletContext().getRealPath("/resources/uploadFiles/");
-			
-			// 업로드한 파일을 새 파일객체로 이동시킴 == 파일전송
-			try {
-				upfile.transferTo(new File(savePath + changeName));
-			} catch (IllegalStateException | IOException e) {
-				
-				e.printStackTrace();
-			}
-			
-			// 파일전송완료시 그 파일이 있는 경로를 반환해줘야함
-			return "resources/uploadFiles/" + changeName;
-			
-		}
-
+	
+	 
+	  // 이벤트 수정폼
+	  @RequestMapping("updateForm.ev") 
+	  public String eventUpdateForm() {
+	  
+	  // 단순 페이지 forward return "event/eventUpdateForm";
+		  return "redirect:/event";
+	  }
+	  
+	  
 	 // 이벤트 수정
-	  @RequestMapping("update.ev") public String updateEvent(Event e) {
+	  @RequestMapping("update.ev") 
+	  public String updateEvent(Event e) {
 		  return "event/eventDetailView"; 
 	  }
 	  
 	  // 이벤트 삭제
-	  @RequestMapping("delete.ev") public String deleteEvent(int eventNo) {
+	  @RequestMapping("delete.ev") 
+	  public String deleteEvent(int eventNo) {
 		  return "event/eventDetailView"; 
 	  }
 	 
