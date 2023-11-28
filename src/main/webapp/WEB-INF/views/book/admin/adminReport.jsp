@@ -23,13 +23,16 @@
     <script>
 	    function reportBlack(nowPage){
 			$.ajax({
-				url : 'reportBlack.bk',
+				url : 'adminReportBlack.bk',
 				async : false,
 				type : 'post',
 				data : {
 					cPage : nowPage    				
 				},
 				success : result => {
+					console.log(result);
+					
+					/*
 					let report = result.reportList;
 					let reportPi = result.reportPi;
 					if(report.size){
@@ -62,7 +65,8 @@
 	    				}
 	    				
 	    				$('#bookreportmypagepagination').html(reportPiValue);
-					}
+	    				
+					}*/
 				},
 					error : function(){
 						console.log("통신 실패");
@@ -70,18 +74,18 @@
 			})
 		}
 		
-		function selectMyPageReply(nowPage){
+		function reportReplyBlack(nowPage){
 			$.ajax({
-				url : 'reportreplymypage.bk',
+				url : 'adminReportreplymypage.bk',
 				async : false,
 				type : 'post',
 				data : {
-					userNo : '${ loginUser.userNo }',
 					rPage : nowPage    				
 				},
 				success : result => {
 					console.log(result);
 					
+					/*
 					let reply = result.replyList;
 					let replyPi = result.replyPi;
 					
@@ -113,7 +117,9 @@
 	    				}
 	    				
 	    				$('#bookreportmypagereplypaginagion').html(replyPiValue);
+	    				
 					}
+					*/
 	    				
 	    				
 				},
@@ -124,8 +130,8 @@
 		}
 	
 		$(function(){
-			selectMyPageReport();
-			selectMyPageReply();
+			reportBlack();
+			//reportReplyBlack();
 		})
     </script>
 </head>

@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class ReportReplyBlack {
-
+	
+	private int replyBlackNo;
 	private String replyDate;
 	private String userId;
 	private String replyContent;

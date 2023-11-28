@@ -123,16 +123,16 @@ public interface BookService {
 	
 	
 	// 관리자페이지 신고게시글 개수 조회
-	public int reportBlackCount();
+	public int adminReportBlackCount();
 	
 	// 관리자페이지 신고게시글 목록 조회
-	public ArrayList<ReportBlack> reportBlack(PageInfo pi);
+	public ArrayList<ReportBlack> adminReportBlack(PageInfo pi);
 	
 	// 관리자페이지 신고댓글 개수 조회
-	public int reportReplyBlackCount();
+	public int adminReportReplyBlackCount();
 	
 	// 관리자페이지 신고댓글 목록 조회
-	public ArrayList<ReportReplyBlack> reportReplyBlack(PageInfo pi);
+	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi);
 	
 	
 	

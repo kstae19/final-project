@@ -228,27 +228,27 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public int reportBlackCount() {
-		return bookDao.reportBlackCount(sqlSession);
+	public int adminReportBlackCount() {
+		return bookDao.adminReportBlackCount(sqlSession);
 	}
 
 	@Override
-	public ArrayList<ReportBlack> reportBlack(PageInfo pi) {
+	public ArrayList<ReportBlack> adminReportBlack(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.reportBlack(sqlSession, rowBounds);
+		return bookDao.adminReportBlack(sqlSession, rowBounds);
 	}
 
 	@Override
-	public int reportReplyBlackCount() {
-		return bookDao.reportReplyBlackCount(sqlSession);
+	public int adminReportReplyBlackCount() {
+		return bookDao.adminReportReplyBlackCount(sqlSession);
 	}
 
 	@Override
-	public ArrayList<ReportReplyBlack> reportReplyBlack(PageInfo pi) {
+	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.reportReplyBlack(sqlSession, rowBounds);
+		return bookDao.adminReportReplyBlack(sqlSession, rowBounds);
 	}
 
 

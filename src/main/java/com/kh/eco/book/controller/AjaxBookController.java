@@ -304,37 +304,49 @@ public class AjaxBookController {
 	
 	
 	// 관리자페이지 신고게시글 목록 조회
-	@RequestMapping(value="reportBlack.bk", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="adminReportBlack.bk", produces="application/json; charset=UTF-8")
 	public String reportBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		
-		PageInfo Pi = Pagination.getPageInfo(bookService.reportBlackCount(), currentPage, 5, 5);
+		int result = bookService.adminReportBlackCount();
 		
-		ArrayList<ReportBlack> list = bookService.reportBlack(Pi);
+		if(result != 0) {
+			PageInfo Pi = Pagination.getPageInfo(result, currentPage, 5, 5);
+			
+			ArrayList<ReportBlack> list = bookService.adminReportBlack(Pi);
 
-		HashMap<String, Object> map = new HashMap();
-		map.put("list", list);
-		map.put("pi", Pi);
-		
-		Gson gson = new GsonBuilder().create();
-		String jsonMap = gson.toJson(map);
-		return jsonMap;
+			HashMap<String, Object> map = new HashMap();
+			map.put("list", list);
+			map.put("pi", Pi);
+			
+			Gson gson = new GsonBuilder().create();
+			String jsonMap = gson.toJson(map);
+			return jsonMap;
+		} else {
+			return null;
+		}
 	}
 	
 	// 관리자페이지 신고댓글 목록 조회
-	@RequestMapping(value="reportReplyBlack.bk", produces="application/json; charset=UTF-8")
+	@RequestMapping(value="adminReportReplyBlack.bk", produces="application/json; charset=UTF-8")
 	public String reportReplyBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		
-		PageInfo pi = Pagination.getPageInfo(bookService.reportReplyBlackCount(), currentPage, 5, 5);
+		int result = bookService.adminReportReplyBlackCount();
 		
-		ArrayList<ReportReplyBlack> list = bookService.reportReplyBlack(pi);
+		if(result != 0) {
+			PageInfo pi = Pagination.getPageInfo(result, currentPage, 5, 5);
+			
+			ArrayList<ReportReplyBlack> list = bookService.adminReportReplyBlack(pi);
 
-		HashMap<String, Object> map = new HashMap();
-		map.put("list", list);
-		map.put("pi", pi);
-		
-		Gson gson = new GsonBuilder().create();
-		String jsonMap = gson.toJson(map);
-		return jsonMap;
+			HashMap<String, Object> map = new HashMap();
+			map.put("list", list);
+			map.put("pi", pi);
+			
+			Gson gson = new GsonBuilder().create();
+			String jsonMap = gson.toJson(map);
+			return jsonMap;
+		} else {
+			return null;
+		}
 	}
 	
 	

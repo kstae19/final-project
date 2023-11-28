@@ -161,20 +161,20 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyMyPage", userNo, rowBounds);
 	}
 	
-	public int reportBlackCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("bookMapper.reportBlackCount");
+	public int adminReportBlackCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.adminReportBlackCount");
 	}
 	
-	public ArrayList<ReportBlack> reportBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
-		return (ArrayList)sqlSession.selectList("bookMapper.reportBlack", null, rowBounds);
+	public ArrayList<ReportBlack> adminReportBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.adminReportBlack", null, rowBounds);
 	}
 	
-	public int reportReplyBlackCount(SqlSessionTemplate sqlSession) {
-		return sqlSession.selectOne("bookMapper.reportReplyBlackCount");
+	public int adminReportReplyBlackCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.adminReportReplyBlackCount");
 	}
 	
-	public ArrayList<ReportReplyBlack> reportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
-		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyBlack", null, rowBounds);
+	public ArrayList<ReportReplyBlack> adminReportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.adminReportReplyBlack", null, rowBounds);
 	}
 	
 	
