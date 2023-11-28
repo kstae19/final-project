@@ -32,4 +32,13 @@ public class MoveForwardController {
 		model.addAttribute("name", name);
 		return "move/airInfo";	
 	}
+	
+	@RequestMapping("bikeinfo")
+	public String bikeinfoPage(String bikeName, String bikeCnt, String bikeLat, String bikeLng, Model model) {
+		model.addAttribute("bikeLat", bikeLat);
+		model.addAttribute("bikeLng", bikeLng);
+		model.addAttribute("bikeName", bikeName);
+		model.addAttribute("bikeCnt", bikeCnt);
+		return "move/bikeInfo";	
+	}
 }
