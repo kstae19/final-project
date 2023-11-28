@@ -92,41 +92,54 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		//console.log('현재데이터 내용 : ${list}');
         var calendarEl = document.getElementById('calendar');
-        
+       
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
-        
           editable : true,
           timeZone : 'local',
           
-  		 <c:if test="not empty ${list}">
-  		 	<c:forEach var="e" items="${list}">
-  		 	
           events: [
-        	    {
-        	      id : ${e.eventNo},
-        	      title : '${e.eventTitle}',
-        	      start : '${e.eventDate}',
-        	      extendedProps : {
-        	      	place : '${e.eventPlace}',
-        	      	participants : ${e.participants},
-        	      	category : ${e.categoryNo}
-        	      },
-        	      imageurl : '${e.changeName}'
-        	      
-        	    }
-        	    // more events ...
-        	  ],
         	  
+        		 <c:if test="not empty ${list}">
+		       		 <c:forEach var="e" items="${list}">
+		        	    {
+			        	      id : '${e.eventNo}',
+			        	      title : '${e.eventTitle}',
+			        	      start : '${e.eventDate}',
+			             	   extendedProps : {
+			        	      	place : '${e.eventPlace}',
+			        	      	participants : ${e.participants},
+			        	      	category : ${e.categoryNo}
+			        	      }, 
+			        	      imageurl : '${e.changeName}'  
+		        	    },    
+		        	   </c:forEach>
+         		 </c:if>
+         		
+        	  ],
         	 
-        	 </c:forEach>
-  		 </c:if>
         	  eventDidMount: function(info) {
         	    console.log(info.event.extendedProps);
         	    // {description: "Lecture", department: "BioChemistry"}
         	  },
-        	  eventContent: { html: '<span>title</span>' }
-        	  
+        	 
+        	  eventContent: function(arg) {
+					console.log(arg);
+					
+		           var event = arg.event;
+		            
+		            var customHtml = '';
+		            
+		            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
+		            
+		            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.start +  "</div>";
+		                        
+		            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
+		            
+		            //customHtml += "<img  style='width:100px; height : 100px;' src=" + event.imageurl +  "/>";
+		            
+		            return { html: customHtml } 
+		        }
          
           
         });//calendar정의
