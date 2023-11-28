@@ -371,33 +371,36 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	SELECT COUNT(*) FROM TB_ORDER WHERE USER_NO = #{userNo}
 </select>
 
-<select id="getShoppingList" parameterType="_int" resultMap="shoppingListMap">
-	SELECT 
-	        ORDER_NO
-	        , ADDRESS_NO
-	        , USER_NO
-	        , TO_CHAR(ORDER_DATE,'YYYY-MM-DD PM HH:MI:SS')
-	        , OPTION_NO
-	        , OPTION_NM
-	        , QTY
-	        , PRICE 
-	        , PRODUCT_NO 
-	        , PRODUCT_NM 
-	        , BRAND_NO 
-	        , BRAND_NAME 
-	        , MAIN_IMG 
-	FROM 
-		TB_ORDER 
-	JOIN 
-		TB_ORDER_ITEM USING(ORDER_NO) 
-	JOIN 
-		TB_PRODUCT_OPTION USING(OPTION_NO) 
-	JOIN 
-		TB_PRODUCT USING(PRODUCT_NO) 
-	JOIN 
-		TB_BRAND USING(BRAND_NO) 
-	WHERE 
-		USER_NO=#{userNo} 
+<select id="getShoppingList" parameterType="hashmap" resultMap="shoppingListMap">
+SELECT 
+        R, ORDER_NO 
+        , USER_NO
+        , OPTION_NO
+        , OPTION_NM
+        , QTY
+        , PRICE 
+        , PRODUCT_NO 
+        , PRODUCT_NM 
+        , BRAND_NO 
+        , BRAND_NAME 
+        , MAIN_IMG 
+FROM (SELECT 
+            ROWNUM R
+            , ORDER_NO
+            , USER_NO 
+        FROM 
+            TB_ORDER 
+        ORDER BY ORDER_NO)
+ JOIN 
+        TB_ORDER_ITEM USING(ORDER_NO)
+ JOIN 
+    TB_PRODUCT_OPTION USING(OPTION_NO) 
+ JOIN 
+    TB_PRODUCT USING(PRODUCT_NO) 
+ JOIN 
+    TB_BRAND USING(BRAND_NO) 
+ WHERE R BETWEEN #{startRow} AND #{endRow} 
+ AND USER_NO = #{userNo}
 </select>
 
 <insert id = "insertReview" parameterType="productReview">

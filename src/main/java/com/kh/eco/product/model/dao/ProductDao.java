@@ -100,9 +100,6 @@ public class ProductDao {
 	public ProductOption getProductOption(SqlSessionTemplate sqlSession, int optionNo) {
 		return sqlSession.selectOne("productMapper.getProductOption", optionNo);
 	}
-	public ArrayList<Order>getShoppingList(SqlSessionTemplate sqlSession, int userNo){
-		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", userNo);
-	}
 	public int updateProductCount(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.update("productMapper.updateProductCount", productNo);
 	}
@@ -137,6 +134,10 @@ public class ProductDao {
 
 	public ArrayList<String> getKeywords(SqlSessionTemplate sqlSession, String keyword) {
 		return (ArrayList)sqlSession.selectList("productMapper.getKeywords", keyword);
+	}
+
+	public ArrayList<Order> getShoppingList(SqlSessionTemplate sqlSession, HashMap map) {
+		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", map);
 	}
 
 }

@@ -150,15 +150,16 @@ public class ProductController {
 								@RequestParam(value="userNo", defaultValue="0") 
 								int userNo,
 								Model model) {
-		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), 
-											 currentPage, 4, 3);
+		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), currentPage, 4, 5);
 		model.addAttribute("pi", pi);	
-		ArrayList<Order> orders = productService.getShoppingList(userNo);
+
+		ArrayList<Order> orders = productService.getShoppingList(userNo, pi);
 		for(Order o : orders) {
+			System.out.println(o);
 			int totalPrice =0;
 			o.setItemQty(o.getOrderDetail().size());
 			for(Cart c : o.getOrderDetail()) {
-				totalPrice+=c.getPrice();
+				totalPrice+=c.getPrice()*c.getQty();
 			}
 			o.setTotalPrice(totalPrice);
 		}

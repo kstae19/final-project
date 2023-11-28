@@ -275,8 +275,17 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ArrayList<Order> getShoppingList(int userNo) {
-		return dao.getShoppingList(sqlSession, userNo);
+	public ArrayList<Order> getShoppingList(int userNo, PageInfo pi) {		
+		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
+		int endRow = pi.getCurrentPage()*pi.getBoardLimit();
+		
+		System.out.println(startRow+"부터"+endRow);
+		HashMap map = new HashMap();
+		map.put("startRow", startRow);
+		map.put("endRow", endRow);
+		map.put("userNo", userNo);
+		
+		return dao.getShoppingList(sqlSession, map);
 	}
 
 	@Override

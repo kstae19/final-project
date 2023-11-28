@@ -86,6 +86,26 @@ h3 {
 	color: white;
 	margin: 20px 2px 20px 2px;
 }
+.paging-area{
+	padding-top : 50px;
+	margin:auto;
+	clear:both;
+}
+.paging-area>ul{
+	list-style : none;
+	display:flex;
+	padding-left:950px;
+}
+.paging-area li{
+	width : 25px;
+	height:25px;
+	font-size : 19px;
+	font-weight:bold;
+	padding:0px;
+	margin:10px;
+}
+
+
 </style>
 
 </head>
@@ -116,7 +136,7 @@ h3 {
 								</div>
 								<c:choose>
 								<c:when test="${o.totalPrice ge 40000 }">
-									<span class="total-price">${o.totalPrice }</span>
+									<span class="total-price">${o.totalPrice }</span>원 
 								</c:when>
 								<c:otherwise>
 										<span class="total-price">${o.totalPrice +3000 }</span>원
@@ -149,6 +169,31 @@ h3 {
 					<!-- 주문 한 개 -->
 				</c:forEach>
 			</c:if>
+			<div class="paging-area">
+				<ul>
+				<c:choose>
+					<c:when test="${pi.currentPage eq 1 }">
+					<li><a disabled> &lt; </a></li>
+					</c:when>
+					<c:otherwise>
+					<li><a href="shoppingList?userNo=${sessionScope.loginUser.userNo}&cPage=${pi.currentPage-1 }"> &lt; </a></li>
+					</c:otherwise>
+				</c:choose>	
+					
+					<c:forEach begin="${pi.startPage }" end="${pi.endPage }" var="p">
+						<li><a href="shoppingList?userNo=${sessionScope.loginUser.userNo}&cPage=${p}"> ${p } </a></li>
+                    </c:forEach>
+                    
+                <c:choose>
+					<c:when test="${pi.currentPage eq pi.maxPage }">
+					<li><a disabled> &gt; </a></li>
+					</c:when>
+					<c:otherwise>
+					<li><a href="shoppingList?userNo=${sessionScope.loginUser.userNo}&cPage=${pi.currentPage+1 }"> &gt; </a></li>
+					</c:otherwise>
+				</c:choose>	    
+                </ul>
+			</div>	
 		</div>
 		<script>
 			function loadOptions(ono){
@@ -168,6 +213,7 @@ h3 {
 								 +e[i].optionName+'</option>';
 							}
 							$('#writeReview input, textarea, select, button:submit').attr('disabled', false);
+							$('#writeReview textarea').text('리뷰를 작성하세요');
 							$('#writeReview select').html($str);
 							$('#writeReview input[name=orderNo]').val(ono);	
 						}
@@ -179,7 +225,6 @@ h3 {
 				})
 			}
 		</script>
-
 	</div>
 	</div>
 	

@@ -49,7 +49,7 @@ public interface ProductService {
 	ProductOption getProductOption(int optionNo);
 	
 	int selectOrderCount(int userNo);
-	ArrayList<Order> getShoppingList(int userNo);
+	ArrayList<Order> getShoppingList(int userNo, PageInfo pi);
 	int updateProductCount(int productNo);
 	int insertReview(ProductReview review);
 	ArrayList checkReview(int orderNo);
