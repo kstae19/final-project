@@ -119,4 +119,20 @@ public class ProductDao {
 		return sqlSession.insert("productMapper.insertReview", review);
 	}
 
+	public ArrayList checkReview(SqlSessionTemplate sqlSession, int orderNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.checkReview", orderNo);
+	}
+
+	public int saveKeyword(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.insert("productMapper.saveKeyword", keyword);
+	}
+
+	public int checkKeyword(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.selectOne("productMapper.checkKeyword", keyword);
+	}
+
+	public int updateKeywordCount(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.update("productMapper.updateKeywordCount", keyword);
+	}
+
 }

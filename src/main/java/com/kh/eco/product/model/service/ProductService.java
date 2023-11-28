@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.json.simple.parser.ParseException;
 
+import com.google.gson.JsonElement;
 import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
@@ -51,6 +52,10 @@ public interface ProductService {
 	ArrayList<Order> getShoppingList(int userNo);
 	int updateProductCount(int productNo);
 	int insertReview(ProductReview review);
+	ArrayList checkReview(int orderNo);
+	int saveKeyword(String keyword);
+	int checkKeyword(String keyword);
+	int updateKeywordCount(String keyword);
 
 
 }

@@ -10,11 +10,7 @@
 	<result property="productInfo" column = "PRODUCT_INFO"/>
 	<result property="detailInfo" column = "DETAIL_INFO"/>
 	<result property="extraInfo" column = "EXTRA_INFO"/>
-	<collection property="optionList" ofType="option">
-		<result column = "OPTION_NO" property = "optionNo"/>
-		<result column = "OPTION_NM" property="optionName"/>
-		<result column = "PRICE" property="price"/>
-	</collection>
+	<collection property="optionList" ofType="option" resultMap = "optionMap"/>
 </resultMap>
 <resultMap id="resultLikeMap" type = "productLike">
 	<result property="productNo" column="PRODUCT_NO"/>
@@ -34,6 +30,11 @@
 	<result property="optionName" column="OPTION_NM"/>
 	<result property="price" column="PRICE"/>
 	<result property="userNo" column="USER_NO"/>
+</resultMap>
+<resultMap id ="optionMap" type="option">
+	<result column = "OPTION_NO" property = "optionNo"/>
+	<result column = "OPTION_NM" property="optionName"/>
+	<result column = "PRICE" property="price"/>
 </resultMap>
 
 <resultMap id="shoppingListMap" type="order">
@@ -415,5 +416,39 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 							#{changeName}
 							)
 </insert>
+<select id="checkReview" parameterType="_int" resultMap="optionMap">
+SELECT 
+        OPTION_NO 
+        , OPTION_NM  
+    FROM 
+        TB_ORDER 
+    JOIN 
+        TB_ORDER_ITEM USING(ORDER_NO) 
+    JOIN 
+        TB_PRODUCT_OPTION USING(OPTION_NO)  
+    WHERE 
+    	ORDER_NO = #{orderNo} 
+    AND 
+    	OPTION_NO 
+    			NOT IN (
+    					SELECT 
+    						OPTION_NO 
+    					FROM 
+    						TB_PRODUCT_REVIEW 
+    					WHERE 
+    						ORDER_NO = #{orderNo})
+</select>
+
+<insert id="saveKeyword" parameterType="string">
+	INSERT INTO TB_KEYWORD(KEYWORD) VALUES(#{keyword})
+</insert>
+
+<select id="checkKeyword" parameterType="string" resultType="_int">
+	SELECT COUNT(*) FROM TB_KEYWORD WHERE KEYWORD= #{keyword}
+</select>
+
+<update id="updateKeywordCount" parameterType="string">
+	UPDATE TB_KEYWORD SET COUNT = COUNT+1 WHERE KEYWORD=#{keyword}
+</update>
 
 </mapper>

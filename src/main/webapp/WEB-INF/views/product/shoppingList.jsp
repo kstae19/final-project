@@ -109,18 +109,18 @@ h3 {
 							<div>
 								<a href="#"><h2>${o.orderDetail[0].productName }(${o.itemQty}건)</h2></a>
 								<div>
-							<c:forEach items="${o.orderDetail}" var="cart">
+									<c:forEach items="${o.orderDetail}" var="cart">
 										<a href="product.detail?productNo=${cart.productNo }">${cart.optionName }</a>
 										<span>${cart.price }</span>*<span>${cart.qty }</span>/ 
-							</c:forEach>
+									</c:forEach>
 								</div>
 								<c:choose>
-									<c:when test="${o.totalPrice ge 40000 }">
-										<span>${o.totalPrice }</span>
-									</c:when>
-									<c:otherwise>
-										<span>${o.totalPrice +3000 }</span> 원
-					</c:otherwise>
+								<c:when test="${o.totalPrice ge 40000 }">
+									<span class="total-price">${o.totalPrice }</span>
+								</c:when>
+								<c:otherwise>
+										<span class="total-price">${o.totalPrice +3000 }</span>원
+								</c:otherwise>
 								</c:choose>
 							</div>
 						</div>
@@ -130,72 +130,90 @@ h3 {
 							배송비<br>
 							<c:choose>
 								<c:when test="${o.totalPrice ge 40000 }">
-					무료배송
-					</c:when>
+								무료배송
+								</c:when>
 								<c:otherwise>
-					3,000원
-					</c:otherwise>
+								3,000원
+								</c:otherwise>
 							</c:choose>
 
 						</div>
 
 						<!-- 주문상태, 후기작성 버튼-->
 						<div class="order-status">
-							<span>주문상태</span> <br>
-							<button type="button" class="btn btn-info btn-lg"
-								data-toggle="modal" data-target="#writeReview">후기 작성</button>
-							<button>문의</button>
+							<span>주문 완료</span> <br>
+							<button type="button" class="btn btn-info btn-lg review-submit"
+								data-toggle="modal" data-target="#writeReview" onclick="loadOptions('${o.orderNo}');">후기 작성</button>
 						</div>
 					</div>
 					<!-- 주문 한 개 -->
-
-					<!-- Modal -->
-					<div class="modal fade" id="writeReview">
-						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
-									<h4 class="modal-title">후기 작성하기</h4>
-								</div>
-
-								<div class="modal-body">
-								<form action="insert.review" method="post"
-										enctype="multipart/form-data">
-								<input type="file" name="upfile"/> 
-								<input type="hidden" value="${o.orderNo }" name = "orderNo"/>
-								<select name="optionNo" required>
-								
-								<c:forEach items="${o.orderDetail}" var="cart">
-									<option value="${cart.optionNo }">${cart.optionName }</option>
-								</c:forEach>
-								</select>
-								 <br> 
-								<input type="text" name="reviewTitle" placeholder="제목을 입력하세요" required />
-								<br>
-								<textarea name="reviewContent" cols="70" rows="8" required>리뷰 내용을 작성하세요.</textarea>
-								별점 : <input type="number" name="starRate" min="0" max="5">
-								
-								<button type="submit">제출</button>
-								</div>
-								</form>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default"
-										data-dismiss="modal">Close</button>
-								</div>
-
-							</div>
-						</div>
-					</div>
-
-
-
 				</c:forEach>
 			</c:if>
 		</div>
+		<script>
+			function loadOptions(ono){
+				$.ajax({
+					url : 'check.review',
+					type : 'get',
+					data : {orderNo : ono},
+					success : e=>{
+						let $str = '';
+						if(e.length==0){
+							$('#writeReview input, textarea, select, button:submit').attr('disabled', true);
+							$('#writeReview textarea').text(' \n감사합니다!\n모든 상품에 리뷰를 등록하셨습니다.');
+						}
+						else{
+							for(let i in e){
+							$str += '<option value = "'+e[i].optionNo+'">'
+								 +e[i].optionName+'</option>';
+							}
+							$('#writeReview input, textarea, select, button:submit').attr('disabled', false);
+							$('#writeReview select').html($str);
+							$('#writeReview input[name=orderNo]').val(ono);	
+						}
+
+					},
+					error : ()=>{
+						console.log('에이젝스는 타입이다');
+					}
+				})
+			}
+		</script>
 
 	</div>
 	</div>
+	
+		<!-- Modal -->
+			<div class="modal fade" id="writeReview">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">후기 작성하기</h4>
+						</div>
+
+						<div class="modal-body">
+							<form action="insert.review" method="post" enctype="multipart/form-data">
+								제품 사진 : <input type="file" name="upfile">
+								<select name="optionNo" required>
+								
+								</select><br>
+								<input type="text" name="reviewTitle" placeholder="제목을 입력하세요" required /> <br>
+								<textarea name="reviewContent" cols="70" rows="8" required>리뷰 내용을 작성하세요.</textarea>
+								별점 : <input type="number" name="starRate" min="0" max="5">
+								<input type="hidden" name="orderNo"/>
+								<button type="submit">제출</button>
+						</div>
+						</form>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">Close</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
 
 
 

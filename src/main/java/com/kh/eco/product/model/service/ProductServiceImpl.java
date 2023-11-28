@@ -304,5 +304,25 @@ public class ProductServiceImpl implements ProductService {
 		return dao.insertReview(sqlSession, review);
 	}
 
+	@Override
+	public ArrayList checkReview(int orderNo) {
+		return dao.checkReview(sqlSession, orderNo);
+	}
+
+	@Override
+	public int saveKeyword(String keyword) {
+		return dao.saveKeyword(sqlSession, keyword);
+	}
+
+	@Override
+	public int checkKeyword(String keyword) {
+		return dao.checkKeyword(sqlSession, keyword);
+	}
+
+	@Override
+	public int updateKeywordCount(String keyword) {
+		return dao.updateKeywordCount(sqlSession, keyword);
+	}
+
 
 }

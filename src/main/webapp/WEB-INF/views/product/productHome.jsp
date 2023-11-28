@@ -35,7 +35,7 @@
 	font-style: normal;
 }
 *{
-	border : 1px solid orange;
+	border : 1px solid transparent;
 }
 div {
 	box-sizing: border-box;
@@ -43,11 +43,13 @@ div {
 	padding: 0;
 
 }
+ul{
+	list-style:none;
+}
 
 .outer {
 	height: 1100px;
 }
-
 .content {
 	width: 1200px;
 	height: 1000px;
@@ -66,7 +68,8 @@ div {
 	border-left-width: 0;
 	border-right-width: 0;
 	border-top-width: 0;
-	border-bottom-width: 1;
+	border-bottom-width: 0;
+	background:beige;
 }
 #searching-area button{
 	width : 40px; 
@@ -164,14 +167,32 @@ div {
 		<br> <br>
 		<div class="content">
 			<div id="searching-area">
-			<form action = "product" method="get">
-				<input type="hidden" name = "category" value=""> 
-				<input type="hidden" name = "orderBy" value=""> 
+			<form action = "product" method="post">
+			<c:choose>
+				<c:when test="${not empty map.orderBy }">
+					<input type="hidden" name = "orderBy" value="${map.orderBy}"> 
+				</c:when>
+				<c:otherwise>
+					<input type="hidden" name = "orderBy" value=""> 
+				</c:otherwise>
+			</c:choose>
+			
+			
+			<c:choose>
+				<c:when test="${not empty map.keyword }">
+				<input type="text" name = "keyword" placeholder="${map.keyword} "> 
+				</c:when>
+				<c:otherwise>
 				<input type="text" name = "keyword" placeholder="검색어를 입력하세요."> 
+				</c:otherwise>
+			</c:choose>
 				<button type="submit">
 				<img src="resources/images/searhIcon.svg">
 				</button>
 			</form>
+				<ul id="keyword-list">
+					<li><div class="keyword">비누비누</div></li>				
+				</ul>				
 			</div>
 
 			<div id="controll-area">
@@ -314,6 +335,12 @@ div {
 						
 						$('#controll-area>select').change(e =>{
 							location.href='product?category='+'${map.category}'+'&orderBy='+$(e.target).val();
+						});
+						
+						$('input[name=keyword]').change({
+							$.ajax({
+								
+							})
 						});
 					})
 				</script>
