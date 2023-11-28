@@ -85,7 +85,9 @@ public class BookServiceImpl implements BookService{
 	@Transactional("transactionManager")
 	public int ajaxDeleteBookReply(HashMap map) {
 		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
+		System.out.println("에코포인트 삭제 여부 : " + result2);
 		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);
+		System.out.println("리플 삭제 여부 : " + result1);
 		return result1 + result2;
 	}
 
@@ -181,7 +183,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi) {
+	public ArrayList<String> bookmarkMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);

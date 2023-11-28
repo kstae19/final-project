@@ -57,6 +57,14 @@
         }
     </style>
     <script>
+	    function isEmpty(str){
+			if(typeof str == "undefined" || str == null || str == "")
+				return true;
+			else
+				return false ;
+		}
+    
+    
     	function selectMyPageBook(nowPage){
     		$.ajax({
     			url : 'bookmypage.bk',
@@ -69,7 +77,7 @@
     			success : result => {
     				let book = result.bookList;
 					let bookPi = result.bookPi;
-    				if(book.size){
+    				if(isEmpty(book)){
     					$('#book-mypage').html("북마크한 도서가 없습니다.");
     				} else {
     					let buttonBefore = $('#book-mypage').children().first();
@@ -115,16 +123,16 @@
 					rPage : nowPage    				
     			},
     			success : result => {
-    				console.log(result);
     				let reply = result.replyList;
 					let replyPi = result.replyPi;
     				
-    				if(reply.size){
+    				if(isEmpty(reply)){
     					$('#bookReply-area').html("작성한 한줄평이 없습니다.");
     				} else {
         				let replyValue = '';
         				for(let i in reply){
         					replyValue += '<tr>'
+        								+ '<input type="hidden" name="ISBN13" value="' + reply[i].ISBN13 + '"/>'
         								+ '<td>'
         								+ '<img src="' + reply[i].bookImg + '"></td>'
         								+ '<td>' + reply[i].bookTitle + '</td>'
@@ -158,17 +166,22 @@
 				}
     		})
     	}
+    	
+    	$(document).on('click', '#mypage-book>div', function(){
+			let attr = "bookDetail.bk?ISBN="+$(this).find('input[name=ISBN13]').val();
+			
+    		location.href = attr;
+		})
+		$(document).on('click', '#mypagebookreply>tr', function(){
+			let attr = "bookDetail.bk?ISBN="+$(this).find('input[name=ISBN13]').val();
+			
+    		location.href = attr;
+		})
     
     	$(function(){
     		selectMyPageBook();
     		selectMyPageReply();
-    		$('#mypage-book>div').click(function(){
-    			let attr = "bookDetail.bk?ISBN="+$(this).find('input[name=ISBN13]').val();
-    			
-        		location.href = attr;
-        	})
     	})
- 	
     </script>
 </head>
 <body>

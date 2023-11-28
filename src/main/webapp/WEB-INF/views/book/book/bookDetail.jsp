@@ -124,6 +124,7 @@
 	        			async : false,
 	        			type : 'post',
 	        			data : {
+	        				ecoNo : $('#bookReply-area').find('input[name=ecoNo]').val(),
 	        				ISBN13 : '${ b.ISBN13 }',
 	        				userNo : loginNo
 	        			},
@@ -162,6 +163,7 @@
 					cPage : nowPage    				
     			},
     			success : result => {
+    				
     				let replyArr = result.replyList;
     				let replyPi = result.replyPi;
     				let replyPiValue = '';
@@ -174,7 +176,8 @@
         				for(let i in replyArr){
         					if(!isEmpty('${ sessionScope.loginUser.userId }')){
         						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
-            						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>';
+            						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
+            									+ '<input type="hidden" value="' + replyArr[i].ecoNo + '" name="ecoNo">';
             					}
         					}
         					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'

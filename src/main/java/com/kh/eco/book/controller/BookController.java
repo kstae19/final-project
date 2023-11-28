@@ -128,7 +128,7 @@ public class BookController {
 	}
 	
 	// 알라딘 api 상품조회 메소드
-	public Book bookLookUp(String ISBN) throws IOException {
+	public static Book bookLookUp(String ISBN) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
 		url += "&ItemId=" + ISBN;
@@ -292,9 +292,8 @@ public class BookController {
 	@RequestMapping("bookDetail.bk")
 	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		
-		int count;
-		System.out.println(book);
-		if(book != null) {
+		int count = 0;
+		if(book.getISBN13() != null) {
 			book.setISBN13(ISBN);
 			count = book.getBookCount();
 		} else {
@@ -324,9 +323,6 @@ public class BookController {
 					return "redirect:book";
 				}
 			}
-		
-		
-		
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회

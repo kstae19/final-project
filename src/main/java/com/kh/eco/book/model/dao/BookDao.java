@@ -132,7 +132,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.bookmarkCountMyPage", userNo);
 	}
 	
-	public ArrayList<Book> bookmarkMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+	public ArrayList<String> bookmarkMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.bookmarkMyPage", userNo, rowBounds);
 	}
 	

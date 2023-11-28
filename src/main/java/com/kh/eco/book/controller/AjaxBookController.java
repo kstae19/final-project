@@ -1,5 +1,6 @@
 package com.kh.eco.book.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -89,23 +89,25 @@ public class AjaxBookController {
 		if(bookService.ajaxInsertBookReply(map) > 1) { // 성공
 			return "success";
 		} else { // 실패
-			session.setAttribute("failBookAlert", "한줄평 작성 실패");
 			return "fail";
 		}
 	}
 	
 	// 한줄평 조회
 	@RequestMapping(value="selectBookReply.bk", produces="application/json; charset=UTF-8")
-	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) {
+	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) throws IOException {
 		
 		// 댓글 개수 조회
 		int count = bookService.ajaxSelectBookReplyCount(ISBN13);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
 		
+		Book book = BookController.bookLookUp(ISBN13);
+		
 		ArrayList<BookReply> list = bookService.ajaxSelectBookReply(ISBN13, pi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
+		map.put("book", book);
 		map.put("replyList", list);
 		map.put("replyPi", pi);
 		
@@ -116,11 +118,12 @@ public class AjaxBookController {
 	
 	// 한줄평 삭제
 	@RequestMapping(value="deleteBookReply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxDeleteBookReply(String ISBN13, int userNo) {
+	public String ajaxDeleteBookReply(String ISBN13, int userNo, int ecoNo) {
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN13", ISBN13);
 		map.put("userNo", userNo);
+		map.put("ecoNo", ecoNo);
 		
 		if(bookService.ajaxDeleteBookReply(map) > 1) { // 삭제 성공
 			return "success";
@@ -135,7 +138,6 @@ public class AjaxBookController {
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
 		// 댓글 개수 조회
-		System.out.println(reportNo);
 		int count = bookService.ajaxSelectReportReplyCount(reportNo);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
 		
@@ -160,7 +162,6 @@ public class AjaxBookController {
 		map.put("reportNo", reportNo);
 		map.put("userNo", userNo);
 		map.put("content", content);
-		System.out.println(map);
 		
 		if(bookService.ajaxInsertReportReply(map) > 0) { // 성공
 			return "success";
@@ -177,8 +178,6 @@ public class AjaxBookController {
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyNo", replyNo);
 		map.put("content", content);
-		
-		System.out.println(map);
 		
 		if(bookService.ajaxUpdateReportReply(map) > 0) { // 성공
 			return "success";
@@ -207,7 +206,6 @@ public class AjaxBookController {
 		map.put("reportReplyNo", reportReplyNo);
 		map.put("blackId", blackId);
 		map.put("userNo", userNo);
-		System.out.println(map);
 		
 		if(bookService.ajaxReplyBlack(map) > 0) { // 댓글 신고 성공
 			return "success";
@@ -218,13 +216,23 @@ public class AjaxBookController {
 	
 	// 마이페이지 북마크 책 조회
 	@RequestMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
-	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) {
+	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) throws IOException {
+		
 		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
 		
-		ArrayList<Book> list = bookService.bookmarkMyPage(userNo, bookPi);
+		ArrayList<String> list = bookService.bookmarkMyPage(userNo, bookPi);
+		ArrayList<Book> bookList = new ArrayList();
+		
+		for(int i = 0; i < list.size(); i++) {
+			Book book = new Book();
+			
+			book = BookController.bookLookUp(list.get(i));
+			
+			bookList.add(book);
+		}
 		
 		HashMap<String, Object> map = new HashMap();
-		map.put("bookList", list);
+		map.put("bookList", bookList);
 		map.put("bookPi", bookPi);
 		
 		Gson gson = new GsonBuilder().create();
@@ -234,14 +242,24 @@ public class AjaxBookController {
 	
 	// 마이페이지 한줄평 조회
 	@RequestMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
-	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
+	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) throws IOException {
 		
 		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), currentPage, 5, 5);
 		
 		ArrayList<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
+		ArrayList<Book> bookList = new ArrayList();
+		
+		for(int i = 0; i < list.size(); i++) {
+			Book book = new Book();
+			
+			book = BookController.bookLookUp(list.get(i).getISBN13());
+			book.setBookReply(list.get(i).getBookReplyContent());
+			
+			bookList.add(book);
+		}
 
 		HashMap<String, Object> map = new HashMap();
-		map.put("replyList", list);
+		map.put("replyList", bookList);
 		map.put("replyPi", replyPi);
 		
 		Gson gson = new GsonBuilder().create();

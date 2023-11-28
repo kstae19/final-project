@@ -99,7 +99,7 @@ public interface BookService {
 	public int bookmarkCountMyPage(int userNo);
 	
 	// 마이페이지 북마크 도서목록 조회
-	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi);
+	public ArrayList<String> bookmarkMyPage(int userNo, PageInfo pi);
 	
 	// 마이페이지 한줄평 도서목록 개수 조회
 	public int bookReplyCountMyPage(int userNo);
