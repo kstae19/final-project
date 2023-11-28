@@ -48,13 +48,13 @@
 			success : result => {
 				
 				$('#reportReply-count').html(result.replyCount);
-				let replyPi = result.replyPi;
-				let replyPiValue = '';
 				if(result.replyCount == 0){
 					$('#reportReply-area').html("댓글이 없습니다.");
 				} else {
 					let replyArr = result.replyList;
     				let replyValue = '';
+    				let replyPi = result.replyPi;
+    				let replyPiValue = '';
     				for(let i in replyArr){
     					replyValue += '<div>'
     					if(!isEmpty('${ sessionScope.loginUser.userId }')){
@@ -62,26 +62,32 @@
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReportReply(this);">삭제</button>';
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="update(this);">수정</button>';
     						}
-    						replyValue += '<button type="button" class="btn btn-dark" onclick="reportReplyBlack(this);">신고하기</button>'
+    						if('${ loginUser.userId }' != replyArr[i].userId ){
+    							replyValue += '<button type="button" class="btn btn-dark" onclick="reportReplyBlack(this);">신고하기</button>'
+    						}
     					}
 	    				replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
 	    						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReportReplyDate + '</p>'
 	    						   + '<p class="replyContent">' + replyArr[i].bookReportReplyContent + '</p>'
 	    						   + '<input type="hidden" value="' + replyArr[i].bookReportReplyNo +'">'
 	    						   + '</div>';
-	    				if(replyPi['currentPage'] == 1){
-	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
-	    				} else{
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
-	    				}
-	    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
-	    				}
-	    				if(replyPi['currentPage'] == replyPi['endPage']){
-	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
-	    				} else{
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
-	    				}
+    				}
+    				
+    				let previous = replyPi.currentPage - 1;
+    				let next = replyPi.currentPage + 1;
+    				
+    				if(replyPi.currentPage == 1){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectReportReply('+ previous +');">Previous</a></li>';
+    				}
+    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectReportReply(' + i + ');">' + i + '</a></li>';
+    				}
+    				if(replyPi['currentPage'] == replyPi['endPage']){
+    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+    				} else{
+    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectReportReply('+ next +');">Next</a></li>';
     				}
     				$('#reportReply-area').html(replyValue);
     				$('#reportReply-pagination').html(replyPiValue);
@@ -132,8 +138,8 @@
 	    			async : false,
 	    			type : 'post',
 	    			data : {
-	    				replyNo : $(e).next().next().next().next().next().val(),
-	    				content : $(e).next().next().next().next().val()
+	    				replyNo : $(e).siblings("input[type=hidden]").val(),
+	    				content : $(e).siblings("input[type=text]").val()
 	    			},
 	    			success : result => {
 	    				console.log(result);
@@ -153,8 +159,9 @@
 		
 		function update(e){ 
 			
-			let replyContent = $(e).next().next().next().next();
-			let content = $(e).next().next().next().next().text();
+			let replyContent = $(e).siblings(".replyContent");
+			//let replyContent = $(e).next().next().next().next();
+			let content = replyContent.text();
 			
 			replyContent.after('<input type="text" id="reportReplyContent" value="'+ content + '">');
 			replyContent.remove();
@@ -167,7 +174,7 @@
        			async : false,
        			type : 'post',
        			data : {
-       				replyNo : $(e).next().next().next().next().next().next().val(),
+       				replyNo : $(e).siblings("input[type=hidden]").val(),
        				userNo : '${ loginUser.userNo }'
        			},
        			success : result => {
@@ -181,37 +188,39 @@
        			},
        			error : () => {
        				console.log("댓글 통신 실패");
+       				console.log($(e).siblings("input[type=hidden]").val());
        			}
        		})
        	}
    		
    		function reportReplyBlack(e){ // 댓글 신고 ajax
-       		$.ajax({
-       			url : 'reportReplyBlack.bk',
-       			async : false,
-       			type : 'post',
-       			data : {
-       				reportReplyNo : $(e).next().next().next().next().val(),
-       				blackId : $(e).next().text(),
-					userNo : '${ loginUser.userNo }'
-       			},
-       			success : result => {
-       				console.log(result);
-       				
-       				if(result === 'success'){
-       					alert('신고 완료');
-       					selectReportReply();
-  	    				} else{
-  	    					alert('댓글 신고 실패');
-  	    				}
-       			},
-       			error : () => {
-       				console.log("댓글 통신 실패");
-       				console.log($(e).next().next().next().next().val());
-       				console.log($(e).next().text());
-       				console.log('${ loginUser.userNo }');
-       			}
-       		})
+   			if(confirm("신고하시겠습니까?")){
+   				$.ajax({
+   	       			url : 'reportReplyBlack.bk',
+   	       			async : false,
+   	       			type : 'post',
+   	       			data : {
+   	       				reportReplyNo : $(e).siblings("input[type=hidden]").val(),
+   	       				blackId : $(e).next().text(),
+   						userNo : '${ loginUser.userNo }'
+   	       			},
+   	       			success : result => {
+   	       				console.log(result);
+   	       				
+   	       				if(result === 'success'){
+   	       					alert('신고 완료');
+   	       					selectReportReply();
+   	  	    				} else{
+   	  	    					alert('신고는 한번만 가능합니다');
+   	  	    				}
+   	       			},
+   	       			error : () => {
+   	       				console.log("댓글 통신 실패");
+   	       			}
+   	       		})
+   			} else{
+   				return;
+   			}
        	}
     </script>
 </head>
@@ -257,39 +266,23 @@
             </div>
             <ul class="pagination justify-content-center" id="reportReply-pagination">
             </ul>
-            <input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent">
-            <c:if test="${ not empty loginUser }">
-	            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;" onclick="insertReportReply();">등록</button>
-	            <p id="reportReplyKeyup">0/100</p>
-            </c:if>
+            <c:choose>
+            	<c:when test="${ empty loginUser }">
+            		<input type="text" placeholder="로그인 후 댓글을 남겨보세요" style="height: 50px; width: 90%;">
+            	</c:when>
+            	<c:otherwise>
+            		<input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent">
+		            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;" onclick="insertReportReply();">등록</button>
+            	</c:otherwise>
+            </c:choose>
         </div>
+        
         <script>
-       		$(function(){
-       			
-       			$('#bookReplyContent').keyup(function(){
-       				let content = $('#reportReplyContent').val();
-       				let contentLength = $('#reportReplyContent').val().length;
-       				maxByte = 100;
-       				
-       				let length = 0;
-       				
-       				for(let i = 0; i < contentLength; i++){
-       					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
-        					length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
-                       }else{
-                       	length = length + 1;
-                       }
-       				}
-       				
-       				if(length < maxByte){
-        				$('#reportReplyKeyup').text(length + "/100");
-       				} else{
-       					alert("제한을 초과했습니다.");
-       					$('#reportReplyContent').val('');
-       				}
-       				
-       			})
-       		})
+	        $('#reportReplyContent').on('keypress', function(e){
+				if(e.keyCode == 13){
+					insertReportReply();
+				}       				
+			})
 	     </script>
 
 

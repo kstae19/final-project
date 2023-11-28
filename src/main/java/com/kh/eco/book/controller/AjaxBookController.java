@@ -20,6 +20,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
@@ -301,6 +303,39 @@ public class AjaxBookController {
 	}
 	
 	
+	// 관리자페이지 신고게시글 목록 조회
+	@RequestMapping(value="reportBlack.bk", produces="application/json; charset=UTF-8")
+	public String reportBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
+		
+		PageInfo Pi = Pagination.getPageInfo(bookService.reportBlackCount(), currentPage, 5, 5);
+		
+		ArrayList<ReportBlack> list = bookService.reportBlack(Pi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("list", list);
+		map.put("pi", Pi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
+	
+	// 관리자페이지 신고댓글 목록 조회
+	@RequestMapping(value="reportReplyBlack.bk", produces="application/json; charset=UTF-8")
+	public String reportReplyBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
+		
+		PageInfo pi = Pagination.getPageInfo(bookService.reportReplyBlackCount(), currentPage, 5, 5);
+		
+		ArrayList<ReportReplyBlack> list = bookService.reportReplyBlack(pi);
+
+		HashMap<String, Object> map = new HashMap();
+		map.put("list", list);
+		map.put("pi", pi);
+		
+		Gson gson = new GsonBuilder().create();
+		String jsonMap = gson.toJson(map);
+		return jsonMap;
+	}
 	
 	
 	

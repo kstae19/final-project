@@ -81,7 +81,7 @@
           		<c:otherwise>
 		          	<c:forEach items="${ list }" var="r" varStatus="i">
 		          		<c:choose>
-		          			<c:when test="${ r.bookReportStar eq 0 }">
+		          			<c:when test="${ r.bookReportNotice ne 0 }">
 		          				<tr style="color:red;">
 						          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 						          <td>공지</td>

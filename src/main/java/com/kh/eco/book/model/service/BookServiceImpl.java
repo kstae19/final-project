@@ -16,6 +16,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.vo.PageInfo;
 
 @EnableTransactionManagement
@@ -223,6 +225,30 @@ public class BookServiceImpl implements BookService{
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int reportBlackCount() {
+		return bookDao.reportBlackCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ReportBlack> reportBlack(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportBlack(sqlSession, rowBounds);
+	}
+
+	@Override
+	public int reportReplyBlackCount() {
+		return bookDao.reportReplyBlackCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ReportReplyBlack> reportReplyBlack(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.reportReplyBlack(sqlSession, rowBounds);
 	}
 
 

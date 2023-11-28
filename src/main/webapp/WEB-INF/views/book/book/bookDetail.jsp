@@ -171,6 +171,7 @@
     				$('#bookReply-count').html(result.replyCount + '개');
     				if(isEmpty(result.replyCount)){
     					$('#bookReply-area').html("한줄평이 없습니다.");
+    					$('#bookReply-pagination').remove();
     				} else {
         				let replyValue = '';
         				for(let i in replyArr){
@@ -179,24 +180,29 @@
             						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
             									+ '<input type="hidden" value="' + replyArr[i].ecoNo + '" name="ecoNo">';
             					}
+        						replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
+     						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
+     						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
         					}
-        					replyValue += '<p style="margin-bottom: 0px;">' + replyArr[i].userId  + '</p>'
-        						   + '<p style="margin-bottom: 0px;">' + replyArr[i].bookReplyDate + '</p>'
-        						   + '<p>' + replyArr[i].bookReplyContent + '</p>';
-        					if(replyPi['currentPage'] == 1){
-            					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
-            				} else{
-            					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
-            				}
-            				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
-            					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
-            				}
-            				if(replyPi['currentPage'] == replyPi['endPage']){
-            					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
-            				} else{
-            					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
-            				}
         				}
+        				
+        				let previous = replyPi['currentPage'] - 1;
+        				let next = replyPi['currentPage'] + 1
+        				
+        				
+						if(replyPi['currentPage'] == 1){
+		 					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+		 				} else{
+		 					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ previous +');">Previous</a></li>';
+		 				}
+		 				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
+		 					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply(' + i + ');">' + i + '</a></li>';
+		 				}
+		 				if(replyPi['currentPage'] == replyPi['endPage']){
+		 					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+		 				} else{
+		 					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectBookReply('+ next +');">Next</a></li>';
+		 				}
         				$('#bookReply-area').html(replyValue);
         				$('#bookReply-pagination').html(replyPiValue);
     				}
@@ -301,7 +307,7 @@
 	             				if(length < maxByte){
 		             				$('#bookReplyKeyup').text(length + "/100");
 	             				} else{
-	             					alert("제한을 초과했습니다.");
+	             					alert("바이트 제한을 초과했습니다.");
 	             					$('#bookReplyContent').val('');
 	             				}
 	             				

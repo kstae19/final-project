@@ -11,7 +11,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
-import com.kh.eco.common.model.vo.PageInfo;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 
 @Repository
 public class BookDao {
@@ -158,6 +159,22 @@ public class BookDao {
 	
 	public ArrayList<BookReportReply> reportReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyMyPage", userNo, rowBounds);
+	}
+	
+	public int reportBlackCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.reportBlackCount");
+	}
+	
+	public ArrayList<ReportBlack> reportBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.reportBlack", null, rowBounds);
+	}
+	
+	public int reportReplyBlackCount(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("bookMapper.reportReplyBlackCount");
+	}
+	
+	public ArrayList<ReportReplyBlack> reportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyBlack", null, rowBounds);
 	}
 	
 	

@@ -7,6 +7,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.vo.PageInfo;
 
 public interface BookService {
@@ -121,13 +123,16 @@ public interface BookService {
 	
 	
 	// 관리자페이지 신고게시글 개수 조회
+	public int reportBlackCount();
 	
 	// 관리자페이지 신고게시글 목록 조회
+	public ArrayList<ReportBlack> reportBlack(PageInfo pi);
 	
 	// 관리자페이지 신고댓글 개수 조회
+	public int reportReplyBlackCount();
 	
 	// 관리자페이지 신고댓글 목록 조회
-	
+	public ArrayList<ReportReplyBlack> reportReplyBlack(PageInfo pi);
 	
 	
 	
