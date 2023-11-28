@@ -451,4 +451,15 @@ SELECT
 	UPDATE TB_KEYWORD SET COUNT = COUNT+1 WHERE KEYWORD=#{keyword}
 </update>
 
+<select id = "getKeywords" parameterType="string" resultType="string">
+	SELECT 
+        KEYWORD 
+    FROM (
+            SELECT KEYWORD, ADD_DATE, COUNT 
+            FROM TB_KEYWORD 
+            WHERE KEYWORD 
+            LIKE '%${keyword}%' 
+            ORDER BY COUNT DESC)
+    WHERE ROWNUM BETWEEN 1 AND 3
+</select>
 </mapper>

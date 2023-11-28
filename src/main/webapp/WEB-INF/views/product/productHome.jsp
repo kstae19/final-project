@@ -45,6 +45,11 @@ div {
 }
 ul{
 	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+#keyword-list>li{
+	cursor:pointer;
 }
 
 .outer {
@@ -158,6 +163,21 @@ ul{
 	width : 20px;
 	height:20px;
 }
+.keyword{
+	width:315px;
+	height : 25px;
+	background:beige;
+	position:relative;
+	display:flex;
+}
+.keyword>button{
+	width:20px;
+	height:20px;
+
+}
+.keyword>div{
+	width:280px;
+}
 </style>
 </head>
 <body>
@@ -177,22 +197,20 @@ ul{
 				</c:otherwise>
 			</c:choose>
 			
-			
 			<c:choose>
 				<c:when test="${not empty map.keyword }">
-				<input type="text" name = "keyword" placeholder="${map.keyword} "> 
+				<input type="text" name = "keyword" placeholder="${map.keyword} " oninput="keywords();"> 
 				</c:when>
 				<c:otherwise>
-				<input type="text" name = "keyword" placeholder="검색어를 입력하세요."> 
+				<input type="text" name = "keyword" placeholder="검색어를 입력하세요." oninput="keywords();"> 
 				</c:otherwise>
 			</c:choose>
 				<button type="submit">
 				<img src="resources/images/searhIcon.svg">
 				</button>
+				<ul id="keyword-list"></ul>	
 			</form>
-				<ul id="keyword-list">
-					<li><div class="keyword">비누비누</div></li>				
-				</ul>				
+			
 			</div>
 
 			<div id="controll-area">
@@ -280,6 +298,34 @@ ul{
 				</div>
 				
 				<script>
+					function keywords(){
+						$.ajax({
+							url : 'getKeywords',
+							type : 'get',
+							data : {keyword:$('input[name=keyword]').val()},
+							success : e =>{
+								let str = '';
+								for(let i in e){
+									str += '<li onmouseover="setKeyword(this);">'
+										+ '<div class="keyword">'
+										+ '<div>'+e[i] +'</div>'
+										+ '<button onclick="removeKeyword(this);"> X </button>'
+										+'</div>'
+										+'</li>';
+								}
+								$('#keyword-list').html(str);
+							},
+							error : ()=>{
+								console.log('망해따..');
+							}
+						});
+					};
+					function removeKeyword(btn){
+						$(btn).parents('li').empty();
+					};
+					function setKeyword(li){
+						$('input[name=keyword]').val($(li).children().children('div').text());				
+					};
 					function sort(category){
 						location.href='product?category='+category;
 					};
@@ -335,13 +381,7 @@ ul{
 						
 						$('#controll-area>select').change(e =>{
 							location.href='product?category='+'${map.category}'+'&orderBy='+$(e.target).val();
-						});
-						
-						$('input[name=keyword]').change({
-							$.ajax({
-								
-							})
-						});
+						});						
 					})
 				</script>
 				<c:if test = "${!empty loginUser}">

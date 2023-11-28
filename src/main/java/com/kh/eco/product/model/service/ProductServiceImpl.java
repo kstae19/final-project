@@ -324,5 +324,10 @@ public class ProductServiceImpl implements ProductService {
 		return dao.updateKeywordCount(sqlSession, keyword);
 	}
 
+	@Override
+	public ArrayList<String> getKeywords(String keyword) {
+		return dao.getKeywords(sqlSession, keyword);
+	}
+
 
 }

@@ -135,4 +135,8 @@ public class ProductDao {
 		return sqlSession.update("productMapper.updateKeywordCount", keyword);
 	}
 
+	public ArrayList<String> getKeywords(SqlSessionTemplate sqlSession, String keyword) {
+		return (ArrayList)sqlSession.selectList("productMapper.getKeywords", keyword);
+	}
+
 }

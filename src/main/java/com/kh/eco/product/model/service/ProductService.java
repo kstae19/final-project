@@ -56,6 +56,7 @@ public interface ProductService {
 	int saveKeyword(String keyword);
 	int checkKeyword(String keyword);
 	int updateKeywordCount(String keyword);
+	ArrayList<String> getKeywords(String keyword);
 
 
 }
