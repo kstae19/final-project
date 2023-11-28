@@ -23,12 +23,14 @@
 		<typeAlias type="com.kh.eco.book.model.vo.BookReport" alias="bookReport" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReportReply" alias="bookReportReply" />
 		<typeAlias type="com.kh.eco.challenge.model.vo.Challenge" alias="challenge" />
+		<typeAlias type="com.kh.eco.eventBoard.model.vo.EventBoard" alias="eventBoard" />
+		<typeAlias type="com.kh.eco.eventBoard.model.vo.Reply" alias="Reply" />
 	</typeAliases>
 
 	<mappers>
 
 		<mapper resource="/mapper/challenge/challenge-mapper.xml" />
-
+		<mapper resource="/mapper/eventBoard/eventboard-mapper.xml" />
 		<mapper resource="/mapper/user/user-mapper.xml"/>
 		<mapper resource ="/mapper/product/product-mapper.xml"/>
   		<mapper resource="/mapper/book/book-mapper.xml" />

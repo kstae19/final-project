@@ -15,7 +15,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- overal -->
-<style>
+<style> 
     #wrapper{
 		border : 1px solid teal;
         width: 1200px;
@@ -25,7 +25,7 @@
     }
 
     #search-area{
-    	border : 1px solid teal;
+       border : 1px solid teal;
        width : 100%;
        height : 15%;
        display : flex;
