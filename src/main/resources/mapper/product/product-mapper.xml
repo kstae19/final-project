@@ -189,13 +189,14 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	    	OPTION_NM "option", 
 	    	REVIEW_TITLE reviewTitle, 
 	    	REVIEW_CONTENT reviewContent, 
-	    	STAR_RATE starRate 
+	    	STAR_RATE starRate,
+	    	CHANGE_NAME changeName 
 	FROM 
 		TB_PRODUCT_REVIEW R 
 	JOIN 
 		TB_PRODUCT_OPTION USING(OPTION_NO) 
 	WHERE 
-		R.STATUS='Y'
+		R.STATUS='Y' 
 	AND OPTION_NO IN (
 	                SELECT OPTION_NO 
 	                FROM TB_PRODUCT_OPTION 
