@@ -363,7 +363,6 @@ public class AjaxBookController {
 		}
 	}
 	
-	
 	// 관리자페이지 신고댓글 삭제
 	@RequestMapping(value="deleteReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String deleteReplyBlack(@RequestParam(value="blackReplyNoArr") int[] arr) {
