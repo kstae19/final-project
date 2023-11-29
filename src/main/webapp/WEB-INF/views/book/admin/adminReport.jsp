@@ -21,6 +21,15 @@
         }
     </style>
     <script>
+    
+	  //문자열이 빈 문자열인지 체크하여 결과값을 리턴. 
+		function isEmpty(str){
+			if(typeof str == "undefined" || str == null || str == "")
+				return true;
+			else
+				return false ;
+		}
+	  
 	    function reportBlack(nowPage){
 			$.ajax({
 				url : 'adminReportBlack.bk',
@@ -31,42 +40,50 @@
 				},
 				success : result => {
 					console.log(result);
-					
-					/*
-					let report = result.reportList;
-					let reportPi = result.reportPi;
-					if(report.size){
-						$('#mypagereport').html("북마크한 도서가 없습니다.");
+	                
+					let reportBlack = result.list;
+					let reportBlackPi = result.pi;
+					if(isEmpty(reportBlack)){
+						$('#reportBlack').html("신고된 게시글이 없습니다.");
 					} else {
-	    				let reportValue = '';
-	    				for(let i in report){
-	    					reportValue += '<tr>'
-	    								 + '<td>' + report[i].bookReportNo + '</td>'
-	    								 + '<td>' + report[i].bookReportTitle + '</td>'
-	    								 + '<td>' + report[i].bookReportDate + '</td>'
-	    								 + '<td>' + report[i].bookReportCount + '</td>'
-	    								 + '</tr>';
+	    				let reportBlackValue = '';
+	    				for(let i in reportBlack){
+	    					let star = '★'.repeat(reportBlack[i].reportStar);
+	    					
+	    					reportBlackValue += '<tr>'
+	    									 + '<td><input type="checkbox"></td>'
+		    								 + '<td>' + reportBlack[i].reportNo + '</td>'
+		    								 + '<td>' + reportBlack[i].userId + '</td>'
+		    								 + '<td>' 
+		    								 + star + " "
+		    								 + reportBlack[i].reportTitle 
+		    								 + '</td>'
+		    								 + '<td>' + reportBlack[i].reportDate + '</td>'
+		    								 + '</tr>';
 	    				}
-	    				$('#mypagereport').html(reportValue);
+	    				$('#reportBlack').html(reportBlackValue);
 	    				
-	    				let reportPiValue = '';
-	    				if(reportPi.currentPage == 1){
-	    					reportPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+	    				
+	    				let reportBlackPiValue = '';
+	    				let previous = reportBlackPi.currentPage - 1;
+	    				let next = reportBlackPi.currentPage + 1;
+	    				if(reportBlackPi.currentPage == 1){
+	    					reportBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
-	    					reportPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReport('+ reportPi['currentPage'] - 1 +');">Previous</a></li>';
+	    					reportBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
 	    				}
-	    				for(let i = reportPi.startPage; i <= reportPi.endPage; i++){
-	    					reportPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReport(' + i + ');">' + i + '</a></li>';
+	    				for(let i = reportBlackPi.startPage; i <= reportBlackPi.endPage; i++){
+	    					reportBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack(' + i + ');">' + i + '</a></li>';
 	    				}
-	    				if(reportPi.currentPage == reportPi.endPage){
-	    					reportPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+	    				if(reportBlackPi.currentPage == reportBlackPi.endPage){
+	    					reportBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
 	    				} else{
-	    					reportPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReport('+ reportPi['currentPage'] + 1 +');">Next</a></li>';
+	    					reportBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ next +');">Next</a></li>';
 	    				}
 	    				
-	    				$('#bookreportmypagepagination').html(reportPiValue);
+	    				$('#reportBlackPi').html(reportBlackPiValue);
 	    				
-					}*/
+					}
 				},
 					error : function(){
 						console.log("통신 실패");
@@ -76,62 +93,70 @@
 		
 		function reportReplyBlack(nowPage){
 			$.ajax({
-				url : 'adminReportreplymypage.bk',
+				url : 'adminReportReplyBlack.bk',
 				async : false,
 				type : 'post',
 				data : {
-					rPage : nowPage    				
+					cPage : nowPage    				
 				},
 				success : result => {
 					console.log(result);
 					
-					/*
-					let reply = result.replyList;
-					let replyPi = result.replyPi;
-					
-					if(reply.size){
-						$('#bookreportmypagereply').html("작성한 한줄평이 없습니다.");
+					let replyBlack = result.list;
+					let replyBlackPi = result.pi;
+					if(isEmpty(reportBlack)){
+						$('#replyBlack').html("신고된 댓글이 없습니다.");
 					} else {
-	    				let replyValue = '';
-	    				for(let i in reply){
-	    					replyValue += '<tr>'
-	    								+ '<td>' + reply[i].bookReportReplyDate + '</td>'
-	    								+ '<td>' + reply[i].bookReportReplyContent + '</td>'
-	    								+ '</tr>';
+	    				let replyBlackValue = '';
+	    				for(let i in replyBlack){
+	    					replyBlackValue += '<tr>'
+	    									 + '<td><input type="checkbox"></td>'
+		    								 + '<td>' + replyBlack[i].replyDate + '</td>'
+		    								 + '<td>' + replyBlack[i].userId + '</td>'
+		    								 + '<td>' + replyBlack[i].replyContent + '</td>'
+		    								 + '</tr>';
 	    				}
-	    				$('#bookreportmypagereply').html(replyValue);
+	    				$('#replyBlack').html(replyBlackValue);
 	    				
-	    				let replyPiValue = '';
-	    				if(replyPi.currentPage == 1){
-	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
+	    				
+	    				let replyBlackPiValue = '';
+	    				let previous = replyBlackPi.currentPage - 1;
+	    				let next = replyBlackPi.currentPage + 1;
+	    				if(replyBlackPi.currentPage == 1){
+	    					replyBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReply('+ replyPi['currentPage'] - 1 +');">Previous</a></li>';
+	    					replyBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
 	    				}
-	    				for(let i = replyPi.startPage; i <= replyPi.endPage; i++){
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReply(' + i + ');">' + i + '</a></li>';
+	    				for(let i = replyBlackPi.startPage; i <= replyBlackPi.endPage; i++){
+	    					replyBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack(' + i + ');">' + i + '</a></li>';
 	    				}
-	    				if(replyPi.currentPage == replyPi.endPage){
-	    					replyPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
+	    				if(replyBlackPi.currentPage == replyBlackPi.endPage){
+	    					replyBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>';
 	    				} else{
-	    					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
+	    					replyBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ next +');">Next</a></li>';
 	    				}
 	    				
-	    				$('#bookreportmypagereplypaginagion').html(replyPiValue);
-	    				
+	    				$('#replyBlackPi').html(replyBlackPiValue);
 					}
-					*/
-	    				
-	    				
 				},
 				error : function(){
 					console.log("통신 실패");
 				}
 			})
 		}
+		
+		function deleteReportBlack(){
+			
+		}
+		
+		function deleteReportBlack(){
+			
+		}
+		
 	
 		$(function(){
 			reportBlack();
-			//reportReplyBlack();
+			reportReplyBlack();
 		})
     </script>
 </head>
@@ -143,9 +168,7 @@
 	
     <div class="outer">
         <h3>신고 게시글 목록</h3>
-        <button type="button" class="btn btn-secondary">게시글삭제</button>
-        <button type="button" class="btn btn-secondary">목록에서 삭제</button>
-        <button type="button" class="btn btn-dark">블랙리스트 추가</button>
+        <button type="button" class="btn btn-secondary" onclick="deleteReportBlack();">게시글삭제</button>
         <table class="table table-bordered">
             <thead>
               <tr>
@@ -154,48 +177,19 @@
                 <th>아이디</th>
                 <th>제목</th>
                 <th>작성일</th>
-                <th>삭제여부</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>★★★★★ 제목</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>★★★★★ 제목</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>★★★★★ 제목</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-                <td>john@example.com</td>
-              </tr>
+            <tbody id="reportBlack">
+              
             </tbody>
           </table>
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          <ul class="pagination justify-content-center" id="reportBlackPi">
+          
           </ul>
           <br><br>
 
           <h3>댓글 목록</h3>
-          <button type="button" class="btn btn-secondary">댓글삭제</button>
-          <button type="button" class="btn btn-dark">블랙리스트 추가</button>
+          <button type="button" class="btn btn-secondary" onclick="deleteReportBlack();">댓글삭제</button>
           <table class="table table-bordered">
             <thead>
               <tr>
@@ -205,32 +199,13 @@
                 <th>댓글</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>댓글</td>
-                <td>댓글</td>
-                <td>댓글</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>댓글</td>
-                <td>댓글</td>
-                <td>댓글</td>
-              </tr>
-              <tr>
-                <td><input type="checkbox"></td>
-                <td>댓글</td>
-                <td>댓글</td>
-                <td>댓글</td>
-              </tr>
+            <tbody id="replyBlack">
+              
             </tbody>
           </table>
-          <ul class="pagination justify-content-center">
+          <ul class="pagination justify-content-center" id="replyBlackPi">
             <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
             <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item"><a class="page-link" href="#">Next</a></li>
           </ul>
     </div>

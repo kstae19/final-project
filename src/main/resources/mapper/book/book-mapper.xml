@@ -581,7 +581,7 @@
 		FROM (SELECT BOOK_REPORT_NO,REPORT_COUNT 
 		        FROM (SELECT DISTINCT BOOK_REPORT_NO, COUNT(*) OVER (PARTITION BY BOOK_REPORT_NO) AS REPORT_COUNT
 		                FROM TB_BOOK_REPORT_BLACK)
-		        WHERE REPORT_COUNT > 5)
+		        WHERE REPORT_COUNT > 1)
 	</select>
 	
 	<!-- 관리자페이지 신고게시글 목록 조회 -->
@@ -603,7 +603,7 @@
 							        FROM (SELECT DISTINCT BOOK_REPORT_NO, 
 							        			COUNT(*) OVER (PARTITION BY BOOK_REPORT_NO) AS REPORT_COUNT
 							                FROM TB_BOOK_REPORT_BLACK)
-							        WHERE REPORT_COUNT > 5)
+							        WHERE REPORT_COUNT > 1)
 	</select>
 	
 	<!-- 관리자페이지 신고댓글 개수 조회 -->
@@ -612,11 +612,11 @@
 		FROM (SELECT BOOK_REPORT_REPLY_NO, REPLY_COUNT 
 		        FROM (SELECT DISTINCT BOOK_REPORT_REPLY_NO, COUNT(*) OVER (PARTITION BY BOOK_REPORT_REPLY_NO) AS REPLY_COUNT
 		                FROM TB_BOOK_REPORT_REPLY_BLACK)
-		        WHERE REPLY_COUNT > 5
+		        WHERE REPLY_COUNT > 1)
 	</select>
 	
 	<!-- 관리자페이지 신고댓글 목록 조회 -->
-	<select id="adminReportReplyBlack" resultMap="adminReportReplyBlack">
+	<select id="adminReportReplyBlack" resultMap="reportReplyBlackResultSet">
 		SELECT 
 			DISTINCT BRRB.BOOK_REPORT_REPLY_NO,
 			USER_ID,
@@ -632,7 +632,7 @@
 		WHERE BRRB.BOOK_REPORT_REPLY_NO IN (SELECT BOOK_REPORT_REPLY_NO
 		        FROM (SELECT DISTINCT BOOK_REPORT_REPLY_NO, COUNT(*) OVER (PARTITION BY BOOK_REPORT_REPLY_NO) AS REPLY_COUNT
 		                FROM TB_BOOK_REPORT_REPLY_BLACK)
-		        WHERE REPLY_COUNT > 5)
+		        WHERE REPLY_COUNT > 1)
 	</select>
 	
 	

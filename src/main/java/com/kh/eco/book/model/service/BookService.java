@@ -134,6 +134,10 @@ public interface BookService {
 	// 관리자페이지 신고댓글 목록 조회
 	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi);
 	
+	// 관리자페이지 신고게시글 삭제
+	
+	// 관리자페이지 신고댓글 삭제
+	
 	
 	
 	
