@@ -1,4 +1,4 @@
-package com.kh.eco.event.model.vo;
+package com.kh.eco.achievement.model.vo;
 
 import java.sql.Date;
 
@@ -8,20 +8,17 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class Event {
-	
-	private int eventNo;
-	private String eventTitle;
-	private String eventContent;
-	private String eventPlace;
-	private String eventDate;
-	
-	private String status;
+public class Achievement {
+
+	private int achievementNo;
+	private int challengeNo;
+	private int userNo;
+	private String achievementTitle;
+	private String achievementContent;
 	private String originName;
 	private String changeName;
 	private Date uploadDate;
 	private Date modifyDate;
+	private String status;
 	
-	private int participants;
-	private int categoryNo;
 }

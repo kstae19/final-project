@@ -10,8 +10,9 @@
 		<result column="EVENT_TITLE" property="eventTitle"/>
 		<result column="EVENT_CONTENT" property="eventContent"/>
 		<result column="EVENT_PLACE" property="eventPlace"/>
+		<result column="EVENT_DATE" property="eventDate"/>
 		<result column="CHANGE_NAME" property="changeName"/>
-		<result column="UPLOAD_DATE" property="uploadDate"/>
+		<result column="UPLOAD_DATE" property="uploadDate" />
 		<result column="PARTICIPANTS" property="participants"/>
 		<result column="CATEGORY_NO" property="categoryNo"/>
 	</resultMap>
@@ -22,12 +23,14 @@
 						EVENT_NO,
 						EVENT_TITLE,
 						EVENT_PLACE,
+						EVENT_DATE,
 						CHANGE_NAME,
-						UPLOAD_DATE,
 						PARTICIPANTS,
 						CATEGORY_NO
 		FROM
 						TB_EVENT
+		WHERE
+						STATUS = 'Y'
 		<!-- 컨트롤러에서 해당월만 조건으로 달기 -->
 	</select>
 	
@@ -38,6 +41,7 @@
 						EVENT_TITLE,
 						EVENT_CONTENT,
 						EVENT_PLACE,
+						EVENT_DATE,
 						CHANGE_NAME,
 						UPLOAD_DATE,
 						PARTICIPANTS,
@@ -58,21 +62,21 @@
 						EVENT_TITLE,
 						EVENT_CONTENT,
 						EVENT_PLACE,
-						CHANGE_NAME,
+						EVENT_DATE,
 						UPLOAD_DATE,
-					
+						CHANGE_NAME,
 						CATEGORY_NO
 						)
 						
 		VALUES(
-						SEQ_EVENT_NEXTVAL,
+						SEQ_EVENT_NO.NEXTVAL,
 						#{ eventTitle },
 						#{ eventContent },
 						#{ eventPlace },
+						#{ eventDate},
+						SYSDATE,
 						#{ changeName },
-						#{ uploadDate },
-						
-						#{ categoryNo },
+						#{ categoryNo }
 					)
 	
 	</insert>
@@ -81,12 +85,12 @@
 		UPDATE
 						TB_EVENT
 		SET
-						EVENT_TITLE = #{ eventTitle }
-						EVENT_CONTENT = #{ eventContent }
-						EVENT_PLACE = #{ eventPlace }
-						CHANGE_NAME = #{ changeName }
-						UPLOAD_DATE = #{ uploadDate }
-						PARTICIPANTS = #{ participants }
+						EVENT_TITLE = #{ eventTitle },
+						EVENT_CONTENT = #{ eventContent },
+						EVENT_PLACE = #{ eventPlace },
+						CHANGE_NAME = #{ changeName },
+						EVENT_DATE = #{ eventDate },
+						MODIFY_DATE = SYSDATE,
 						CATEGORY_NO = #{ categoryNo }
 		WHERE
 						EVENT_NO = #{ eventNo }

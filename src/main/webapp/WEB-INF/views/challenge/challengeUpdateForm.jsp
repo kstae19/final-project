@@ -64,17 +64,18 @@
     
 	<section id="content-area">
         <br>
-        <h2 align="center">게시글 작성</h2>
+        <h2 align="center">게시글 수정</h2>
         <br><br>
 
 
 		<!--파일을 첨부하는 요청을 할 때는 반드시 form태그에 enctype="multipart/form-data" 를 추가해줘야함!!-->
-        <form enctype="multipart/form-data" action="insert.ch" id="enrollform" method="post">
-			<input type="hidden" name="userNo" value="${loginUser.userNo }" />
+        <form enctype="multipart/form-data" action="update.ch" id="updateForm" method="post">
+			<input type="hidden" name="userNo" value="${ sessionScope.loginUser.userNo }" />
+			<input type="hidden" name="challengeNo" value="${ challenge.challengeNo }" />
             <article id="content-items">
             	<div class="content-item">
 	            	<label for="title">
-							챌린지명<input id="title" type="text" name="challengeTitle">
+							챌린지명<input id="title" type="text" name="challengeTitle" value="${ challenge.challengeTitle }">
 					</label>
             	</div>
             	 	<div class="content-item">
@@ -89,18 +90,18 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="place" >
-							장소<input id="place" type="text" name="challengePlace"/><i class="fas fa-map-marker-alt"></i>
+							장소<input id="place" type="text" name="challengePlace" value="${ challenge.challengePlace }"/><i class="fas fa-map-marker-alt"></i>
 							<!-- 지도api에서 위치 클릭시 해당 도로명주소를 String으로 받아와 ajax로 input의 value값에 세팅할 예정 -->
 					</label>
             	</div>
             	 	<div class="content-item">
 	            	<label for="startDate">
-							시작일<input id="startDate" type="date" value="LocalDate.now();" name="startDate">
+							시작일<input id="startDate" type="date" value="${ challenge.startDate }" name="startDate"/>
 					</label>
             	</div>
             	 	<div class="content-item">
 	            	<label for="endDate">
-							종료일<input id="endDate" type="date" value="2023-11-11" name="endDate">
+							종료일<input id="endDate" type="date" value="${ challenge.endDate }" name="endDate"/>
 					</label>
             	</div>
             	<div class="content-item">
@@ -111,28 +112,29 @@
             	</div>
           	     <div class="content-item">
 	            	<label for="successLimit">
-							목표달성률<input id="successLimit" type="number" min="0" max="100" name="successLimit">
+							목표달성률<input id="successLimit" type="number" min="0" max="100" name="successLimit" value="${ challenge.successLimit }"/>
 					</label>
             	</div>
         	     <div class="content-item">
 	            	<label for="minParticipant">
-							최소인원<input id="minParticipant" type="number" min="0" max="100" name="minParticipant">
+							최소인원<input id="minParticipant" type="number" min="0" max="100" name="minParticipant"  value="${ challenge.minParticipant }"/>
 					</label>
             	</div>
             	<div class="content-item">
 	            	<label for="maxParticipant">
-							최대인원<input id="maxParticipant" type="number" min="0" max="100" name="maxParticipant">
+							최대인원<input id="maxParticipant" type="number" min="0" max="100" name="maxParticipant" value="${ challenge.maxParticipant }"/>
 					</label>
             	</div>
             	 <div class="content-item">
 	            	<label for="file" id="file">
-							File🖼️<input id="upfile" type="file" name="upfile"/><!-- fileInput의 name을 multiFileRequest의 이름과 맞춰야  -->
+							File🖼️<input id="upfile" type="file" name="upfile" value="${challenge.changeName }"/><!-- fileInput의 name을 multiFileRequest의 이름과 맞춰야  -->
 					</label>
             	</div>
                 <div class="content-item">
 							내용
 				<textarea id="content"  style="resize:none; height:300px;" name="challengeContent">
-				</textarea>
+				 ${ challenge.challengeContent }
+				 </textarea>
             	</div>
 
             </article>
@@ -144,7 +146,7 @@
             </script>
             
             <div align="center">
-                <button type="submit" id="insert-btn" class="btn btn-sm btn-info">글작성</button>
+                <button type="submit" id="update-btn" class="btn btn-sm btn-info">수정</button>
             </div>
    
         </form>
@@ -204,7 +206,7 @@
                 border-radius: 10px;
           
             }
-            #insert-btn{
+            #update-btn{
                 background-color: burlywood;
             }
         </style>
