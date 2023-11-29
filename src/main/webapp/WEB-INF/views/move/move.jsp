@@ -754,7 +754,7 @@
 					for(let i in subStData){
 						StData = subStData[i];
 						StName = StData.lineNm;
-						console.log(StData);
+						// console.log(StData);
 						// console.log(StName);
 						if(StName == ("1호선")){
 							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
@@ -844,23 +844,17 @@
 				    	
 				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
 						var subContent = '<div style="width:220px; height:100%">' + 
-				    					 '<div style="width:200px; height:100%"> ' + StData.stnKrNm + '역 ' + StData.lineNm + '<br>' +
-										 '<div style="text-align:right"> ' +
-										  
-						/*
-						+
-					    					bike.stationName + '<br> : ' +
-					    					bike.parkingBikeTotCnt + '<br>' + 
-											'<div style="text-align:right"> ' +
-												'<form action="subinfo" id="subinfo">' +
-												'	<button>상세보기</button>' +
-												'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
-												'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
-												'	<input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
-												'	<input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
-												'</form>'+
-											'</div>'+
-						*/
+					    					 '<div style="width:200px; height:100%"> ' + StData.stnKrNm + '역 ' + StData.lineNm + '<br>' +
+											 '</div>' +
+											 '<div style="text-align:right"> ' + 
+								/*	'<form action="subinfo" id="subinfo">' +
+												 '	 <button>상세보기</button>' +
+												 '	 <input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
+												 '	 <input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
+												 '	 <input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
+												 '	 <input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
+												 '</form>'+ */
+											 '</div>'+
 										  '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 						    subRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
@@ -881,8 +875,8 @@
 								subinfowindow.open(map, marker);
 							};
 						}
-					}
-				}
+					} // for
+				} // success
 			});
 		}
 		
