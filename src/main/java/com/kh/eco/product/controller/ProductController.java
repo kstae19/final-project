@@ -49,14 +49,21 @@ public class ProductController {
 								String keyword, 
 								Model model) {
 		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
-		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), 
-				 							currentPage, 6, 5);
+		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), currentPage, 6, 5);
 		model.addAttribute("pi", pi);				
 		
 		HashMap map = new HashMap();
 		map.put("orderBy", orderBy);	//정렬 기준
 		map.put("category", category);	//상품 종류
 		map.put("keyword", keyword);	//검색 키워드
+		
+		if(keyword != null) {
+			if(productService.checkKeyword(keyword)>0) {
+				productService.updateKeywordCount(keyword);
+			}else {
+				productService.saveKeyword(keyword);								
+			}
+		}
 		
 		model.addAttribute("map", map);
 		model.addAttribute("productList", productService.selectProductList(map, pi));
@@ -143,15 +150,16 @@ public class ProductController {
 								@RequestParam(value="userNo", defaultValue="0") 
 								int userNo,
 								Model model) {
-		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), 
-											 currentPage, 4, 3);
+		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), currentPage, 4, 5);
 		model.addAttribute("pi", pi);	
-		ArrayList<Order> orders = productService.getShoppingList(userNo);
+
+		ArrayList<Order> orders = productService.getShoppingList(userNo, pi);
 		for(Order o : orders) {
+			System.out.println(o);
 			int totalPrice =0;
 			o.setItemQty(o.getOrderDetail().size());
 			for(Cart c : o.getOrderDetail()) {
-				totalPrice+=c.getPrice();
+				totalPrice+=c.getPrice()*c.getQty();
 			}
 			o.setTotalPrice(totalPrice);
 		}
