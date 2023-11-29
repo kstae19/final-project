@@ -349,6 +349,7 @@
 			createOverLay2();
 			createOverLay3();
 			removePolygon();
+			$('#move-info').css('display', 'none');
 		});
 		
 		$('#btnBus').on('click', () => {
@@ -370,6 +371,8 @@
 			removePolygon();
 			removeOverLay();
 			removeInfowindow();
+			$('#move-info').css('display', 'none');
+			createSubway();
 		});
 				
 		// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
@@ -539,7 +542,7 @@
 				success : data => {
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
-					console.log(bicycles);
+					// console.log(bicycles);
 					
 				    var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
 				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
@@ -563,8 +566,8 @@
 				    	
 				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
 						var iwContent = '<div style="width:220px; height:100%"> ' +
-				    					bike.stationName + '<br>잔여 자전거 수 : ' +
-				    					bike.parkingBikeTotCnt + '<br>' + 
+				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +
 										'<form action="bikeinfo" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
@@ -730,6 +733,34 @@
 
 					}
 			    	
+				}
+			});
+		}
+		
+		function createSubway() {
+			$.ajax({
+				url: 'subwayST',
+				success: subStData => {
+					var imageSrc = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Taegeuk.svg/2048px-Taegeuk.svg.png',
+					imageSize = new kakao.maps.Size(16, 18), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(8, 10)};
+					//console.log(subStData);
+					for(let i in subStData){
+						StData = subStData[i];
+						// console.log(StData);
+						
+						const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(StData.convY, StData.convX);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
+					    
+				    	marker.setMap(map);
+				    	
+				    	// markers.push(marker);
+					}
 				}
 			});
 		}
