@@ -90,7 +90,7 @@ ul{
 }
 
 #controll-area>select {
-	margin-left: 740px;
+	margin-left: 737px;
 	padding: 5px;
 	font-size: 20px;
 }
@@ -116,7 +116,7 @@ ul{
 }
 .product {
 	float:left;
-	width: 394px;
+	width: 393px;
 	height: 400px;
 	cursor:pointer;
 	margin:2px;
@@ -411,7 +411,17 @@ ul{
 				</c:choose>	
 					
 					<c:forEach begin="${pi.startPage }" end="${pi.endPage }" var="p">
-						<li><a href="product?keyword=${keyword }&category=${category}&cPage=${p}"> ${p } </a></li>
+					<c:choose>
+						<c:when test="${pi.currentPage eq p }">
+							<li><a disabled> ${p } </a></li>
+						</c:when>
+						<c:when test="${not empty keyword and not empty category }">
+							<li><a href="product?keyword=${keyword }&category=${category}&cPage=${p}"> ${p } </a></li>
+						</c:when>
+						<c:otherwise>
+							<li><a href="cPage=${p}"> ${p } </a></li>
+						</c:otherwise>
+                   </c:choose>
                     </c:forEach>
                     
                 <c:choose>
