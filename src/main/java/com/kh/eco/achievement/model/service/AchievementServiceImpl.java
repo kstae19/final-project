@@ -1,6 +1,7 @@
 package com.kh.eco.achievement.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,16 +10,19 @@ import org.springframework.stereotype.Service;
 
 import com.kh.eco.achievement.model.dao.AchievementDao;
 import com.kh.eco.achievement.model.vo.Achievement;
+import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.vo.PageInfo;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class AchievementServiceImpl implements AchievementService {
 
-	@Autowired
-	private AchievementDao achievementDao;
 	
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	private final AchievementDao achievementDao;
+	
+	private final SqlSessionTemplate sqlSession;
 
 	
 	
@@ -28,9 +32,12 @@ public class AchievementServiceImpl implements AchievementService {
 		return achievementDao.countAchievementList(sqlSession, challengeNo);
 	}
 	
-	
-	
 	@Override
+	public List<Challenge> selectAchievementList(int challengeNo) {
+
+		return achievementDao.selectAchievementList(sqlSession, challengeNo);
+	}
+/*	@Override
 	public ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi) {
 		// offset(상쇄)이용해 rowBounds 만들기
 				int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
@@ -38,7 +45,7 @@ public class AchievementServiceImpl implements AchievementService {
 				
 		// 만들어진 rowBounds가지고 selectAchievementList 조회
 		return achievementDao.selectAchievementList(sqlSession, challengeNo, rowBounds);
-	}
+	}*/
 
 	@Override
 	public int insertAchievement(Achievement a) {

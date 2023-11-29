@@ -1,12 +1,14 @@
 package com.kh.eco.achievement.model.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.eco.achievement.model.vo.Achievement;
+import com.kh.eco.challenge.model.vo.Challenge;
 
 @Repository
 public class AchievementDao {
@@ -18,9 +20,17 @@ public class AchievementDao {
 
 	
 	
-	public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate sqlSession, int challengeNo, RowBounds rowBounds) {
-		
-		return (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo, rowBounds);
+	/*
+	 * public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate
+	 * sqlSession, int challengeNo, RowBounds rowBounds) {
+	 * 
+	 * return
+	 * (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList",
+	 * challengeNo, rowBounds); }
+	 */
+	
+	public List<Challenge> selectAchievementList(SqlSessionTemplate sqlSession, int challengeNo) {
+		return (List)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo);
 	}
 
 	public int insertAchievement(SqlSessionTemplate sqlSession, Achievement a) {

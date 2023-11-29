@@ -1,7 +1,7 @@
 package com.kh.eco.event.model.service;
 
 
-import com.kh.eco.eventBoard.model.vo.EventBoard;
+import com.kh.eco.event.model.vo.Event;
 import java.util.ArrayList;
 
 import com.kh.eco.event.model.vo.Event;

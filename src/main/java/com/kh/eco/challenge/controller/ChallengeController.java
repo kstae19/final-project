@@ -20,12 +20,16 @@ import com.kh.eco.challenge.model.service.ChallengeService;
 import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
+import com.kh.eco.event.model.service.EventService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 public class ChallengeController {
 
-	@Autowired
-	private ChallengeService challengeService;
+	
+	private final ChallengeService challengeService;
 	
 	// 전체 리스트 조회
 	@RequestMapping("challenge")
