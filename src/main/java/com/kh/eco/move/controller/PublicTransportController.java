@@ -22,8 +22,6 @@ public class PublicTransportController {
 	public String subwayStation() throws IOException {
 		String url = "https://t-data.seoul.go.kr/apig/apiman-gateway/tapi/TaimsKsccDvSubwayStationGeom/1.0";
 		url += "?apikey=" + URLEncoder.encode(SB_SERVICEKEY, "UTF-8");
-		url += "&startRow=1";
-		url += "&rowCnt=800";
 		
 		// System.out.println(url);
 		URL requestUrl = new URL(url);
