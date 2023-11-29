@@ -32,13 +32,14 @@ import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 	
-	@Autowired
-	private ProductDao dao;
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	private final ProductDao dao;
+	private final SqlSessionTemplate sqlSession;
 	
 	@Override
 	public ArrayList<Product> selectProductList(HashMap map, PageInfo pi) {

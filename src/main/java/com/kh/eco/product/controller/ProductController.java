@@ -1,11 +1,11 @@
 package com.kh.eco.product.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.io.File;
 
 import javax.servlet.http.HttpSession;
 
@@ -32,12 +32,14 @@ import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
+import lombok.RequiredArgsConstructor;
+
 
 @Controller
+@RequiredArgsConstructor
 public class ProductController {
 	
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
 	
 	@RequestMapping("product")
 	public String productHome(@RequestParam(value="cPage", defaultValue="1") 
@@ -68,7 +70,6 @@ public class ProductController {
 		model.addAttribute("map", map);
 		model.addAttribute("productList", productService.selectProductList(map, pi));
 		
-		System.out.println(model.getAttribute("productList"));
 		return "product/productHome";
 	}
 	
@@ -155,7 +156,6 @@ public class ProductController {
 
 		ArrayList<Order> orders = productService.getShoppingList(userNo, pi);
 		for(Order o : orders) {
-			System.out.println(o);
 			int totalPrice =0;
 			o.setItemQty(o.getOrderDetail().size());
 			for(Cart c : o.getOrderDetail()) {
