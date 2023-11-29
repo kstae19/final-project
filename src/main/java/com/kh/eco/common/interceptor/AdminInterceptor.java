@@ -20,15 +20,23 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 		// 현재 요청을 보낸 사람이 로그인이 되어있을 경우 => Controller를 호출
 		HttpSession session = request.getSession();
 		User loginUser = (User)session.getAttribute("loginUser");
-		String userStatus = loginUser.getUserStatus();
 		
-		if(userStatus.equals("A")) {
-			return true;
-		} else {
-			session.setAttribute("loginAlert", "관리자 페이지입니다..");
+		if(loginUser != null) {
+			String userStatus = loginUser.getUserStatus();
+			if(userStatus.equals("A")) {
+				return true;
+			} else {
+				session.setAttribute("loginAlert", "관리자 페이지입니다..");
+				response.sendRedirect(request.getContextPath());
+				return false;
+			}
+		}else {
+			session.setAttribute("loginAlert", "로그인 후 이용해주세요..");
 			response.sendRedirect(request.getContextPath());
 			return false;
 		}
+		
+		
 	}
 	
 	

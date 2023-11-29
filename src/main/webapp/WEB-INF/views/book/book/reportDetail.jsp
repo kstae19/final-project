@@ -283,6 +283,12 @@
 					insertReportReply();
 				}       				
 			})
+			
+			
+			
+			
+			
+			
 	     </script>
 
 

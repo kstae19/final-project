@@ -251,6 +251,16 @@ public class BookServiceImpl implements BookService{
 		return bookDao.adminReportReplyBlack(sqlSession, rowBounds);
 	}
 
+	@Override
+	public int deleteReportBlack(int[] arr) {
+		return bookDao.deleteReportBlack(sqlSession, arr);
+	}
+
+	@Override
+	public int deleteReplyBlack(int[] arr) {
+		return bookDao.deleteReplyBlack(sqlSession, arr);
+	}
+
 
 	
 

@@ -176,6 +176,14 @@ public class BookDao {
 	public ArrayList<ReportReplyBlack> adminReportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.adminReportReplyBlack", null, rowBounds);
 	}
+
+	public int deleteReportBlack(SqlSessionTemplate sqlSession, int[] array) {
+		return sqlSession.update("bookMapper.deleteReportBlack", array);
+	}
+
+	public int deleteReplyBlack(SqlSessionTemplate sqlSession, int[] array) {
+		return sqlSession.delete("bookMapper.deleteReplyBlack", array);
+	}
 	
 	
 	

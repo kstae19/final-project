@@ -31,7 +31,6 @@
 	</typeAliases>
 
 	<mappers>
-
 		<mapper resource="/mapper/challenge/challenge-mapper.xml" />
 		<mapper resource="/mapper/event/event-mapper.xml"/>
 		<mapper resource="/mapper/user/user-mapper.xml"/>

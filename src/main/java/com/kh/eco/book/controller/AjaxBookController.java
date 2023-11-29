@@ -349,6 +349,34 @@ public class AjaxBookController {
 		}
 	}
 	
+	// 관리자페이지 신고게시글 삭제
+	@RequestMapping(value="deleteReportBlack.bk", produces="text/html; charset=UTF-8")
+	public String deleteReportBlack(@RequestParam(value="blackReportNoArr") int[] arr) {
+    
+		int result = bookService.deleteReportBlack(arr);
+		System.out.println(result);
+		
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	
+	// 관리자페이지 신고댓글 삭제
+	@RequestMapping(value="deleteReplyBlack.bk", produces="text/html; charset=UTF-8")
+	public String deleteReplyBlack(@RequestParam(value="blackReplyNoArr") int[] arr) {
+		
+		int result = bookService.deleteReplyBlack(arr);
+		System.out.println(result);
+		
+		if(result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
 	
 	
 	
