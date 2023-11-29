@@ -29,6 +29,10 @@
 		<typeAlias type="com.kh.eco.eventBoard.model.vo.EventBoard" alias="eventBoard" />
 		<typeAlias type="com.kh.eco.eventBoard.model.vo.Reply" alias="Reply" />
 
+
+		<typeAlias type="com.kh.eco.event.model.vo.Event" alias="event"/>
+		<typeAlias type="com.kh.eco.achievement.model.vo.Achievement" alias="achievement"/>
+
 	</typeAliases>
 
 	<mappers>
@@ -36,7 +40,10 @@
     <mapper resource="/mapper/eventBoard/eventboard-mapper.xml" />
 		<mapper resource="/mapper/user/user-mapper.xml"/>
 		<mapper resource ="/mapper/product/product-mapper.xml"/>
+
     <mapper resource="/mapper/book/book-mapper.xml" />
+  		
+  		<mapper resource="/mapper/achievement/achievement-mapper.xml"/>
 	</mappers>
   
 </configuration>

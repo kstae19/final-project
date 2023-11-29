@@ -35,7 +35,7 @@
 	font-style: normal;
 }
 *{
-	border : 1px solid orange;
+	border : 1px solid transparent;
 }
 div {
 	box-sizing: border-box;
@@ -43,11 +43,18 @@ div {
 	padding: 0;
 
 }
+ul{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+}
+#keyword-list>li{
+	cursor:pointer;
+}
 
 .outer {
 	height: 1100px;
 }
-
 .content {
 	width: 1200px;
 	height: 1000px;
@@ -66,7 +73,8 @@ div {
 	border-left-width: 0;
 	border-right-width: 0;
 	border-top-width: 0;
-	border-bottom-width: 1;
+	border-bottom-width: 0;
+	background:beige;
 }
 #searching-area button{
 	width : 40px; 
@@ -155,6 +163,21 @@ div {
 	width : 20px;
 	height:20px;
 }
+.keyword{
+	width:315px;
+	height : 25px;
+	background:beige;
+	position:relative;
+	display:flex;
+}
+.keyword>button{
+	width:20px;
+	height:20px;
+
+}
+.keyword>div{
+	width:280px;
+}
 </style>
 </head>
 <body>
@@ -164,14 +187,30 @@ div {
 		<br> <br>
 		<div class="content">
 			<div id="searching-area">
-			<form action = "product" method="get">
-				<input type="hidden" name = "category" value=""> 
-				<input type="hidden" name = "orderBy" value=""> 
-				<input type="text" name = "keyword" placeholder="검색어를 입력하세요."> 
+			<form action = "product" method="post">
+			<c:choose>
+				<c:when test="${not empty map.orderBy }">
+					<input type="hidden" name = "orderBy" value="${map.orderBy}"> 
+				</c:when>
+				<c:otherwise>
+					<input type="hidden" name = "orderBy" value=""> 
+				</c:otherwise>
+			</c:choose>
+			
+			<c:choose>
+				<c:when test="${not empty map.keyword }">
+				<input type="text" name = "keyword" placeholder="${map.keyword} " oninput="keywords();"> 
+				</c:when>
+				<c:otherwise>
+				<input type="text" name = "keyword" placeholder="검색어를 입력하세요." oninput="keywords();"> 
+				</c:otherwise>
+			</c:choose>
 				<button type="submit">
 				<img src="resources/images/searhIcon.svg">
 				</button>
+				<ul id="keyword-list"></ul>	
 			</form>
+			
 			</div>
 
 			<div id="controll-area">
@@ -259,6 +298,34 @@ div {
 				</div>
 				
 				<script>
+					function keywords(){
+						$.ajax({
+							url : 'getKeywords',
+							type : 'get',
+							data : {keyword:$('input[name=keyword]').val()},
+							success : e =>{
+								let str = '';
+								for(let i in e){
+									str += '<li onmouseover="setKeyword(this);">'
+										+ '<div class="keyword">'
+										+ '<div>'+e[i] +'</div>'
+										+ '<button onclick="removeKeyword(this);"> X </button>'
+										+'</div>'
+										+'</li>';
+								}
+								$('#keyword-list').html(str);
+							},
+							error : ()=>{
+								console.log('망해따..');
+							}
+						});
+					};
+					function removeKeyword(btn){
+						$(btn).parents('li').empty();
+					};
+					function setKeyword(li){
+						$('input[name=keyword]').val($(li).children().children('div').text());				
+					};
 					function sort(category){
 						location.href='product?category='+category;
 					};
@@ -314,7 +381,7 @@ div {
 						
 						$('#controll-area>select').change(e =>{
 							location.href='product?category='+'${map.category}'+'&orderBy='+$(e.target).val();
-						});
+						});						
 					})
 				</script>
 				<c:if test = "${!empty loginUser}">

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="achievmentMapper">
+
+	<resultMap id="achievementResultSet" type="achievement">
+		<result column="ACHIEVE_NO" property="achievementNo" />
+		<result column="CHALLENGE_NO" property="challengeNo" />
+		<result column="USER_NO" property="userNo" />
+		<result column="ACHIEVE_TITLE" property="achievementTitle" />
+		<result column="ACHIEVE_CONTENT" property="achievementContent" />
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="UPLOAD_DATE" property="uploadDate" />
+	</resultMap>
+	
+	<!-- 인증댓글 전체개수 카운트 cNo -->
+	<select id="countAchievementList" parameterType="_int" resultType="_int">
+		SELECT
+						COUNT(*)
+		FROM
+						TB_ACHIEVE
+		WHERE
+						STATUS = 'Y'
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+	</select>
+	
+	<!-- 인증댓글 전체조회 cNo-->
+	<select id="selectAchievementList" parameterType="_int" resultMap="achievementResultSet">
+		SELECT 
+						ACHIEVE_NO,
+						USER_NO,
+						ACHIEVE_TITLE,
+						ACHIEVE_CONTENT,
+						CHANGE_NAME,
+						UPLOAD_DATE
+		FROM
+						TB_ACHIEVE
+		WHERE
+						STATUS = 'Y'
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+	</select>
+	
+	<!--  인증댓글 등록 A -->
+	<insert id="insertAchievement" parameterType="achievement">
+		INSERT
+			INTO
+						TB_ACHIEVE
+						(
+						ACHIEVE_NO,
+						CHALLENGE_NO,
+						USER_NO,
+						ACHIEVE_TITLE,
+						ACHIEVE_CONTENT,
+						CHANGE_NAME,
+						UPLOAD_DATE
+						)
+						
+		VALUES
+						(
+						SEQ_ACHIEVE_NO.NEXTVAL,
+						#{	 challengeNo },
+						#{ userNo },
+						#{ achievementTitle },
+						#{ achievementContent },
+						#{ changeName },
+						SYSDATE
+						)
+	</insert>
+	
+	
+	
+	<!--  인증댓글 수정 aNo -->
+	<update id="updateAchievement" parameterType="achievement">
+		UPDATE
+						TB_ACHIEVE
+		SET
+						ACHIEVE_TITLE = #{ achievementTitle },
+						ACHIEVE_CONTENT = #{ achievementContent },
+						CHANGE_NAME = #{ changeName },
+						MODIFY_DATE = SYSDATE
+		WHERE
+						ACHIEVE_NO = #{ achievementNo }
+	</update>
+	
+	
+	<!--  인증댓글 삭제 : aNo-->
+	<update id="deleteAchievement" parameterType="_int">
+		UPDATE
+						TB_ACHIEVE
+		SET
+						STATUS = 'N'
+		WHERE
+						ACHIEVE_NO = #{ achievementNo }
+	</update>
+
+
+</mapper>

@@ -4,7 +4,6 @@ package com.kh.eco.challenge.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.eco.challenge.model.service.ChallengeService;
@@ -142,7 +140,8 @@ public class ChallengeController {
 												Model model) {
 		
 		
-		  System.out.println(c); System.out.println(upfile);
+		  System.out.println(c); 
+		  System.out.println(upfile);
 		 
 		
 		if( !upfile.getOriginalFilename().equals("") ) {
@@ -170,9 +169,11 @@ public class ChallengeController {
 	}
 	
 	
+	
 	// 파일원본명, 서버업로드할 경로+바뀐이름 2개를 challenge에 담는 메서드
 	// ex. 'bonobono.jsp' => 2023111610383.jsp
-	public String saveFile(MultipartFile upfile, HttpSession session) {
+	// 정적 Static 메서드 선언!!!!!
+	public static String saveFile(MultipartFile upfile, HttpSession session) {
 		
 		// 원본파일명 뽑기(필드명과 같게)
 		String originName = upfile.getOriginalFilename();
@@ -240,6 +241,71 @@ public class ChallengeController {
 	}
 	
 	
+	@RequestMapping("updateForm.ch")
+	public String updateForm(Challenge c, Model model) {
+		
+		// 이미존재하는 정보도 넘겨
+		model.addAttribute("challenge", c);
+		return "challenge/challengeUpdateForm";
+	}
+	
+	
+	
+	
+	
+	@RequestMapping("update.ch")
+	public String updateChallenge(Challenge c, MultipartFile upfile, HttpSession session, Model model) {
+	
+		
+//		=======================파일 다시 공부하기==========================
+		//	1. upfile이 새로 첨부된 경우 
+		if( !upfile.getOriginalFilename().equals("") ) {
+			
+			 
+			c.setOriginName(upfile.getOriginalFilename());
+			c.setChangeName(saveFile(upfile, session));
+		 
+		// 2. upfile 첨부 안 한 경우 == 원래 있는 거 보여줘야
+		} else {
+			
+			c.setOriginName(c.getOriginName());
+			c.setChangeName(c.getChangeName());
+		}
+		// upfile을 삭제한 경우
+//		=======================파일 다시 공부하기==========================
+
+
+		System.out.println(c);
+		if(challengeService.updateChallenge(c) > 0) {
+			// update 성공, DB바뀜 = 새로운 리스트를 불러와야
+
+			
+			session.setAttribute("alertMsg", "게시글 수정 성공!");
+			return "redirect:/challenge";
+			//return "challenge/challengeListView";
+			
+		} else {
+			
+			return "common/errorPage";
+		}
+		
+		
+	}
+	
+	@RequestMapping("delete.ch")
+	public String deleteChallenge(int challengeNo, HttpSession session) {
+		
+		if(challengeService.deleteChallenge(challengeNo) > 0) {
+			
+			session.setAttribute("alertMsg", "게시글 삭제 성공!");
+			return "redirect:/challenge";
+			
+		} else {
+		
+			return "common/errorPage";
+		}
+		
+	}
 	
 	
 

@@ -76,4 +76,15 @@ public class AjaxProductController {
 			return "failed";
 		}
 	}
+	@ResponseBody
+	@GetMapping(value="check.review", produces="application/json; charset=UTF-8")
+	public String checkReview(int orderNo) {
+		return new Gson().toJson(productService.checkReview(orderNo));
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "getKeywords", produces="application/json; charset=UTF-8")
+	public String getKeywords(String keyword) {
+		return new Gson().toJson(productService.getKeywords(keyword));
+	}
 }

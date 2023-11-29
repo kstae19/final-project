@@ -121,7 +121,7 @@
 			    					deferred.reject(err);
 			    				}
 			    				
-			    			});
+			    			});//ajax
 		    			
 		    			return deferred.promise();	
 		    		};// checkLikeCount
@@ -138,6 +138,7 @@
     			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
     			//	$('#content-area').on('click', '#likeCount', function(){
     					
+    		// jQuery시작
     		  $(function(){		
 				// 클릭이벤트함수
 				$('#like').on('click',  function(){
@@ -225,157 +226,38 @@
     		
     		
     		
-    		/* $('#likeCount').on('click', function(e){
-			    		new Promise( (resolve, reject) => {
-			    			
-			    			$.ajax({
-			    				url : 'checkLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo }
-			    				},
-			    				success : function(data){ 
-			    					resolve(data);
-			    				},
-			    				error : function(){
-			    					
-			    				}
-			    				
-			    			});
-			
-			    		})
-			    		.then( (arg)  => {
-			    			
-			    			$.ajax({
-			    				url : 'increaseLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo },
-			    				},
-			    				success : function(result){
-			    					
-			    					console.log("좋아요 증가 성공");
-			    				},
-			    				error : function(){					
-			    					console.log('좋아요 증가 실패'); 
-			    				}
-			    		})
-    				})
-    				.then( (arg)  => {
-			    			
-			    			$.ajax({
-			    				url : 'decreaseLike.ch',
-			    				data : {
-			    					userNo : ${ loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo },
-			    				},
-			    				success : function(result){			
-			    					console.log("좋아요 감소 성공");
-			    				},
-			    				error : function(){		
-			    					console.log('좋아요 감소 실패');	
-			    				}
-			    		})
-    				})
-    		}) */
     		
-    		
-    	/* 	$(function(){
-    			
-    			
-				// 클릭했을 때 이벤트    		
-    		
-    				
-    				checkLikeCount();
-
-
-    			});
-    			
-				
-    			// 좋아요 했는지 확인
-    			function checkLikeCount(){
-        			
-        			$.ajax({
-        				url : 'checkLike.ch',
-        				data : {
-        					userNo : ${ loginUser.userNo },
-        					challengeNo : ${ challenge.challengeNo }
-        				},
-        				success : function(data){ 
-        
-        					console.log(data);
-        				},
-        				error : function(){
-        					console.log('좋아요 했는지 여부 확인불가');
-        				}
-        				
-        				
-        				
-        			});
-        			
-        			
-        		};
-        			
-        		// 좋아요 증가함수
-        		function increaseLikeCount(){
-    	
-    		    			$.ajax({
-    		    				url : 'increaseLike.ch',
-    		    				data : {
-    		    					userNo : ${ loginUser.userNo },
-    		    					challengeNo : ${ challenge.challengeNo },
-    		    				},
-    		    				success : function(result){
-    		    					
-    		    					console.log("좋아요 증가 성공");
-    		    				},
-    		    				error : function(){
-    		    					
-    		    					console.log('좋아요 증가 실패');
-    		    					
-    		    				}
-    		    			
-    		    		
-    	
-    	
-        			})
-        		
-        		};
-
-        		// 좋아요 감소함수
-        		function decreaseLikeCount(){
-    	
-    		    			$.ajax({
-    		    				url : 'decreaseLike.ch',
-    		    				data : {
-    		    					userNo : ${ loginUser.userNo },
-    		    					challengeNo : ${ challenge.challengeNo },
-    		    				},
-    		    				success : function(result){
-    		    					
-    		    					console.log("좋아요 감소 성공");
-    		    				},
-    		    				error : function(){
-    		    					
-    		    					console.log('좋아요 감소 실패');
-    		    					
-    		    				}
-
-    	
-        			})
-        		
-        		};
-        		
-    		}) */
 		    </script>
 		    		
     		
-    		<c:if test="${  loginUser.userNo eq challenge.userNo }">
-    			<button><a href="#">수정</a></button><button><a href="#">삭제</a></button>
+    		<c:if test="${  sessionScope.loginUser.userNo eq challenge.userNo }">
+    		
+    			<!-- 수정 : 넘겨야할 파라미터가 객체라 그냥 input hidden으로 넘김 -->
+    			<form  enctype="multipart/form-data"  action="updateForm.ch" method="get">
+    				<input type="hidden" name="challengeNo" value="${ challenge.challengeNo }" />
+    				<input type="hidden" name="challengeTitle" value="${ challenge.challengeTitle }" />
+    				<input type="hidden" name="categoryNo" value="${ challenge.categoryNo }" />
+    				<input type="hidden" name="challengePlace" value="${ challenge.challengePlace }" />
+    				<input type="hidden" name="startDate" value="${ challenge.startDate }" />
+    				<input type="hidden" name="endDate" value="${ challenge.endDate }" />
+    				<input type="hidden" name="achievementCount" value="${ challenge.achievementCount }" />
+    				<input type="hidden" name="successLimit" value="${ challenge.successLimit }" />
+    				<input type="hidden" name="minParticipant" value="${ challenge.minParticipant }" />
+    				<input type="hidden" name="maxParticipant" value="${ challenge.maxParticipant }" />
+  					<input type="hidden" name="upfile" value="${ challenge.changeName }" />
+    				<textarea style="display:none;" name="challengeContent">${ challenge.challengeContent }</textarea>
+    			
+    			<button type="submit">수정</button>
+    			</form>
+    			
+    			<!-- 삭제 : 넘기는 파라미터가 1개라서 a태그 쿼리스트링으로 넘김 -->
+    			<button><a href="delete.ch?challengeNo=${ challenge.challengeNo }">삭제</a></button>
     		</c:if>
     		
     	</section>
     
+    	<button id="achievement-toggle-btn">인증글 보기</button>
+    	
     	<section id="achievement-area">
     	
     		<article id="achievement-enroll" >
@@ -401,6 +283,23 @@
     	
     	</section>
 	
+	<script>
+		$(function(){
+			
+			$('#achievement-toggle-btn').on('click', function(){
+				
+				$('#achievement-area').css('visibility', 'visible');
+				
+			});
+			
+		
+			
+			
+			
+		});
+    			
+	
+	</script>
     	
     <!-- content -->
     <style>
@@ -411,6 +310,10 @@
     
     <!-- achievement  -->
 	<style>
+	#achievement-area{
+		visibility:hidden; /*visibility:visible*/ 
+	
+	}
 	#achievement-list{
       	display : grid;
       	justify-content : center;

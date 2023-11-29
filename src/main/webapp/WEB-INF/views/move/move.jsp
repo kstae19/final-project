@@ -282,6 +282,7 @@
 		
 	    var areas = [];
 	    var markers = [];
+	    var submarkers = [];
 	    var infowindows = [];
 	    
 	    $.getJSON("resources/json/seoul.json", function(geojson) {
@@ -349,6 +350,7 @@
 			createOverLay2();
 			createOverLay3();
 			removePolygon();
+			$('#move-info').css('display', 'none');
 		});
 		
 		$('#btnBus').on('click', () => {
@@ -370,6 +372,8 @@
 			removePolygon();
 			removeOverLay();
 			removeInfowindow();
+			$('#move-info').css('display', 'none');
+			createSubway();
 		});
 				
 		// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
@@ -539,7 +543,7 @@
 				success : data => {
 					// console.log(data);
 					const bicycles = data.rentBikeStatus.row;
-					console.log(bicycles);
+					// console.log(bicycles);
 					
 				    var imageSrc = 'https://www.bikeseoul.com/img/icon_big1.png',
 				    imageSize = new kakao.maps.Size(25, 28), // 마커이미지의 크기입니다
@@ -563,8 +567,8 @@
 				    	
 				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
 						var iwContent = '<div style="width:220px; height:100%"> ' +
-				    					bike.stationName + '<br>잔여 자전거 수 : ' +
-				    					bike.parkingBikeTotCnt + '<br>' + 
+				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +
 										'<form action="bikeinfo" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
@@ -734,6 +738,108 @@
 			});
 		}
 		
+		function createSubway() {
+			$.ajax({
+				url: 'subwayST',
+				success: subStData => {
+					var imageSrc = '',
+					imageSize = new kakao.maps.Size(16, 18), // 마커이미지의 크기입니다
+				    imageOption = {offset: new kakao.maps.Point(8, 10)};
+					//console.log(subStData);
+					for(let i in subStData){
+						StData = subStData[i];
+						StName = StData.lineNm;
+						console.log(StName);
+						if(StName == ("1호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
+						} else if(StName == ("경원선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
+						} else if(StName == ("경인선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
+						} else if(StName == ("경부선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
+						} else if(StName == ("장항선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
+						} else if(StName == ("2호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-10a643.svg'
+						} else if(StName == ("3호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
+						} else if(StName == ("일산선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
+						} else if(StName == ("4호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
+						} else if(StName == ("안산선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
+						} else if(StName == ("과천선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
+						} else if(StName == ("진접선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
+						} else if(StName == ("5호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-a95094.svg'
+						} else if(StName == ("6호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-d08d1a.svg'
+						} else if(StName == ("7호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
+						} else if(StName == ("7호선(인천)")){
+							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
+						} else if(StName == ("8호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-e74e6d.svg'
+						} else if(StName == ("9호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
+						} else if(StName == ("9호선(연장)")){
+							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
+						} else if(StName == ("의정부선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-d9750d.svg'
+						} else if(StName == ("에버라인선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-36a805.svg'
+						} else if(StName == ("경의중앙선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
+						} else if(StName == ("중앙선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
+						} else if(StName == ("경강선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-1059ac.svg'
+						} else if(StName == ("분당선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-a69500.svg'
+						} else if(StName == ("신분당선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
+						} else if(StName == ("신분당선(연장)")){
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
+						} else if(StName == ("신분당선(연장2)")){
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
+						} else if(StName == ("경춘선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-0ba382.svg'
+						} else if(StName == ("인천1호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-6496df.svg'
+						} else if(StName == ("인천2호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-cf843c.svg'
+						} else if(StName == ("공항철도1호선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
+						} else if(StName == ("우이신설선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-878787.svg'
+						} else if(StName == ("서해선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-40a607.svg'
+						} else if(StName == ("김포골드라인")){
+							imageSrc = 'https://svgsilh.com/svg/305827-a18f57.svg'
+						} else if(StName == ("신림선")){
+							imageSrc = 'https://svgsilh.com/svg/305827-0781fa.svg'
+						}
+						
+						const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+		                const markerPosition = new kakao.maps.LatLng(StData.convY, StData.convX);
+		                
+		                const marker = new kakao.maps.Marker({
+		                    position: markerPosition,
+		                    image: markerImage
+		                });
+					    
+				    	marker.setMap(map);
+				    	
+				    	submarkers.push(marker);
+					}
+				}
+			});
+		}
+		
 		function removeOverLay() {
 			for(let i = 0; i < Object.keys(markers).length; i++){
 				markers[i].setMap(null);
@@ -746,6 +852,11 @@
 			}
 		}
 		
+		function removeSubMarker() {
+			for(let i = 0; i < Object.keys(submarkers).length; i++){
+				submarkers[i].setMap(null);
+			}
+		}
 	});
 	
 

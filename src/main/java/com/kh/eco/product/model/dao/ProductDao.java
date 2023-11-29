@@ -100,9 +100,6 @@ public class ProductDao {
 	public ProductOption getProductOption(SqlSessionTemplate sqlSession, int optionNo) {
 		return sqlSession.selectOne("productMapper.getProductOption", optionNo);
 	}
-	public ArrayList<Order>getShoppingList(SqlSessionTemplate sqlSession, int userNo){
-		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", userNo);
-	}
 	public int updateProductCount(SqlSessionTemplate sqlSession, int productNo) {
 		return sqlSession.update("productMapper.updateProductCount", productNo);
 	}
@@ -117,6 +114,30 @@ public class ProductDao {
 
 	public int insertReview(SqlSessionTemplate sqlSession, ProductReview review) {
 		return sqlSession.insert("productMapper.insertReview", review);
+	}
+
+	public ArrayList checkReview(SqlSessionTemplate sqlSession, int orderNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.checkReview", orderNo);
+	}
+
+	public int saveKeyword(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.insert("productMapper.saveKeyword", keyword);
+	}
+
+	public int checkKeyword(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.selectOne("productMapper.checkKeyword", keyword);
+	}
+
+	public int updateKeywordCount(SqlSessionTemplate sqlSession, String keyword) {
+		return sqlSession.update("productMapper.updateKeywordCount", keyword);
+	}
+
+	public ArrayList<String> getKeywords(SqlSessionTemplate sqlSession, String keyword) {
+		return (ArrayList)sqlSession.selectList("productMapper.getKeywords", keyword);
+	}
+
+	public ArrayList<Order> getShoppingList(SqlSessionTemplate sqlSession, HashMap map) {
+		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", map);
 	}
 
 }
