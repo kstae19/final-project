@@ -149,5 +149,8 @@ public class ProductDao {
 	public int deleteReview(SqlSessionTemplate sqlSession, int reviewNo) {
 		return sqlSession.update("productMapper.deleteReview", reviewNo);
 	}
+	public ArrayList<Order> getOrderList(SqlSessionTemplate sqlSession, int userNo){
+		return (ArrayList)sqlSession.selectList("productMapper.getOrderList", userNo);
+	}
 
 }

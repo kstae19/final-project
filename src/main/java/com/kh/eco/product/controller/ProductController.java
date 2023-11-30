@@ -174,6 +174,7 @@ public class ProductController {
 		HashMap map = new HashMap();
 		model.addAttribute("likeList", productService.getLikes(userNo));
 		model.addAttribute("review", productService.getLastReview(userNo));
+		model.addAttribute("orderList", productService.getOrderList(userNo));
 		System.out.println(model.getAttribute("review"));
 		return "product/myshopping";
 	}

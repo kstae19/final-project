@@ -136,12 +136,14 @@ h2 {
 							</tr>
 						</thead>
 						<tbody>
+							<c:forEach items="${orderList}" var="o">
 							<tr>
-								<td>2023-10-10</td>
-								<td>버터버터</td>
-								<td>10</td>
-								<td>13,000원</td>
+								<td>${o.orderDate}</td>
+								<td>${o.productName }</td>
+								<td>${o.orderNo }</td>
+								<td>${o.total}</td>
 							</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				</div>

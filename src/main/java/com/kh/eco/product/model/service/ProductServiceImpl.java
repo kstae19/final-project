@@ -355,5 +355,10 @@ public class ProductServiceImpl implements ProductService {
 		return dao.deleteReview(sqlSession, reviewNo);
 	}
 
+	@Override
+	public ArrayList<Order> getOrderList(int userNo) {
+		return dao.getOrderList(sqlSession, userNo);
+	}
+
 
 }
