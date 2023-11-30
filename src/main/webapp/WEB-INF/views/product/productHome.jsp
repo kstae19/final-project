@@ -90,7 +90,7 @@ ul{
 }
 
 #controll-area>select {
-	margin-left: 740px;
+	margin-left: 737px;
 	padding: 5px;
 	font-size: 20px;
 }
@@ -116,7 +116,7 @@ ul{
 }
 .product {
 	float:left;
-	width: 394px;
+	width: 393px;
 	height: 400px;
 	cursor:pointer;
 	margin:2px;
@@ -347,12 +347,10 @@ ul{
 								userNo : '${sessionScope.loginUser.userNo}'
 							},
 							success : e => {
-								if(e == 'added'){
-									$(th).attr('src', 'resources/images/heart-solid.svg');
-								}
-								else if(e == 'removed'){
-									$(th).attr('src', 'resources/images/heart-regular.svg');
-								};
+								let value = '';
+								value = e=='added'? 'resources/images/heart-solid.svg' : 
+										(e=='removed'? 'resources/images/heart-regular.svg': '');
+								if(value != '') $(th).attr('src', value);
 							},
 							error : e => {
 								console.log('세상은 요지경~~');
@@ -411,7 +409,17 @@ ul{
 				</c:choose>	
 					
 					<c:forEach begin="${pi.startPage }" end="${pi.endPage }" var="p">
-						<li><a href="product?keyword=${keyword }&category=${category}&cPage=${p}"> ${p } </a></li>
+					<c:choose>
+						<c:when test="${pi.currentPage eq p }">
+							<li><a disabled> ${p } </a></li>
+						</c:when>
+						<c:when test="${not empty keyword and not empty category }">
+							<li><a href="product?keyword=${keyword }&category=${category}&cPage=${p}"> ${p } </a></li>
+						</c:when>
+						<c:otherwise>
+							<li><a href="cPage=${p}"> ${p } </a></li>
+						</c:otherwise>
+                   </c:choose>
                     </c:forEach>
                     
                 <c:choose>

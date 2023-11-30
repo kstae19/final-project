@@ -6,13 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>상품 주문</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-</script>
-
-<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js" 
-integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4" 
-crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 /*--공통 스타일 --*/
 div {
@@ -117,7 +114,7 @@ h2 {
 						</c:if>
 					</div>
 				<div class="orderer-info">
-					<h2>주문자 정보 <button type="button" onclick="shipping();">배송지 선택</button></h2>
+					<h2>주문자 정보  </h2>
 					<input type="hidden" name="userNo"
 						value="${sessionScope.loginUser.userNo }"> <br> 이름 :
 					<input type="text" readonly
@@ -129,7 +126,9 @@ h2 {
 				</div>
 				<div class="shipping-info">
 					<h2>배송 정보</h2>
-					<input type="hidden" value="1" name="addressNo"> <br>
+					<input type="hidden" value="1" name="addressNo">
+					<button type="button" class="btn btn-primary" data-toggle="modal" 
+					data-target="#addresList" onclick="addresslist();">배송지 선택</button><br>
 					<input type="text" readonly value="수령인"> <br> <input
 						type="text" readonly value="연락처"> <br> <input
 						type="text" readonly value="우편번호"> <br> <input
@@ -191,9 +190,49 @@ h2 {
 							console.log('개똥 api..');
 						}
 					})
+				};
+				function addresslist(){
+					$.ajax({
+						url : 'addressList',
+						data : {userNo : '${sessionScope.loginUser.userNo}'},
+						success : e=>{
+							console.log(e);
+						},
+						error : () =>{
+							console.log('ajax하기시러..배송지이이이이!');
+						}
+					})
 				}
 			</script>
 		</div>
 	</div>
+<!-- The Modal -->
+  <div class="modal fade" id="addressList">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">배송지 선택</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <ul>
+          	<li>
+          		<div class="address">
+          		
+          		</div>
+          	</li>
+          </ul>
+        </div>        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>	
 </body>
 </html>

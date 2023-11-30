@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.dao.ProductDao;
+import com.kh.eco.product.model.vo.Address;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
@@ -32,13 +33,14 @@ import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 	
-	@Autowired
-	private ProductDao dao;
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	private final ProductDao dao;
+	private final SqlSessionTemplate sqlSession;
 	
 	@Override
 	public ArrayList<Product> selectProductList(HashMap map, PageInfo pi) {
@@ -336,6 +338,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ArrayList<String> getKeywords(String keyword) {
 		return dao.getKeywords(sqlSession, keyword);
+	}
+
+	@Override
+	public ArrayList<Address> getAddressList(int userNo) {
+		return dao.getAddressList(sqlSession, userNo);
 	}
 
 
