@@ -3,16 +3,12 @@ package com.kh.eco.book.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,16 +24,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.eco.book.model.service.BookService;
 import com.kh.eco.book.model.vo.Book;
-import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class BookController {
 	
-	@Autowired
-	public BookService bookService;
+	public final BookService bookService;
 	
 	public static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
 	
@@ -127,8 +124,8 @@ public class BookController {
 		return bookList;
 	}
 	
-	/* 알라딘 api 상품조회 메소드
-	public Book bookLookUp(String ISBN) throws IOException {
+	// 알라딘 api 상품조회 메소드
+	public static Book bookLookUp(String ISBN) throws IOException {
 		String url = "http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
 		url += "&ItemId=" + ISBN;
@@ -174,7 +171,7 @@ public class BookController {
 	        "subTitle": "환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
 	        "originalTitle": "The Developing Genome: An Introduction to Behavioral Epigenetics (2015년)",
 	        "itemPage": 540
-      		}
+      		}*/
 		 
 		JsonObject item = itemArr.get(0).getAsJsonObject();
 		
@@ -191,7 +188,7 @@ public class BookController {
 		book.setBookImg(item.get("cover").getAsString());
 		
 		return book;
-	}*/
+	}
 	
 	
 	// 메인화면 메소드
@@ -199,7 +196,6 @@ public class BookController {
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
 		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
-		// bookList가 아니라 isbn키값을 가지는 hashmap을 만들어서 그걸 db단에서 조회시키면서 새로운 vo를 만들어 키값을 덮어씌...테이블구조를 바꿔야할까
 		ArrayList<Book> countList = bookService.countList();
 		
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
@@ -287,39 +283,45 @@ public class BookController {
 	}
 	
 	
-	// 상세페이지 메소드(api 조회하지 않게 바꿨지만..)
-	@RequestMapping("bookdetail.bk")
+	// 상세페이지 메소드
+	@RequestMapping("bookDetail.bk")
 	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		
-		book.setISBN13(ISBN);
-		int count = book.getBookCount();
-		
-		if(count == 0) { // 조회수가 0일때
-			int bookCount = bookService.insertBook(book);
-			if(bookCount > 0) { // 조회수 추가 성공
-				book.setBookCount(bookCount);
-				model.addAttribute("b", book);
-				return "book/book/bookDetail";
-			} else { // 조회수 추가 실패
-				session.setAttribute("alert", "조회수 추가 실패");
-				return "redirect:book";
-			}
-		} else { // 조회수가 1 이상일때
-			int bookCount = bookService.increaseBook(ISBN);
-			if(bookCount > 0) { // 조회수 증가 성공
-				int countBook = bookService.countBook(ISBN);
-				book.setBookCount(countBook);
-				model.addAttribute("b", book);
-				return "book/book/bookDetail";
-			} else { // 조회수 증가 실패
-				session.setAttribute("alert", "조회수 증가 실패");
-				return "redirect:book";
-			}
+		int count = 0;
+		if(book.getISBN13() != null) {
+			book.setISBN13(ISBN);
+			count = book.getBookCount();
+		} else {
+			book = bookLookUp(ISBN);
+			count = 1;
 		}
+			
+			if(count == 0) { // 조회수가 0일때
+				int bookCount = bookService.insertBook(book);
+				if(bookCount > 0) { // 조회수 추가 성공
+					book.setBookCount(bookCount);
+					model.addAttribute("b", book);
+					return "book/book/bookDetail";
+				} else { // 조회수 추가 실패
+					session.setAttribute("failBookAlert", "조회 실패");
+					return "redirect:book";
+				}
+			} else { // 조회수가 1 이상일때
+				int bookCount = bookService.increaseBook(ISBN);
+				if(bookCount > 0) { // 조회수 증가 성공
+					int countBook = bookService.countBook(ISBN);
+					book.setBookCount(countBook);
+					model.addAttribute("b", book);
+					return "book/book/bookDetail";
+				} else { // 조회수 증가 실패
+					session.setAttribute("failBookAlert", "조회 실패");
+					return "redirect:book";
+				}
+			}
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회
-	@RequestMapping("bookreport")
+	@RequestMapping("bookReport")
 	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
 		model.addAttribute("list", bookService.selectReportList(pi));
@@ -358,16 +360,16 @@ public class BookController {
 	public String reportEnrollForm(BookReport bookReport, HttpSession session) {
 		
 		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 작성 실패
 			session.setAttribute("failBookAlert", "게시글 작성 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 		
 	}
 	 
 	// 독후감 게시판 상세조회
-	@RequestMapping("reportdetail.bk")
+	@RequestMapping("reportDetail.bk")
 	public String reportDetail(int rno, Model model, HttpSession session) {
 		
 		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
@@ -399,10 +401,10 @@ public class BookController {
 		
 		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
 			session.setAttribute("successBookAlert", "게시글 수정 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 수정 실패
 			session.setAttribute("failBookAlert", "게시글 수정 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
@@ -412,10 +414,10 @@ public class BookController {
 		
 		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
 			session.setAttribute("successBookAlert", "게시글 삭제 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 삭제 실패
 			session.setAttribute("failBookAlert", "게시글 삭제 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
@@ -430,112 +432,31 @@ public class BookController {
 		
 		if(bookService.reportBlack(map) > 0) {
 			session.setAttribute("successBookAlert", "게시글 신고 성공");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		} else { // 신고 실패
 			session.setAttribute("failBookAlert", "게시글 신고 실패");
-			return "redirect:bookreport";
+			return "redirect:bookReport";
 		}
 	}
 	
 	// 도서 마이페이지 포워딩
-	@RequestMapping("bookmypage")
+	@RequestMapping("bookMyPage")
 	public String BookMyPage() {
 		return "book/mypage/bookMyPage";
 	}
 	
 	// 독후감 게시판 마이페이지 포워딩
-	@RequestMapping("reportmypage")
+	@RequestMapping("reportMyPage")
 	public String ReportMyPage() {
 		return "book/mypage/reportMyPage";
 	}
-	
-	// 독서캘린더 마이페이지 포워딩
-	
+
 	
 	// 신고게시판 포워딩
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/* 환경사전 api
-	@RequestMapping("ecodictionary")
-	public String ecoDictionary() throws IOException {
-		String clientId = "vzhAW8vm_5bAc_CGqL5k"; //애플리케이션 클라이언트 아이디
-        String clientSecret = "S3pHBtYEka"; //애플리케이션 클라이언트 시크릿
-
-        String text = null;
-        try {
-            text = URLEncoder.encode("환경", "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("검색어 인코딩 실패",e);
-        }
-
-	    String apiURL = "https://openapi.naver.com/v1/search/encyc.json"; // JSON 결과
-	    apiURL += "?query=" + text;  
-	    apiURL += "&sort=sim";
-	    apiURL += "&display=100";
-	    apiURL += "&start=1";
-	    //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
-	
-	    Map<String, String> requestHeaders = new HashMap<>();
-	    requestHeaders.put("X-Naver-Client-Id", clientId);
-	    requestHeaders.put("X-Naver-Client-Secret", clientSecret);
-	    String responseBody = get(apiURL,requestHeaders);
-	    
-	    System.out.println(responseBody);
-	    
-	    return "book/book/ecoList";
+	@RequestMapping("adminReport")
+	public String adminReport() {
+		return "book/admin/adminReport";
 	}
-	// 네이버 api 메소드
-	private static String get(String apiUrl, Map<String, String> requestHeaders){
-	    HttpURLConnection con = connect(apiUrl);
-	    try {
-	        con.setRequestMethod("GET");
-	        for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
-	            con.setRequestProperty(header.getKey(), header.getValue());
-	        }
-	        int responseCode = con.getResponseCode();
-	        if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-	            return readBody(con.getInputStream());
-	        } else { // 오류 발생
-	            return readBody(con.getErrorStream());
-	        }
-	    } catch (IOException e) {
-	        throw new RuntimeException("API 요청과 응답 실패", e);
-	    } finally {
-	        con.disconnect();
-	    }
-	}
-	// 네이버 api 메소드
-	private static HttpURLConnection connect(String apiUrl){
-	    try {
-	        URL url = new URL(apiUrl);
-	        return (HttpURLConnection)url.openConnection();
-	    } catch (MalformedURLException e) {
-	        throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
-	    } catch (IOException e) {
-	        throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
-	    }
-	}
-	// 네이버 api 메소드
-	private static String readBody(InputStream body){
-	    InputStreamReader streamReader = new InputStreamReader(body);
 	
-	    try (BufferedReader lineReader = new BufferedReader(streamReader)) {
-	        StringBuilder responseBody = new StringBuilder();
-	        String line;
-	        while ((line = lineReader.readLine()) != null) {
-	            responseBody.append(line);
-	        }
-	        return responseBody.toString();
-	    } catch (IOException e) {
-	        throw new RuntimeException("API 응답을 읽는 데 실패했습니다.", e);
-	    }
-	}*/
-
+	
 }

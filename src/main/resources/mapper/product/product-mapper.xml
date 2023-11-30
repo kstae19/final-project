@@ -189,13 +189,14 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	    	OPTION_NM "option", 
 	    	REVIEW_TITLE reviewTitle, 
 	    	REVIEW_CONTENT reviewContent, 
-	    	STAR_RATE starRate 
+	    	STAR_RATE starRate,
+	    	CHANGE_NAME changeName 
 	FROM 
 		TB_PRODUCT_REVIEW R 
 	JOIN 
 		TB_PRODUCT_OPTION USING(OPTION_NO) 
 	WHERE 
-		R.STATUS='Y'
+		R.STATUS='Y' 
 	AND OPTION_NO IN (
 	                SELECT OPTION_NO 
 	                FROM TB_PRODUCT_OPTION 
@@ -205,9 +206,12 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 <select id="getLikes" parameterType="_int" resultType="productLike">
 	SELECT 
 		PRODUCT_NO productNo, 
-		USER_NO userNo 
+		USER_NO userNo, 
+        MAIN_IMG mainImg,
+        PRODUCT_NM productName 
 	FROM 
 		TB_PRODUCT_LIKE 
+    JOIN TB_PRODUCT USING(PRODUCT_NO) 
 	WHERE 
 		USER_NO = #{userNo}
 </select>
@@ -464,5 +468,17 @@ SELECT
             LIKE '%${keyword}%' 
             ORDER BY COUNT DESC)
     WHERE ROWNUM BETWEEN 1 AND 3
+</select>
+
+<select id="getAddressList" parameterType="_int" resultType="address">
+	SELECT 
+			ADDRESS_NO addressNo 
+			, POST  
+			, ADDRESS  
+			, DETAIL_ADDRESS detailAddress 
+			, RECEIVER 
+			, PHONE 
+		FROM TB_ADDRESS 
+		WEHRE USER_NO=#{userNo}
 </select>
 </mapper>

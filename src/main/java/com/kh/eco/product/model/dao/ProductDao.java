@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.kh.eco.product.model.vo.Address;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
@@ -138,6 +139,10 @@ public class ProductDao {
 
 	public ArrayList<Order> getShoppingList(SqlSessionTemplate sqlSession, HashMap map) {
 		return (ArrayList)sqlSession.selectList("productMapper.getShoppingList", map);
+	}
+
+	public ArrayList<Address> getAddressList(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("productMapper.getAddressList", userNo);
 	}
 
 }
