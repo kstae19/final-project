@@ -89,9 +89,6 @@ public class ProductDao {
 	public int insertOrderItem(SqlSessionTemplate sqlSession, OrderItem item) {
 		return sqlSession.insert("productMapper.insertOrderItems", item);
 	}
-//	public int insertOrderItems(SqlSessionTemplate sqlSession, Order order) {
-//		return sqlSession.insert("productMapper.insertOrderItems", order);
-//	}
 	public int insertReady(SqlSessionTemplate sqlSession, ApproveRequest approveRequest) {
 		return sqlSession.insert("productMapper.insertReady", approveRequest);
 	}
@@ -143,6 +140,14 @@ public class ProductDao {
 
 	public ArrayList<Address> getAddressList(SqlSessionTemplate sqlSession, int userNo) {
 		return (ArrayList)sqlSession.selectList("productMapper.getAddressList", userNo);
+	}
+
+	public ProductReview getLastReview(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("productMapper.getLastReview", userNo);
+	}
+
+	public int deleteReview(SqlSessionTemplate sqlSession, int reviewNo) {
+		return sqlSession.update("productMapper.deleteReview", reviewNo);
 	}
 
 }

@@ -6,6 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style>
@@ -65,6 +69,10 @@ h2 {
 	font-weight: 600;
 	float: right;
 }
+#review-list img{
+	width:180px;
+	height:160px;
+}
 </style>
 </head>
 <body>
@@ -72,34 +80,70 @@ h2 {
 	<div class="outer">
 		<div class="content">
 		<jsp:include page="prodMenu.jsp"/>
-			<c:choose>
-				<c:when test="${empty likeList }">
-					<div id="like-list" style="display:none"></div>
-				</c:when>
-				<c:otherwise>
+		<c:if test = "${empty likeList and empty review and empty orderList }">
+			<h3>등록된 찜/리뷰/주문 목록이 존재하지 않습니다.</h3>
+		</c:if>
+			<c:if test="${not empty likeList }">
 				<div id="like-list">
 				<h2>찜한 상품</h2>
-				<c:forEach items="${likeList }" var="like">
-					<div class="like-product">
-						<img src="${like.mainImg}" 
-						onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo}
-						+'&productNo='+${like.productNo}">
-						<div>${like.productName}
-							<button onclick="removeLike(${like.productNo}, this);" > X </button>
+					<c:forEach items="${likeList }" var="like">
+						<div class="like-product">
+							<img src="${like.mainImg}" 
+							onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo}
+							+'&productNo='+${like.productNo}">
+							<div>${like.productName}
+								<button onclick="removeLike(${like.productNo}, this);" > X </button>
+							</div>
 						</div>
-					</div>
-				</c:forEach>
-			</div>
-				</c:otherwise>
-			</c:choose>
-
-			<div id="review-list">
-				<h2>최근 후기</h2>
-			</div>
+					</c:forEach>
+				</div>
+			</c:if>
+			<c:if test="${not empty review}">
+				<div id="review-list">
+					<h2>최근 후기</h2>
+					<table class="table table-borderless">
+						<tbody>
+							<tr>
+								<td rowspan="3"><img src="${review.changeName}"></td>
+								<td>${review.reviewNo}. ${review.reviewTitle }</td>
+								<td>${review.starRate}/5</td>
+							</tr>
+							<tr>
+								<td>${review.option}</td>
+								<td><button class="btn btn-outline-warning">수정</button></td>
+							</tr>
+							<tr>
+								<td>${review.reviewContent }</td>
+								<form action="delete.review" method="get">
+								<input type="hidden" name="reviewNo" value="${review.reviewNo}"/>
+								<td><button type="sumbit" class="btn btn-outline-danger">삭제</button></td>
+								</form>
+							</tr>
+						</tbody>
+					</table>				   
+				</div>
+			</c:if>
 			<div id="order-list">
 				<h2>최근 주문</h2>
 				<div>
-					<a href="">더 보기</a>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>주문일</th>
+								<th>상품명</th>
+								<th>주문번호</th>
+								<th>결제금액</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>2023-10-10</td>
+								<td>버터버터</td>
+								<td>10</td>
+								<td>13,000원</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
@@ -108,6 +152,7 @@ h2 {
 		function removeLike(pno, btn){
 			$.ajax({
 				url : 'delete.like',
+				type : 'get',
 				data :{productNo : pno, userNo : '${sessionScope.loginUser.userNo}'},
 				success : e=>{
 					$(btn).parents('.like-product').css('display', 'none');
@@ -115,8 +160,8 @@ h2 {
 				error : () =>{
 					console.log('에이젝스 시렁');
 				}
-			})
-		}
+			});
+		};
 	</script>
 </body>
 </html>

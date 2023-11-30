@@ -1,6 +1,7 @@
 package com.kh.eco.product.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,7 @@ public class AjaxProductController {
 	}
 	@GetMapping(value ="product.review", produces="application/json; charset=UTF-8")
 	public String ajaxReviewList(int productNo, Model model) {
+		HashMap map = new HashMap();
 		return new Gson().toJson(productService.reviewList(productNo));
 	}
 	@GetMapping(value="getLikes.pr", produces="application/json; charset=UTF-8")

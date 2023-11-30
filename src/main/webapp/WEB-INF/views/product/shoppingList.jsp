@@ -116,8 +116,9 @@ h3 {
 	<br>
 	<br>
 	<div class="outer">
-		<h1>주문내역 조회</h1>
 		<div class="content">
+		<h1>주문내역 조회</h1>
+		<jsp:include page="prodMenu.jsp"/>
 			<c:if test="${not empty orders }">
 				<c:forEach items="${orders }" var="o" varStatus="status">
 					<div class="order">
