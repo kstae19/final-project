@@ -7,6 +7,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.vo.PageInfo;
 
 public interface BookService {
@@ -99,7 +101,7 @@ public interface BookService {
 	public int bookmarkCountMyPage(int userNo);
 	
 	// 마이페이지 북마크 도서목록 조회
-	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi);
+	public ArrayList<String> bookmarkMyPage(int userNo, PageInfo pi);
 	
 	// 마이페이지 한줄평 도서목록 개수 조회
 	public int bookReplyCountMyPage(int userNo);
@@ -121,14 +123,22 @@ public interface BookService {
 	
 	
 	// 관리자페이지 신고게시글 개수 조회
+	public int adminReportBlackCount();
 	
 	// 관리자페이지 신고게시글 목록 조회
+	public ArrayList<ReportBlack> adminReportBlack(PageInfo pi);
 	
 	// 관리자페이지 신고댓글 개수 조회
+	public int adminReportReplyBlackCount();
 	
 	// 관리자페이지 신고댓글 목록 조회
+	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi);
 	
+	// 관리자페이지 신고게시글 삭제
+	public int deleteReportBlack(int reportBlackNo);
 	
+	// 관리자페이지 신고댓글 삭제
+	public int deleteReplyBlack(int replyBlackNo);
 	
 	
 	
