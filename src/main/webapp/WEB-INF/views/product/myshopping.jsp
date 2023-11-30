@@ -132,7 +132,7 @@ h2 {
 								<th>주문일</th>
 								<th>상품명</th>
 								<th>주문번호</th>
-								<th>결제금액</th>
+								<th>상품금액</th>
 							</tr>
 						</thead>
 						<tbody>
