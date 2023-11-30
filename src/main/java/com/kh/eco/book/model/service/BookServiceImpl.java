@@ -16,6 +16,8 @@ import com.kh.eco.book.model.vo.Book;
 import com.kh.eco.book.model.vo.BookReply;
 import com.kh.eco.book.model.vo.BookReport;
 import com.kh.eco.book.model.vo.BookReportReply;
+import com.kh.eco.book.model.vo.ReportBlack;
+import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.vo.PageInfo;
 
 @EnableTransactionManagement
@@ -85,7 +87,9 @@ public class BookServiceImpl implements BookService{
 	@Transactional("transactionManager")
 	public int ajaxDeleteBookReply(HashMap map) {
 		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
+		System.out.println("에코포인트 삭제 여부 : " + result2);
 		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);
+		System.out.println("리플 삭제 여부 : " + result1);
 		return result1 + result2;
 	}
 
@@ -181,7 +185,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<Book> bookmarkMyPage(int userNo, PageInfo pi) {
+	public ArrayList<String> bookmarkMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);
@@ -221,6 +225,40 @@ public class BookServiceImpl implements BookService{
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
+	}
+
+	@Override
+	public int adminReportBlackCount() {
+		return bookDao.adminReportBlackCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ReportBlack> adminReportBlack(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.adminReportBlack(sqlSession, rowBounds);
+	}
+
+	@Override
+	public int adminReportReplyBlackCount() {
+		return bookDao.adminReportReplyBlackCount(sqlSession);
+	}
+
+	@Override
+	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return bookDao.adminReportReplyBlack(sqlSession, rowBounds);
+	}
+
+	@Override
+	public int deleteReportBlack(int reportBlackNo) {
+		return bookDao.deleteReportBlack(sqlSession, reportBlackNo);
+	}
+
+	@Override
+	public int deleteReplyBlack(int replyBlackNo) {
+		return bookDao.deleteReplyBlack(sqlSession, replyBlackNo);
 	}
 
 

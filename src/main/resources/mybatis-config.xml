@@ -24,19 +24,28 @@
 		<typeAlias type="com.kh.eco.book.model.vo.BookReply" alias="bookReply" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReport" alias="bookReport" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReportReply" alias="bookReportReply" />
+		<typeAlias type="com.kh.eco.book.model.vo.ReportBlack" alias="adminReportBlack" />
+		<typeAlias type="com.kh.eco.book.model.vo.ReportReplyBlack" alias="adminReportReplyBlack" />
 		<typeAlias type="com.kh.eco.product.model.vo.ApproveRequest" alias="approveRequest" />
 		<typeAlias type="com.kh.eco.challenge.model.vo.Challenge" alias="challenge" />
+
+		<typeAlias type="com.kh.eco.eventBoard.model.vo.EventBoard" alias="eventBoard" />
+		<typeAlias type="com.kh.eco.eventBoard.model.vo.Reply" alias="Reply" />
+
+
 		<typeAlias type="com.kh.eco.event.model.vo.Event" alias="event"/>
 		<typeAlias type="com.kh.eco.achievement.model.vo.Achievement" alias="achievement"/>
+
 	</typeAliases>
 
 	<mappers>
-
 		<mapper resource="/mapper/challenge/challenge-mapper.xml" />
-		<mapper resource="/mapper/event/event-mapper.xml"/>
+    <mapper resource="/mapper/eventBoard/eventboard-mapper.xml" />
 		<mapper resource="/mapper/user/user-mapper.xml"/>
 		<mapper resource ="/mapper/product/product-mapper.xml"/>
-  		<mapper resource="/mapper/book/book-mapper.xml" />
+
+    <mapper resource="/mapper/book/book-mapper.xml" />
+  		
   		<mapper resource="/mapper/achievement/achievement-mapper.xml"/>
 	</mappers>
   

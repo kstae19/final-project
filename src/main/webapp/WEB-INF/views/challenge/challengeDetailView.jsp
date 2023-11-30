@@ -16,7 +16,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <!-- overal -->
-<style>
+<style> 
     #wrapper{
 		border : 1px solid teal;
         width: 1200px;
@@ -25,6 +25,10 @@
         background-color: white;
     }
 
+
+    #search-area{
+       border : 1px solid teal;
+    }
     #header-area{
     	border : 1px solid yellow;
        width : 100%;

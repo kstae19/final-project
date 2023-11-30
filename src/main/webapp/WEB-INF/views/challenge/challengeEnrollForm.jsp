@@ -30,7 +30,7 @@
         height : 75%; 
         width : 100%;
     }
-    input { 
+    input {
 
 		-webkit-appearance : none;
 		
