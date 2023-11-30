@@ -150,7 +150,7 @@
 					let ISBN13 = $(this).children('input[name=ISBN]').val();
 					let count = $(this).children('.book-count').text().slice(-1);
 					//location.href='bookdetail.bk?ISBN='+$(this).children('input[name=ISBN]').val() + '&count=' + $(this).children('#book-count').text();
-					$(this).parent().attr("action", "bookdetail.bk?ISBN13=" + ISBN13);
+					$(this).parent().attr("action", "bookDetail.bk?ISBN13=" + ISBN13);
 					$(this).parent().submit();
 				})
 			})

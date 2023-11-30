@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,10 +52,15 @@
         <ul>
             <li style="font-size: 30px; margin-bottom: 15px;">정보제공/커뮤니티</li>
             <li onclick="location.href='book'">우수환경도서</li>
-            <li onclick="location.href='bookreport'">독후감 게시판</li>
-            <li onclick="location.href='ecodictionary'">환경용어사전</li>
-            <li onclick="location.href='bookcalendar'">독서캘린더</li>
-            <li onclick="location.href='bookmypage'">마이페이지</li>
+            <li onclick="location.href='bookReport'">독후감 게시판</li>
+            <!-- <li onclick="location.href='ecodictionary'">환경용어사전</li>
+            <li onclick="location.href='bookcalendar'">독서캘린더</li> -->
+            <c:if test="${ not empty loginUser }">
+            	<li onclick="location.href='bookMyPage'">마이페이지</li>
+            	<c:if test="${ loginUser.userStatus eq 'A' }">
+            		<li onclick="location.href='adminReport'">관리자페이지</li>
+            	</c:if>
+            </c:if>
         </ul>
     </div>
 </body>

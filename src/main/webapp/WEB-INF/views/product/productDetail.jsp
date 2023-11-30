@@ -9,6 +9,7 @@
 <!-- jQuery 라이브러리 -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <style>
 div {
 	box-sizing: border-box;
@@ -133,6 +134,13 @@ div {
 	border-radius:5px;
 	background:beige;
 	padding:1px;
+}
+#review-area img{
+	width:150px;
+	height:130px;
+}
+#review-area td{
+	padding : 5px 20px 5px 20px;
 }
 </style>
 </head>
@@ -342,31 +350,50 @@ div {
 			 		<h2 onclick="showReviews();">리뷰 보기(${review.reviewNo }개)</h2>
 			 	</c:otherwise>			 	
 			 </c:choose>
-			 <div></div>
+			 <div>
+			 
+			 <div id="pagination-container"></div>
+			 </div>
 		</div>
 		<script>
-			function showReviews(){
+			let $reviews = $('#review-area>div');
+			$(()=>{		
+				$reviews.css('display', 'none');
 				$.ajax({
 					url:'product.review',
 					data:{productNo:${p.productNo}},
 					success: reviews => {
-						let value = '<div><table><tbody>';
-						for(let i in reviews){
-							value += '<tr>'
-								+ '<td><span class="fakebtn">'+reviews[i].option+'</span> <b>'+reviews[i].reviewTitle+'</b></td>'
-								+'</tr>'
-								+'<tr>'
-								+ '<td>'+reviews[i].reviewContent+'</td>'
-								+'</tr>';	
-						}
-						value += '</tbody></table></div>';
-						$('#review-area>div').html(value);
+						let html = template(reviews);
+						$reviews.html(html);
 					},
 					error:()=>{
 						alert('지겨웡~~~~~~~~~~');
 					}
 				});
+			});
+			function template(data){
+				let value = '<table><tbody>';
+				$.each(data, (index, item)=>{
+						value += '<tr>'
+							+ '<td rowspan="2"><img src="'+item.changeName+'"></td>'
+							+ '<td><span class="fakebtn">'+item.option+'</span> <b>'+item.reviewTitle+'</b></td>'
+							+'</tr>'
+							+'<tr>'
+							+ '<td>'+item.reviewContent+'</td>'
+							+'</tr>';
+				});
+				value += '</tbody></table>';
+				return value;
+			};
+			function showReviews(){
+				if($reviews.css('display') == 'none'){
+					$reviews.css('display', 'block');					
+				}
+				else{
+					$reviews.css('display', 'none');
+				}
 			}
+			
 		</script>
 	</div>
 	

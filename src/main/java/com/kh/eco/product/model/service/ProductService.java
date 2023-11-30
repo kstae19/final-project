@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 
 import com.google.gson.JsonElement;
 import com.kh.eco.common.model.vo.PageInfo;
+import com.kh.eco.product.model.vo.Address;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
@@ -57,6 +58,7 @@ public interface ProductService {
 	int checkKeyword(String keyword);
 	int updateKeywordCount(String keyword);
 	ArrayList<String> getKeywords(String keyword);
+	ArrayList<Address> getAddressList(int userNo);
 
 
 }

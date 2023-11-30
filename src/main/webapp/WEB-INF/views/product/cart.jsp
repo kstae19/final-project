@@ -85,6 +85,8 @@ h3{
 	width:30px;
 	text-align:center;
 }
+
+
 </style>
 
 </head>
@@ -95,7 +97,7 @@ h3{
 <br>
 <div class="outer">
 	<div class="content">
-	<a href="shoppingList?userNo=${sessionScope.loginUser.userNo }">주문내역 확인</a>
+	<jsp:include page="prodMenu.jsp"/>
 		<div id = "criteria">
 			<span><input type="checkbox"></span>
 			<div style="width:60%;">상품정보</div>
