@@ -181,12 +181,12 @@
 		color: black;
 	}
 	
-	.more button, #bikeinfo > button{
+	.more button, #bikeinfo > button, #subinfo > button{
 		border: none;
 		background-color: white;
 	}
 	
-	#bikeinfo > button {
+	#bikeinfo > button, #subinfo > button {
 		margin-right: 3px;
 		margin-bottom: 3px;
 	}
@@ -284,6 +284,7 @@
 	    var markers = [];
 	    var submarkers = [];
 	    var infowindows = [];
+	    var subinfowindows = [];
 	    
 	    $.getJSON("resources/json/seoul.json", function(geojson) {
 			var units = geojson.features; // 파일에서 key값이 "features"인 것의 value를 통으로 가져옴(이것은 여러지역에 대한 정보를 모두 담고있음)			
@@ -327,6 +328,8 @@
 			createPolygon();
 			removeOverLay();
 			removeInfowindow();
+			removeSubMarker();
+			removeSubInfowindow();
 			//map.setDraggable(false);
 		});
 		
@@ -350,6 +353,8 @@
 			createOverLay2();
 			createOverLay3();
 			removePolygon();
+			removeSubMarker();
+			removeSubInfowindow();
 			$('#move-info').css('display', 'none');
 		});
 		
@@ -634,8 +639,8 @@
 				    	
 				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
 						var iwContent = '<div style="width:220px; height:100%"> ' +
-				    					bike.stationName + '<br>잔여 자전거 수 : ' +
-				    					bike.parkingBikeTotCnt + '<br>' + 
+				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +
 										'<form action="bikeinfo" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
@@ -702,9 +707,9 @@
 				    	
 				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
 						var iwContent = '<div style="width:220px; height:100%"> ' +
-				    					bike.stationName + '<br>잔여 자전거 수 : ' +
-				    					bike.parkingBikeTotCnt + '<br>' + 
-										'<div style="text-align:right"> ' +
+				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
+				    					bike.parkingBikeTotCnt + '<br></div>' + 
+										'<div style="text-align:right"> ' +	
 										'<form action="bikeinfo" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
 										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
@@ -744,84 +749,96 @@
 				success: subStData => {
 					var imageSrc = '',
 					imageSize = new kakao.maps.Size(16, 18), // 마커이미지의 크기입니다
-				    imageOption = {offset: new kakao.maps.Point(8, 10)};
+				    imageOption = {offset: new kakao.maps.Point(10, 18)};
 					//console.log(subStData);
 					for(let i in subStData){
 						StData = subStData[i];
 						StName = StData.lineNm;
-						console.log(StName);
-						if(StName == ("1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경원선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경인선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경부선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("장항선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("2호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-10a643.svg'
-						} else if(StName == ("3호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
-						} else if(StName == ("일산선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
-						} else if(StName == ("4호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("안산선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("과천선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("진접선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("5호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a95094.svg'
-						} else if(StName == ("6호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-d08d1a.svg'
-						} else if(StName == ("7호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
-						} else if(StName == ("7호선(인천)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
-						} else if(StName == ("8호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-e74e6d.svg'
-						} else if(StName == ("9호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
-						} else if(StName == ("9호선(연장)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
-						} else if(StName == ("의정부선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-d9750d.svg'
-						} else if(StName == ("에버라인선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-36a805.svg'
-						} else if(StName == ("경의중앙선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
-						} else if(StName == ("중앙선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
-						} else if(StName == ("경강선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-1059ac.svg'
-						} else if(StName == ("분당선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a69500.svg'
-						} else if(StName == ("신분당선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("신분당선(연장)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("신분당선(연장2)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("경춘선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-0ba382.svg'
-						} else if(StName == ("인천1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-6496df.svg'
-						} else if(StName == ("인천2호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cf843c.svg'
-						} else if(StName == ("공항철도1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("우이신설선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-878787.svg'
-						} else if(StName == ("서해선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-40a607.svg'
-						} else if(StName == ("김포골드라인")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a18f57.svg'
-						} else if(StName == ("신림선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-0781fa.svg'
+						console.log(StData);
+						// console.log(StName);
+						switch(StName) {
+						case "1호선":
+						case "경원선":
+						case "경인선":
+						case "경부선":
+						case "장항선":
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg';
+							break;
+						case "2호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-10a643.svg';
+							break;
+						case "3호선":
+						case "일산선":
+							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg';
+							break;
+						case "4호선":
+						case "안산선":
+						case "과천선":
+						case "진접선":
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg';
+							break;
+						case "5호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-a95094.svg';
+							break;
+						case "6호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-d08d1a.svg';
+							break;
+						case "7호선":
+						case "7호선(인천)":
+							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg';
+							break;
+						case "8호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-e74e6d.svg';
+							break;
+						case "9호선":
+						case "9호선(연장)":
+							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg';
+							break;
+						case "경의중앙선":
+						case "중앙선":
+							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg';
+							break;
+						case "공항철도1호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg';
+							break;
+						case "경춘선":
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg';
+							break;
+						case "분당선":
+							imageSrc = 'https://svgsilh.com/svg/305827-a69500.svg';
+							break;
+						case "신분당선":
+						case "신분당선(연장)":
+						case "신분당선(연장2)":
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg';
+							break;
+						case "우이신설선":
+							imageSrc = 'https://svgsilh.com/svg/305827-878787.svg';
+							break;
+						case "의정부선":
+							imageSrc = 'https://svgsilh.com/svg/305827-d9750d.svg';
+							break;
+						case "에버라인선":
+							imageSrc = 'https://svgsilh.com/svg/305827-36a805.svg';
+							break;
+						case "경강선":
+							imageSrc = 'https://svgsilh.com/svg/305827-1059ac.svg';
+							break;
+						case "인천1호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-6496df.svg';
+							break;
+						case "인천2호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-cf843c.svg';
+							break;
+						case "서해선":
+							imageSrc = 'https://svgsilh.com/svg/305827-40a607.svg';
+							break;
+						case "김포골드라인":
+							imageSrc = 'https://svgsilh.com/svg/305827-a18f57.svg';
+							break;
+						case "신림선":
+							imageSrc = 'https://svgsilh.com/svg/305827-0781fa.svg';
+							break;
 						}
 						
 						const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -835,8 +852,42 @@
 				    	marker.setMap(map);
 				    	
 				    	submarkers.push(marker);
-					}
-				}
+				    	
+				    	// 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+						var subContent = '<div style="width:220px; height:100%">' + 
+					    					 '<div style="width:200px; height:100%"> ' + StData.stnKrNm + '역 ' + StData.lineNm + '<br>' +
+											 '</div>' +
+											 '<div style="text-align:right"> ' + 
+												'<form action="subinfo" id="subinfo">' +
+												 '	 <button>상세보기</button>' +
+												 '	 <input type="hidden" name="subName" value="' + StData.stnKrNm + '"/>' +
+												 '	 <input type="hidden" name="subLine" value="' + StData.lineNm  + '"/>' +
+												 '	 <input type="hidden" name="subLat" value="' + StData.convY + '"/>' +
+												 '	 <input type="hidden" name="subLng" value="' + StData.convX + '"/>' +
+												 '</form>'+ 
+											 '</div>'+
+										  '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+						    subRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+						// 인포윈도우를 생성합니다
+						var subinfowindow = new kakao.maps.InfoWindow({
+						    content : subContent,
+						    removable : subRemoveable
+						});
+						    
+						subinfowindows.push(subinfowindow);
+						    
+						//마커 클릭하면 인포윈도우
+						kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, subinfowindow));
+						//marker click event/
+						function makeClickListener(map, marker, subinfowindow) {
+							return function() {
+								removeSubInfowindow();
+								subinfowindow.open(map, marker);
+							};
+						}
+					} // for
+				} // success
 			});
 		}
 		
@@ -855,6 +906,12 @@
 		function removeSubMarker() {
 			for(let i = 0; i < Object.keys(submarkers).length; i++){
 				submarkers[i].setMap(null);
+			}
+		}
+		
+		function removeSubInfowindow() {
+			for(let i = 0; i < Object.keys(subinfowindows).length; i++){
+				subinfowindows[i].close();
 			}
 		}
 	});
