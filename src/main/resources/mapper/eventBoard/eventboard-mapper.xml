@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eventBoardMapper">
+	
+	<resultMap id="eventBoardResultSet" type="EventBoard">
+		<result column="BNO" 				property="bNo" />
+		<result column="TITLE"				property="title" />
+		<result column="CONTENT"			property="content" />
+		<result column="WRITER" 			property="writer" />
+		<result column="REGDATE"			property="regDate" />
+		<result column="VIEWCOUNT"			property="viewCount" />
+		<result column="CHANGE_NAME"   		property="changeName" />
+		<result column="ORIGIN_NAME"   		property="originName" />
+		
+	</resultMap>
+	
+	<select id="selectListCount" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		       EVENTBOARD
+		 WHERE
+		       STATUS = 'Y'
+	</select>
+	
+	<select id="selectList" resultMap="eventBoardResultSet">
+		SELECT
+			   BNO
+			  ,TITLE
+			  ,WRITER
+			  ,VIEW_COUNT
+			  ,TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') as "CREATE_DATE"
+			  ,ORIGIN_NAME
+		  FROM
+		  	   EVENTBOARD
+		 WHERE
+		       STATUS = 'Y'
+		 ORDER
+		    BY
+		       BNO DESC
+	</select>
+	
+	<insert id="insertEventBoard" parameterType="eventBoard">
+		INSERT
+		  INTO
+		       EVENTBOARD
+		       (
+		       BNO,
+		       TITLE,
+		       CONTENT,
+		       WRITER,
+		       ORIGIN_NAME,
+		       CHANGE_NAME
+		       )
+		VALUES
+		       (
+		       SEQ_BNO.NEXTVAL,
+		       #{title},
+		       #{content},
+		       #{writer},
+		       #{originName},
+		       #{changeName}
+		       )
+	</insert>
+	
+	<update id="increaseCount" parameterType="_int">
+	   UPDATE
+	   	      EVENTBOARD
+	   	  SET
+	   	      COUNT = COUNT + 1
+	   	WHERE
+	   	      BNO = #{ bNo }
+	   	  AND
+	   	      STATUS = 'Y'
+	</update>
+	
+	<select id="selectEventBoard" parameterType="_int" resultMap="eventBoardResultSet">
+		SELECT
+			   BNO,
+			   TITLE,
+			   WRITER,
+			   CONTENT,
+			   ORIGIN_NAME,
+			   CHANGE_NAME,
+			   TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') "CREATE_DATE"
+		  FROM
+		       EVENTBOARD
+		 WHERE
+		       BNO = #{bNo}
+	</select>
+	
+	<update id="deleteEventBoard" parameterType="_int">
+		UPDATE
+		       EVENTBOARD
+		   SET
+		       STATUS = 'N'
+		 WHERE
+		       BNO = #{bNo}
+	</update>
+	
+	
+	<update id="updateEventBoard" parameterType="eventBoard">
+		UPDATE
+		       EVENTBOARD
+		   SET
+		       TITLE = #{title},
+		       CONTENT = #{content},
+		       ORIGIN_NAME = #{originName},
+		       CHANGE_NAME = #{changeName}
+		 WHERE
+		       BNO = #{bNo}
+	</update>
+	
+	<select id="selectReplyList" resultType="reply" parameterType="_int">
+		SELECT
+		       REPLY_NO replyNo,
+		       REPLY_WRITER replyWriter,
+		       REPLY_CONTENT replyContent,
+		       TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') as "createDate"
+		  FROM
+		       REPLY
+		 WHERE
+		       STATUS = 'Y'
+		   AND
+		       REF_BNO = #{refBno}
+		 ORDER
+		    BY
+		       REPLY_NO DESC
+	</select>
+	
+	<insert id="insertReply" parameterType="reply">
+		INSERT
+		  INTO
+		       REPLY
+		       (
+		       REPLY_NO,
+		       REPLY_CONTENT,
+		       REPLY_WRITER,
+		       REF_BNO
+		       )
+		VALUES
+		       (
+		       SEQ_RNO.NEXTVAL,
+		       #{replyContent},
+		       #{replyWriter},
+		       #{refBno}
+		       )
+	</insert>
+	
+	<select resultMap="eventBoardResultSet" id="selectTopBoard">
+		select
+		       a.*
+		  FROM
+		       (
+		        select
+		               bNo,
+		               title,
+		               writer,
+		               viewCount,
+		               to_char(create_date, 'YYYY-MM-DD') as "create_date",
+		               origin_name
+		          from
+		               eventBoard
+		         where
+		               status = 'Y'
+		         order
+		            by
+		               count desc
+		       ) a
+		where
+			   rownum between 1 and 5
+	</select>
+</mapper> 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

@@ -24,6 +24,5 @@ public class BookReport {
 	private int bookReportSecret;
 	private int bookReportStar;
 	private int userNo;
-	private int ecoNo;
 
 }

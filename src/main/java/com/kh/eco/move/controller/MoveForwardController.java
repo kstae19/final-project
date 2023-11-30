@@ -41,4 +41,13 @@ public class MoveForwardController {
 		model.addAttribute("bikeCnt", bikeCnt);
 		return "move/bikeInfo";	
 	}
+	
+	@RequestMapping("subinfo")
+	public String subinfoPage(String subName, String subLine, String subLat, String subLng, Model model) {
+		model.addAttribute("subLat", subLat);
+		model.addAttribute("subLng", subLng);
+		model.addAttribute("subName", subName);
+		model.addAttribute("subLine", subLine);
+		return "move/subInfo";	
+	}
 }
