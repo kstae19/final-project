@@ -754,80 +754,91 @@
 					for(let i in subStData){
 						StData = subStData[i];
 						StName = StData.lineNm;
-						// console.log(StData);
+						console.log(StData);
 						// console.log(StName);
-						if(StName == ("1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경원선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경인선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("경부선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("장항선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg'
-						} else if(StName == ("2호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-10a643.svg'
-						} else if(StName == ("3호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
-						} else if(StName == ("일산선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg'
-						} else if(StName == ("4호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("안산선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("과천선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("진접선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("5호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a95094.svg'
-						} else if(StName == ("6호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-d08d1a.svg'
-						} else if(StName == ("7호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
-						} else if(StName == ("7호선(인천)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg'
-						} else if(StName == ("8호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-e74e6d.svg'
-						} else if(StName == ("9호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
-						} else if(StName == ("9호선(연장)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg'
-						} else if(StName == ("의정부선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-d9750d.svg'
-						} else if(StName == ("에버라인선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-36a805.svg'
-						} else if(StName == ("경의중앙선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
-						} else if(StName == ("중앙선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg'
-						} else if(StName == ("경강선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-1059ac.svg'
-						} else if(StName == ("분당선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a69500.svg'
-						} else if(StName == ("신분당선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("신분당선(연장)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("신분당선(연장2)")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg'
-						} else if(StName == ("경춘선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-0ba382.svg'
-						} else if(StName == ("인천1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-6496df.svg'
-						} else if(StName == ("인천2호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-cf843c.svg'
-						} else if(StName == ("공항철도1호선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg'
-						} else if(StName == ("우이신설선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-878787.svg'
-						} else if(StName == ("서해선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-40a607.svg'
-						} else if(StName == ("김포골드라인")){
-							imageSrc = 'https://svgsilh.com/svg/305827-a18f57.svg'
-						} else if(StName == ("신림선")){
-							imageSrc = 'https://svgsilh.com/svg/305827-0781fa.svg'
+						switch(StName) {
+						case "1호선":
+						case "경원선":
+						case "경인선":
+						case "경부선":
+						case "장항선":
+							imageSrc = 'https://svgsilh.com/svg/305827-052f93.svg';
+							break;
+						case "2호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-10a643.svg';
+							break;
+						case "3호선":
+						case "일산선":
+							imageSrc = 'https://svgsilh.com/svg/305827-de6d00.svg';
+							break;
+						case "4호선":
+						case "안산선":
+						case "과천선":
+						case "진접선":
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg';
+							break;
+						case "5호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-a95094.svg';
+							break;
+						case "6호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-d08d1a.svg';
+							break;
+						case "7호선":
+						case "7호선(인천)":
+							imageSrc = 'https://svgsilh.com/svg/305827-657931.svg';
+							break;
+						case "8호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-e74e6d.svg';
+							break;
+						case "9호선":
+						case "9호선(연장)":
+							imageSrc = 'https://svgsilh.com/svg/305827-b58600.svg';
+							break;
+						case "경의중앙선":
+						case "중앙선":
+							imageSrc = 'https://svgsilh.com/svg/305827-5f9c82.svg';
+							break;
+						case "공항철도1호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-038fa0.svg';
+							break;
+						case "경춘선":
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg';
+							break;
+						case "분당선":
+							imageSrc = 'https://svgsilh.com/svg/305827-a69500.svg';
+							break;
+						case "신분당선":
+						case "신분당선(연장)":
+						case "신분당선(연장2)":
+							imageSrc = 'https://svgsilh.com/svg/305827-cd2234.svg';
+							break;
+						case "우이신설선":
+							imageSrc = 'https://svgsilh.com/svg/305827-878787.svg';
+							break;
+						case "의정부선":
+							imageSrc = 'https://svgsilh.com/svg/305827-d9750d.svg';
+							break;
+						case "에버라인선":
+							imageSrc = 'https://svgsilh.com/svg/305827-36a805.svg';
+							break;
+						case "경강선":
+							imageSrc = 'https://svgsilh.com/svg/305827-1059ac.svg';
+							break;
+						case "인천1호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-6496df.svg';
+							break;
+						case "인천2호선":
+							imageSrc = 'https://svgsilh.com/svg/305827-cf843c.svg';
+							break;
+						case "서해선":
+							imageSrc = 'https://svgsilh.com/svg/305827-40a607.svg';
+							break;
+						case "김포골드라인":
+							imageSrc = 'https://svgsilh.com/svg/305827-a18f57.svg';
+							break;
+						case "신림선":
+							imageSrc = 'https://svgsilh.com/svg/305827-0781fa.svg';
+							break;
 						}
 						
 						const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
@@ -847,13 +858,13 @@
 					    					 '<div style="width:200px; height:100%"> ' + StData.stnKrNm + '역 ' + StData.lineNm + '<br>' +
 											 '</div>' +
 											 '<div style="text-align:right"> ' + 
-								/*	'<form action="subinfo" id="subinfo">' +
+												'<form action="subinfo" id="subinfo">' +
 												 '	 <button>상세보기</button>' +
-												 '	 <input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
-												 '	 <input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
-												 '	 <input type="hidden" name="bikeName" value="' + bike.stationName + '"/>' +
-												 '	 <input type="hidden" name="bikeCnt" value="' + bike.parkingBikeTotCnt + '"/>' +
-												 '</form>'+ */
+												 '	 <input type="hidden" name="subName" value="' + StData.stnKrNm + '"/>' +
+												 '	 <input type="hidden" name="subLine" value="' + StData.lineNm  + '"/>' +
+												 '	 <input type="hidden" name="subLat" value="' + StData.convY + '"/>' +
+												 '	 <input type="hidden" name="subLng" value="' + StData.convX + '"/>' +
+												 '</form>'+ 
 											 '</div>'+
 										  '</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 						    subRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
