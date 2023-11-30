@@ -364,7 +364,7 @@
 </script>
 
 <script>
-	$('#achievement-content button).on('click', function(){
+	$('#achievement-content').on('click', 'button', function(){
 		console.log('수정하기 클릭');
 		$.ajax({
 			url : 'update.ac',
@@ -376,7 +376,7 @@
 
 	});
 	
-	$('#achievement-content button.eq[1]').on('click', function(){
+	$( ('#achievement-content > button').eq(1) ).on('click', function(){
 		console.log('삭제하기 클릭');
 		$.ajax({
 			url : 'delete.ac',
