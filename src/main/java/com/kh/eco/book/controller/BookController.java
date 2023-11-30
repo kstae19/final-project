@@ -12,9 +12,10 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,9 +35,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookController {
 	
-	public final BookService bookService;
+	private final BookService bookService;
 	
-	public static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
+	private static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
 	
 	// 알라딘 api 검색기능 메소드
 	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
@@ -190,9 +191,19 @@ public class BookController {
 		return book;
 	}
 	
+	// 글자 바이트 체크 메소드
+	public static boolean checkText(String content, int length) throws Exception{
+		if(content.getBytes().length < length) {
+			return true;
+		}else {
+			System.out.println("값이 너무 큽니다.");
+			throw new Exception();
+		}
+	}
+	
 	
 	// 메인화면 메소드
-	@RequestMapping("book")
+	@GetMapping("book")
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
 		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
@@ -217,7 +228,7 @@ public class BookController {
 	
 	
 	// 검색 메소드
-	@RequestMapping("searchBook.bk")
+	@GetMapping("searchBook.bk")
 	public String bookSearch(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model, String selectBookOption, String searchBookValue) throws IOException {
 		
 		ArrayList<Book> allList = new ArrayList();
@@ -321,7 +332,7 @@ public class BookController {
 	}
 	
 	// 독후감 게시판 포워딩 겸 리스트 조회
-	@RequestMapping("bookReport")
+	@GetMapping("bookReport")
 	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
 		model.addAttribute("list", bookService.selectReportList(pi));
@@ -330,7 +341,7 @@ public class BookController {
 	}
 	
 	// 독후감 게시판 검색목록 리스트 조회
-	@RequestMapping("reportSearch.bk")
+	@GetMapping("reportSearch.bk")
 	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, ModelAndView mv, String reportSearchOption, String reportSearchValue, HttpSession session) {
 		
 		HashMap<String, String> map = new HashMap();
@@ -350,14 +361,17 @@ public class BookController {
 	}
 	
 	// 독후감 게시판 작성페이지 포워딩
-	@RequestMapping("reportEnroll.bk")
+	@GetMapping("reportEnroll.bk")
 	public String reportEnroll() {
 		return "book/book/reportEnrollForm";
 	}
 	
 	// 독후감 게시판 작성
-	@RequestMapping("reportEnrollForm.bk")
-	public String reportEnrollForm(BookReport bookReport, HttpSession session) {
+	@PostMapping("reportEnrollForm.bk")
+	public String reportEnrollForm(BookReport bookReport, HttpSession session) throws Exception {
+		
+		checkText(bookReport.getBookReportTitle(), 33);
+		checkText(bookReport.getBookReportContent(), 1333);
 		
 		if(bookService.reportEnrollForm(bookReport) > 0) { // 작성 성공
 			return "redirect:bookReport";
@@ -369,7 +383,7 @@ public class BookController {
 	}
 	 
 	// 독후감 게시판 상세조회
-	@RequestMapping("reportDetail.bk")
+	@GetMapping("reportDetail.bk")
 	public String reportDetail(int rno, Model model, HttpSession session) {
 		
 		if(bookService.countReport(rno) > 0) { // 조회수 증가 성공
@@ -387,7 +401,7 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 수정 포워딩
-	@RequestMapping("reportUpdate.bk")
+	@GetMapping("reportUpdate.bk")
 	public String reportUpdate(int reportNo, Model model) {
 		
 		model.addAttribute("br", bookService.reportDetail(reportNo));
@@ -396,8 +410,11 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 수정
-	@RequestMapping("reportUpdateForm.bk")
-	public String reportUpdateForm(BookReport bookReport, HttpSession session) {
+	@PostMapping("reportUpdateForm.bk")
+	public String reportUpdateForm(BookReport bookReport, HttpSession session) throws Exception {
+		
+		checkText(bookReport.getBookReportTitle(), 33);
+		checkText(bookReport.getBookReportContent(), 1333);
 		
 		if(bookService.reportUpdateForm(bookReport) > 0) { // 수정 성공
 			session.setAttribute("successBookAlert", "게시글 수정 성공");
@@ -409,7 +426,7 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 삭제
-	@RequestMapping("reportDelete.bk")
+	@PostMapping("reportDelete.bk")
 	public String reportDelete(int reportNo, HttpSession session) {
 		
 		if(bookService.reportDelete(reportNo) > 0) { // 삭제 성공
@@ -422,7 +439,7 @@ public class BookController {
 	}
 	
 	// 독후감 게시글 신고
-	@RequestMapping("reportBlack.bk")
+	@PostMapping("reportBlack.bk")
 	public String reportBlack(int reportNo, String userId, int userNo, HttpSession session) {
 		
 		HashMap<String, Object> map = new HashMap();
@@ -440,20 +457,20 @@ public class BookController {
 	}
 	
 	// 도서 마이페이지 포워딩
-	@RequestMapping("bookMyPage")
+	@GetMapping("bookMyPage")
 	public String BookMyPage() {
 		return "book/mypage/bookMyPage";
 	}
 	
 	// 독후감 게시판 마이페이지 포워딩
-	@RequestMapping("reportMyPage")
+	@GetMapping("reportMyPage")
 	public String ReportMyPage() {
 		return "book/mypage/reportMyPage";
 	}
 
 	
 	// 신고게시판 포워딩
-	@RequestMapping("adminReport")
+	@GetMapping("adminReport")
 	public String adminReport() {
 		return "book/admin/adminReport";
 	}

@@ -20,15 +20,16 @@ import com.kh.eco.book.model.vo.ReportBlack;
 import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.vo.PageInfo;
 
+import lombok.RequiredArgsConstructor;
+
 @EnableTransactionManagement
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService{
 	
-	@Autowired
-	private BookDao bookDao;
+	private final BookDao bookDao;
 	
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	private final SqlSessionTemplate sqlSession;
 
 	
 	@Override

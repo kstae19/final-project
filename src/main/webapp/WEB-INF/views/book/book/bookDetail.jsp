@@ -283,9 +283,9 @@
             		<input id="bookReplyContent" readonly type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
             	</c:when>
             	<c:otherwise>
-            		<input id="bookReplyContent" type="text" placeholder="하나의 도서에 하나의 한줄평만 작성할 수 있습니다" name="bookReplyContent" style="height: 50px; width: 90%;" maxlength="100">
+            		<input id="bookReplyContent" type="text" placeholder="하나의 도서에 하나의 한줄평만 작성할 수 있습니다" name="bookReplyContent" style="height: 50px; width: 90%;" maxlength="50">
             		<button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
-	             	<p id="bookReplyKeyup">0/100</p>
+	             	<p id="bookReplyKeyup">0/50</p>
 	             	<script>
 	             		$(function(){
 	             			
@@ -305,7 +305,7 @@
 	             				}
 	             				
 	             				if(length < maxByte){
-		             				$('#bookReplyKeyup').text(length + "/100");
+		             				$('#bookReplyKeyup').text(length + "/50");
 	             				} else{
 	             					alert("바이트 제한을 초과했습니다.");
 	             					$('#bookReplyContent').val('');
