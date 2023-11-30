@@ -276,6 +276,7 @@
 			function insertAchievement(){
 				
 				const formData = new FormData();
+				/** fileUpload 및 저장경로 공부 */
 				formData.append('upfile', $('#upfile')[0].files[0]);
 				formData.append('challengeNo', ${ challenge.challengeNo });
 				formData.append('userNo', ${ sessionScope.loginUser.userNo });
@@ -309,12 +310,7 @@
 </script>
 
 <script>
-		//$('#achievement-toggle-btn').on('click', function(){
-			
-			// 인증박스 보이기
-			//$('#achievement-area').css('visibility', 'visible');	
-			
-			// 인증글 10개씩 보기
+
 			let currentPage = 1;
 
 			$('#selectMore-btn').on('click', function(){
@@ -369,8 +365,15 @@
 		$.ajax({
 			url : 'update.ac',
 			type : 'PUT',
-			data :
-			
+			data : {
+				
+			},
+			success : function(){
+				console.log('수정 성공');
+			},
+			error : function(){
+				console.log('수정 실패');
+			}
 		});//ajax
 		
 

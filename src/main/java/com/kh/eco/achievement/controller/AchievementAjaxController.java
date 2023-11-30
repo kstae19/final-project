@@ -41,14 +41,14 @@ public class AchievementAjaxController {
 
 	@GetMapping(value = "achievement", produces = "application/json; charset=UTF-8")
 	public String selectAchievementList(int challengeNo, @RequestParam(value="currentPage", defaultValue="1")int currentPage) {
-		System.out.println("난 현재페이지" + currentPage);
+		
 		 PageInfo pi = Pagination.getPageInfo(
 				 												achievementService.countAchievementList(challengeNo),
 																 currentPage, 
 																 10, 
 																 1);
 		 ArrayList<Achievement> achieveList = achievementService.selectAchievementList(challengeNo, pi); 
-		 System.out.println(achieveList);
+		 
 		 return new Gson().toJson(achieveList);
 	}
 	
@@ -57,19 +57,18 @@ public class AchievementAjaxController {
 													MultipartFile upfile,
 													HttpSession session
 													) {	
-		System.out.println(achievement);
-		//System.out.println(upfile);
+		
+		
 		if( !upfile.getOriginalFilename().equals("") ) {
-			//System.out.println("upfile은 null이 아니야");
-			// challenge에 업로드한 파일 원본명/새이름 세팅
+			
 			achievement.setOriginName(upfile.getOriginalFilename());
-			achievement.setChangeName(ChallengeController.saveFile(upfile, session));// 업로드한 파일과 해당 세션을 가지고 새이름을 세팅
-			// changeName을 get하면 나오는 값임(이미 업로드한 파일, 세션, 저장경로 등이 들어가있음)
+			achievement.setChangeName(ChallengeController.saveFile(upfile, session));
+			
 		} 
 
 		if(achievementService.insertAchievement(achievement) > 0) {
 			return "success";
-			//System.out.println("등록된 Challenge정보 : " + challengeService.insertChallenge(c));
+			
 		} else {
 			return "fail";
 		}
@@ -78,9 +77,25 @@ public class AchievementAjaxController {
 	
 	@PutMapping("update.ac")
 	public String updateAchievement(Achievement achievement,
-													MultipartFile upfile) {
+													MultipartFile upfile,
+													HttpSession session) {
 		
-		return "";
+		System.out.println(achievement);
+		
+		if( !upfile.getOriginalFilename().equals("") ) {
+			
+			achievement.setOriginName(upfile.getOriginalFilename());
+			achievement.setChangeName(ChallengeController.saveFile(upfile, session));
+		
+		} 
+
+		if(achievementService.updateAchievement(achievement) > 0) {
+			return "success";
+			
+		} else {
+			return "fail";
+		}
+
 	}
 	
 	
@@ -89,7 +104,11 @@ public class AchievementAjaxController {
 		
 		System.out.println(achievementNo);
 		
-		return "";
+		if(achievementService.deleteAchievement(achievementNo) > 0) {
+			return "success";
+		} else {
+			return "fail";
+		}
 	}
 	
 
