@@ -85,22 +85,7 @@ h3{
 	width:30px;
 	text-align:center;
 }
-#shopping-menu{
-	border:1px solid red;
-	width:100%;
-	height : 40px;
-	display:flex;
-}
-#shopping-menu>div{
-	width:150px;
-	height : 100%;
-	font-size:20px;
-	padding:2px;
-	margin:1px 10px 1px 10px;
-}
-a{
-	text-decoration:none;
-}
+
 
 </style>
 
@@ -112,14 +97,7 @@ a{
 <br>
 <div class="outer">
 	<div class="content">
-	<div id="shopping-menu">
-		<div>
-			<a href="shoppingList?userNo=${sessionScope.loginUser.userNo }">주문내역 확인</a>
-		</div>
-		<div>
-			<a href="myshopping?userNo=${sessionScope.loginUser.userNo }">내 쇼핑</a>
-		</div>
-	</div>	
+	<jsp:include page="prodMenu.jsp"/>
 		<div id = "criteria">
 			<span><input type="checkbox"></span>
 			<div style="width:60%;">상품정보</div>

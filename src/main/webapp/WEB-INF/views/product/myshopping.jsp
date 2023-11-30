@@ -13,7 +13,7 @@ div {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	border: 1px solid orange;
+
 }
 
 .outer {
@@ -48,6 +48,7 @@ h2 {
 	width: 180px;
 	height: 160px;
 	margin: 10px;
+	cursor:pointer;
 }
 
 .like-product>div {
@@ -58,7 +59,7 @@ h2 {
 }
 
 .like-product button {
-	background: none;
+	background: beige;
 	border: none;
 	cursor: pointer;
 	font-weight: 600;
@@ -70,6 +71,7 @@ h2 {
 	<jsp:include page="../common/header.jsp" />
 	<div class="outer">
 		<div class="content">
+		<jsp:include page="prodMenu.jsp"/>
 			<c:choose>
 				<c:when test="${empty likeList }">
 					<div id="like-list" style="display:none"></div>
@@ -80,10 +82,10 @@ h2 {
 				<c:forEach items="${likeList }" var="like">
 					<div class="like-product">
 						<img src="${like.mainImg}" 
-						onclick="location.href='product.detail?userNo=${sessionScope.loginUser.userNo}
-						&productNo=${like.productNo}'">
+						onclick="location.href='product.detail?userNo='+${sessionScope.loginUser.userNo}
+						+'&productNo='+${like.productNo}">
 						<div>${like.productName}
-							<button onclick="removeLike(${like.productNo}, this);" >X</button>
+							<button onclick="removeLike(${like.productNo}, this);" > X </button>
 						</div>
 					</div>
 				</c:forEach>
