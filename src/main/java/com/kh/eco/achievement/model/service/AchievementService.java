@@ -12,7 +12,7 @@ public interface AchievementService {
 	// 인증 전체개수 카운트
 	int countAchievementList(int challengeNo);
 	
-	List<Challenge> selectAchievementList(int challengeNo);
+	ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
 	// 인증 전체조회
 	//ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
 	

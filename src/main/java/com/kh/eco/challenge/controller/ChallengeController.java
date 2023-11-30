@@ -142,12 +142,10 @@ public class ChallengeController {
 												MultipartFile upfile,
 												HttpSession session,
 												Model model) {
-		
-		
+
 		  System.out.println(c); 
 		  System.out.println(upfile);
-		 
-		
+
 		if( !upfile.getOriginalFilename().equals("") ) {
 			
 			//System.out.println("upfile은 null이 아니야");

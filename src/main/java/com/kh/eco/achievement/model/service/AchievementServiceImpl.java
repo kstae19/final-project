@@ -33,19 +33,14 @@ public class AchievementServiceImpl implements AchievementService {
 	}
 	
 	@Override
-	public List<Challenge> selectAchievementList(int challengeNo) {
-
-		return achievementDao.selectAchievementList(sqlSession, challengeNo);
-	}
-/*	@Override
 	public ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi) {
-		// offset(상쇄)이용해 rowBounds 만들기
-				int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-				RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-				
-		// 만들어진 rowBounds가지고 selectAchievementList 조회
+
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
 		return achievementDao.selectAchievementList(sqlSession, challengeNo, rowBounds);
-	}*/
+	}
 
 	@Override
 	public int insertAchievement(Achievement a) {

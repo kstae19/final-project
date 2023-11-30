@@ -223,10 +223,7 @@
 		            }
 
        		})
-			
-			
-			
-        	
+
  			   // step2.등록 클릭이벤트
 			    $('button[type=submit]').on('click', function(){
 			    	

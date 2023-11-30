@@ -43,7 +43,8 @@
 		AND
 						CHALLENGE_NO = #{ challengeNo }
 		ORDER
-		BY			UPLOAD_DATE DESC
+		BY			UPLOAD_DATE DESC,
+						CHALLENGE_NO DESC
 	</select>
 	
 	<!--  인증댓글 등록 A -->

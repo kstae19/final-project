@@ -251,10 +251,9 @@
     	
     	<c:if test="${ sessionScope.loginUser != null }">
     		<article id="achievement-enroll" >
-    			<textarea style="resize:none; width:100%; height:10%;">
-    			
-    			</textarea>
-    			<button><input type="file">첨부파일</button>
+    			<input id="achievementTitle" type="text" name="achievementTitle"/>
+    			<textarea id="achievementContent" style="resize:none; width:100%; height:10%;"></textarea>
+    			<input id="upfile" type="file" name="upfile" />첨부파일
     			<button onclick="insertAchievement();">인증</button>
     			<button onclick="selectMine();">내 인증글만 보기</button>
     		</article>
@@ -262,108 +261,139 @@
     		
     		<article id="achievement-list">
     			
-    			<div class="achievement-item">
+    			
     				<div id="achievement-content">
-    				
     				</div>
-    				<button onclick="reply();">답글달기</button>
-    			</div>
+    		
     			
     		</article>
-	  
-				<button id="selectNext-btn" onclick="selectMore();">더보기</button>
 
+			<button id="selectMore-btn">더보기</button>
     	</section>
 
-	<script>
-		
-	selectMore();
-			//$('#achievement-toggle-btn').on('click', function(){
+</div><!-- wrapper -->
+<script>
+			function insertAchievement(){
 				
-				// 인증박스 보이기
-				//$('#achievement-area').css('visibility', 'visible');	
-				
-				// 인증글 10개씩 보기
-				
-				/* $.ajax({
+				const formData = new FormData();
+				formData.append('upfile', $('#upfile')[0].files[0]);
+				formData.append('challengeNo', ${ challenge.challengeNo });
+				formData.append('userNo', ${ sessionScope.loginUser.userNo });
+				formData.append('achievementTitle', $('#achievementTitle').val());
+				formData.append('achievementContent', $('#achievementContent').val());
+
+				$.ajax({
+					url : 'insert.ac',
+					type : 'POST',
+					processData: false,
+				    contentType: false,
+				    enctype: 'multipart/form-data',
+				    data: formData,
+					success : function(data){
+						
+						console.log("난 결과 : " + data);
+						if(data == 'success'){
+							currentPage = 1;
+							selectMore(currentPage);
+							$('input').val('');
+							$('textarea').val('');
+						}else{
+							alert('인증 실패ㅠㅠ');
+						}
+					},
+					error : function(){
+						console.log('작성 실패!');
+					}
+				})
+			};//insertA 
+</script>
+
+<script>
+		//$('#achievement-toggle-btn').on('click', function(){
+			
+			// 인증박스 보이기
+			//$('#achievement-area').css('visibility', 'visible');	
+			
+			// 인증글 10개씩 보기
+			let currentPage = 1;
+
+			$('#selectMore-btn').on('click', function(){
+				selectMore(currentPage);
+				currentPage++;
+			});
+			
+			function selectMore(currentPage){
+
+				 $.ajax({
 						url : 'achievement',
 						data : { 
-							challengeNo : ${ challenge.challengeNo }
+							challengeNo : ${ challenge.challengeNo },
+							currentPage : currentPage
 						},
 						success : function(result){
 							console.log(result);
-							
 							let resultStr = '';
 							for(let i in result){
 								resultStr +=
-												'<div>'+ result[i].achievementTitle + '</div>'
+												'<img src="' + result[i].changeName + '"/>'
+												+'<span><b>'+ result[i].achievementTitle + '</span>'
+												+'<span>'+ result[i].userNo + '</span>'
 												+'<div>'+ result[i].achievementContent + '</div>'
-												+'<div>'+ result[i].userNo + '</div>';
+												+'<p>' + result[i].achievementNo + '</p>';
+							/**왜 안되지?ㅠㅠㅠㅠㅠㅠ */
+							if(result[i].userNo = ${loginUser.userNo}){		
+								resultStr += '<div><button>수정하기</button>'
+											 	+'<button>삭제하기</button></div>';
+							};
 						
-							}
-							$('#achievement-content').html(resultStr);
-						},
-						error : function(){
-							console.log('인증글 보기 실패');
-						}
-				}); */
-				
-			function selectMore(){
-
-			 var startNum = $('#achievement-content').length;
-			 console.log(startNum);
-			 var addListHtml = '';
-			 
-					$.ajax({
-						url : 'achievement',
-						type : 'post',
-						dataType : 'json',
-						data : { 
-							challengeNo : ${ challenge.challengeNo },
-							startNum : startNum
-						},
-						success : function(result){
-							console.log(result);
-							
-							if(result.length < 10){
-								$('#selectNext-btn').remove();
+							};//for
+						
+							/** 현재 페이지에 따라 더하거나 보여주기 */
+							if(currentPage != 1){ 
+								$('#achievement-content').append(resultStr);
 							} else{
-								var addListHtml = '';
-								if(result.length > 0){
-									
-									for(var i=0; i<result.length; i++){
-										var idx = Number(startNum) + Number(i) + 1;
-										
-										addListHtml += '<div>';
-										addListHtml += '<div>' + idx + '</div>';
-										addListHtml += '<div>'+ result[i].achievementTitle + '</div>'
-										addListHtml += '<div>'+ result[i].achievementContent + '</div>'
-										addListHtml += '<div>'+ result[i].userNo + '</div>'
-										addListHtml += '</div>';
-									}
-									
-								}//if
-							}//else
-
-							$('#achievement-content').append(addListHtml);
-
+								$('#achievement-content').html(resultStr);
+							};
+							
 						},
 						error : function(){
 							console.log('인증글 보기 실패');
 						}
-				});
+				}); //ajax
+			};//selectMore
+</script>
+
+<script>
+	$('#achievement-content button).on('click', function(){
+		console.log('수정하기 클릭');
+		$.ajax({
+			url : 'update.ac',
+			type : 'PUT',
+			data :
+			
+		});//ajax
+		
+
+	});
 	
-		};
-				
-				
-			//});
-			
+	$('#achievement-content button.eq[1]').on('click', function(){
+		console.log('삭제하기 클릭');
+		$.ajax({
+			url : 'delete.ac',
+			type : 'DELETE',
+			data : { achievementNo : achievementNo},
+			success : function(){
+				console.log('삭제 성공');
+			},
+			error : function(){
+				console.log('삭제 실패');
+			}
+		});//ajax
 		
-			
-			
-			
-		
-	</script>
+
+	});
+
+</script>
     	
     <!-- content -->
     <style>
@@ -396,14 +426,25 @@
 	    justify-content:center; 
 	    border : 1px solid black;
 	}
-	.achievement-item{
+	#achievement-content{
 	    align-items:center;
 	    justify-content:center; 
 
 	}
+	#achievement-content img{
+		float : left;
+		width : 100%;
+		height : 200px;
+	}
+	#achievement-content div{
+		width : 100%;
+	}
+	#achievement-content p{
+		display : none;
+	}
 	</style>
     
-    </div>
+    
 
     </body>
     </html>

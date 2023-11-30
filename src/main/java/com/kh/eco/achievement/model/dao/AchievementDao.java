@@ -29,8 +29,8 @@ public class AchievementDao {
 	 * challengeNo, rowBounds); }
 	 */
 	
-	public List<Challenge> selectAchievementList(SqlSessionTemplate sqlSession, int challengeNo) {
-		return (List)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo);
+	public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate sqlSession, int challengeNo, RowBounds rowBounds) {
+		return (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo, rowBounds);
 	}
 
 	public int insertAchievement(SqlSessionTemplate sqlSession, Achievement a) {
