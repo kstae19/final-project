@@ -196,8 +196,6 @@ public class BookController {
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
 		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
-		// bookList가 아니라 isbn키값을 가지는 hashmap을 만들어서 그걸 db단에서 조회시키면서 새로운 vo를 만들어 키값을 덮어씌...테이블구조를 바꿔야할까
-		// 마이바티스 갱신?
 		ArrayList<Book> countList = bookService.countList();
 		
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
@@ -285,7 +283,7 @@ public class BookController {
 	}
 	
 	
-	// 상세페이지 메소드(api 조회하지 않게 바꿨지만..)
+	// 상세페이지 메소드
 	@RequestMapping("bookDetail.bk")
 	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
 		

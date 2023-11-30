@@ -33,7 +33,6 @@
 		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
 		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
 		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
-		<result column="ECO_HISTORY_NO" property="ecoNo" />
 	</resultMap>
 	
 	<!-- 독후감 게시글 댓글 -->
@@ -309,15 +308,7 @@
 	
 	<!-- 독후감 게시판 작성 -->
 	<insert id="reportEnrollForm" parameterType="bookReport">
-		INSERT ALL
-		INTO TB_ECO_HISTORY
-		VALUES (
-			#{userNo},
-			10,
-			SYSDATE,
-			'B',
-			SEQ_ECO_HISTORY.NEXTVAL
-			)
+		INSERT 
 		INTO 
 			TB_BOOK_REPORT
 					(
@@ -327,8 +318,7 @@
 					BOOK_REPORT_CONTENT,
 					USER_NO,
 					BOOK_REPORT_SECRET,
-					BOOK_REPORT_STAR,
-					ECO_HISTORY_NO
+					BOOK_REPORT_STAR
 					)
 		VALUES 
 			(
@@ -338,10 +328,8 @@
 			#{bookReportContent},
 			#{userNo},
 			#{bookReportSecret},
-			#{bookReportStar},
-			SEQ_ECO_HISTORY.CURRVAL
+			#{bookReportStar}
 			)
-		SELECT * FROM DUAL
 	</insert>
 	
 	<!-- 독후감 게시판 조회수 증가 -->
@@ -644,20 +632,16 @@
 	</select>
 	
 	<!-- 관리자 페이지 신고게시글 삭제 -->
-	<update id="deleteReportBlack" parameterType="list">
-		<foreach collection="array" item="item" separator=";" open="DECLARE BEGIN" close="; END;">
-			UPDATE TB_BOOK_REPORT
-			SET BOOK_REPORT_STATUS = 'N'
-			WHERE BOOK_REPORT_NO = #{item}
-		</foreach>
+	<update id="deleteReportBlack" parameterType="_int">
+		UPDATE TB_BOOK_REPORT
+		SET BOOK_REPORT_STATUS = 'N'
+		WHERE BOOK_REPORT_NO = #{reportBlackNo}
 	</update>
 	
 	<!-- 관리자 페이지 신고댓글 삭제 -->
-	<delete id="deleteReplyBlack" parameterType="list">
-		<foreach collection="array" item="item" separator=";" open="DECLARE BEGIN" close="; END;">
-			DELETE FROM TB_BOOK_REPORT_REPLY
-			WHERE BOOK_REPORT_REPLY_NO = #{item}
-		</foreach>
+	<delete id="deleteReplyBlack" parameterType="_int">
+		DELETE FROM TB_BOOK_REPORT_REPLY
+		WHERE BOOK_REPORT_REPLY_NO = #{replyBlackNo}
 	</delete>
 	
 	

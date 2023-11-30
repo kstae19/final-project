@@ -45,6 +45,7 @@
 					let reportBlackPi = result.pi;
 					if(isEmpty(reportBlack)){
 						$('#reportBlack').html("신고된 게시글이 없습니다.");
+						$('#reportBlackPi').html('');
 					} else {
 	    				let reportBlackValue = '';
 	    				for(let i in reportBlack){
@@ -63,11 +64,10 @@
 	    				}
 	    				$('#reportBlack').html(reportBlackValue);
 	    				
-	    				
 	    				let reportBlackPiValue = '';
 	    				let previous = reportBlackPi.currentPage - 1;
 	    				let next = reportBlackPi.currentPage + 1;
-	    				if(reportBlackPi.currentPage == 1){
+	    				if(reportBlackPi.currentPage != 1){
 	    					reportBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
 	    					reportBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
@@ -106,6 +106,7 @@
 					let replyBlackPi = result.pi;
 					if(isEmpty(replyBlack)){
 						$('#replyBlack').html("신고된 댓글이 없습니다.");
+						$('#replyBlackPi').html('');
 					} else {
 	    				let replyBlackValue = '';
 	    				for(let i in replyBlack){
@@ -123,7 +124,7 @@
 	    				let replyBlackPiValue = '';
 	    				let previous = replyBlackPi.currentPage - 1;
 	    				let next = replyBlackPi.currentPage + 1;
-	    				if(replyBlackPi.currentPage == 1){
+	    				if(replyBlackPi.currentPage != 1){
 	    					replyBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
 	    					replyBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
@@ -274,9 +275,7 @@
             </tbody>
           </table>
           <ul class="pagination justify-content-center" id="replyBlackPi">
-            <!-- <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+            
           </ul>
     </div>
     <script>
@@ -321,7 +320,6 @@
     		}
     	})
     </script>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 </body>
 </html>

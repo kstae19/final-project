@@ -177,12 +177,12 @@ public class BookDao {
 		return (ArrayList)sqlSession.selectList("bookMapper.adminReportReplyBlack", null, rowBounds);
 	}
 
-	public int deleteReportBlack(SqlSessionTemplate sqlSession, int[] array) {
-		return sqlSession.update("bookMapper.deleteReportBlack", array);
+	public int deleteReportBlack(SqlSessionTemplate sqlSession, int reportBlackNo) {
+		return sqlSession.update("bookMapper.deleteReportBlack", reportBlackNo);
 	}
 
-	public int deleteReplyBlack(SqlSessionTemplate sqlSession, int[] array) {
-		return sqlSession.delete("bookMapper.deleteReplyBlack", array);
+	public int deleteReplyBlack(SqlSessionTemplate sqlSession, int replyBlackNo) {
+		return sqlSession.delete("bookMapper.deleteReplyBlack", replyBlackNo);
 	}
 	
 	

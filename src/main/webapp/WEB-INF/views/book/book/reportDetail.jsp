@@ -50,6 +50,7 @@
 				$('#reportReply-count').html(result.replyCount);
 				if(result.replyCount == 0){
 					$('#reportReply-area').html("댓글이 없습니다.");
+					$('#reportReply-pagination').html('');
 				} else {
 					let replyArr = result.replyList;
     				let replyValue = '';
@@ -240,16 +241,102 @@
          	</c:forEach>
 			${ br.bookReportTitle }
 		</h3>
-		<!-- 폼태그 post로 바꿔야할듯... -->
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
-	        <button type="button" class="btn btn-dark" onclick="location.href='reportBlack.bk?reportNo=${br.bookReportNo}&userId=${ br.userId }&userNo=${ loginUser.userNo }'">신고하기</button>
+	        <button type="button" class="btn btn-dark" onclick="reportBlackPost(${br.bookReportNo}, '${ br.userId }', '${loginUser.userId}', ${ loginUser.userNo });">신고하기</button>
 	        <c:if test="${ loginUser.userId eq br.userId }">
-		        <button type="button" class="btn btn-danger" onclick="location.href='reportDelete.bk?reportNo=${br.bookReportNo}'">삭제</button>
-		        <button type="button" class="btn btn-secondary" onclick="location.href='reportUpdate.bk?reportNo=${br.bookReportNo}'">수정</button>
+		        <button type="button" class="btn btn-danger" onclick="reportDeletePost(${br.bookReportNo});">삭제</button>
+		        <button type="button" class="btn btn-secondary" onclick="reportUpdatePost(${br.bookReportNo});">수정</button>
 	        </c:if>
         </c:if>
+        <script>
+        	function reportBlackPost(reportNo, userId, loginUserId, userNo){ // 신고버튼
+        		
+        		if(userId === loginUserId){
+        			alert("자신이 작성한 글은 신고할 수 없습니다.");
+        		} else{
+        			// form태그 생성
+            		let form = document.createElement('form');
+            		
+            		// input[type=hidden]태그 생성 후 값 담음
+            		let rNoInput = document.createElement('input');
+            		rNoInput.setAttribute('type', 'hidden');
+            		rNoInput.setAttribute('name', 'reportNo');
+            		rNoInput.setAttribute('value', reportNo);
+            		let idInput = document.createElement('input');
+            		idInput.setAttribute('type', 'hidden');
+            		idInput.setAttribute('name', 'userId');
+            		idInput.setAttribute('value', userId);
+            		let uNoInput = document.createElement('input');
+            		uNoInput.setAttribute('type', 'hidden');
+            		uNoInput.setAttribute('name', 'userNo');
+            		uNoInput.setAttribute('value', userNo);
+            		
+            		// form태그의 자식요소로 추가
+            		form.appendChild(rNoInput);
+            		form.appendChild(idInput);
+            		form.appendChild(uNoInput);
+            		
+            		// form태그의 속성 추가
+            		form.setAttribute('method', 'post');
+            		form.setAttribute('action', 'reportBlack.bk');
+            		
+            		// body 안에 form태그 추가
+            		document.body.appendChild(form);
+            		
+            		// 실행
+            		form.submit();
+        		}
+        	}
+        	function reportDeletePost(reportNo){ // 삭제
+        		// form태그 생성
+        		let form = document.createElement('form');
+        		
+        		// input[type=hidden]태그 생성 후 값 담음
+        		let rNoInput = document.createElement('input');
+        		rNoInput.setAttribute('type', 'hidden');
+        		rNoInput.setAttribute('name', 'reportNo');
+        		rNoInput.setAttribute('value', reportNo);
+        		
+        		// form태그의 자식요소로 추가
+        		form.appendChild(rNoInput);
+        		
+        		// form태그의 속성 추가
+        		form.setAttribute('method', 'post');
+        		form.setAttribute('action', 'reportDelete.bk');
+        		
+        		// body 안에 form태그 추가
+        		document.body.appendChild(form);
+        		
+        		// 실행
+        		form.submit();
+        	}
+        			
+        	function reportUpdatePost(reportNo){ // 수정
+       			// form태그 생성
+           		let form = document.createElement('form');
+           		
+           		// input[type=hidden]태그 생성 후 값 담음
+           		let rNoInput = document.createElement('input');
+           		rNoInput.setAttribute('type', 'hidden');
+           		rNoInput.setAttribute('name', 'reportNo');
+           		rNoInput.setAttribute('value', reportNo);
+           		
+           		// form태그의 자식요소로 추가
+           		form.appendChild(rNoInput);
+           		
+           		// form태그의 속성 추가
+           		form.setAttribute('method', 'post');
+           		form.setAttribute('action', 'reportUpdate.bk');
+           		
+           		// body 안에 form태그 추가
+           		document.body.appendChild(form);
+           		
+           		// 실행
+           		form.submit();
+        	}
+        </script>
         <hr>
         <p>
         	${ br.bookReportContent }
@@ -283,12 +370,6 @@
 					insertReportReply();
 				}       				
 			})
-			
-			
-			
-			
-			
-			
 	     </script>
 
 
