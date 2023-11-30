@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.dao.ProductDao;
+import com.kh.eco.product.model.vo.Address;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Brand;
 import com.kh.eco.product.model.vo.Cart;
@@ -337,6 +338,11 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ArrayList<String> getKeywords(String keyword) {
 		return dao.getKeywords(sqlSession, keyword);
+	}
+
+	@Override
+	public ArrayList<Address> getAddressList(int userNo) {
+		return dao.getAddressList(sqlSession, userNo);
 	}
 
 

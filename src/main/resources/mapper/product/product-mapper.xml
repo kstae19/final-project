@@ -466,4 +466,16 @@ SELECT
             ORDER BY COUNT DESC)
     WHERE ROWNUM BETWEEN 1 AND 3
 </select>
+
+<select id="getAddressList" parameterType="_int" resultType="address">
+	SELECT 
+			ADDRESS_NO addressNo 
+			, POST  
+			, ADDRESS  
+			, DETAIL_ADDRESS detailAddress 
+			, RECEIVER 
+			, PHONE 
+		FROM TB_ADDRESS 
+		WEHRE USER_NO=#{userNo}
+</select>
 </mapper>

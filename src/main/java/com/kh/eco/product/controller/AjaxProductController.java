@@ -83,4 +83,8 @@ public class AjaxProductController {
 	public String getKeywords(String keyword) {
 		return new Gson().toJson(productService.getKeywords(keyword));
 	}
+	@GetMapping(value = "addressList", produces="application/json; charset=UTF-8")
+	public String getAddressList(int userNo) {
+		return new Gson().toJson(productService.getAddressList(userNo));
+	}
 }
