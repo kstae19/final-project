@@ -10,4 +10,6 @@ public class ProductLike {
 	private int productNo;
 	private int userNo;
 	private String addDate;
+	private String mainImg;
+	private String productName;
 }

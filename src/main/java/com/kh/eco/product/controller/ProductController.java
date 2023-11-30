@@ -166,6 +166,11 @@ public class ProductController {
 		model.addAttribute("orders", orders);
 		return "product/shoppingList";
 	}
+	@GetMapping("myshopping")
+	public String myPage(int userNo, Model model) {
+		model.addAttribute("likeList", productService.getLikes(userNo));
+		return "product/myshopping";
+	}
 	@GetMapping("paySuccess")
 	public String getSuccessPage(String pg_token, Model model, HttpSession session) throws IOException, ParseException {
 		//db에서 방금 추가된 정보들 가져오기

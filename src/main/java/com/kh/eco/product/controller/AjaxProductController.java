@@ -33,6 +33,10 @@ public class AjaxProductController {
 	public String checkLike(ProductLike like) {
 		return productService.checkLike(like);
 	}
+	@GetMapping(value = "delete.like", produces="text/html; charset=UTF-8")
+	public String disLike(ProductLike like) {
+		return productService.removeLike(like)>0? "removed" : "remove failed";
+	}
 	public int removeLike(ProductLike like) {
 		return productService.removeLike(like);
 	}	

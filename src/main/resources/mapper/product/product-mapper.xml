@@ -206,9 +206,12 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 <select id="getLikes" parameterType="_int" resultType="productLike">
 	SELECT 
 		PRODUCT_NO productNo, 
-		USER_NO userNo 
+		USER_NO userNo, 
+        MAIN_IMG mainImg,
+        PRODUCT_NM productName 
 	FROM 
 		TB_PRODUCT_LIKE 
+    JOIN TB_PRODUCT USING(PRODUCT_NO) 
 	WHERE 
 		USER_NO = #{userNo}
 </select>

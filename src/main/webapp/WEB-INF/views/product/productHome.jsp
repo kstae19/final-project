@@ -347,12 +347,10 @@ ul{
 								userNo : '${sessionScope.loginUser.userNo}'
 							},
 							success : e => {
-								if(e == 'added'){
-									$(th).attr('src', 'resources/images/heart-solid.svg');
-								}
-								else if(e == 'removed'){
-									$(th).attr('src', 'resources/images/heart-regular.svg');
-								};
+								let value = '';
+								value = e=='added'? 'resources/images/heart-solid.svg' : 
+										(e=='removed'? 'resources/images/heart-regular.svg': '');
+								if(value != '') $(th).attr('src', value);
 							},
 							error : e => {
 								console.log('세상은 요지경~~');
