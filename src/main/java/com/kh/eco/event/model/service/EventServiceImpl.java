@@ -9,13 +9,15 @@ import org.springframework.stereotype.Service;
 import com.kh.eco.event.model.dao.EventDao;
 import com.kh.eco.event.model.vo.Event;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class EventServiceImpl implements EventService{
 
-	@Autowired
-	private EventDao eventDao;
 	
-	@Autowired
+	private final EventDao eventDao;
+	
 	private SqlSessionTemplate sqlSession;
 
 	@Override

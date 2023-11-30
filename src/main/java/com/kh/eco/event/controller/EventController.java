@@ -26,8 +26,10 @@ import com.kh.eco.challenge.controller.ChallengeController;
 import com.kh.eco.event.model.service.EventService;
 import com.kh.eco.event.model.vo.Event;
 
-   
+import lombok.RequiredArgsConstructor;
 
+   
+@RequiredArgsConstructor
 @Controller 
 public class EventController {
 
@@ -38,8 +40,8 @@ public class EventController {
 	 * 
 	 */
 	
-	@Autowired
-	private EventService eventService;
+	
+	private final EventService eventService;
 	
 	
 

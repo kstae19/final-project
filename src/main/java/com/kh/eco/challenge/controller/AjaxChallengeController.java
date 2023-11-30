@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.eco.challenge.model.service.ChallengeService;
+import com.kh.eco.event.model.service.EventService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController 
 public class AjaxChallengeController {
 
-	@Autowired
-	private ChallengeService challengeService;
+	
+	private final ChallengeService challengeService;
 	
 	
 	// Model을 쓸거면 ajax를 쓰면 안돼 Java랑 JS섞어쓰지마

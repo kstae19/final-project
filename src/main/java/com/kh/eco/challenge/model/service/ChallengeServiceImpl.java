@@ -14,16 +14,17 @@ import com.kh.eco.challenge.model.dao.ChallengeDao;
 import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.vo.PageInfo;
 
+import lombok.RequiredArgsConstructor;
 
 
+@RequiredArgsConstructor
 @Service
 public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 implements
 
-	@Autowired
-	private ChallengeDao challengeDao;
 	
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	private final ChallengeDao challengeDao;
+	
+	private final SqlSessionTemplate sqlSession;
 	
 	
 	// 게시글 전체조회
