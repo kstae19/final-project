@@ -137,6 +137,7 @@ public class ProductController {
 								, Model model
 								, HttpSession session) throws IOException, ParseException {
 		session.setAttribute("order", order);
+		System.out.println((Order)session.getAttribute("order"));
 		model.addAttribute("pcUrl", productService.getPcUrl(pay));
 		return "product/payReady";
 	}

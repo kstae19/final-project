@@ -7,9 +7,10 @@
 <meta charset="UTF-8">
 <title>상품 주문</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style>
 /*--공통 스타일 --*/
 div {
@@ -126,17 +127,14 @@ h2 {
 				</div>
 				<div class="shipping-info">
 					<h2>배송 정보</h2>
-					<input type="hidden" value="1" name="addressNo">
-					<button type="button" class="btn btn-primary" data-toggle="modal" 
-					data-target="#addresList" onclick="addresslist();">배송지 선택</button><br>
-					<input type="text" readonly value="수령인"> <br> <input
-						type="text" readonly value="연락처"> <br> <input
-						type="text" readonly value="우편번호"> <br> <input
-						type="text" readonly value="주소"> <br> <input
-						type="text" readonly value="상세주소"> <br><br><br>
+					<input type="hidden" name="addressNo">
+					<a href="#addressList" data-toggle="modal">배송지 선택</a>
+					<div>
+					<br/>
+					</div>
 				</div>
 				<div class="order-summary">
-					<h3>주문 요약</h3>
+					<h2>주문 요약</h2>
 					<div>
 						<c:choose>
 						<c:when test="${numOfItem ne 1 }">
@@ -191,48 +189,90 @@ h2 {
 						}
 					})
 				};
-				function addresslist(){
+				$(()=>{
+
 					$.ajax({
 						url : 'addressList',
-						data : {userNo : '${sessionScope.loginUser.userNo}'},
 						success : e=>{
-							console.log(e);
+							e.map(a=>{
+								$el = $('<div class="address"><table class="table table-borderless"></table></div>').attr('id', a.addressNo);
+								let $ptr = $('<tr></tr>');
+								let $atr = $('<tr></tr>');
+								let $dtr = $('<tr></tr>');
+								$ptr.append($('<td></td>').text('수령인')
+										, $('<td colspan="2"></td>').text(a.receiver + '(연락처 : '+a.phone+')'));
+								
+								$atr.append($('<td></td>').text('주소')
+										, $('<td colspan="2"></td>').text(a.address+' (' + a.post + ' )'));
+								$dtr.append($('<td></td>').text('상세주소')
+										, $('<td colspan="2"></td>').text(a.detailAddress));								
+								$el.append($ptr, $atr, $dtr);
+								$('#addressList .modal-body').append($el);
+							})
 						},
 						error : () =>{
 							console.log('ajax하기시러..배송지이이이이!');
 						}
-					})
-				}
-			</script>
+					});
+				});
+				jQuery(document).ready(()=>{
+					$('#addressList .modal-body').on('click','.address', e=>{
+						let $address = $(e.target).parents('.address');
+						let $adrInfo = $address.clone(false);
+						$('.shipping-info>div').html($adrInfo);
+						$('input[name = "addressNo"]').val($address.attr('id'));
+						$('.address').css('background', 'none');
+						$address.css('background', 'beige')
+					});
+				});
+			</script>			
+
+      		</div>
 		</div>
 	</div>
 <!-- The Modal -->
   <div class="modal fade" id="addressList">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
       
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">배송지 선택</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
+        </div>       
         <!-- Modal body -->
         <div class="modal-body">
-          <ul>
-          	<li>
-          		<div class="address">
-          		
-          		</div>
-          	</li>
-          </ul>
+        	<a href="#addForm" data-toggle="modal">배송지 추가</a>
+
         </div>        
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
         </div>
         
       </div>
     </div>	
+    </div>	
+    <div class="modal fade" id="addForm">
+	    <div class="modal-dialog modal-dialog-centered">
+	      <div class="modal-content">
+	      
+	        <!-- Modal Header -->
+	        <div class="modal-header">
+	          <h4 class="modal-title">신규 배송지 추가</h4>
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        </div>       
+	        <!-- Modal body -->
+	        <div class="modal-body">
+	        	<form action="newAddress" type="post">
+	        		
+	        	</form>	
+	        </div>        
+	        <!-- Modal footer -->
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+	        </div>
+	        
+	</div>
 </body>
 </html>
