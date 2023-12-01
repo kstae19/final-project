@@ -345,5 +345,20 @@ public class ProductServiceImpl implements ProductService {
 		return dao.getAddressList(sqlSession, userNo);
 	}
 
+	@Override
+	public ProductReview getLastReview(int userNo) {
+		return dao.getLastReview(sqlSession, userNo);
+	}
+
+	@Override
+	public int deleteReview(int reviewNo) {
+		return dao.deleteReview(sqlSession, reviewNo);
+	}
+
+	@Override
+	public ArrayList<Order> getOrderList(int userNo) {
+		return dao.getOrderList(sqlSession, userNo);
+	}
+
 
 }

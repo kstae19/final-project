@@ -9,8 +9,9 @@ import lombok.ToString;
 public class ProductReview {
 	private int reviewNo;
 	private int optionNo;
-	private String option;
 	private int orderNo;
+	private int userNo;
+	private String option;
 	private String reviewTitle;
 	private String reviewContent;
 	private double starRate;

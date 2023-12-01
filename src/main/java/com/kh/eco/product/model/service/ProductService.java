@@ -59,6 +59,9 @@ public interface ProductService {
 	int updateKeywordCount(String keyword);
 	ArrayList<String> getKeywords(String keyword);
 	ArrayList<Address> getAddressList(int userNo);
+	ProductReview getLastReview(int userNo);
+	int deleteReview(int reviewNo);
+	ArrayList<Order> getOrderList(int userNo);
 
 
 }

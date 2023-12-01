@@ -10,7 +10,6 @@ import java.util.HashMap;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +30,7 @@ import com.kh.eco.product.model.vo.OrderCart;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.product.model.vo.ProductOption;
 import com.kh.eco.product.model.vo.ProductReview;
+import com.kh.eco.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +49,8 @@ public class ProductController {
 								@RequestParam(value="category", defaultValue="all") 
 								String category,
 								String keyword, 
-								Model model) {
+								Model model,
+								HttpSession session) {
 		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
 		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), currentPage, 6, 5);
 		model.addAttribute("pi", pi);				
@@ -65,10 +66,12 @@ public class ProductController {
 			}else {
 				productService.saveKeyword(keyword);								
 			}
-		}
-		
+		}		
 		model.addAttribute("map", map);
 		model.addAttribute("productList", productService.selectProductList(map, pi));
+		
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser != null) System.out.println("로그인 유저 : "+loginUser.getUserNo());
 		
 		return "product/productHome";
 	}
@@ -149,7 +152,7 @@ public class ProductController {
 	public String getShoppingList(@RequestParam(value="cPage", defaultValue="1") 
 								int currentPage, 
 								@RequestParam(value="userNo", defaultValue="0") 
-								int userNo,
+								Integer userNo,
 								Model model) {
 		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), currentPage, 4, 5);
 		model.addAttribute("pi", pi);	
@@ -168,7 +171,11 @@ public class ProductController {
 	}
 	@GetMapping("myshopping")
 	public String myPage(int userNo, Model model) {
+		HashMap map = new HashMap();
 		model.addAttribute("likeList", productService.getLikes(userNo));
+		model.addAttribute("review", productService.getLastReview(userNo));
+		model.addAttribute("orderList", productService.getOrderList(userNo));
+		System.out.println(model.getAttribute("review"));
 		return "product/myshopping";
 	}
 	@GetMapping("paySuccess")
@@ -218,6 +225,16 @@ public class ProductController {
 		}
 
 		return "resources/uploadFiles/"+changeName;
+	}
+	@GetMapping("delete.review")
+	public String deleteReview(int reviewNo, HttpSession session) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		if(loginUser != null) {
+			productService.deleteReview(reviewNo);
+			return "redirect:/myshopping?userNo="+loginUser.getUserNo();
+		}else {
+			return "redirect:/";
+		}
 	}
 	
 	

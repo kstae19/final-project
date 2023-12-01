@@ -44,13 +44,31 @@
 	<result property="addressNo" column="ADDRESS_NO"/>
 	<collection property="orderDetail" ofType="cart" resultMap="cartMap"/>
 </resultMap>
+
+<resultMap id="reviewMap" type="productReview">
+	<result property="reviewNo" column="REVIEW_NO"/>
+	<result property="option" column="OPTION_NM"/>
+	<result property="orderNo" column="ORDER_NO"/>
+	<result property="reviewTitle" column="REVIEW_TITLE"/>
+	<result property="reviewContent" column="REVIEW_CONTENT"/>
+	<result property="starRate" column="STAR_RATE"/>
+	<result property="changeName" column="CHANGE_NAME"/>
+</resultMap>
+
+
+<!-- 수 관련 -->
 <select id = "selectProductCount" resultType="_int">
 	SELECT COUNT(*) FROM TB_PRODUCT WHERE STATUS = 'Y'
 </select>
 <select id = "selectCategoryCount" resultType="_int" parameterType="string">
 	SELECT COUNT(*) FROM TB_PRODUCT WHERE STATUS = 'Y' AND CATEGORY= #{category}
 </select>
+<update id="updateProductCount" parameterType="_int">
+	UPDATE TB_PRODUCT SET COUNT=COUNT+1 WHERE PRODUCT_NO = #{productNo}
+</update>
 
+
+<!-- 상품 관련 -->
 <select id="selectProductList" resultMap="resultProductMap" parameterType="hashmap">
 SELECT 
 		PRODUCT_NO, 
@@ -107,10 +125,6 @@ SELECT
     AND PRODUCT_NM LIKE '%#{keyword}%' OR OPTION_NM LIKE '%keyword%'
 </select>
 
-<insert id="addLike" parameterType="productLike">
-INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
-</insert>
-
 <select id = "selectProduct" parameterType = "_int"  resultMap="resultProductMap">
 	SELECT 
 			PRODUCT_NO, 
@@ -135,7 +149,12 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 </select>
 
 <select id="getPrice" parameterType="_int" resultType="string">
-	select TO_CHAR(price, '999,999') from tb_product_option where OPTION_NO = #{optionNo}
+	select 
+			TO_CHAR(price, '999,999') 
+		from 
+			tb_product_option 
+		where 
+			OPTION_NO = #{optionNo}
 </select>
 <select id="getImages" parameterType="_int" resultType="string">
 	SELECT 
@@ -146,11 +165,6 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 			PRODUCT_NO = #{productNo} 
 		AND STATUS= 'Y'
 </select>
-
-<update id="updateProductCount" parameterType="_int">
-	UPDATE TB_PRODUCT SET COUNT=COUNT+1 WHERE PRODUCT_NO = #{productNo}
-</update>
-
 <select id="getBrand" parameterType="_int" resultType="brand">
 	SELECT 
 		BRAND_NO brandNo, 
@@ -176,33 +190,27 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 	FROM 
 	    TB_PRODUCT_REVIEW 
 	WHERE 
+		STATUS='Y' 
+	AND 
 	    OPTION_NO IN (
 	                    SELECT OPTION_NO 
 	                    FROM TB_PRODUCT_OPTION 
 	                    WHERE PRODUCT_NO = #{productNo}
 	                    )
 </select>
-
-<select id="reviewList" parameterType="_int" resultType="productReview">
-	SELECT 
-	    	REVIEW_NO reviewNo, 
-	    	OPTION_NM "option", 
-	    	REVIEW_TITLE reviewTitle, 
-	    	REVIEW_CONTENT reviewContent, 
-	    	STAR_RATE starRate,
-	    	CHANGE_NAME changeName 
-	FROM 
-		TB_PRODUCT_REVIEW R 
-	JOIN 
-		TB_PRODUCT_OPTION USING(OPTION_NO) 
-	WHERE 
-		R.STATUS='Y' 
-	AND OPTION_NO IN (
-	                SELECT OPTION_NO 
-	                FROM TB_PRODUCT_OPTION 
-	                WHERE PRODUCT_NO = #{productNo}
-	                )
-</select>
+<!-- 좋아요 -->
+<insert id="addLike" parameterType="productLike">
+INSERT 
+	INTO 
+		TB_PRODUCT_LIKE(
+						PRODUCT_NO
+						, USER_NO
+						) 
+				VALUES(
+						#{productNo}
+						, #{userNo}
+						)
+</insert>
 <select id="getLikes" parameterType="_int" resultType="productLike">
 	SELECT 
 		PRODUCT_NO productNo, 
@@ -216,7 +224,6 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 		USER_NO = #{userNo}
 </select>
 
-
 <select id="checkLike" parameterType="productLike" resultType="string">
 	SELECT 'Y' FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
 </select>
@@ -224,6 +231,8 @@ INSERT INTO TB_PRODUCT_LIKE(PRODUCT_NO, USER_NO) VALUES(#{productNo}, #{userNo})
 <delete id="removeLike" parameterType="productLike">
 	DELETE FROM TB_PRODUCT_LIKE WHERE PRODUCT_NO = #{productNo} AND USER_NO = #{userNo}
 </delete>
+
+
 
 <select id="selectCartItems" parameterType="_int" resultMap="cartMap">
 	SELECT 
@@ -407,6 +416,7 @@ FROM (SELECT
  AND USER_NO = #{userNo}
 </select>
 
+<!-- 리뷰 -->
 <insert id = "insertReview" parameterType="productReview">
 	INSERT 
 		INTO 
@@ -443,8 +453,61 @@ SELECT
     					FROM 
     						TB_PRODUCT_REVIEW 
     					WHERE 
-    						ORDER_NO = #{orderNo})
+    						ORDER_NO = #{orderNo} 
+    					AND STATUS = 'Y')
 </select>
+<select id="reviewList" parameterType="_int" resultMap="reviewMap">
+	SELECT 
+	    	REVIEW_NO , 
+	    	OPTION_NM , 
+	    	REVIEW_TITLE , 
+	    	REVIEW_CONTENT , 
+	    	STAR_RATE ,
+	    	CHANGE_NAME  
+	FROM 
+		TB_PRODUCT_REVIEW R 
+	JOIN 
+		TB_PRODUCT_OPTION USING(OPTION_NO) 
+	WHERE 
+		R.STATUS='Y' 
+	AND OPTION_NO IN (
+	                SELECT OPTION_NO 
+	                FROM TB_PRODUCT_OPTION 
+	                WHERE PRODUCT_NO = #{productNo}
+	                )
+</select>
+
+<select id="getLastReview" parameterType="_int" resultMap="reviewMap">
+SELECT 
+		REVIEW_NO 
+        , OPTION_NM 
+        , ORDER_NO  
+        , REVIEW_TITLE 
+        , REVIEW_CONTENT 
+        , STAR_RATE 
+        , CHANGE_NAME
+    FROM (SELECT
+                REVIEW_NO
+                , OPTION_NM
+                , ORDER_NO
+                , REVIEW_TITLE
+                , REVIEW_CONTENT
+                , STAR_RATE
+                , CHANGE_NAME 
+            FROM 
+                TB_PRODUCT_REVIEW R
+            JOIN TB_PRODUCT_OPTION USING(OPTION_NO) 
+            JOIN TB_ORDER USING(ORDER_NO) 
+            WHERE 
+            	USER_NO = #{userNo} 
+            AND R.STATUS = 'Y' 
+            ORDER 
+            	BY ORDER_DATE DESC) 
+    WHERE ROWNUM=1
+</select>
+<update id="deleteReview" parameterType="_int">
+	UPDATE TB_PRODUCT_REVIEW SET STATUS='N' WHERE REVIEW_NO = #{reviewNo}
+</update>
 
 <insert id="saveKeyword" parameterType="string">
 	INSERT INTO TB_KEYWORD(KEYWORD) VALUES(#{keyword})
@@ -480,5 +543,35 @@ SELECT
 			, PHONE 
 		FROM TB_ADDRESS 
 		WEHRE USER_NO=#{userNo}
+</select>
+
+<select id="getOrderList" parameterType="_int" resultType="order">
+SELECT 
+        DISTINCT(ORDER_NO) orderNo
+        , ORDER_DATE orderDate
+        , "total"
+        , "productName"    
+FROM TB_ORDER 
+JOIN (SELECT 
+            ORDER_NO
+            , TO_CHAR(SUM(QTY*PRICE), '999,999')||'원' "total"
+            , LISTAGG(OPTION_NM, ',') WITHIN GROUP(ORDER BY OPTION_NM) "productName"
+        FROM 
+            TB_ORDER_ITEM 
+        JOIN 
+            TB_PRODUCT_OPTION USING(OPTION_NO) 
+        JOIN 
+            TB_ORDER USING(ORDER_NO) 
+        WHERE USER_NO =#{userNo} 
+        GROUP 
+            BY 
+                ORDER_NO) USING(ORDER_NO) 
+JOIN 
+    TB_ORDER_ITEM USING(ORDER_NO)  
+JOIN 
+    TB_PRODUCT_OPTION USING(OPTION_NO) 
+ORDER 
+    BY 
+        ORDER_DATE DESC
 </select>
 </mapper>

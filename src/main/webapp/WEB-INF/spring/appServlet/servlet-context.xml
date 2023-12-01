@@ -25,8 +25,10 @@
 	
 	<interceptors>
 		<interceptor>
-			<mapping path="/bookMyPage" />
-			<mapping path="/reportMyPage" />
+			<mapping path="/bookmypage" />
+			<mapping path="/reportmypage" />
+			<mapping path="/shoppingList"/>
+			<mapping path="/myShopping"/>
 			<mapping path="/reportEnroll.bk" />
 			<beans:bean class="com.kh.eco.common.interceptor.LoginInterceptor" id="loginInterceptor" />
 		</interceptor>

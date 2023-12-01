@@ -16,6 +16,8 @@ public class Order {
 	private String orderDate;
 	private int itemQty;
 	private int totalPrice;
+	private String total;
+	private String productName;
 	private ArrayList<OrderItem> items;
 	private ArrayList<Cart> orderDetail;
 }
