@@ -76,7 +76,8 @@ public class AchievementAjaxController {
 		
 	}
 	
-	@PutMapping("update.ac")
+	/*
+	@PutMapping("update/{achievement}/")
 	public String updateAchievement(Achievement achievement,
 													MultipartFile upfile,
 													HttpSession session) {
@@ -98,7 +99,7 @@ public class AchievementAjaxController {
 		}
 
 	}
-	
+	*/
 	
 	@DeleteMapping("delete/{achievementNo}")
 	public String deleteAchievement(@PathVariable(name="achievementNo")int achievementNo) {

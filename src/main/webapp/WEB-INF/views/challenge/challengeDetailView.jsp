@@ -378,9 +378,18 @@
 				console.log('수정 실패');
 			}
 		});//ajax 
-		
-
 	});
+<!-- 		
+	function update(e){ //this넘기기
+	
+	let replyContent = $(e).siblings(".replyContent");
+	let content = replyContent.text();
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	replyContent.after('<input type="text" id="reportReplyContent" value="'+ content + '">');
+	replyContent.remove();
+	$(e).attr("onclick", "updateReportReply(this);");
+} 
+-->
 */
 
 		$('#achievement-content').on('click', '.delete-btn', function(){
