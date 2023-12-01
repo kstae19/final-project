@@ -31,6 +31,13 @@ public class BookServiceImpl implements BookService{
 	private final BookDao bookDao;
 	
 	private final SqlSessionTemplate sqlSession;
+	
+	// 페이징처리를 위한 offset 만들기
+	private RowBounds createRowBounds(PageInfo pi) {
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		return rowBounds;
+	}
 
 	
 	@Override
@@ -80,18 +87,14 @@ public class BookServiceImpl implements BookService{
 	
 	@Override
 	public List<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.ajaxSelectBookReply(sqlSession, ISBN13, rowBounds);
+		return bookDao.ajaxSelectBookReply(sqlSession, ISBN13, createRowBounds(pi));
 	}
 	
 	@Override
 	@Transactional("transactionManager")
 	public int ajaxDeleteBookReply(HashMap map) {
 		int result2 = bookDao.ajaxDeleteBookEco(sqlSession, map);
-		System.out.println("에코포인트 삭제 여부 : " + result2);
 		int result1 = bookDao.ajaxDeleteBookReply(sqlSession, map);
-		System.out.println("리플 삭제 여부 : " + result1);
 		return result1 + result2;
 	}
 
@@ -102,9 +105,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<BookReport> selectReportList(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.selectReportList(sqlSession, rowBounds);
+		return bookDao.selectReportList(sqlSession, createRowBounds(pi));
 	}
 	
 	@Override
@@ -114,9 +115,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<BookReport> searchReportList(HashMap map, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.searchReportList(sqlSession, map, rowBounds);
+		return bookDao.searchReportList(sqlSession, map, createRowBounds(pi));
 	}
 	
 	@Override
@@ -156,9 +155,7 @@ public class BookServiceImpl implements BookService{
 	
 	@Override
 	public List<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.ajaxSelectReportReply(sqlSession, reportNo, rowBounds);
+		return bookDao.ajaxSelectReportReply(sqlSession, reportNo, createRowBounds(pi));
 	}
 
 	@Override
@@ -188,9 +185,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<String> bookmarkMyPage(int userNo, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);
+		return bookDao.bookmarkMyPage(sqlSession, userNo, createRowBounds(pi));
 	}
 
 	@Override
@@ -200,9 +195,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (List)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
+		return (List)bookDao.bookReplyMyPage(sqlSession, userNo, createRowBounds(pi));
 	}
 
 	@Override
@@ -212,9 +205,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<BookReport> reportMyPage(int userNo, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.reportMyPage(sqlSession, userNo, rowBounds);
+		return bookDao.reportMyPage(sqlSession, userNo, createRowBounds(pi));
 	}
 
 	@Override
@@ -224,9 +215,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
+		return bookDao.reportReplyMyPage(sqlSession, userNo, createRowBounds(pi));
 	}
 
 	@Override
@@ -236,9 +225,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<ReportBlack> adminReportBlack(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.adminReportBlack(sqlSession, rowBounds);
+		return bookDao.adminReportBlack(sqlSession, createRowBounds(pi));
 	}
 
 	@Override
@@ -248,9 +235,7 @@ public class BookServiceImpl implements BookService{
 
 	@Override
 	public List<ReportReplyBlack> adminReportReplyBlack(PageInfo pi) {
-		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
-		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return bookDao.adminReportReplyBlack(sqlSession, rowBounds);
+		return bookDao.adminReportReplyBlack(sqlSession, createRowBounds(pi));
 	}
 
 	@Override
