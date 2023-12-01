@@ -12,7 +12,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 	div{
-		/*border: 1px solid black;*/
+		border: 1px solid black;
 		
 	}
 	
@@ -170,8 +170,12 @@
 	.cirinfo{
 		font-weight: bold;
 		position: relative;
-		left: 30px;
+		left: 0px;
     	bottom: 85px;
+	}
+	
+	.ci{
+		width:80px;
 	}
 	
 	#cirTop{
@@ -253,6 +257,9 @@
 			var arrivalTopList = [];
 			var arrivalBotList = [];
 			
+			var subName = '${subName}';
+			var cleanedSubName = subName.replace(/\(([^)]+)\)/g, '');
+			
 			if(hours  < 10) {
 				hours = '0' +  hours
 			}
@@ -261,17 +268,18 @@
 			}
 			
 			let timeValue = hours +':'+ minutes;
+			let changeSubName = '';
 			
 			$.ajax({
 				url : 'subcode',	
 				data : {
-					subName : '${subName}',
+					subName : cleanedSubName,
 					subLine : '${subLine}'
 				},
 				success : result => {
 					let tdata = '';
 					let adata = '';
-					// console.log(result.RESULT.CODE == "INFO-200");
+					// console.log(result);
 					if(result.SearchSTNBySubwayLineInfo && result.SearchSTNBySubwayLineInfo.RESULT.CODE == "INFO-000"){
 						subCode = result.SearchSTNBySubwayLineInfo.row[0].STATION_CD;
 						if(subCode != null){
@@ -281,7 +289,7 @@
 									subcode : subCode
 								},
 								success : data => {
-									console.log(data.SearchSTNTimeTableByIDService.row)
+									// console.log(data.SearchSTNTimeTableByIDService.row)
 									subtimerow = data.SearchSTNTimeTableByIDService.row;
 									
 									let value = '';
@@ -327,13 +335,15 @@
 				}
 			});
 			
+
+			
 			$.ajax({
 				url: 'subway',
 				data: {
-					sName : '${subName}'
+					sName : cleanedSubName
 				},
 				success : data => {
-					//console.log(data.realtimeArrivalList);
+					// console.log(data);
 					arrival = data.realtimeArrivalList;
 					sLine = '';
 						
@@ -422,7 +432,7 @@
 														  +			arrivalData.bstatnNm + '행'
 														  + 	'</h6>'
 														  + 	'<h6 class="cirinfo" id="cirtimeTop'+ i +'">'
-														  +			arrivalData.barvlDt + '초'
+														  +			Math.floor(arrivalData.barvlDt/60) + '분 ' + (arrivalData.barvlDt-(Math.floor(arrivalData.barvlDt/60)*60)) +'초'
 														  + 	'</h6>'
 														  + '</div>';
 														  
@@ -437,7 +447,7 @@
 														  +			arrivalData.bstatnNm + '행'
 														  + 	'</h6>'
 														  + 	'<h6 class="cirinfo" id="cirtimeBot'+ i +'">'
-														  +			arrivalData.barvlDt + '초'
+														  +			Math.floor(arrivalData.barvlDt/60) + '분 ' + (arrivalData.barvlDt-(Math.floor(arrivalData.barvlDt/60)*60)) +'초'
 														  + 	'</h6>'
 														  + '</div>'
 														  
@@ -464,49 +474,49 @@
 					}).length;
 					
 					if(countTop == 1){
-						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 + 'px', 'bottom':'-55px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-100px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-100px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 + 'px', 'bottom':'-55px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
 					} 
 					else {
-						$('#cirTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-55px'})
-						$('#cirTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'0px'})
-						$('#cirTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'55px'})
-						$('#cirTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'110px'})
-						$('#cirTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'165px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-95px'})
-						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-40px'})
-						$('#cirinfoTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'15px'})
-						$('#cirinfoTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'69px'})
-						$('#cirinfoTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'124px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-95px'})
-						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-40px'})
-						$('#cirtimeTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'15px'})
-						$('#cirtimeTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'69px'})
-						$('#cirtimeTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'124px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-55px'})
+						$('#cirTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'2px'})
+						$('#cirTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'55px'})
+						$('#cirTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'110px'})
+						$('#cirTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'165px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-95px'})
+						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-38px'})
+						$('#cirinfoTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'15px'})
+						$('#cirinfoTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'69px'})
+						$('#cirinfoTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'124px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-95px'})
+						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-38px'})
+						$('#cirtimeTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'15px'})
+						$('#cirtimeTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'69px'})
+						$('#cirtimeTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'124px'})
 					}
 					
 					if(countBot == 1){
-						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 + 'px', 'bottom':'-55px'})
-						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-100px'})
-						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-100px'})
+						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 + 'px', 'bottom':'-55px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-100px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-100px'})
 					} 
 					else {
-						$('#cirBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-55px'})
-						$('#cirBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'0px'})
-						$('#cirBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'55px'})
-						$('#cirBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'110px'})
-						$('#cirBot' + arrivalBotList[8]).css({'left': -690 + parseInt(arrivalBotList[9])*0.8 +'px', 'bottom':'165px'})
-						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-95px'})
-						$('#cirinfoBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'-40px'})
-						$('#cirinfoBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'15px'})
-						$('#cirinfoBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'69px'})
-						$('#cirinfoBot' + arrivalBotList[8]).css({'left': -670 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'124px'})
-						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-95px'})
-						$('#cirtimeBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'-40px'})
-						$('#cirtimeBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'15px'})
-						$('#cirtimeBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'69px'})
-						$('#cirtimeBot' + arrivalBotList[8]).css({'left': -670 + parseInt(arrivalBotList[9])*0.8 +'px', 'bottom':'124px'})
+						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-55px'})
+						$('#cirBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'2px'})
+						$('#cirBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'58px'})
+						$('#cirBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'116px'})
+						$('#cirBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[9])*0.9 +'px', 'bottom':'165px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
+						$('#cirinfoBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'-38px'})
+						$('#cirinfoBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'18px'})
+						$('#cirinfoBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'75px'})
+						$('#cirinfoBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'124px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
+						$('#cirtimeBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'-38px'})
+						$('#cirtimeBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'18px'})
+						$('#cirtimeBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'75px'})
+						$('#cirtimeBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[9])*0.9 +'px', 'bottom':'124px'})
 					}
 				}
 			})
