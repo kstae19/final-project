@@ -12,6 +12,7 @@
 		<typeAlias type="com.kh.eco.user.model.vo.User" alias="user"/>
 		<typeAlias type="com.kh.eco.user.model.vo.Cert" alias="cert"/>
 		<typeAlias type="com.kh.eco.user.model.vo.KakaoUser" alias="kakaouser"/>
+		
 		<typeAlias type="com.kh.eco.product.model.vo.Product" alias="product"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Brand" alias="brand"/>
 		<typeAlias type="com.kh.eco.product.model.vo.ProductReview" alias="productReview"/>
@@ -19,20 +20,13 @@
 		<typeAlias type="com.kh.eco.product.model.vo.ProductLike" alias="productLike"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Cart" alias="cart"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Order" alias="order"/>
-
 		<typeAlias type="com.kh.eco.product.model.vo.ApproveRequest" alias="approveRequest" />
-		
-
 		<typeAlias type="com.kh.eco.product.model.vo.Address" alias="address"/>
 
 		<typeAlias type="com.kh.eco.book.model.vo.Book" alias="book" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReply" alias="bookReply" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReport" alias="bookReport" />
 		<typeAlias type="com.kh.eco.book.model.vo.BookReportReply" alias="bookReportReply" />
-
-		
-		
-	
 
 		<typeAlias type="com.kh.eco.book.model.vo.ReportBlack" alias="adminReportBlack" />
 		<typeAlias type="com.kh.eco.book.model.vo.ReportReplyBlack" alias="adminReportReplyBlack" />

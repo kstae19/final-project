@@ -43,11 +43,12 @@ public class EventController {
 	private final EventService eventService;
 
 	// 이벤트 전체조회
-	@RequestMapping(value="event")
+	@GetMapping("event")
     public String selectEventList(Model model) {
 
 		model.addAttribute("list", eventService.selectEventList());
-
+		System.out.println(eventService.selectEventList());
+		
         return "event/eventListView";
     }
 	
@@ -72,37 +73,33 @@ public class EventController {
 	  }
 	
 	// 이벤트 등록
-	 @PostMapping(value="insert.ev") 
-	 public String insertEvent(	
-											MultipartFile upfile, 
+	 @PostMapping("insert.ev") 
+	 public String insertEvent(	MultipartFile upfile, 
 											 Event e, 
 											 Model model, 
 											 HttpSession session) {
-	 
-		  System.out.println(e);
-		  System.out.println("파일 : " + upfile);
+
 		 
 		  // 이벤트 등록
 		  if( !upfile.getOriginalFilename().contentEquals("")) {
 			  
 			  e.setOriginName(upfile.getOriginalFilename());
 			  e.setChangeName(ChallengeController.saveFile(upfile, session));
-
+			  System.out.println(e.getOriginName());
 		  }
 		  
-		  
-		 if(eventService.insertEvent(e) > 0) {
-			 session.setAttribute("alertMsg", "이벤트 등록 성공!");
-			 model.addAttribute("e", e);
-			 System.out.println("OriginName : " + e.getOriginName());
-			 System.out.println("changeName : " + e.getChangeName());
-			 return "redirect:/event"; 
-			 //return "event/eventListView";// 이렇게 포워딩하면 기존정보가 그대로??
-		 } else {
-			 return "common/errorPage"; 
-		 }
-		  
-	  }
+				 if(eventService.insertEvent(e) > 0) {
+					 session.setAttribute("alertMsg", "이벤트 등록 성공!");
+					 model.addAttribute("e", e);
+					 System.out.println("OriginName : " + e.getOriginName());
+					 System.out.println("changeName : " + e.getChangeName());
+					 return "redirect:/event"; 
+					 //return "event/eventListView";// 이렇게 포워딩하면 기존정보가 그대로??
+				 } else {
+					 return "common/errorPage"; 
+				 }
+		  }
+	  
 	 
 	
 	 

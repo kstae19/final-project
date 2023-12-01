@@ -18,7 +18,7 @@ public class EventServiceImpl implements EventService{
 	
 	private final EventDao eventDao;
 	
-	private SqlSessionTemplate sqlSession;
+	private final SqlSessionTemplate sqlSession;
 
 	@Override
 	public ArrayList<Event> selectEventList() {
@@ -33,9 +33,9 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public int insertEvent(Event event) {
+	public int insertEvent(Event e) {
 		
-		return eventDao.insertEvent(sqlSession, event);
+		return eventDao.insertEvent(sqlSession, e);
 	}
 
 	@Override

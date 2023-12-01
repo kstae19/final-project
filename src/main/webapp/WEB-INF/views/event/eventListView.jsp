@@ -49,25 +49,25 @@
 				        <h5 class="modal-title" id="staticBackdropLabel">이벤트 등록하기</h5>
 				      </div>
 				      
-				      <form id="insert-form" enctype="multipart/form-data" action="insert.ev" method="post">
-				      	<div class="modal-body">
+				      
+				      	<div id="insert-form" class="modal-body" >
 
 					       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
 					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
 					       
 					        <input class="event" id="eventNo" name="eventNo" type="hidden"/>
-					       	<input class="event" id="eventDate" name="eventDate" type="hidden"/>
+					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value="" />
 					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
 
 					      <div class="modal-footer">
-					        <button type="submit" class="btn btn-primary">등록</button>
-					        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					        <button class="btn btn-primary" onclick="insertEvent();">등록</button>
+					        <button class="btn btn-secondary" data-dismiss="modal">취소</button>
 					      </div>
 					      
 						</div><!-- body -->
-					</form>
+					
 					
 				</div>   <!-- content -->
 			</div><!-- dialog -->
@@ -133,16 +133,96 @@
 <script>
 		//console.log('현재데이터 내용 : ${list}'); // JAVA + JS는 좋지 않아요 ajax를 자바대신 쓰던지
 		//DOMContentLoaded Event DOM Tree가 모두 로딩된 이후에 발생하는 이벤트
-	document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
-        });
-        calendar.render();
-      });
+      document.addEventListener('DOMContentLoaded', function() {
 
+	        var calendarEl = document.getElementById('calendar');
+	        var calendar = new FullCalendar.Calendar(calendarEl, {
+		          initialView: 'dayGridMonth',
+		          editable: true,   
+		          events: [
+				 		<c:if test="${ not empty list}">
+							<c:forEach var="e" items="${list}">
+								
+								{ 
+									id : '${e.eventNo}',
+									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
+									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
+									 extendedProps: {
+										 place : '${e.eventPlace}',
+										 participant : ${e.participants},
+										 categoryNo : ${e.categoryNo},
+									 },
+									 imageurl :'${e.changeName}'
+								}, 
+							</c:forEach>
+						</c:if> 
+					],	
+					 eventDidMount: function(info) {
+						    console.log(info.event.imageurl);
+					 },
+					 eventContent: function (arg) {
+							console.log(arg);
+				            var event = arg.event;
+				            
+				            var customHtml = '';
+				            
+				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
+				            
+				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
+				                        
+				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
+				            
+				            customHtml += "<img  style='width:100px; height : 100px;' src='" + event.imageurl +  "'/>";
+				            
+				            return { html: customHtml }
+				        }
+				
+			})// var calendar
+			calendar.render();
+	        
+	        calendar.on('dateClick', function(info){
+	        		//해당 날짜 값에 주입하고
+	        		$('#eventDate').val(info.dateStr);
+	        		// 모달창 띄우고
+	        		$('#insertModal').modal('show');
+	        });
 
+     })//DOMContentLoaded
+
+		function insertEvent(){
+		
+			const formData = new FormData();
+			
+			formData.append('eventTitle', $('#eventTitle').val());
+			formData.append('eventContent', $('#eventContent').val());
+			formData.append('eventPlace', $('#eventPlace').val());
+			formData.append('eventDate', $('#eventDate').val());
+  			formData.append('upfile', $('#upfile')[0].files[0]);
+  			formData.append('categoryNo', $('#categoryNo').val());
+  			
+  			console.log($('#upfile')[0].files[0]);
+  			console.log($('#eventDate').val());
+  			
+			$.ajax({
+				url : 'insert.ev',
+				type : 'POST',
+				processData: false,
+			    contentType: false,
+			    enctype: 'multipart/form-data',
+			    data: formData,
+				success : function(data){
+					
+					console.log("난 결과 : " + data);
+					
+				},
+				error : function(){
+					console.log('작성 실패!');
+				}
+			})
+		};//insertE
 </script>
+
+
 
 
 <style>

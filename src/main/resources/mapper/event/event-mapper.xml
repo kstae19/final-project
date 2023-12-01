@@ -11,6 +11,7 @@
 		<result column="EVENT_CONTENT" property="eventContent"/>
 		<result column="EVENT_PLACE" property="eventPlace"/>
 		<result column="EVENT_DATE" property="eventDate"/>
+		<result column="ORIGIN_NAME" property="originName"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="UPLOAD_DATE" property="uploadDate" />
 		<result column="PARTICIPANTS" property="participants"/>
@@ -24,6 +25,7 @@
 						EVENT_TITLE,
 						EVENT_PLACE,
 						EVENT_DATE,
+						ORIGIN_NAME,
 						CHANGE_NAME,
 						PARTICIPANTS,
 						CATEGORY_NO
@@ -65,9 +67,9 @@
 						EVENT_DATE,
 						UPLOAD_DATE,
 						CHANGE_NAME,
+						PARTICIPANTS,
 						CATEGORY_NO
-						)
-						
+						)	
 		VALUES(
 						SEQ_EVENT_NO.NEXTVAL,
 						#{ eventTitle },
@@ -76,9 +78,9 @@
 						#{ eventDate},
 						SYSDATE,
 						#{ changeName },
+						DEFAULT,
 						#{ categoryNo }
 					)
-	
 	</insert>
 	<!-- 이벤트 수정 -->
 	<update id="updateEvent" parameterType="event">

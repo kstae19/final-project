@@ -18,7 +18,7 @@ public interface EventService {
 	
 	
 	// 이벤트 등록, 수정, 삭제
-	int insertEvent(Event event);
+	int insertEvent(Event e);
 	int updateEvent(Event event);
 	int deleteEvent(int eventNo);
 	
