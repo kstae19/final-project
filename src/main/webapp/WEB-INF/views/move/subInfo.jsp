@@ -131,6 +131,11 @@
 		heigth: 50%;
 	}
 	
+	#ti-content > h3{
+		float: left;
+		width: 50%;
+	}
+	
 	.arrivalInfo {
 		width: 80%;
 		border: 2px solid #28a745;
@@ -165,7 +170,7 @@
 	.cirinfo{
 		font-weight: bold;
 		position: relative;
-		left: 39px;
+		left: 30px;
     	bottom: 85px;
 	}
 	
@@ -188,18 +193,20 @@
 			<div class="info">  
 				<h1>${subName}역 ${subLine}</h1>
 				<h3 class="temp tm" id="h3time">열차 시간표</h3>
-				<div class="headinfo">
-					<h3 class="temp tm">상행선</h3>
-					<h3 class="temp tm">하행선</h3>
-					<div id="content">
-						<div>
-							<div class="subTimeInfo" id="subTimeInfo">
-							
+				<div class="headinfo tim">
+					<div id="ti-content">
+						<h3 class="temp tm">상행선</h3>
+						<h3 class="temp tm">하행선</h3>
+						<div id="content">
+							<div>
+								<div class="subTimeInfo" id="subTimeInfo">
+								
+								</div>
 							</div>
-						</div>
-						<div>
-							<div class="subTimeInfo" id="subTime2Info">
-							
+							<div>
+								<div class="subTimeInfo" id="subTime2Info">
+								
+								</div>
 							</div>
 						</div>
 					</div>
@@ -255,7 +262,6 @@
 			
 			let timeValue = hours +':'+ minutes;
 			
-			
 			$.ajax({
 				url : 'subcode',	
 				data : {
@@ -263,49 +269,61 @@
 					subLine : '${subLine}'
 				},
 				success : result => {
-					// console.log(result.SearchSTNBySubwayLineInfo.row[0].STATION_CD);
-					subCode = result.SearchSTNBySubwayLineInfo.row[0].STATION_CD;
-					if(subCode != null){
-						$.ajax({
-							url : 'subtime',	
-							data : {
-								subcode : subCode
-							},
-							success : data => {
-								console.log(data.SearchSTNTimeTableByIDService.row)
-								subtimerow = data.SearchSTNTimeTableByIDService.row;
-								
-								let value = '';
-								for(let i in subtimerow){
-									subtime = subtimerow[i];
+					let tdata = '';
+					let adata = '';
+					// console.log(result.RESULT.CODE == "INFO-200");
+					if(result.SearchSTNBySubwayLineInfo && result.SearchSTNBySubwayLineInfo.RESULT.CODE == "INFO-000"){
+						subCode = result.SearchSTNBySubwayLineInfo.row[0].STATION_CD;
+						if(subCode != null){
+							$.ajax({
+								url : 'subtime',	
+								data : {
+									subcode : subCode
+								},
+								success : data => {
+									console.log(data.SearchSTNTimeTableByIDService.row)
+									subtimerow = data.SearchSTNTimeTableByIDService.row;
 									
-									value += '<h5 class="fi" id="'+subtime.LEFTTIME.substr(0, 5)+'">'+ subtime.SUBWAYENAME + '행 ' + subtime.LEFTTIME.substr(0, 5) + '</h5>';
-								}
-								if(subtimerow != null){
-									$.ajax({
-										url : 'subtime2',
-										async : true,
-										data : {
-											subcode : subCode
-										},
-										success : data => {
-											console.log(data.SearchSTNTimeTableByIDService.row)
-											subtimerow = data.SearchSTNTimeTableByIDService.row;
-											
-											let value = '';
-											for(let i in subtimerow){
-												subtime = subtimerow[i];
+									let value = '';
+									for(let i in subtimerow){
+										subtime = subtimerow[i];
+										
+										value += '<h5 class="fi" id="'+subtime.LEFTTIME.substr(0, 5)+'">'+ subtime.SUBWAYENAME + '행 ' + subtime.LEFTTIME.substr(0, 5) + '</h5>';
+									}
+									if(subtimerow != null){
+										$.ajax({
+											url : 'subtime2',
+											async : true,
+											data : {
+												subcode : subCode
+											},
+											success : data => {
+												// console.log(data.SearchSTNTimeTableByIDService.row)
+												subtimerow = data.SearchSTNTimeTableByIDService.row;
 												
-												value += '<h5 class="la" id="'+subtime.LEFTTIME.substr(0, 5)+'">'+subtime.SUBWAYENAME + '행 ' + subtime.LEFTTIME.substr(0, 5) + '</h5>';
+												let value = '';
+												for(let i in subtimerow){
+													subtime = subtimerow[i];
+													
+													value += '<h5 class="la" id="'+subtime.LEFTTIME.substr(0, 5)+'">'+subtime.SUBWAYENAME + '행 ' + subtime.LEFTTIME.substr(0, 5) + '</h5>';
+												}
+												$('#subTime2Info').html(value);
 											}
-											$('#subTime2Info').html(value);
-										}
-									});
-								}
-								$('#subTimeInfo').html(value);
-						    }
-						});
+										});
+									}
+									$('#subTimeInfo').html(value);
+							    }
+							});
+						}
 					}
+					else if(result.RESULT.CODE == "INFO-200"){
+						tdata += '현재  지하철 정보를 지원하지 않는 역입니다.';
+						$('.tim').html(tdata);
+						$('#ti-content').css('display', 'hidden');
+						adata += '현재 실시간 지하철 정보를 지원하지 않는 역입니다.';
+						$('.arr').html(adata);
+						$('#ar-content').css('display', 'hidden');
+					} 
 				}
 			});
 			
@@ -422,6 +440,8 @@
 														  +			arrivalData.barvlDt + '초'
 														  + 	'</h6>'
 														  + '</div>'
+														  
+										  arrivalBotList.push(i, arrivalData.barvlDt);
 									}
 								}
 								// arrivalData.barvlDt,  열차도착예정시간
@@ -434,7 +454,7 @@
 					$('#arrivalTop').after(arrivalTopresult);
 					$('#arrivalBot').after(arrivalBotresult);
 					
-					console.log(arrivalTopList);
+					//console.log(arrivalTopList);
 					let countTop = $('[id^="cirTop"]').filter(function() {
 					    return !isNaN(this.id.replace('cirTop', ''));
 					}).length;
@@ -442,18 +462,51 @@
 					let countBot = $('[id^="cirBot"]').filter(function() {
 					    return !isNaN(this.id.replace('cirBot', ''));
 					}).length;
+					
 					if(countTop == 1){
-						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) + 'px', 'bottom':'-55px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) +'px', 'bottom':'-100px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) +'px', 'bottom':'-100px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 + 'px', 'bottom':'-55px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-100px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-100px'})
 					} 
 					else {
-						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) +'px', 'bottom':'-55px'})
-						$('#cirTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3]) +'px', 'bottom':'0px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) +'px', 'bottom':'-95px'})
-						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3]) +'px', 'bottom':'-40px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1]) +'px', 'bottom':'-95px'})
-						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3]) +'px', 'bottom':'-40px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-55px'})
+						$('#cirTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'0px'})
+						$('#cirTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'55px'})
+						$('#cirTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'110px'})
+						$('#cirTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'165px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-95px'})
+						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-40px'})
+						$('#cirinfoTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'15px'})
+						$('#cirinfoTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'69px'})
+						$('#cirinfoTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'124px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -750 + parseInt(arrivalTopList[1])*0.8 +'px', 'bottom':'-95px'})
+						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -730 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-40px'})
+						$('#cirtimeTop' + arrivalTopList[4]).css({'left': -710 + parseInt(arrivalTopList[5])*0.8 +'px', 'bottom':'15px'})
+						$('#cirtimeTop' + arrivalTopList[6]).css({'left': -690 + parseInt(arrivalTopList[7])*0.8 +'px', 'bottom':'69px'})
+						$('#cirtimeTop' + arrivalTopList[8]).css({'left': -670 + parseInt(arrivalTopList[9])*0.8 +'px', 'bottom':'124px'})
+					}
+					
+					if(countBot == 1){
+						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 + 'px', 'bottom':'-55px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-100px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-100px'})
+					} 
+					else {
+						$('#cirBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-55px'})
+						$('#cirBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'0px'})
+						$('#cirBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'55px'})
+						$('#cirBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'110px'})
+						$('#cirBot' + arrivalBotList[8]).css({'left': -690 + parseInt(arrivalBotList[9])*0.8 +'px', 'bottom':'165px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-95px'})
+						$('#cirinfoBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'-40px'})
+						$('#cirinfoBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'15px'})
+						$('#cirinfoBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'69px'})
+						$('#cirinfoBot' + arrivalBotList[8]).css({'left': -670 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'124px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -750 + parseInt(arrivalBotList[1])*0.8 +'px', 'bottom':'-95px'})
+						$('#cirtimeBot' + arrivalBotList[2]).css({'left': -730 + parseInt(arrivalBotList[3])*0.8 +'px', 'bottom':'-40px'})
+						$('#cirtimeBot' + arrivalBotList[4]).css({'left': -710 + parseInt(arrivalBotList[5])*0.8 +'px', 'bottom':'15px'})
+						$('#cirtimeBot' + arrivalBotList[6]).css({'left': -690 + parseInt(arrivalBotList[7])*0.8 +'px', 'bottom':'69px'})
+						$('#cirtimeBot' + arrivalBotList[8]).css({'left': -670 + parseInt(arrivalBotList[9])*0.8 +'px', 'bottom':'124px'})
 					}
 				}
 			})
