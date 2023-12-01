@@ -133,7 +133,7 @@
     	    					$('#bookReplyContent').val('');
     	    					selectBookReply();
     	    				} else{
-    	    					alert('댓글 등록 실패');
+    	    					alert('삭제 실패');
     	    				}
 	        			},
 	        			error : () => {
@@ -176,7 +176,7 @@
         				let replyValue = '';
         				for(let i in replyArr){
         					if(!isEmpty('${ sessionScope.loginUser.userId }')){
-        						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+        						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }' || '${ sessionScope.loginUser.userStatus }' === 'A'){
             						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
             									+ '<input type="hidden" value="' + replyArr[i].ecoNo + '" name="ecoNo">';
             					}
@@ -223,6 +223,7 @@
 <body>
 	
 	<jsp:include page="../../common/header.jsp" />
+	<br>
 	<jsp:include page="../common/bookHeader.jsp" />
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 

@@ -59,7 +59,7 @@
     				for(let i in replyArr){
     					replyValue += '<div>'
     					if(!isEmpty('${ sessionScope.loginUser.userId }')){
-    						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+    						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }' || '${ sessionScope.loginUser.userStatus }' === 'A'){
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReportReply(this);">삭제</button>';
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="update(this);">수정</button>';
     						}
@@ -239,13 +239,13 @@
 			 <c:forEach var="i" begin="1" end="${ br.bookReportStar }">
          		★
          	</c:forEach>
-			${ br.bookReportTitle }
+         	<c:out value="${ br.bookReportTitle }" />
 		</h3>
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
 	        <button type="button" class="btn btn-dark" onclick="reportBlackPost(${br.bookReportNo}, '${ br.userId }', '${loginUser.userId}', ${ loginUser.userNo });">신고하기</button>
-	        <c:if test="${ loginUser.userId eq br.userId }">
+	        <c:if test="${ loginUser.userId eq br.userId or sessionScope.loginUser.userStatus eq 'A' }">
 		        <button type="button" class="btn btn-danger" onclick="reportDeletePost(${br.bookReportNo});">삭제</button>
 		        <button type="button" class="btn btn-secondary" onclick="reportUpdatePost(${br.bookReportNo});">수정</button>
 	        </c:if>
@@ -339,7 +339,7 @@
         </script>
         <hr>
         <p>
-        	${ br.bookReportContent }
+        	<c:out value="${ br.bookReportContent }" />
         </p>
         <hr>
 
