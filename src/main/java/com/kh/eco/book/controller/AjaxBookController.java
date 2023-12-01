@@ -3,13 +3,12 @@ package com.kh.eco.book.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,15 +24,16 @@ import com.kh.eco.book.model.vo.ReportReplyBlack;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@Controller
+@RequiredArgsConstructor
 public class AjaxBookController {
 	
-	@Autowired
-	public BookService bookService;
+	private final BookService bookService;
 	
 	// 북마크 있나없나 조회
-	@RequestMapping(value="selectBookMark.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="selectBookMark.bk", produces="text/html; charset=UTF-8")
 	public String ajaxSelectBookMark(String ISBN13, int userNo) {
 		String className="";
 		HashMap<String, Object> map = new HashMap();
@@ -52,7 +52,7 @@ public class AjaxBookController {
 	}
 	
 	//북마크 추가/삭제
-	@RequestMapping(value="bookMark.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="bookMark.bk", produces="text/html; charset=UTF-8")
 	public String ajaxBookMark(String className, String ISBN13, int userNo, HttpSession session) {
 		
 		HashMap<String, Object> map = new HashMap();
@@ -80,8 +80,10 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 등록
-	@RequestMapping(value="insertBookReply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) {
+	@PostMapping(value="insertBookReply.bk", produces="text/html; charset=UTF-8")
+	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) throws Exception {
+		
+		BookController.checkText(content, 63);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN13", ISBN13);
@@ -96,7 +98,7 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 조회
-	@RequestMapping(value="selectBookReply.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="selectBookReply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectBookReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, String ISBN13) throws IOException {
 		
 		// 댓글 개수 조회
@@ -105,7 +107,7 @@ public class AjaxBookController {
 		
 		Book book = BookController.bookLookUp(ISBN13);
 		
-		ArrayList<BookReply> list = bookService.ajaxSelectBookReply(ISBN13, pi);
+		List<BookReply> list = bookService.ajaxSelectBookReply(ISBN13, pi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
@@ -119,7 +121,7 @@ public class AjaxBookController {
 	}
 	
 	// 한줄평 삭제
-	@RequestMapping(value="deleteBookReply.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="deleteBookReply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteBookReply(String ISBN13, int userNo, int ecoNo) {
 		
 		HashMap<String, Object> map = new HashMap();
@@ -136,14 +138,14 @@ public class AjaxBookController {
 	
 	
 	// 댓글 조회
-	@RequestMapping(value="selectReportReply.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="selectReportReply.bk", produces="application/json; charset=UTF-8")
 	public String ajaxSelectReportReply(@RequestParam(value="cPage", defaultValue="1") int currentPage, int reportNo) {
 		
 		// 댓글 개수 조회
 		int count = bookService.ajaxSelectReportReplyCount(reportNo);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
 		
-		ArrayList<BookReportReply> list = bookService.ajaxSelectReportReply(reportNo, pi);
+		List<BookReportReply> list = bookService.ajaxSelectReportReply(reportNo, pi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
@@ -157,8 +159,10 @@ public class AjaxBookController {
 	
 
 	// 댓글 등록
-	@RequestMapping(value="insertreportreply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxInsertReportReply(int reportNo, int userNo, String content) {
+	@PostMapping(value="insertreportreply.bk", produces="text/html; charset=UTF-8")
+	public String ajaxInsertReportReply(int reportNo, int userNo, String content) throws Exception {
+		
+		BookController.checkText(content, 63);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("reportNo", reportNo);
@@ -168,14 +172,15 @@ public class AjaxBookController {
 		if(bookService.ajaxInsertReportReply(map) > 0) { // 성공
 			return "success";
 		} else { // 실패
-			System.out.println("실패!");
 			return "fail";
 		}
 	}
 	
 	// 댓글 수정
-	@RequestMapping("updatereportreply.bk")
-	public String ajaxUpdateReportReply(int replyNo, String content) {
+	@PostMapping("updatereportreply.bk")
+	public String ajaxUpdateReportReply(int replyNo, String content) throws Exception {
+		
+		BookController.checkText(content, 63);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyNo", replyNo);
@@ -184,13 +189,12 @@ public class AjaxBookController {
 		if(bookService.ajaxUpdateReportReply(map) > 0) { // 성공
 			return "success";
 		} else { // 실패
-			System.out.println("실패!");
 			return "fail";
 		}
 	}
 	
 	// 댓글 삭제
-	@RequestMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="deletereportreply.bk", produces="text/html; charset=UTF-8")
 	public String ajaxDeleteReportReply(int replyNo) {
 		
 		if(bookService.ajaxDeleteReportReply(replyNo) > 0) { // 삭제 성공
@@ -201,7 +205,7 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 신고
-	@RequestMapping(value="reportReplyBlack.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="reportReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String ajaxReplyBlack(int reportReplyNo, String blackId, int userNo) {
 		
 		HashMap<String, Object> map = new HashMap();
@@ -217,13 +221,13 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 북마크 책 조회
-	@RequestMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
 	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) throws IOException {
 		
 		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
 		
-		ArrayList<String> list = bookService.bookmarkMyPage(userNo, bookPi);
-		ArrayList<Book> bookList = new ArrayList();
+		List<String> list = bookService.bookmarkMyPage(userNo, bookPi);
+		List<Book> bookList = new ArrayList();
 		
 		for(int i = 0; i < list.size(); i++) {
 			Book book = new Book();
@@ -243,13 +247,13 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 한줄평 조회
-	@RequestMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="bookreplymypage.bk", produces="application/json; charset=UTF-8")
 	public String bookReplyMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) throws IOException {
 		
 		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
-		ArrayList<Book> bookList = new ArrayList();
+		List<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
+		List<Book> bookList = new ArrayList();
 		
 		for(int i = 0; i < list.size(); i++) {
 			Book book = new Book();
@@ -270,11 +274,11 @@ public class AjaxBookController {
 	}
 	
 	// 마이페이지 게시글 조회
-	@RequestMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="reportmypage.bk", produces="application/json; charset=UTF-8")
 	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReport> list = bookService.reportMyPage(userNo, reportPi);
+		List<BookReport> list = bookService.reportMyPage(userNo, reportPi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("reportList", list);
@@ -286,12 +290,12 @@ public class AjaxBookController {
 	}
 		
 	// 마이페이지 게시글 댓글 조회
-	@RequestMapping(value="reportreplymypage.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="reportreplymypage.bk", produces="application/json; charset=UTF-8")
 	public String reportReplyMyPage(@RequestParam(value="rrPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		
 		PageInfo replyPi = Pagination.getPageInfo(bookService.reportReplyCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
+		List<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
 
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyList", list);
@@ -304,7 +308,7 @@ public class AjaxBookController {
 	
 	
 	// 관리자페이지 신고게시글 목록 조회
-	@RequestMapping(value="adminReportBlack.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="adminReportBlack.bk", produces="application/json; charset=UTF-8")
 	public String reportBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		
 		int result = bookService.adminReportBlackCount();
@@ -312,7 +316,7 @@ public class AjaxBookController {
 		if(result != 0) {
 			PageInfo Pi = Pagination.getPageInfo(result, currentPage, 5, 5);
 			
-			ArrayList<ReportBlack> list = bookService.adminReportBlack(Pi);
+			List<ReportBlack> list = bookService.adminReportBlack(Pi);
 
 			HashMap<String, Object> map = new HashMap();
 			map.put("list", list);
@@ -327,7 +331,7 @@ public class AjaxBookController {
 	}
 	
 	// 관리자페이지 신고댓글 목록 조회
-	@RequestMapping(value="adminReportReplyBlack.bk", produces="application/json; charset=UTF-8")
+	@PostMapping(value="adminReportReplyBlack.bk", produces="application/json; charset=UTF-8")
 	public String reportReplyBlack(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		
 		int result = bookService.adminReportReplyBlackCount();
@@ -335,7 +339,7 @@ public class AjaxBookController {
 		if(result != 0) {
 			PageInfo pi = Pagination.getPageInfo(result, currentPage, 5, 5);
 			
-			ArrayList<ReportReplyBlack> list = bookService.adminReportReplyBlack(pi);
+			List<ReportReplyBlack> list = bookService.adminReportReplyBlack(pi);
 
 			HashMap<String, Object> map = new HashMap();
 			map.put("list", list);
@@ -350,7 +354,7 @@ public class AjaxBookController {
 	}
 	
 	// 관리자페이지 신고게시글 삭제
-	@RequestMapping(value="deleteReportBlack.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="deleteReportBlack.bk", produces="text/html; charset=UTF-8")
 	public String deleteReportBlack(@RequestParam(value="blackReportNoArr") int[] arr) {
 		
 		int result = 0;
@@ -364,7 +368,7 @@ public class AjaxBookController {
 	}
 	
 	// 관리자페이지 신고댓글 삭제
-	@RequestMapping(value="deleteReplyBlack.bk", produces="text/html; charset=UTF-8")
+	@PostMapping(value="deleteReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String deleteReplyBlack(@RequestParam(value="blackReplyNoArr") int[] arr) {
 		
 		int result = 0;

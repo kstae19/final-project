@@ -16,7 +16,7 @@
 	
 	<!-- 한줄평 -->
 	<resultMap id="bookReplyResultSet" type="bookReply">
-		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
+		<result column="REPORT_DATE" property="bookReplyDate" />
 		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
 		<result column="USER_ID" property="userId" />
 		<result column="ECO_HISTORY_NO" property="ecoNo" />
@@ -29,7 +29,7 @@
 		<result column="BOOK_REPORT_CONTENT" property="bookReportContent" />
 		<result column="BOOK_REPORT_TITLE" property="bookReportTitle" />
 		<result column="USER_ID" property="userId" />
-		<result column="BOOK_REPORT_DATE" property="bookReportDate" />
+		<result column="REPORT_DATE" property="bookReportDate" />
 		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
 		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
 		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
@@ -49,7 +49,7 @@
 		<result column="BOOK_REPORT_NO" property="reportNo" />
 		<result column="USER_ID" property="userId" />
 		<result column="BOOK_REPORT_TITLE" property="reportTitle" />
-		<result column="BOOK_REPORT_DATE" property="reportDate" />
+		<result column="REPORT_DATE" property="reportDate" />
 		<result column="BOOK_REPORT_STAR" property="reportStar" />
 	</resultMap>
 	
@@ -229,7 +229,7 @@
 			BOOK_REPORT_NOTICE,
 			BOOK_REPORT_TITLE,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -279,7 +279,7 @@
 			BOOK_REPORT_NOTICE,
 			BOOK_REPORT_TITLE,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -347,7 +347,7 @@
 			BOOK_REPORT_TITLE,
 			BOOK_REPORT_CONTENT,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -532,7 +532,7 @@
 			BOOK_REPORT_TITLE,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR, 
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT
 		FROM TB_BOOK_REPORT
 		WHERE USER_NO = #{userNo}
@@ -581,7 +581,7 @@
 			DISTINCT BRB.BOOK_REPORT_NO,
 			USER_ID,
 			BOOK_REPORT_TITLE,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_STAR
 		FROM 
 			TB_BOOK_REPORT_BLACK BRB

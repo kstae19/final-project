@@ -2,6 +2,7 @@ package com.kh.eco.book.model.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -17,7 +18,7 @@ import com.kh.eco.book.model.vo.ReportReplyBlack;
 @Repository
 public class BookDao {
 	
-	public ArrayList<Book> countList(SqlSessionTemplate sqlSession){
+	public List<Book> countList(SqlSessionTemplate sqlSession){
 		return (ArrayList)sqlSession.selectList("bookMapper.countList");
 	}
 	
@@ -53,7 +54,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.ajaxSelectBookReplyCount", ISBN13);
 	}
 	
-	public ArrayList<BookReply> ajaxSelectBookReply(SqlSessionTemplate sqlSession, String ISBN13, RowBounds rowBounds){
+	public List<BookReply> ajaxSelectBookReply(SqlSessionTemplate sqlSession, String ISBN13, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.ajaxSelectBookReply", ISBN13, rowBounds);
 	}
 	
@@ -69,7 +70,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.reportCount");
 	}
 	
-	public ArrayList<BookReport> selectReportList(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+	public List<BookReport> selectReportList(SqlSessionTemplate sqlSession, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.selectReportList", null, rowBounds);
 	}
 	
@@ -77,7 +78,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.searchReportCount", map);
 	}
 	
-	public ArrayList<BookReport> searchReportList(SqlSessionTemplate sqlSession, HashMap map, RowBounds rowBounds){
+	public List<BookReport> searchReportList(SqlSessionTemplate sqlSession, HashMap map, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.searchReportList", map, rowBounds);
 	}
 	
@@ -109,7 +110,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.selectReportReplyCount", reportNo);
 	}
 	
-	public ArrayList<BookReportReply> ajaxSelectReportReply(SqlSessionTemplate sqlSession, int reportNo, RowBounds rowBounds) {
+	public List<BookReportReply> ajaxSelectReportReply(SqlSessionTemplate sqlSession, int reportNo, RowBounds rowBounds) {
 		return (ArrayList)sqlSession.selectList("bookMapper.selectReportReply", reportNo, rowBounds);
 	}
 
@@ -133,7 +134,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.bookmarkCountMyPage", userNo);
 	}
 	
-	public ArrayList<String> bookmarkMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+	public List<String> bookmarkMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.bookmarkMyPage", userNo, rowBounds);
 	}
 	
@@ -141,7 +142,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.bookReplyCountMyPage", userNo);
 	}
 	
-	public ArrayList<Book> bookReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+	public List<Book> bookReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.bookReplyMyPage", userNo, rowBounds);
 	}
 	
@@ -149,7 +150,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.reportCountMyPage", userNo);
 	}
 	
-	public ArrayList<BookReport> reportMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+	public List<BookReport> reportMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.reportMyPage", userNo, rowBounds);
 	}
 	
@@ -157,7 +158,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.reportReplyCountMyPage", userNo);
 	}
 	
-	public ArrayList<BookReportReply> reportReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
+	public List<BookReportReply> reportReplyMyPage(SqlSessionTemplate sqlSession, int userNo, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.reportReplyMyPage", userNo, rowBounds);
 	}
 	
@@ -165,7 +166,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.adminReportBlackCount");
 	}
 	
-	public ArrayList<ReportBlack> adminReportBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+	public List<ReportBlack> adminReportBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.adminReportBlack", null, rowBounds);
 	}
 	
@@ -173,7 +174,7 @@ public class BookDao {
 		return sqlSession.selectOne("bookMapper.adminReportReplyBlackCount");
 	}
 	
-	public ArrayList<ReportReplyBlack> adminReportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
+	public List<ReportReplyBlack> adminReportReplyBlack(SqlSessionTemplate sqlSession, RowBounds rowBounds){
 		return (ArrayList)sqlSession.selectList("bookMapper.adminReportReplyBlack", null, rowBounds);
 	}
 
