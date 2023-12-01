@@ -264,8 +264,9 @@ h2 {
 	        </div>       
 	        <!-- Modal body -->
 	        <div class="modal-body">
-	        	<form action="newAddress" type="post">
-	        		
+	        	<form action="newAddress" method="post" class="form-group">
+	        		<input type="text"/><br>
+	        		<input type="text"/>
 	        	</form>	
 	        </div>        
 	        <!-- Modal footer -->
