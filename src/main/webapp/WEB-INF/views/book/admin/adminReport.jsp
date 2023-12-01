@@ -33,7 +33,6 @@
 	    function reportBlack(nowPage){
 			$.ajax({
 				url : 'adminReportBlack.bk',
-				async : false,
 				type : 'post',
 				data : {
 					cPage : nowPage    				
@@ -94,7 +93,6 @@
 		function reportReplyBlack(nowPage){
 			$.ajax({
 				url : 'adminReportReplyBlack.bk',
-				async : false,
 				type : 'post',
 				data : {
 					cPage : nowPage    				
@@ -160,7 +158,6 @@
 					
 		       		$.ajax({
 		       			url : 'deleteReportBlack.bk',
-		       			async : false,
 		       			type : 'post',
 		       			data : {
 		       				blackReportNoArr : blackNoArr
@@ -198,7 +195,6 @@
 				
 	       		$.ajax({
 	       			url : 'deleteReplyBlack.bk',
-	       			async : false,
 	       			type : 'post',
 	       			data : {
 	       				blackReplyNoArr : blackNoArr

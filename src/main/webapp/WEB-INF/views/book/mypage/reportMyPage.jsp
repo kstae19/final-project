@@ -24,7 +24,6 @@
     	function selectMyPageReport(nowPage){
     		$.ajax({
     			url : 'reportmypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -34,7 +33,7 @@
     				let report = result.reportList;
 					let reportPi = result.reportPi;
     				if(report.size){
-    					$('#mypagereport').html("북마크한 도서가 없습니다.");
+    					$('#myPageReport').html("북마크한 도서가 없습니다.");
     				} else {
         				let reportValue = '';
         				for(let i in report){
@@ -45,7 +44,7 @@
         								 + '<td>' + report[i].bookReportCount + '</td>'
         								 + '</tr>';
         				}
-        				$('#mypagereport').html(reportValue);
+        				$('#myPageReport').html(reportValue);
         				
         				let reportPiValue = '';
         				if(reportPi.currentPage == 1){
@@ -62,7 +61,7 @@
         					reportPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReport('+ reportPi['currentPage'] + 1 +');">Next</a></li>';
         				}
         				
-        				$('#bookreportmypagepagination').html(reportPiValue);
+        				$('#reportMyPagePi').html(reportPiValue);
     				}
     			},
    				error : function(){
@@ -74,7 +73,6 @@
     	function selectMyPageReply(nowPage){
 			$.ajax({
 				url : 'reportreplymypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -87,7 +85,7 @@
 					let replyPi = result.replyPi;
 					
     				if(reply.size){
-    					$('#bookreportmypagereply').html("작성한 한줄평이 없습니다.");
+    					$('#reportReplyMyPage').html("작성한 한줄평이 없습니다.");
     				} else {
         				let replyValue = '';
         				for(let i in reply){
@@ -96,7 +94,7 @@
         								+ '<td>' + reply[i].bookReportReplyContent + '</td>'
         								+ '</tr>';
         				}
-        				$('#bookreportmypagereply').html(replyValue);
+        				$('#reportReplyMyPage').html(replyValue);
         				
         				let replyPiValue = '';
         				if(replyPi.currentPage == 1){
@@ -113,7 +111,7 @@
         					replyPiValue += '<li class="page-item"><a class="page-link" onclick="selectMyPageReply('+ replyPi['currentPage'] + 1 +');">Next</a></li>';
         				}
         				
-        				$('#bookreportmypagereplypaginagion').html(replyPiValue);
+        				$('#reportReplyMyPagePi').html(replyPiValue);
     				}
         				
         				
@@ -147,11 +145,11 @@
                 <th>조회수</th>
               </tr>
             </thead>
-            <tbody id="mypagereport">
+            <tbody id="myPageReport">
               
             </tbody>
           </table>
-          <ul class="pagination justify-content-center" id="bookreportmypagepagination">
+          <ul class="pagination justify-content-center" id="reportMyPagePi">
             
           </ul>
           <br><br>
@@ -164,11 +162,11 @@
                 <th>댓글</th>
               </tr>
             </thead>
-            <tbody id="bookreportmypagereply">
+            <tbody id="reportReplyMyPage">
               
             </tbody>
           </table>
-          <ul class="pagination justify-content-center" id="bookreportmypagereplypaginagion">
+          <ul class="pagination justify-content-center" id="reportReplyMyPagePi">
             
           </ul>
     </div>

@@ -93,7 +93,7 @@
 		          			</c:when>
 		          			<c:when test="${ r.bookReportSecret eq 1 }">
 		        				<c:choose>
-		        					<c:when test="${ r.userId eq loginUser.userId }">
+		        					<c:when test="${ r.userId eq loginUser.userId or loginUser.userStatus eq 'A' }">
 		        						<tr>
 								          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 								          <td>

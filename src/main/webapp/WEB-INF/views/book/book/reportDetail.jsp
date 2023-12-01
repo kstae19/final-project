@@ -39,7 +39,6 @@
 		// 댓글 조회 ajax
 		$.ajax({
 			url : 'selectReportReply.bk',
-			async : false,
 			type : 'post',
 			data : {
 				reportNo : '${ br.bookReportNo }',
@@ -59,7 +58,7 @@
     				for(let i in replyArr){
     					replyValue += '<div>'
     					if(!isEmpty('${ sessionScope.loginUser.userId }')){
-    						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+    						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }' || '${ sessionScope.loginUser.userStatus }' === 'A'){
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReportReply(this);">삭제</button>';
         						replyValue += '<button type="button" class="btn btn-secondary" onclick="update(this);">수정</button>';
     						}
@@ -136,7 +135,6 @@
 			if($('#reportReplyContent').val().trim() != ''){
 	    		$.ajax({
 	    			url : 'updatereportreply.bk',
-	    			async : false,
 	    			type : 'post',
 	    			data : {
 	    				replyNo : $(e).siblings("input[type=hidden]").val(),
@@ -172,7 +170,6 @@
    		function deleteReportReply(e){ // 댓글 삭제 ajax
        		$.ajax({
        			url : 'deletereportreply.bk',
-       			async : false,
        			type : 'post',
        			data : {
        				replyNo : $(e).siblings("input[type=hidden]").val(),
@@ -198,7 +195,6 @@
    			if(confirm("신고하시겠습니까?")){
    				$.ajax({
    	       			url : 'reportReplyBlack.bk',
-   	       			async : false,
    	       			type : 'post',
    	       			data : {
    	       				reportReplyNo : $(e).siblings("input[type=hidden]").val(),
@@ -239,13 +235,13 @@
 			 <c:forEach var="i" begin="1" end="${ br.bookReportStar }">
          		★
          	</c:forEach>
-			${ br.bookReportTitle }
+         	<c:out value="${ br.bookReportTitle }" />
 		</h3>
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
 	        <button type="button" class="btn btn-dark" onclick="reportBlackPost(${br.bookReportNo}, '${ br.userId }', '${loginUser.userId}', ${ loginUser.userNo });">신고하기</button>
-	        <c:if test="${ loginUser.userId eq br.userId }">
+	        <c:if test="${ loginUser.userId eq br.userId or sessionScope.loginUser.userStatus eq 'A' }">
 		        <button type="button" class="btn btn-danger" onclick="reportDeletePost(${br.bookReportNo});">삭제</button>
 		        <button type="button" class="btn btn-secondary" onclick="reportUpdatePost(${br.bookReportNo});">수정</button>
 	        </c:if>
@@ -339,7 +335,7 @@
         </script>
         <hr>
         <p>
-        	${ br.bookReportContent }
+        	<c:out value="${ br.bookReportContent }" />
         </p>
         <hr>
 
@@ -355,10 +351,10 @@
             </ul>
             <c:choose>
             	<c:when test="${ empty loginUser }">
-            		<input type="text" placeholder="로그인 후 댓글을 남겨보세요" style="height: 50px; width: 90%;">
+            		<input type="text" placeholder="로그인 후 댓글을 남겨보세요" style="height: 50px; width: 90%;" readonly>
             	</c:when>
             	<c:otherwise>
-            		<input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent">
+            		<input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent" maxlength="50">
 		            <button type="submit" class="btn btn-secondary" style="height: 50px; width: 9%;" onclick="insertReportReply();">등록</button>
             	</c:otherwise>
             </c:choose>
