@@ -12,7 +12,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 	div{
-		border: 1px solid black;
+		/*border: 1px solid black;*/
 		
 	}
 	
