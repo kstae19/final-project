@@ -57,7 +57,6 @@
 	        		// 북마크 조회 ajax
 	        		$.ajax({
 	        			url : 'selectBookMark.bk',
-	        			async : false,
 	        			type : 'post',
 	        			data : {
 	        				ISBN13 : '${ b.ISBN13 }',
@@ -94,7 +93,6 @@
 	        		if($('#bookReplyContent').val().trim() != ''){
 	    	    		$.ajax({
 	    	    			url : 'insertBookReply.bk',
-	    	    			async : false,
 	    	    			type : 'post',
 	    	    			data : {
 	    	    				ISBN13 : '${ b.ISBN13 }',
@@ -121,7 +119,6 @@
 	    		function deleteReply(){ // 한줄평 삭제 ajax
 	        		$.ajax({
 	        			url : 'deleteBookReply.bk',
-	        			async : false,
 	        			type : 'post',
 	        			data : {
 	        				ecoNo : $('#bookReply-area').find('input[name=ecoNo]').val(),
@@ -156,7 +153,6 @@
     		// 한줄평 조회 ajax
     		$.ajax({
     			url : 'selectBookReply.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				ISBN13 : '${ b.ISBN13 }',

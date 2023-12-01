@@ -68,7 +68,6 @@
     	function selectMyPageBook(nowPage){
     		$.ajax({
     			url : 'bookmypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -117,7 +116,6 @@
     	function selectMyPageReply(nowPage){
 			$.ajax({
 				url : 'bookreplymypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',

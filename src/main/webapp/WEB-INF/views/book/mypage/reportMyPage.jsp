@@ -24,7 +24,6 @@
     	function selectMyPageReport(nowPage){
     		$.ajax({
     			url : 'reportmypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -74,7 +73,6 @@
     	function selectMyPageReply(nowPage){
 			$.ajax({
 				url : 'reportreplymypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',

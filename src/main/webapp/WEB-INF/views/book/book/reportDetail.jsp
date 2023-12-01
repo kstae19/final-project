@@ -39,7 +39,6 @@
 		// 댓글 조회 ajax
 		$.ajax({
 			url : 'selectReportReply.bk',
-			async : false,
 			type : 'post',
 			data : {
 				reportNo : '${ br.bookReportNo }',
@@ -136,7 +135,6 @@
 			if($('#reportReplyContent').val().trim() != ''){
 	    		$.ajax({
 	    			url : 'updatereportreply.bk',
-	    			async : false,
 	    			type : 'post',
 	    			data : {
 	    				replyNo : $(e).siblings("input[type=hidden]").val(),
@@ -172,7 +170,6 @@
    		function deleteReportReply(e){ // 댓글 삭제 ajax
        		$.ajax({
        			url : 'deletereportreply.bk',
-       			async : false,
        			type : 'post',
        			data : {
        				replyNo : $(e).siblings("input[type=hidden]").val(),
@@ -198,7 +195,6 @@
    			if(confirm("신고하시겠습니까?")){
    				$.ajax({
    	       			url : 'reportReplyBlack.bk',
-   	       			async : false,
    	       			type : 'post',
    	       			data : {
    	       				reportReplyNo : $(e).siblings("input[type=hidden]").val(),
