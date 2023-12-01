@@ -260,12 +260,10 @@
     	</c:if>
     		
     		<article id="achievement-list">
-    			
-    			
+
     				<div id="achievement-content">
     				</div>
-    		
-    			
+
     		</article>
 
 			<button id="selectMore-btn">더보기</button>
@@ -310,7 +308,6 @@
 </script>
 
 <script>
-
 			let currentPage = 1;
 
 			$('#selectMore-btn').on('click', function(){
@@ -331,16 +328,20 @@
 							let resultStr = '';
 							for(let i in result){
 								resultStr +=
-												'<img src="' + result[i].changeName + '"/>'
-												+'<span><b>'+ result[i].achievementTitle + '</span>'
+												'<div>'
+												+'<img src="' + result[i].changeName + '"/>'
+												+'<span><b>'+ result[i].achievementTitle + '</b></span>'
 												+'<span>'+ result[i].userNo + '</span>'
 												+'<div>'+ result[i].achievementContent + '</div>'
-												+'<p>' + result[i].achievementNo + '</p>';
-							/**왜 안되지?ㅠㅠㅠㅠㅠㅠ */
-							if(result[i].userNo = ${loginUser.userNo}){		
-								resultStr += '<div><button>수정하기</button>'
-											 	+'<button>삭제하기</button></div>';
-							};
+												+'</div>'
+			 			
+								if(result[i].userNo == ${loginUser.userNo}){		
+									resultStr += '<div>'
+													+'<button class="update-btn">수정하기</button>'
+												 	+'<button class="delete-btn">삭제하기</button>'
+												 	+'<p>' + result[i].achievementNo + '</p>'
+												 	+'</div>'
+								}; 
 						
 							};//for
 						
@@ -360,9 +361,11 @@
 </script>
 
 <script>
-	$('#achievement-content').on('click', 'button', function(){
+/* 나중에..
+	$('#achievement-content').on('click', '.update-btn', function(){
 		console.log('수정하기 클릭');
-		$.ajax({
+		$(this).abhtml('');
+		/* $.ajax({
 			url : 'update.ac',
 			type : 'PUT',
 			data : {
@@ -374,27 +377,33 @@
 			error : function(){
 				console.log('수정 실패');
 			}
-		});//ajax
+		});//ajax 
 		
 
 	});
+*/
+
+		$('#achievement-content').on('click', '.delete-btn', function(){
+			
+			$.ajax({
+				url : 'delete/'+$(this).next().html(),
+				type : 'DELETE',
+				data : { achievementNo : $(this).next().html() },
+				success : function(data){
+					if(data == 'success'){
+						currentPage = 1;
+						selectMore(currentPage);
+					}else{
+						alert('인증글 삭제 실패! 다음에 다시 시도해주세요');
+					}
+				},
+				error : function(){
+					console.log('삭제 실패');
+				}
+			});//ajax
+			
 	
-	$( ('#achievement-content > button').eq(1) ).on('click', function(){
-		console.log('삭제하기 클릭');
-		$.ajax({
-			url : 'delete.ac',
-			type : 'DELETE',
-			data : { achievementNo : achievementNo},
-			success : function(){
-				console.log('삭제 성공');
-			},
-			error : function(){
-				console.log('삭제 실패');
-			}
-		});//ajax
-		
-
-	});
+		});
 
 </script>
     	
