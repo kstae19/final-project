@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -206,9 +207,26 @@ public class BookController {
 	@GetMapping("book")
 	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
 		
-		ArrayList<Book> bookList = selectBookList(20, "환경", currentPage);
-		ArrayList<Book> countList = bookService.countList();
+		List<Book> bookList = selectBookList(20, "환경", currentPage);
+		List<Book> countList = bookService.countList();
 		
+		HashMap<String, Integer> countMap = new HashMap<>();
+		for (Book book : countList) {
+		    countMap.put(book.getISBN13(), book.getBookCount());
+		}
+		
+		List<Book> combineList = new ArrayList();
+		for (Book book : bookList) {
+		    String isbn = book.getISBN13();
+		    if (countMap.containsKey(isbn)) {
+		        Integer bookCount = countMap.get(isbn);
+		        book.setBookCount(bookCount);
+		    }
+		    combineList.add(book);
+		}
+		
+		
+		/*
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
 		for(int i = 0; i < bookList.size(); i++) {
 			for(int n = 0; n < countList.size(); n++) {
@@ -216,11 +234,11 @@ public class BookController {
 					bookList.get(i).setBookCount(countList.get(n).getBookCount());
 				}
 			}
-		}
+		}*/
 		
 		PageInfo pi = Pagination.getPageInfo(200, currentPage, 20, 10);
 		
-		model.addAttribute("bookList", bookList);
+		model.addAttribute("bookList", combineList);
 		model.addAttribute("pi", pi);
 		
 		return "book/book/bookList";
@@ -264,7 +282,24 @@ public class BookController {
 			break;
 		}
 		
-		ArrayList<Book> countList = bookService.countList();
+		List<Book> countList = bookService.countList();
+		
+		HashMap<String, Integer> countMap = new HashMap<>();
+		for (Book book : countList) {
+		    countMap.put(book.getISBN13(), book.getBookCount());
+		}
+		
+		List<Book> combineList = new ArrayList();
+		for (Book book : searchList) {
+		    String isbn = book.getISBN13();
+		    if (countMap.containsKey(isbn)) {
+		        Integer bookCount = countMap.get(isbn);
+		        book.setBookCount(bookCount);
+		    }
+		    combineList.add(book);
+		}
+		
+		/*
 		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
 		for(int i = 0; i < searchList.size(); i++) {
 			for(int n = 0; n < countList.size(); n++) {
@@ -272,7 +307,7 @@ public class BookController {
 					searchList.get(i).setBookCount(countList.get(n).getBookCount());
 				}
 			}
-		}
+		}*/
 		
 		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 20, 10);
 		// 만약 현재페이지 1 : 0 ~ 19(20)
@@ -350,7 +385,7 @@ public class BookController {
 		
 		PageInfo pi = Pagination.getPageInfo(bookService.searchReportCount(map), currentPage, 10, 10);
 		
-		ArrayList<BookReport> list = bookService.searchReportList(map, pi);
+		List<BookReport> list = bookService.searchReportList(map, pi);
 		
 		if(list != null) { // 리스트 조회 성공
 			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportSearchOption).addObject("keyword", reportSearchValue).setViewName("book/book/reportList");

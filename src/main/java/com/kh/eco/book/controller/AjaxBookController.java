@@ -3,12 +3,12 @@ package com.kh.eco.book.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -107,7 +107,7 @@ public class AjaxBookController {
 		
 		Book book = BookController.bookLookUp(ISBN13);
 		
-		ArrayList<BookReply> list = bookService.ajaxSelectBookReply(ISBN13, pi);
+		List<BookReply> list = bookService.ajaxSelectBookReply(ISBN13, pi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
@@ -145,7 +145,7 @@ public class AjaxBookController {
 		int count = bookService.ajaxSelectReportReplyCount(reportNo);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 5, 5);
 		
-		ArrayList<BookReportReply> list = bookService.ajaxSelectReportReply(reportNo, pi);
+		List<BookReportReply> list = bookService.ajaxSelectReportReply(reportNo, pi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyCount", count);
@@ -226,8 +226,8 @@ public class AjaxBookController {
 		
 		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
 		
-		ArrayList<String> list = bookService.bookmarkMyPage(userNo, bookPi);
-		ArrayList<Book> bookList = new ArrayList();
+		List<String> list = bookService.bookmarkMyPage(userNo, bookPi);
+		List<Book> bookList = new ArrayList();
 		
 		for(int i = 0; i < list.size(); i++) {
 			Book book = new Book();
@@ -252,8 +252,8 @@ public class AjaxBookController {
 		
 		PageInfo replyPi = Pagination.getPageInfo(bookService.bookReplyCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
-		ArrayList<Book> bookList = new ArrayList();
+		List<BookReply> list = bookService.bookReplyMyPage(userNo, replyPi);
+		List<Book> bookList = new ArrayList();
 		
 		for(int i = 0; i < list.size(); i++) {
 			Book book = new Book();
@@ -278,7 +278,7 @@ public class AjaxBookController {
 	public String reportMyPage(@RequestParam(value="rPage", defaultValue="1") int currentPage, Model model, int userNo) {
 		PageInfo reportPi = Pagination.getPageInfo(bookService.reportCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReport> list = bookService.reportMyPage(userNo, reportPi);
+		List<BookReport> list = bookService.reportMyPage(userNo, reportPi);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("reportList", list);
@@ -295,7 +295,7 @@ public class AjaxBookController {
 		
 		PageInfo replyPi = Pagination.getPageInfo(bookService.reportReplyCountMyPage(userNo), currentPage, 5, 5);
 		
-		ArrayList<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
+		List<BookReportReply> list = bookService.reportReplyMyPage(userNo, replyPi);
 
 		HashMap<String, Object> map = new HashMap();
 		map.put("replyList", list);
@@ -316,7 +316,7 @@ public class AjaxBookController {
 		if(result != 0) {
 			PageInfo Pi = Pagination.getPageInfo(result, currentPage, 5, 5);
 			
-			ArrayList<ReportBlack> list = bookService.adminReportBlack(Pi);
+			List<ReportBlack> list = bookService.adminReportBlack(Pi);
 
 			HashMap<String, Object> map = new HashMap();
 			map.put("list", list);
@@ -339,7 +339,7 @@ public class AjaxBookController {
 		if(result != 0) {
 			PageInfo pi = Pagination.getPageInfo(result, currentPage, 5, 5);
 			
-			ArrayList<ReportReplyBlack> list = bookService.adminReportReplyBlack(pi);
+			List<ReportReplyBlack> list = bookService.adminReportReplyBlack(pi);
 
 			HashMap<String, Object> map = new HashMap();
 			map.put("list", list);

@@ -1,6 +1,7 @@
 package com.kh.eco.book.model.service;
 
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,7 +35,7 @@ public class BookServiceImpl implements BookService{
 	
 	@Override
 	public ArrayList<Book> countList() {
-		return bookDao.countList(sqlSession);
+		return (ArrayList<Book>) bookDao.countList(sqlSession);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public ArrayList<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi) {
+	public List<BookReply> ajaxSelectBookReply(String ISBN13, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.ajaxSelectBookReply(sqlSession, ISBN13, rowBounds);
@@ -100,7 +101,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<BookReport> selectReportList(PageInfo pi) {
+	public List<BookReport> selectReportList(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.selectReportList(sqlSession, rowBounds);
@@ -112,7 +113,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<BookReport> searchReportList(HashMap map, PageInfo pi) {
+	public List<BookReport> searchReportList(HashMap map, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.searchReportList(sqlSession, map, rowBounds);
@@ -154,7 +155,7 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public ArrayList<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi) {
+	public List<BookReportReply> ajaxSelectReportReply(int reportNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.ajaxSelectReportReply(sqlSession, reportNo, rowBounds);
@@ -186,7 +187,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<String> bookmarkMyPage(int userNo, PageInfo pi) {
+	public List<String> bookmarkMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.bookmarkMyPage(sqlSession, userNo, rowBounds);
@@ -198,10 +199,10 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
+	public List<BookReply> bookReplyMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
-		return (ArrayList)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
+		return (List)bookDao.bookReplyMyPage(sqlSession, userNo, rowBounds);
 	}
 
 	@Override
@@ -210,7 +211,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<BookReport> reportMyPage(int userNo, PageInfo pi) {
+	public List<BookReport> reportMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.reportMyPage(sqlSession, userNo, rowBounds);
@@ -222,7 +223,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi) {
+	public List<BookReportReply> reportReplyMyPage(int userNo, PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.reportReplyMyPage(sqlSession, userNo, rowBounds);
@@ -234,7 +235,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<ReportBlack> adminReportBlack(PageInfo pi) {
+	public List<ReportBlack> adminReportBlack(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.adminReportBlack(sqlSession, rowBounds);
@@ -246,7 +247,7 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public ArrayList<ReportReplyBlack> adminReportReplyBlack(PageInfo pi) {
+	public List<ReportReplyBlack> adminReportReplyBlack(PageInfo pi) {
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return bookDao.adminReportReplyBlack(sqlSession, rowBounds);

@@ -280,39 +280,36 @@
             </ul>
             <c:choose>
             	<c:when test="${ empty sessionScope.loginUser }">
-            		<input id="bookReplyContent" readonly type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
+            		<input readonly type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" style="height: 50px; width: 90%;">
             	</c:when>
             	<c:otherwise>
             		<input id="bookReplyContent" type="text" placeholder="하나의 도서에 하나의 한줄평만 작성할 수 있습니다" name="bookReplyContent" style="height: 50px; width: 90%;" maxlength="50">
             		<button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
 	             	<p id="bookReplyKeyup">0/50</p>
 	             	<script>
-	             		$(function(){
-	             			
-	             			$('#bookReplyContent').keyup(function(){
-	             				let content = $('#bookReplyContent').val();
-	             				let contentLength = $('#bookReplyContent').val().length;
-	             				maxByte = 100;
-	             				
-	             				let length = 0;
-	             				
-	             				for(let i = 0; i < contentLength; i++){
-	             					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
-		             					length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
-		                            }else{
-		                            	length = length + 1;
-		                            }
-	             				}
-	             				
-	             				if(length < maxByte){
-		             				$('#bookReplyKeyup').text(length + "/50");
-	             				} else{
-	             					alert("바이트 제한을 초과했습니다.");
-	             					$('#bookReplyContent').val('');
-	             				}
-	             				
-	             			})
-	             		})
+             			let inputReply = document.getElementById("bookReplyContent")
+             			inputReply.oninput = e=>{
+             				let content = e.target.value;
+             				let contentLenght = content.length;
+             				let maxByte = inputReply.getAttribute("maxlength");
+							let length = 0;    
+							
+             				for(let i = 0; i < contentLenght; i++){
+             					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
+             						length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
+	                            }else{
+	                            	length = length + 1;
+	                            }
+             				}
+             				
+             				if (length < maxByte) {
+             					document.getElementById('bookReplyKeyup').innerText = length + "/50";
+            					} else {
+            						alert("바이트 제한을 초과했습니다.");
+            					 	inputReply.value = '';
+            					 	document.getElementById('bookReplyKeyup').innerText = "0/50";
+            					}
+             			}
 	             	</script>
             	</c:otherwise>
             </c:choose>
