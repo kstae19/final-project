@@ -11,7 +11,6 @@ public class Pagination {
 			int startPage = (currentPage - 1) / pageLimit * pageLimit + 1; // 페이징 버튼의 시작
 			int endPage = startPage + pageLimit - 1; // 페이징 버튼의 끝
 			if(endPage > maxPage) endPage = maxPage;
-			System.out.println("너냐");
 			return new PageInfo(listCount, currentPage, boardLimit, pageLimit, maxPage, startPage, endPage);
 		} else {
 			return new PageInfo(listCount, currentPage, boardLimit, pageLimit, maxPage, 0, 0);

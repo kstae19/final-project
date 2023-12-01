@@ -50,9 +50,9 @@
 		        <c:if test="${ loginUser.userStatus eq 'A' }">
 		        	<label><input type="checkbox" name="bookReportNotice" value="1">공지등록</label>
 		        </c:if>
-		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle" maxlength="40">
+		        <input type="text" placeholder="제목을 입력해 주세요." name="bookReportTitle" maxlength="30">
 		        <br><br>
-		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent" maxlength="1900"></textarea>
+		        <textarea placeholder="내용을 입력해주세요." name="bookReportContent" maxlength="1300"></textarea>
 		        <br><br>
 		        <span>별점</span>
 		        <select name="bookReportStar">

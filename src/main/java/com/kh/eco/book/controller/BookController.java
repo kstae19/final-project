@@ -52,17 +52,6 @@ public class BookController {
 		url += "&Cover=big";
 		url += "&start=" + currentPage;
 		
-		/*
-		 * http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?
-		 * ttbkey=ttbrkd_gus_wl1746003
-		 * &Query=%ED%99%98%EA%B2%BD
-		 * &MaxResults=100
-		   &start=1
-		   &output=xml
-		   &Version=20131101
-		   &Cover=big
-		 */
-		
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
 		// 요청방식은 GET방식과 POST방식에 상관없이 요청 가능합니다.
@@ -71,31 +60,6 @@ public class BookController {
 		
 		// 결과 받기
 		String responseText = br.readLine();
-		/*
-		 * {"title":"환경과 생태 쫌 아는 10대 - 우리, 100년 뒤에도 만날 수 있을까요?",
-		 *  "link":"http:\/\/www.aladin.co.kr\/shop\/wproduct.aspx?ItemId=192112209&amp;partner=openAPI&amp;start=api",
-		 *  "author":"최원형 (지은이), 방상호 (그림)",
-		 *  "pubDate":"2019-05-20",
-		 *  "description":"과학 쫌 아는 십대 3권. 현대인이 쉽고도 흔하게 행하는 여덟 가지 소비 장면을 포착하여, 나의 소비가 어느 계층의 누구에게, 어디에 있는 어떤 생물에게 어떻게 영향을 미치는지 다양한 각도에서 살펴보고자 했다.",
-		 *  "isbn":"K112635902",
-		 *  "isbn13":"9791161727356",
-		 *  "itemId":192112209,
-		 *  "priceSales":11700,
-		 *  "priceStandard":13000,
-		 *  "mallType":"BOOK",
-		 *  "stockStatus":"",
-		 *  "mileage":650,
-		 *  "cover":"https:\/\/image.aladin.co.kr\/product\/19211\/22\/cover\/k112635902_1.jpg",
-		 *  "categoryId":1143,
-		 *  "categoryName":"국내도서>청소년>청소년 수학\/과학",
-		 *  "publisher":"풀빛",
-		 *  "salesPoint":27027,
-		 *  "adult":false,
-		 *  "fixedPrice":true,
-		 *  "customerReviewRank":10,
-		 *  "seriesInfo":{"seriesId":658912,"seriesLink":"http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=658912&amp;partner=openAPI","seriesName":"과학 쫌 아는 십대 3"},
-		 *  "subInfo":{}}
-		 */
 		
 		JsonObject totalObj = JsonParser.parseString(responseText).getAsJsonObject();
 		JsonArray itemArr = totalObj.getAsJsonArray("item");
@@ -146,34 +110,6 @@ public class BookController {
 		
 		JsonObject totalObj = JsonParser.parseString(responseText).getAsJsonObject();
 		JsonArray itemArr = totalObj.getAsJsonArray("item");
-		/*
-		 * {
-	      "title": "경험은 어떻게 유전자에 새겨지는가 - 환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
-	      "link": "http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=324228542&amp;partner=openAPI&amp;start=api",
-	      "author": "데이비드 무어 (지은이), 정지인 (옮긴이)",
-	      "pubDate": "2023-09-18",
-	      "description": "하버드대학교에서 발달·생물심리학 박사 학위를 받은 뒤 피처대학 심리학과 교수로 활동 중인 데이비드 무어가 ‘경이로울 정도로 성장하는’ 후성유전학의 연구와 통찰을 《경험은 어떻게 유전자에 새겨지는가》에 집대성했다.",
-	      "isbn": "K102935996",
-	      "isbn13": "9791192465111",
-	      "itemId": 324228542,
-	      "priceSales": 26100,
-	      "priceStandard": 29000,
-	      "mallType": "BOOK",
-	      "stockStatus": "",
-	      "mileage": 1450,
-	      "cover": "https://image.aladin.co.kr/product/32422/85/cover/k102935996_1.jpg",
-	      "categoryId": 51002,
-	      "categoryName": "국내도서>과학>기초과학/교양과학",
-	      "publisher": "아몬드",
-	      "salesPoint": 24560,
-	      "adult": false,
-	      "fixedPrice": true,
-	      "customerReviewRank": 10,
-	      "subInfo": {
-	        "subTitle": "환경과 맥락에 따라 달라지는 유전체에 관한 행동 후성유전학의 놀라운 발견",
-	        "originalTitle": "The Developing Genome: An Introduction to Behavioral Epigenetics (2015년)",
-	        "itemPage": 540
-      		}*/
 		 
 		JsonObject item = itemArr.get(0).getAsJsonObject();
 		

@@ -287,6 +287,7 @@
             		<button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
 	             	<p id="bookReplyKeyup">0/50</p>
 	             	<script>
+	             		
              			let inputReply = document.getElementById("bookReplyContent")
              			inputReply.oninput = e=>{
              				let content = e.target.value;
