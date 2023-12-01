@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,30 +34,21 @@ import lombok.RequiredArgsConstructor;
 @Controller 
 public class EventController {
 
-
 	/*
 	 * @ResponseBody => "event/eventListView" 자체가 화면에 나옴
 	 * 
 	 * 
 	 */
 	
-	
 	private final EventService eventService;
-	
-	
 
-			
 	// 이벤트 전체조회
 	@RequestMapping(value="event")
     public String selectEventList(Model model) {
 
-		
 		model.addAttribute("list", eventService.selectEventList());
-		
 
-		
         return "event/eventListView";
-        
     }
 	
 	// 이벤트 등록폼
@@ -95,9 +87,7 @@ public class EventController {
 			  
 			  e.setOriginName(upfile.getOriginalFilename());
 			  e.setChangeName(ChallengeController.saveFile(upfile, session));
-			  
-			  
-			
+
 		  }
 		  
 		  

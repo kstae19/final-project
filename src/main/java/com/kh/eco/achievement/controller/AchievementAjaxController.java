@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,8 @@ public class AchievementAjaxController {
 		
 	}
 	
-	@PutMapping("update.ac")
+	/*
+	@PutMapping("update/{achievement}/")
 	public String updateAchievement(Achievement achievement,
 													MultipartFile upfile,
 													HttpSession session) {
@@ -97,10 +99,10 @@ public class AchievementAjaxController {
 		}
 
 	}
+	*/
 	
-	
-	@DeleteMapping("delete.ac")
-	public String deleteAchievement(int achievementNo) {
+	@DeleteMapping("delete/{achievementNo}")
+	public String deleteAchievement(@PathVariable(name="achievementNo")int achievementNo) {
 		
 		System.out.println(achievementNo);
 		
