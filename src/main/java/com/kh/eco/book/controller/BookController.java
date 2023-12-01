@@ -215,14 +215,12 @@ public class BookController {
 		    countMap.put(book.getISBN13(), book.getBookCount());
 		}
 		
-		List<Book> combineList = new ArrayList();
 		for (Book book : bookList) {
 		    String isbn = book.getISBN13();
 		    if (countMap.containsKey(isbn)) {
 		        Integer bookCount = countMap.get(isbn);
 		        book.setBookCount(bookCount);
 		    }
-		    combineList.add(book);
 		}
 		
 		
@@ -238,7 +236,7 @@ public class BookController {
 		
 		PageInfo pi = Pagination.getPageInfo(200, currentPage, 20, 10);
 		
-		model.addAttribute("bookList", combineList);
+		model.addAttribute("bookList", bookList);
 		model.addAttribute("pi", pi);
 		
 		return "book/book/bookList";
@@ -289,14 +287,12 @@ public class BookController {
 		    countMap.put(book.getISBN13(), book.getBookCount());
 		}
 		
-		List<Book> combineList = new ArrayList();
 		for (Book book : searchList) {
 		    String isbn = book.getISBN13();
 		    if (countMap.containsKey(isbn)) {
 		        Integer bookCount = countMap.get(isbn);
 		        book.setBookCount(bookCount);
 		    }
-		    combineList.add(book);
 		}
 		
 		/*
