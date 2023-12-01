@@ -355,7 +355,7 @@
             </ul>
             <c:choose>
             	<c:when test="${ empty loginUser }">
-            		<input type="text" placeholder="로그인 후 댓글을 남겨보세요" style="height: 50px; width: 90%;">
+            		<input type="text" placeholder="로그인 후 댓글을 남겨보세요" style="height: 50px; width: 90%;" readonly>
             	</c:when>
             	<c:otherwise>
             		<input type="text" placeholder="댓글을 남겨보세요" style="height: 50px; width: 90%;" id="reportReplyContent" maxlength="50">
