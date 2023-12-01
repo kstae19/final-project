@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+ 
 <meta charset="UTF-8">
 <title>Eco Friendly</title>
 <!-- jQuery 라이브러리 -->
@@ -22,27 +23,14 @@
 		opacity:0.8;
 	}
 </style>
+<jsp:include page="common/header.jsp" />
 </head>
 <body>
-	<jsp:include page="common/header.jsp" />
 	<div id="placeholder">
 	<img src="resources/images/cookieChunsik.jpg">
 	
 	</div>
 	
-	<script>
-		$(()=>{
-			$('.menu').hover(function(){
-				$(this).css('color', 'red');
-			}, function(){
-				$(this).css('color', 'black');
-			});
-			$('.login-menu').hover(function(){
-				$(this).css('color', 'red');
-			}, function(){
-				$(this).css('color', 'black');
-			});
-		})
-	</script>
+	
 </body>
 </html>
