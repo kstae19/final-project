@@ -206,7 +206,9 @@
 		display : none;
 	}
 	
-	
+	#toAirInfo{
+		background-color : #e3ffea;
+	}
 	
 </style>
 </head>
@@ -529,7 +531,7 @@
 		    			$('#move-info .title').html(title);
 		    			$('#move-info .air').html(airresult);
 				    	$('#move-info').css('display', 'block');
-				    	moreresult += '<button>상세보기</button>'
+				    	moreresult += '<button id="toAirInfo">상세보기</button>'
 				    				+ '</form> ';	
     					$('#move-info .more').html(moreresult);
 		    		}
