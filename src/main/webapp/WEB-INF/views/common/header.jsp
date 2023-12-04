@@ -12,12 +12,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
 <style>
-div{
-	/*border: 1px solid black;*/
-}
+	div{
+		/*border: 1px solid black;*/
+	}
+	
 	body {
 		font-family: 'Noto Sans KR', sans-serif;
 	}
+	
 	#menubar{
 		box-sizing : border-box;
 	}
@@ -67,7 +69,7 @@ div{
 		margin:auto;
 	}
 	
-	h1 {
+	#header_h1 {
 	    display: block;
 	    font-size: 20px;
 	    margin-block-start: 0.67em;
@@ -89,7 +91,7 @@ div{
 		border : 1px solid red;
 	}
 	
-	h3 {
+	 #header_h3 {
 	    display: block;
 	    font-size: 18px;
 	    margin-block-start: 0.67em;
@@ -121,7 +123,7 @@ div{
 	}
 	
 	#main{
-		margin-left: 250px;
+		margin-left: 240px;
 		text-decoration:none;
 		color: #28a745;
 		font-weight : bold;
@@ -180,7 +182,6 @@ div{
 		<a class="menu" href="challenge">CHALLENGE</a>
 		<a class="menu" href="product">PRODUCT</a>
 		<a class="menu" href="move">MOVE</a>
-		<a class="menu" href="/eco">MAIN</a>
 	</div>
 
 
@@ -205,27 +206,27 @@ div{
 		<div id="main"><a class="main" id="main" href="/eco">Eco Friendly</a></div>
 		<c:choose>
 			<c:when test="${ empty sessionScope.loginUser }">
-				<div class="lim login-menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
+				<div class="lim login-menu" onclick="location.href='login'"><h1 id="header_h1">LOGIN</h1> </div>
 			</c:when>
 			<c:otherwise>
 				<c:choose>
 					<c:when test="${ sessionScope.loginUser.userStatus eq 'A' }">
 						<div class="iom iam">
-							<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+							<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
 			            </div>
-						<div class="lom login-menu" onclick="location.href='user.us'"><h3>회원관리</h3> </div>
-						<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
+						<div class="lom login-menu" onclick="location.href='user.us'"><h3 id="header_h3">회원관리</h3> </div>
+						<div class="lom login-menu" onclick="location.href='logout.us'"><h3 id="header_h3">LOGOUT</h3> </div>
 					</c:when>
 					<c:otherwise>
 						<c:choose>
 							<c:when test="${ empty sessionScope.accessToken and empty sessionScope.accessNToken }">
 								<div id="login-menu">
 									<div class="iom">
-										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+										<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
 						            </div>
 									<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-									<div class="lom login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-									<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
+									<div class="lom login-menu" onclick="location.href='mypage.us'"><h3 id="header_h3">MYPAGE</h3> </div>
+									<div class="lom login-menu" onclick="location.href='logout.us'"><h3 id="header_h3">LOGOUT</h3> </div>
 					            </div>
 							</c:when>
 							<c:otherwise>
@@ -233,21 +234,21 @@ div{
 									<c:when test="${ not empty sessionScope.accessNToken }">
 										<div id="login-menu">
 											<div class="iom">
-												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+												<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
 								            </div>
 											<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-											<div class="lom login-menu" onclick="location.href='naverlogout.us'"><h3>네이버 LOGOUT</h3> </div>
+											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3 id="header_h3">MYPAGE</h3> </div>
+											<div class="lom login-menu" onclick="location.href='naverlogout.us'"><h3 id="header_h3">네이버 LOGOUT</h3> </div>
 							            </div>
 									</c:when>
 									<c:when test="${ not empty sessionScope.accessToken }">
 										<div id="login-menu">
 											<div class="iom">
-												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+												<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
 								            </div>
 											<div class="lom cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-											<div class="lom login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
+											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3 id="header_h3">MYPAGE</h3> </div>
+											<div class="lom login-menu" onclick="location.href='kakaologout.us'"><h3 id="header_h3">카카오 LOGOUT</h3> </div>
 							            </div>
 									</c:when>
 									<c:otherwise>
