@@ -47,7 +47,7 @@
 		</script>
 		<c:remove var="failBookAlert" scope="session"/>
 	</c:if>
-
+	<br><br>
     <div class="main_image">
         <img src="https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/07/resize-images-banner.jpeg" width="100%" height="200px">
         <h1 class="main_image_text" style="font-size:50px"><c:out value="${ middelLetter }" /></h1>
