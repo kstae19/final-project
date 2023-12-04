@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.kh.eco.challenge.controller.ChallengeController;
 import com.kh.eco.event.model.service.EventService;
 import com.kh.eco.event.model.vo.Event;
@@ -63,14 +66,20 @@ public class EventController {
 	 */
 	  
 
-	  // 이벤트 세부모달
-	  @RequestMapping("detail.ev") 
-	  public String selectEventDetail(int eventNo, Model model) {
-	  
-		 model.addAttribute("e", eventService.selectEventDetail(eventNo));
-	 
-		  return "event/eventListView"; 
-	  }
+	/*
+	 * // 이벤트 세부모달
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value="detail.ev",
+	 * produces="application/json; charset=UTF-8") public String
+	 * selectEventDetail(int eventNo, Model model) {
+	 * 
+	 * System.out.println(eventNo); Event event =
+	 * eventService.selectEventDetail(eventNo);
+	 * 
+	 * return new Gson().toJson(event); }
+	 */
 	
 	// 이벤트 등록
 	 @PostMapping("insert.ev") 
@@ -79,13 +88,13 @@ public class EventController {
 											 Model model, 
 											 HttpSession session) {
 
-		 
+
 		  // 이벤트 등록
 		  if( !upfile.getOriginalFilename().contentEquals("")) {
 			  
 			  e.setOriginName(upfile.getOriginalFilename());
 			  e.setChangeName(ChallengeController.saveFile(upfile, session));
-			  System.out.println(e.getOriginName());
+		
 		  }
 		  
 				 if(eventService.insertEvent(e) > 0) {
@@ -100,22 +109,20 @@ public class EventController {
 				 }
 		  }
 	  
-	 
-	
-	 
-	  // 이벤트 수정폼
-	  @RequestMapping("updateForm.ev") 
-	  public String eventUpdateForm() {
-	  
-	  // 단순 페이지 forward return "event/eventUpdateForm";
-		  return "redirect:/event";
-	  }
-	  
+
 	  
 	 // 이벤트 수정
+	 @ResponseBody
 	  @RequestMapping("update.ev") 
-	  public String updateEvent(Event e) {
-		  return "event/eventDetailView"; 
+	  public String updateEvent(Event event) {
+		  System.out.println(event);
+		  
+		  System.out.println(eventService.updateEvent(event));
+		  if(eventService.updateEvent(event) >0) {
+			  return "success";
+		  } else {
+			  return "fail";
+		  }
 	  }
 	  
 	  // 이벤트 삭제
@@ -124,7 +131,22 @@ public class EventController {
 		  return "event/eventDetailView"; 
 	  }
 	 
-    
+	    @RequestMapping("join.ev")
+	    public  String joinEvent(int userNo, int eventNo) {
+	       	System.out.println(userNo);
+	    	System.out.println(eventNo);
+	    	
+	    	HashMap<String, Integer> map = new HashMap();
+	    	map.put("userNo", userNo);
+	    	map.put("eventNo", eventNo);
+	    	
+	    	if(eventService.joinEvent(map)>0) {
+	    		return "success";
+	    	} else {
+	    		return "fail";
+	    	}
+	    
+	    }
 
 	
 }

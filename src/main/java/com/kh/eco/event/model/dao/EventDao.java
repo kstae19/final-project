@@ -1,6 +1,7 @@
 package com.kh.eco.event.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,6 +34,11 @@ public class EventDao {
 	public int deleteEvent(SqlSessionTemplate sqlSession, int eventNo) {
 		
 		return sqlSession.update("eventMapper.deleteEvent", eventNo);
+	}
+
+	public int joinEvent(SqlSessionTemplate sqlSession, HashMap<String, Integer> map) {
+	
+		return sqlSession.update("eventMapper.joinEvent", map);
 	}
 
 }

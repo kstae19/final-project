@@ -62,7 +62,7 @@
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
 
 					      <div class="modal-footer">
-					        <button class="btn btn-primary" onclick="insertEvent();">등록</button>
+					        <button class="btn btn-primary" id="insertEvent">등록</button>
 					        <button class="btn btn-secondary" data-dismiss="modal">취소</button>
 					      </div>
 					      
@@ -86,46 +86,88 @@
 
 				      	<div id="modal-body" class="modal-body">
 						
-					       	<div class="content">
-							       	<div>이벤트명 : 	</div>
-							       	<div>카테고리 : 	</div>
-							       	<div>이벤트 내용 : 	</div>
-							       	<div>이벤트 장소 : 	</div>
-							       	<div>이벤트 날짜 : 	</div>
-							       	<div>첨부파일 : 	</div>
+					       	<div id="detail-title">
+							       	<div>이벤트명&nbsp;&nbsp;&nbsp;    : 	</div>
+							       	<div>카테고리&nbsp;&nbsp;&nbsp;    : 	</div>
+							       	<div>이벤트내용 : 	</div>
+							       	<!-- <div>이벤트시간 : 	</div> -->
+							       	<div>이벤트장소 : 	</div>
+							       	<div>참여인원&nbsp;&nbsp;&nbsp;    : 	</div>
+							       	<div>첨부파일&nbsp;&nbsp;&nbsp;    : 	</div>
 					       	</div>
 					       	
-					       	<div class="content">
-							       	<div></div>
-							       	<div></div>
-							       	<div></div>
-							       	<div></div>
-							       	<div></div>
-							       	<div></div>
+					       	<div id="detail-content">
+							       	<div id="dEventTitle"> </div>
+							       	<div id="dCategoryNo"> </div>
+							       	<div id="dEventContent"> </div>
+							       	<!-- <div id="mEventDate"> </div> -->							       	
+ 									<div id="dEventPlace"> </div>
+							       	<div id="dParticipants"> </div>
+							       	<div id="dUpfile"> </div>
+							       	<div id="dEventNo"></div>
 					       	</div>
 
 						</div><!-- body -->
-						
-						<c:if test="${ loginUser.userNo == 1 }">
+	
 							 <div class="modal-footer">
-						        <button type="submit" class="btn btn-primary">수정</button>
-						        <button type="button" class="btn btn-secondary" data-dismiss="modal">삭제</button>
+							 	<c:choose>
+								 	<c:when test="${ loginUser.userNo == 1 }"> 
+							        	<button id="updateForm" type="submit" class="btn btn-primary">수정</button>
+							        </c:when>
+							        <c:otherwise>
+							        	<button id="joinEvent" type="submit" class="btn btn-primary">참가</button>
+							        </c:otherwise> 
+						        </c:choose>
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
 						      </div>
-					    </c:if>
-					
+	 	
 				</div>   <!-- content -->
 			</div><!-- dialog -->
 			
 		</div><!-- detailModal -->
+
+<script>		
+	/* function updateEvent(){
+		
+	 	$.ajax({
+			url : 'update.ev',
+			data : { 
+				eventTitle : $('#eventTitle').val(),
+				eventContent : $('#eventContent').val(),
+				eventPlace : $('#eventPlace').val(),
+				changeName : $('#changeName').val(),
+				categoryNo : $('#categoryNo').val(),
+				eventNo : $('#eventNo').val()
+			},
+			success : function(data){
+				console.log(data);
+				
+			},
+			error : function(){
+				alert('수정할 수 없습니다. 잠시 후 다시 시도해주세요');
+			}
+		});
+	 	
+	};//updateE */
+	
+	
+	
+</script>
+		
 		<div id="calendar"></div>
 		
 </div><!-- wrapper -->
 
 <style>
 	#modal-body{
+	border : 1px solid teal;
 		display : flex;
-		justify-content : center;
-		align-items : center;
+		width : 100%;
+		justify-content;
+	}
+
+	#mEventNo{
+	display : none; 
 	}
 
 </style>
@@ -149,8 +191,9 @@
 									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
 									 extendedProps: {
 										 place : '${e.eventPlace}',
-										 participant : ${e.participants},
+										 participants : ${e.participants},
 										 categoryNo : ${e.categoryNo},
+										 content : '${e.eventContent}'
 									 },
 									 imageurl :'${e.changeName}'
 								}, 
@@ -158,72 +201,188 @@
 						</c:if> 
 					],	
 					 eventDidMount: function(info) {
-						    console.log(info.event.imageurl);
+						    //console.log(info.event.imageurl);
 					 },
 					 eventContent: function (arg) {
-							console.log(arg);
+							//console.log(arg);
 				            var event = arg.event;
 				            
 				            var customHtml = '';
 				            
+				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.id + "</div>";
+				            
 				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
+				            
+				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.start + "</div>";
 				            
 				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
 				                        
 				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
 				            
-				            customHtml += "<img  style='width:100px; height : 100px;' src='" + event.imageurl +  "'/>";
+				            switch(event.extendedProps.categoryNo){
+				            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
+				            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
+				            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
+				            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
+				            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
+							
+				            }
+				 
 				            
 				            return { html: customHtml }
 				        }
 				
-			})// var calendar
+			});// var calendar
 			calendar.render();
 	        
-	        calendar.on('dateClick', function(info){
+	        calendar.on('dateClick', function(e){
+				
 	        		//해당 날짜 값에 주입하고
-	        		$('#eventDate').val(info.dateStr);
+	        		$('#eventDate').val(e.dateStr);
 	        		// 모달창 띄우고
 	        		$('#insertModal').modal('show');
+	        	
+	        	
 	        });
+	        
+	        calendar.on('eventClick', function(e){
+			
+					event = e.event._def;
+					//console.log(event);
+
+			 $('#detail-content').children().eq(0).html(event.title);
+			 $('#detail-content').children().eq(1).html(event.extendedProps.categoryNo);
+			 $('#detail-content').children().eq(2).html(event.extendedProps.content);
+			 //$('#detail-content').children().eq(3).html(event.start);
+			 $('#detail-content').children().eq(3).html(event.extendedProps.place);
+			 $('#detail-content').children().eq(4).html(event.extendedProps.participants);
+			 $('#detail-content').children().eq(5).html(event.extendedProps.imageurl);
+			 $('#detail-content').children().eq(6).html(event.publicId);
+
+
+	          $('#detailModal').modal('show');
+	        	
+	        });
+	        
+	        $('#insertEvent').on('click', function(){
+	    		
+	    		const formData = new FormData();
+	    		
+	    		formData.append('eventTitle', $('#eventTitle').val());
+	    		formData.append('eventContent', $('#eventContent').val());
+	    		formData.append('eventPlace', $('#eventPlace').val());
+	    		formData.append('eventDate', $('#eventDate').val());
+	    		formData.append('upfile', $('#upfile')[0].files[0]);
+	    		formData.append('categoryNo', $('#categoryNo').val());
+	    			
+	    			console.log($('#upfile')[0].files[0]);
+	    			console.log($('#eventDate').val());
+	    			
+	    		$.ajax({
+	    			url : 'insert.ev',
+	    			type : 'POST',
+	    			processData: false,
+	    		    contentType: false,
+	    		    enctype: 'multipart/form-data',
+	    		    data: formData,
+	    			success : function(data){
+	    				
+	    				 calendar.refetchEvents();
+	    				alert('이벤트 등록 성공!');
+	    				
+	    				$('#insertModal').modal('hide');
+	    		
+	    			
+	    				//calendar.render(); => 안됨
+	    				// calendar.refetchEvents(); => 안됨
+	    				// calendar.rerenderEvents(); => 안됨
+	    			},
+	    			error : function(){
+	    				console.log('작성 실패!');
+	    			}
+	    		})
+	    	});//insertE
+	    	
+	    	$('#updateForm').on('click', function(){
+	    	
+	    	// 각 div.html()을 변수에 저장하고
+	    		let eventTitle = $('#dEventTitle').html();
+	    		let categoryNo = $('#dCategoryNo').html();
+	    		let eventContent = $('#dEventContent').html();
+	    		//let eventDate = $('#mEventDate').html();
+	    		let eventPlace = $('#dEventPlace').html();
+	    		let participants = $('#dParticipants').html();
+	    		let upfile = $('#dUpfile').html();
+	    		let eventNo = $('#dEventNo').html();
+	    		
+	    	// #detail-content에  input(value가 변수인) 삽입
+	    		$('#detail-title').html('');
+	    		$('.modal-footer').html('');
+	    	 	$('#detail-content').html(
+	    	 			'<label for="uEventTitle">이벤트명 : <input id="uEventTitle" class="event" name="eventTitle" type="text" required  value="' +eventTitle+ '"/></label>'
+	    		   		+'<label for="uCategoryNo">카테고리 : <input id="uCategoryNo" class="event" name="categoryNo" type="number" required  value="' +categoryNo+ '"/></label>'
+	    			 	+'<label for="uEventContent">이벤트내용 : <input id="uEventContent" class="event" name="eventContent" type="text" required  value="' +eventContent+ '"/></label>'
+	    			 	//+'<label for="eventDate">이벤트날짜 : <input id="eventDate" class="event" name="eventDate" type="text" required  value="' +eventDate+ '"/></label>'
+	    		        +'<label for="uEventPlace">이벤트장소 : <input id="uEventPlace" class="event" name="eventPlace" type="text" required  value="' +eventPlace+ '"/></label>'
+	    		        +'<label for="uParticipants">참여인원 : <input id="uParticipants" class="event" name="participants" type="number" readonly value="' +participants+ '"/></label>'
+	    		       	+'<label for="uUpfile">첨부파일 : <input id="uUpfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required  value="' +upfile+ '"/></label>'
+	    		       	+'<input class="uEventNo" id="uEventNo" name="eventNo" type="hidden"  value="' +eventNo+ '"/>'
+	    		       	+'<div class="modal-footer">'
+	    		       	+'<button type="submit" class="tn btn-primary" id="updateEvent">수정</button>'
+	    		        +'</div>');
+	    		});//updateF
+	    		
+	    		$('#detail-content').on('click', '#updateEvent', function(){
+	    			
+	    			const formData = new FormData();
+	    			
+	    			formData.append('eventTitle', $('#uEventTitle').val());
+	    			formData.append('categoryNo', Number($('#uCategoryNo').val()));
+	    			formData.append('eventContent', $('#uEventContent').val());
+	    			formData.append('eventPlace', $('#uEventPlace').val());
+	    			formData.append('upfile', $('#uUpfile')[0].files[0]);
+	    			formData.append('eventNo', Number($('#uEventNo').val()));
+	    			    
+	    			$.ajax({
+	    				url : 'update.ev',
+	    				type : 'POST',
+	    				processData: false,
+	    			    contentType: false,
+	    			    enctype: 'multipart/form-data',
+	    			    data: formData,
+	    				success : function(){
+	    					alert('이벤트 수정 성공!');
+	    			
+	    				},
+	    				error : function(){
+	    					alert('수정할 수 없습니다. 잠시 후 다시 시도해주세요');
+	    				}
+	    			});
+	    		});
+	    		
+	    		$('#joinEvent').on('click', function(){
+	    			
+	    			$.ajax({
+	    				url : 'join.ev',
+	    				type : 'PUT',
+	    				data : { 
+	    					// 둘 다 null이 들어가는 이유?
+	    					userNo : ${ sessionScope.loginUser.userNo },
+	    					eventNo : $('#mEventNo').html(),
+	    				},
+	    				success : function(data){
+	    					alert('참가신청 성공!');
+	    					$('#detailModal').modal('hide');
+	    				},
+	    				error : function(){
+	    					alert('참가할 수 없습니다. 잠시 후 다시 시도해주세요');
+	    				}
+	    			});
+	    		});//joinE
 
      })//DOMContentLoaded
 
-		function insertEvent(){
-		
-			const formData = new FormData();
-			
-			formData.append('eventTitle', $('#eventTitle').val());
-			formData.append('eventContent', $('#eventContent').val());
-			formData.append('eventPlace', $('#eventPlace').val());
-			formData.append('eventDate', $('#eventDate').val());
-  			formData.append('upfile', $('#upfile')[0].files[0]);
-  			formData.append('categoryNo', $('#categoryNo').val());
-  			
-  			console.log($('#upfile')[0].files[0]);
-  			console.log($('#eventDate').val());
-  			
-			$.ajax({
-				url : 'insert.ev',
-				type : 'POST',
-				processData: false,
-			    contentType: false,
-			    enctype: 'multipart/form-data',
-			    data: formData,
-				success : function(data){
-					
-					console.log("난 결과 : " + data);
-					
-				},
-				error : function(){
-					console.log('작성 실패!');
-				}
-			})
-		};//insertE
 </script>
-
-
-
 
 <style>
 		#insertModal{
@@ -235,18 +394,13 @@
 		#eventEnrollForm{
 			
 		}
-		.modal-body{
+		#modal-body{
 			display : flex;
-			flex-flow : column nowrap;
+			/* flex-flow : column nowrap; */
 			/*align-items : center;*/
 			justify-content : center;
-		}
-		.event{
-		
 		}
 </style>
 
 </body>
 </html>
-
-		

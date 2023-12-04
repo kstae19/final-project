@@ -3,6 +3,7 @@ package com.kh.eco.event.model.service;
 
 import com.kh.eco.event.model.vo.Event;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.eco.event.model.vo.Event;
 
@@ -21,7 +22,7 @@ public interface EventService {
 	int insertEvent(Event e);
 	int updateEvent(Event event);
 	int deleteEvent(int eventNo);
-	
+	int joinEvent(HashMap<String, Integer> map);
 	
 }
 

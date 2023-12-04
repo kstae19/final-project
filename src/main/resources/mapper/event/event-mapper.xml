@@ -23,6 +23,7 @@
 		SELECT
 						EVENT_NO,
 						EVENT_TITLE,
+						EVENT_CONTENT,
 						EVENT_PLACE,
 						EVENT_DATE,
 						ORIGIN_NAME,
@@ -91,7 +92,6 @@
 						EVENT_CONTENT = #{ eventContent },
 						EVENT_PLACE = #{ eventPlace },
 						CHANGE_NAME = #{ changeName },
-						EVENT_DATE = #{ eventDate },
 						MODIFY_DATE = SYSDATE,
 						CATEGORY_NO = #{ categoryNo }
 		WHERE
@@ -107,5 +107,20 @@
 						STATUS = 'N'
 		WHERE
 						EVENT_NO = #{ eventNo }
+	</update>
+	
+	<update id="joinEvent" parameterType="hashmap">
+		UPDATE
+						TB_EVENT
+		SET
+						PARTICIPANTS = PARTICIPANTS + 1
+		WHERE
+						EVENT_NO = #{ eventNo}
+		AND
+						(
+						SELECT COUNT(*)
+						FROM	TB_USER
+						WHERE USER_NO = #{ userNo }
+						 ) = 1
 	</update>
 </mapper>

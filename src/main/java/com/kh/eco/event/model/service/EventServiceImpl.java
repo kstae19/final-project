@@ -1,6 +1,7 @@
 package com.kh.eco.event.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,12 @@ public class EventServiceImpl implements EventService{
 	public int deleteEvent(int eventNo) {
 		
 		return eventDao.deleteEvent(sqlSession, eventNo);
+	}
+
+	@Override
+	public int joinEvent(HashMap<String, Integer> map) {
+	
+		return eventDao.joinEvent(sqlSession, map);
 	}
 	
 	
