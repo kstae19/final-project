@@ -42,10 +42,10 @@
         }
         
         .bookmark{
-        	content: url(http://localhost:8001/eco/resources/images/book/book-empty.png);
+        	content: url(/eco/resources/images/book/book-empty.png);
         }
         img[class$=abled]{
-        	content: url(http://localhost:8001/eco/resources/images/book/book-full.png);
+        	content: url(/eco/resources/images/book/book-full.png);
         }
     </style>
     
