@@ -202,8 +202,6 @@
         				$('#bookReply-area').html(replyValue);
         				$('#bookReply-pagination').html(replyPiValue);
     				}
-    			
-    				
     			},
     			error : () => {
     				console.log("댓글 통신 실패");
