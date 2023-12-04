@@ -228,7 +228,7 @@
 </head>
 <body>
 	
-	<jsp:include page="../../common/header.jsp" />
+	<jsp:include page="../../user/adminPage/adminHeader.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 	

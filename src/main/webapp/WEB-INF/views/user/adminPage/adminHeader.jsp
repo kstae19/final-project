@@ -175,11 +175,11 @@ div{
 <body>
 	<div id="menubar" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a class="menu" href="">BOOK</a>
-		<a class="menu" href="">EVENT</a>
-		<a class="menu" href="">CHALLENGE</a>
-		<a class="menu" href="">PRODUCT</a>
-		<a class="menu" href="">MOVE</a>
+		<a class="menu" href="adminReport">BOOK</a>
+		<a class="menu" href="#">EVENT</a>
+		<a class="menu" href="#">CHALLENGE</a>
+		<a class="menu" href="#">PRODUCT</a>
+		<a class="menu" href="#">MOVE</a>
 		<a class="menu" href="/eco">MAIN</a>
 	</div>
 
@@ -206,7 +206,7 @@ div{
 		<div class="iom iam">
 			<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
 	          </div>
-		<div class="lom login-menu" onclick="location.href='admin.us'"><h3>회원관리</h3> </div>
+		<div class="lom login-menu" onclick="location.href='admin.us'"><h3>관리자</h3> </div>
 		<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
 	</div>
 	<script>

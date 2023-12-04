@@ -175,11 +175,11 @@ div{
 <body>
 	<div id="menubar" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a class="menu" href="">BOOK</a>
-		<a class="menu" href="">EVENT</a>
-		<a class="menu" href="">CHALLENGE</a>
-		<a class="menu" href="">PRODUCT</a>
-		<a class="menu" href="">MOVE</a>
+		<a class="menu" href="bookMyPage">BOOK</a>
+		<a class="menu" href="#">EVENT</a>
+		<a class="menu" href="#">CHALLENGE</a>
+		<a class="menu" href="#">PRODUCT</a>
+		<a class="menu" href="#">MOVE</a>
 		<a class="menu" href="/eco">MAIN</a>
 	</div>
 
