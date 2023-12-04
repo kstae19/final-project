@@ -175,11 +175,11 @@ div{
 <body>
 	<div id="menubar" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-		<a class="menu" href="book">BOOK</a>
-		<a class="menu" href="event">EVENT</a>
-		<a class="menu" href="challenge">CHALLENGE</a>
-		<a class="menu" href="product">PRODUCT</a>
-		<a class="menu" href="move">MOVE</a>
+		<a class="menu" href="">BOOK</a>
+		<a class="menu" href="">EVENT</a>
+		<a class="menu" href="">CHALLENGE</a>
+		<a class="menu" href="">PRODUCT</a>
+		<a class="menu" href="">MOVE</a>
 		<a class="menu" href="/eco">MAIN</a>
 	</div>
 
@@ -203,62 +203,11 @@ div{
 			</span>
 		</div>
 		<div id="main"><a class="main" id="main" href="/eco">Eco Friendly</a></div>
-		<c:choose>
-			<c:when test="${ empty sessionScope.loginUser }">
-				<div class="lim login-menu" onclick="location.href='login'"><h1>LOGIN</h1> </div>
-			</c:when>
-			<c:otherwise>
-				<c:choose>
-					<c:when test="${ sessionScope.loginUser.userStatus eq 'A' }">
-						<div class="iom iam">
-							<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-			            </div>
-						<div class="lom login-menu" onclick="location.href='admin.us'"><h3>관리자</h3> </div>
-						<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
-					</c:when>
-					<c:otherwise>
-						<c:choose>
-							<c:when test="${ empty sessionScope.accessToken and empty sessionScope.accessNToken }">
-								<div id="login-menu">
-									<div class="iom">
-										<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-						            </div>
-									<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-									<div class="lom login-menu" onclick="location.href='myPage.us'"><h3>MYPAGE</h3> </div>
-									<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
-					            </div>
-							</c:when>
-							<c:otherwise>
-								<c:choose>
-									<c:when test="${ not empty sessionScope.accessNToken }">
-										<div id="login-menu">
-											<div class="iom">
-												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-								            </div>
-											<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-											<div class="lom login-menu" onclick="location.href='naverlogout.us'"><h3>네이버 LOGOUT</h3> </div>
-							            </div>
-									</c:when>
-									<c:when test="${ not empty sessionScope.accessToken }">
-										<div id="login-menu">
-											<div class="iom">
-												<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
-								            </div>
-											<div class="lom cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
-											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3>MYPAGE</h3> </div>
-											<div class="lom login-menu" onclick="location.href='kakaologout.us'"><h3>카카오 LOGOUT</h3> </div>
-							            </div>
-									</c:when>
-									<c:otherwise>
-									</c:otherwise>
-								</c:choose>
-							</c:otherwise>
-						</c:choose>
-					</c:otherwise>
-        		</c:choose>
-			</c:otherwise>
-		</c:choose>
+		<div class="iom iam">
+			<h3>${ sessionScope.loginUser.userName }님 환영합니다</h3>
+	          </div>
+		<div class="lom login-menu" onclick="location.href='admin.us'"><h3>회원관리</h3> </div>
+		<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
 	</div>
 	<script>
 		function openNav() {

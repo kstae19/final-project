@@ -30,10 +30,12 @@
 			<mapping path="/shoppingList"/>
 			<mapping path="/myShopping"/>
 			<mapping path="/reportEnroll.bk" />
+			<mapping path="/myPage.us" />
 			<beans:bean class="com.kh.eco.common.interceptor.LoginInterceptor" id="loginInterceptor" />
 		</interceptor>
 		<interceptor>
 			<mapping path="/adminReport" />
+			<mapping path="/admin.us" />
 			<beans:bean class="com.kh.eco.common.interceptor.AdminInterceptor" id="adminInterceptor" />
 		</interceptor>
 	</interceptors>

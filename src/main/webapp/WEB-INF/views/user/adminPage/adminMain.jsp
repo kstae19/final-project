@@ -8,5 +8,17 @@
 </head>
 <body>
 
+	<jsp:include page="adminHeader.jsp" />
+
+
+
+
+
+
+
+
+
+
+
 </body>
-</html>   
+</html>
