@@ -137,7 +137,8 @@ public class ProductController {
 								, Model model
 								, HttpSession session) throws IOException, ParseException {
 		session.setAttribute("order", order);
-		System.out.println((Order)session.getAttribute("order"));
+		//주문이 완료되야 테이블에 저장할 수 있으므로 일단 세션에 담아두기
+		
 		model.addAttribute("pcUrl", productService.getPcUrl(pay));
 		return "product/payReady";
 	}
