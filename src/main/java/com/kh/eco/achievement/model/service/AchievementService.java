@@ -1,6 +1,7 @@
 package com.kh.eco.achievement.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kh.eco.achievement.model.vo.Achievement;
@@ -11,10 +12,11 @@ public interface AchievementService {
 
 	// 인증 전체개수 카운트
 	int countAchievementList(int challengeNo);
+	int countMyAchievementList(HashMap map);
 	
-	ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
 	// 인증 전체조회
-	//ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
+	ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
+	ArrayList<Achievement> selectMyAchievement(HashMap map, PageInfo pi);
 	
 	// 인증 등록
 	int insertAchievement(Achievement a);

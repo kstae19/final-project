@@ -209,7 +209,7 @@
 				            
 				            var customHtml = '';
 				            
-				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.id + "</div>";
+				            //customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.id + "</div>";
 				            
 				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
 				            
@@ -217,7 +217,7 @@
 				            
 				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
 				                        
-				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
+				            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
 				            
 				            switch(event.extendedProps.categoryNo){
 				            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
@@ -241,7 +241,6 @@
 	        		$('#eventDate').val(e.dateStr);
 	        		// 모달창 띄우고
 	        		$('#insertModal').modal('show');
-	        	
 	        	
 	        });
 	        
@@ -285,14 +284,14 @@
 	    		    contentType: false,
 	    		    enctype: 'multipart/form-data',
 	    		    data: formData,
-	    			success : function(data){
-	    				
-	    				 calendar.refetchEvents();
-	    				alert('이벤트 등록 성공!');
-	    				
+	    			success : function(data){	    	
+	    				console.log(data);
+	    				alert('이벤트 등록 성공!');	
 	    				$('#insertModal').modal('hide');
-	    		
-	    			
+	    				/* calendar.addEvent({
+	    					title : "금요일", // 이벤트 제목
+	    					start : "2020-09-29" //달력 날짜에 매핑
+	    					}) */
 	    				//calendar.render(); => 안됨
 	    				// calendar.refetchEvents(); => 안됨
 	    				// calendar.rerenderEvents(); => 안됨
@@ -352,7 +351,7 @@
 	    			    data: formData,
 	    				success : function(){
 	    					alert('이벤트 수정 성공!');
-	    			
+	    					$('#detailModal').modal('hide');
 	    				},
 	    				error : function(){
 	    					alert('수정할 수 없습니다. 잠시 후 다시 시도해주세요');

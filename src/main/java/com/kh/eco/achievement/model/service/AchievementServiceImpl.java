@@ -1,6 +1,7 @@
 package com.kh.eco.achievement.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -24,22 +25,35 @@ public class AchievementServiceImpl implements AchievementService {
 	
 	private final SqlSessionTemplate sqlSession;
 
-	
+
+
 	
 	@Override
 	public int countAchievementList(int challengeNo) {
 		
 		return achievementDao.countAchievementList(sqlSession, challengeNo);
 	}
-	
+	@Override
+	public int countMyAchievementList(HashMap map) {
+		
+		return achievementDao.countMyAchievementList(sqlSession, map);
+	}
+
 	@Override
 	public ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi) {
 
-		
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
 		return achievementDao.selectAchievementList(sqlSession, challengeNo, rowBounds);
+	}
+	@Override
+	public ArrayList<Achievement> selectMyAchievement(HashMap map, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
+		
+		return achievementDao.selectMyAchievement(sqlSession, map, rowBounds);
 	}
 
 	@Override
@@ -59,6 +73,7 @@ public class AchievementServiceImpl implements AchievementService {
 		
 		return achievementDao.deleteAchievement(sqlSession, achievementNo);
 	}
+
 
 
 }

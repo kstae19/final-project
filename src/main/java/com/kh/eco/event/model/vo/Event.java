@@ -2,13 +2,15 @@ package com.kh.eco.event.model.vo;
 
 import java.sql.Date;
 
+import com.kh.eco.common.model.vo.EventChallenge;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class Event {
+public class Event  extends EventChallenge{
 	
 	private int eventNo;
 	private String eventTitle;
@@ -16,12 +18,7 @@ public class Event {
 	private String eventPlace;
 	private String eventDate;
 	
-	private String status;
-	private String originName;
-	private String changeName;
-	private Date uploadDate;
-	private Date modifyDate;
-	
 	private int participants;
-	private int categoryNo;
+	// private List<User> participantsList;
+	
 }

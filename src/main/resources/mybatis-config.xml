@@ -32,6 +32,7 @@
 		<typeAlias type="com.kh.eco.book.model.vo.ReportReplyBlack" alias="adminReportReplyBlack" />
 		<typeAlias type="com.kh.eco.product.model.vo.ApproveRequest" alias="approveRequest" />
 
+		<typeAlias type="com.kh.eco.common.model.vo.EventChallenge" alias="eventChallenge" />
 		<typeAlias type="com.kh.eco.challenge.model.vo.Challenge" alias="challenge" />
 		<typeAlias type="com.kh.eco.event.model.vo.Event" alias="event"/>
 		<typeAlias type="com.kh.eco.achievement.model.vo.Achievement" alias="achievement"/>
@@ -48,6 +49,7 @@
 		
     	<mapper resource="/mapper/book/book-mapper.xml" />
     	
+    	<mapper resource="/mapper/common/eventChallenge-mapper.xml"/>
     	<mapper resource="/mapper/challenge/challenge-mapper.xml" />
     	<mapper resource="/mapper/event/event-mapper.xml"/>
   		<mapper resource="/mapper/achievement/achievement-mapper.xml"/>
