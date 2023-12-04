@@ -11,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
 /*--공통 스타일 --*/
 div {
@@ -128,9 +129,9 @@ h2 {
 				<div class="shipping-info">
 					<h2>배송 정보</h2>
 					<input type="hidden" name="addressNo">
-					<a href="#addressList" data-toggle="modal">배송지 선택</a>
+					<a href="#addressList" data-toggle="modal" onclick="return addressList();">배송지 선택</a>
 					<div>
-					<br/>
+
 					</div>
 				</div>
 				<div class="order-summary">
@@ -189,11 +190,11 @@ h2 {
 						}
 					})
 				};
-				$(()=>{
-
+				function addressList(){
 					$.ajax({
 						url : 'addressList',
 						success : e=>{
+							$('#addressList .modal-body > div').empty();
 							e.map(a=>{
 								$el = $('<div class="address"><table class="table table-borderless"></table></div>').attr('id', a.addressNo);
 								let $ptr = $('<tr></tr>');
@@ -206,15 +207,17 @@ h2 {
 										, $('<td colspan="2"></td>').text(a.address+' (' + a.post + ' )'));
 								$dtr.append($('<td></td>').text('상세주소')
 										, $('<td colspan="2"></td>').text(a.detailAddress));								
-								$el.append($ptr, $atr, $dtr);
-								$('#addressList .modal-body').append($el);
+								$el.append($ptr, $atr, $dtr,$('<br/>'));
+								$('#addressList .modal-body > div').append($el);
 							})
+								return true;
 						},
 						error : () =>{
 							console.log('ajax하기시러..배송지이이이이!');
+							return false;
 						}
-					});
-				});
+					});				
+				};
 				jQuery(document).ready(()=>{
 					$('#addressList .modal-body').on('click','.address', e=>{
 						let $address = $(e.target).parents('.address');
@@ -222,7 +225,7 @@ h2 {
 						$('.shipping-info>div').html($adrInfo);
 						$('input[name = "addressNo"]').val($address.attr('id'));
 						$('.address').css('background', 'none');
-						$address.css('background', 'beige')
+						$address.css('background', 'lightgray');
 					});
 				});
 			</script>			
@@ -243,7 +246,7 @@ h2 {
         <!-- Modal body -->
         <div class="modal-body">
         	<a href="#addForm" data-toggle="modal">배송지 추가</a>
-
+        	<div></div>
         </div>        
         <!-- Modal footer -->
         <div class="modal-footer">
@@ -264,10 +267,13 @@ h2 {
 	        </div>       
 	        <!-- Modal body -->
 	        <div class="modal-body">
-	        	<form action="newAddress" method="post" class="form-group">
-	        		<input type="text"/><br>
-	        		<input type="text"/>
-	        	</form>	
+					<input type="text" name="receiver" placeholder="받는 분" required><br/>
+					<input type="text" name="phone" placeholder="연락처" required><br/>
+					<input type="text" name="post" placeholder="우편번호" required>
+					<button type="button" onclick="postCode();">우편번호 검색</button><br/>
+					<input type="text" name="address" placeholder="주소"><br/>
+					<input type="text" name="detailAddress" placeholder="상세주소" required/><br/>
+					<button type="button" onclick="addAddress();">주소 등록하기</button>
 	        </div>        
 	        <!-- Modal footer -->
 	        <div class="modal-footer">
@@ -275,5 +281,38 @@ h2 {
 	        </div>
 	        
 	</div>
+	<script>
+		function postCode(){
+			new daum.Postcode({
+				oncomplete : function(data){
+					console.log(data);
+					$('input[name="post"]').val(data.zonecode);
+					$('input[name="address"]').val(data.address);
+				}
+			}).open();
+		};
+		function addAddress(){
+			$.ajax({
+				url : 'newAddress',
+				type : 'post',
+				data : {receiver : $('input[name="receiver"]').val(),
+						phone : $('input[name = "phone"]').val(),
+						post : $('input[name = "post"]').val(),
+						address : $('input[name = "address"]').val(),
+						detailAddress : $('input[name = "detailAddress"]').val(),
+						},
+				success : e =>{
+					console.log(e);
+					alert('배송지 추가 성공!');
+					addressList();
+				},
+				error : () =>{
+					console.log('ajax...');
+				}
+			});
+			
+		};
+
+	</script>
 </body>
 </html>

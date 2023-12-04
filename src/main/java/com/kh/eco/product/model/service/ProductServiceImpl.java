@@ -360,5 +360,10 @@ public class ProductServiceImpl implements ProductService {
 		return dao.getOrderList(sqlSession, userNo);
 	}
 
+	@Override
+	public int addAddress(Address address) {
+		return dao.addAddress(sqlSession, address);
+	}
+
 
 }

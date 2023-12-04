@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.eco.common.model.template.Pagination;
 import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.product.model.service.ProductService;
+import com.kh.eco.product.model.vo.Address;
 import com.kh.eco.product.model.vo.ApproveRequest;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.KakaoPay;
@@ -238,6 +239,14 @@ public class ProductController {
 			return "redirect:/";
 		}
 	}
+	@PostMapping("newAddress")
+	public String newAddress(Address address, HttpSession session) {
+		User loginUser = ((User)session.getAttribute("loginUser"));
+		address.setUserNo(loginUser.getUserNo());
+		productService.addAddress(address);
+		return "redirect:/product";
+	}
+
 	
 	
 }
