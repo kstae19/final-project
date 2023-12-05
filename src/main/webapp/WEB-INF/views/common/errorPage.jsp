@@ -12,6 +12,7 @@
 
     <br>
     <div align="center">
+    	<br><br>
         <img src="https://cdn2.iconfinder.com/data/icons/oops-404-error/64/208_balloon-bubble-chat-conversation-sorry-speech-256.png">
         <br><br>
         <h1 style="font-weight:bold;">${ errorMsg }</h1>
