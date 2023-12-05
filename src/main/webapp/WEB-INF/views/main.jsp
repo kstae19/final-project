@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="resources/images/1968582-28a745.png" type="image/x-icon">	
+  	
 <meta charset="UTF-8">
 <title>Eco Friendly</title>
 <!-- jQuery 라이브러리 -->
@@ -12,7 +12,7 @@
 <!-- swiper.js 라이브러리 추가 -->
 <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
-
+<link rel="icon" href="resources/images/common/1968582-28a745.png" type="image/x-icon">
 <style>
 
 	#placeholder{
