@@ -1,6 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.ResourceBundle" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%
+	ResourceBundle resource = ResourceBundle.getBundle("key");
+	
+	String kakao = resource.getString("key.KAKAO");
+	String naver = resource.getString("key.NAVER");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -172,13 +181,13 @@
 		
 		<script>
 			$('#kakao-login').click(() => {
-				location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=371545a4bd07fbb21965518d557bf733&redirect_uri=http://localhost:8001/eco/code&response_type=code&scope=profile_image';
+				location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=<%=kakao%>&redirect_uri=http://localhost:8001/eco/code&response_type=code&scope=profile_image';
 			});
 		</script>
 		
 		<script>
 			$('#naver-login').click(() => {
-				location.href = 'https://nid.naver.com/oauth2.0/authorize?client_id=Bm7N4g9KvV8b3Wl6cjN0&redirect_uri=http://localhost:8001/eco/ncode&response_type=code&state=test';
+				location.href = 'https://nid.naver.com/oauth2.0/authorize?client_id=<%=naver%>&redirect_uri=http://localhost:8001/eco/ncode&response_type=code&state=test';
 			});
 		</script>
 		
