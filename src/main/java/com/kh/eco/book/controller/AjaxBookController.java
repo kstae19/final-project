@@ -81,9 +81,10 @@ public class AjaxBookController {
 	
 	// 한줄평 등록
 	@PostMapping(value="insertBookReply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) throws Exception {
+	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) 
+	throws Exception {
 		
-		BookController.checkText(content, 63);
+		BookController.checkText(content, 60);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN13", ISBN13);

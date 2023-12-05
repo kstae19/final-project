@@ -129,7 +129,8 @@ public class BookController {
 	}
 	
 	// 글자 바이트 체크 메소드
-	public static boolean checkText(String content, int length) throws Exception{
+	public static boolean checkText(String content, int length) 
+	throws Exception{
 		if(content.getBytes().length < length) {
 			return true;
 		}else {
@@ -288,7 +289,8 @@ public class BookController {
 	
 	// 독후감 게시판 검색목록 리스트 조회
 	@GetMapping("reportSearch.bk")
-	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, ModelAndView mv, String reportSearchOption, String reportSearchValue, HttpSession session) {
+	public ModelAndView searchReportList(@RequestParam(value="cPage", defaultValue="1") int currentPage, 
+			ModelAndView mv, String reportSearchOption, String reportSearchValue, HttpSession session) {
 		
 		HashMap<String, String> map = new HashMap();
 		map.put("condition", reportSearchOption);
@@ -299,7 +301,8 @@ public class BookController {
 		List<BookReport> list = bookService.searchReportList(map, pi);
 		
 		if(list != null) { // 리스트 조회 성공
-			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportSearchOption).addObject("keyword", reportSearchValue).setViewName("book/book/reportList");
+			mv.addObject("list", list).addObject("pi", pi).addObject("condition", reportSearchOption).
+			addObject("keyword", reportSearchValue).setViewName("book/book/reportList");
 		} else { // 리스트 조회 실패
 			session.setAttribute("failBookAlert", "조회수 증가 실패");
 		}
