@@ -278,7 +278,7 @@ public class BookController {
 			}
 	}
 	
-	// 독후감 게시판 포워딩 겸 리스트 조회
+	// 독후감 게시판 리스트 조회
 	@GetMapping("bookReport")
 	public String bookReport(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) {
 		PageInfo pi = Pagination.getPageInfo(bookService.reportCount(), currentPage, 10, 10);
