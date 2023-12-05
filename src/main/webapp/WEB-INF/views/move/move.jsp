@@ -476,7 +476,7 @@
 			    			    					async: false, // 동기 처리
 			    			    					success: answer => {
 			    			    						const today = answer.response.body.items.item;
-			    			    						console.log(today);
+			    			    						// console.log(today);
 			    			    						let todayLresult = '';
 			    			    						let todayHresult = '';
 			    			    						
@@ -754,7 +754,7 @@
 					for(let i in subStData){
 						StData = subStData[i];
 						StName = StData.lineNm;
-						console.log(StData);
+						// console.log(StData);
 						// console.log(StName);
 						switch(StName) {
 						case "1호선":

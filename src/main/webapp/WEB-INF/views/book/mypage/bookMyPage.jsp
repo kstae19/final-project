@@ -68,7 +68,6 @@
     	function selectMyPageBook(nowPage){
     		$.ajax({
     			url : 'bookmypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -77,6 +76,7 @@
     			success : result => {
     				let book = result.bookList;
 					let bookPi = result.bookPi;
+					
     				if(isEmpty(book)){
     					$('#book-mypage').html("북마크한 도서가 없습니다.");
     				} else {
@@ -116,7 +116,6 @@
     	function selectMyPageReply(nowPage){
 			$.ajax({
 				url : 'bookreplymypage.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				userNo : '${ loginUser.userNo }',
@@ -127,7 +126,7 @@
 					let replyPi = result.replyPi;
     				
     				if(isEmpty(reply)){
-    					$('#bookReply-area').html("작성한 한줄평이 없습니다.");
+    					$('#mypagebookreply').html("작성한 한줄평이 없습니다.");
     				} else {
         				let replyValue = '';
         				for(let i in reply){

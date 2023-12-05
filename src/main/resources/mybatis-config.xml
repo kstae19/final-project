@@ -20,6 +20,7 @@
 		<typeAlias type="com.kh.eco.product.model.vo.ProductLike" alias="productLike"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Cart" alias="cart"/>
 		<typeAlias type="com.kh.eco.product.model.vo.Order" alias="order"/>
+    
 		<typeAlias type="com.kh.eco.product.model.vo.ApproveRequest" alias="approveRequest" />
 		<typeAlias type="com.kh.eco.product.model.vo.Address" alias="address"/>
 

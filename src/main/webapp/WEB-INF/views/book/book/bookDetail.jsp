@@ -57,7 +57,6 @@
 	        		// 북마크 조회 ajax
 	        		$.ajax({
 	        			url : 'selectBookMark.bk',
-	        			async : false,
 	        			type : 'post',
 	        			data : {
 	        				ISBN13 : '${ b.ISBN13 }',
@@ -94,7 +93,6 @@
 	        		if($('#bookReplyContent').val().trim() != ''){
 	    	    		$.ajax({
 	    	    			url : 'insertBookReply.bk',
-	    	    			async : false,
 	    	    			type : 'post',
 	    	    			data : {
 	    	    				ISBN13 : '${ b.ISBN13 }',
@@ -121,7 +119,6 @@
 	    		function deleteReply(){ // 한줄평 삭제 ajax
 	        		$.ajax({
 	        			url : 'deleteBookReply.bk',
-	        			async : false,
 	        			type : 'post',
 	        			data : {
 	        				ecoNo : $('#bookReply-area').find('input[name=ecoNo]').val(),
@@ -133,7 +130,7 @@
     	    					$('#bookReplyContent').val('');
     	    					selectBookReply();
     	    				} else{
-    	    					alert('댓글 등록 실패');
+    	    					alert('삭제 실패');
     	    				}
 	        			},
 	        			error : () => {
@@ -156,7 +153,6 @@
     		// 한줄평 조회 ajax
     		$.ajax({
     			url : 'selectBookReply.bk',
-    			async : false,
     			type : 'post',
     			data : {
     				ISBN13 : '${ b.ISBN13 }',
@@ -176,7 +172,7 @@
         				let replyValue = '';
         				for(let i in replyArr){
         					if(!isEmpty('${ sessionScope.loginUser.userId }')){
-        						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }'){
+        						if(replyArr[i].userId === '${ sessionScope.loginUser.userId }' || '${ sessionScope.loginUser.userStatus }' === 'A'){
             						replyValue += '<button type="button" class="btn btn-secondary" onclick="deleteReply();">삭제</button>'
             									+ '<input type="hidden" value="' + replyArr[i].ecoNo + '" name="ecoNo">';
             					}
@@ -223,6 +219,7 @@
 <body>
 	
 	<jsp:include page="../../common/header.jsp" />
+	<br>
 	<jsp:include page="../common/bookHeader.jsp" />
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 
@@ -280,39 +277,37 @@
             </ul>
             <c:choose>
             	<c:when test="${ empty sessionScope.loginUser }">
-            		<input id="bookReplyContent" readonly type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" name="bookReplyContent" style="height: 50px; width: 90%;">
+            		<input readonly type="text" placeholder="로그인 후 다양한 생각을 남겨주세요" style="height: 50px; width: 90%;">
             	</c:when>
             	<c:otherwise>
-            		<input id="bookReplyContent" type="text" placeholder="하나의 도서에 하나의 한줄평만 작성할 수 있습니다" name="bookReplyContent" style="height: 50px; width: 90%;" maxlength="100">
+            		<input id="bookReplyContent" type="text" placeholder="하나의 도서에 하나의 한줄평만 작성할 수 있습니다" name="bookReplyContent" style="height: 50px; width: 90%;" maxlength="50">
             		<button type="submit" style="height: 50px; width: 9%;" onclick="insertReply();">등록</button>
-	             	<p id="bookReplyKeyup">0/100</p>
+	             	<p id="bookReplyKeyup">0/50</p>
 	             	<script>
-	             		$(function(){
-	             			
-	             			$('#bookReplyContent').keyup(function(){
-	             				let content = $('#bookReplyContent').val();
-	             				let contentLength = $('#bookReplyContent').val().length;
-	             				maxByte = 100;
-	             				
-	             				let length = 0;
-	             				
-	             				for(let i = 0; i < contentLength; i++){
-	             					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
-		             					length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
-		                            }else{
-		                            	length = length + 1;
-		                            }
-	             				}
-	             				
-	             				if(length < maxByte){
-		             				$('#bookReplyKeyup').text(length + "/100");
-	             				} else{
-	             					alert("바이트 제한을 초과했습니다.");
-	             					$('#bookReplyContent').val('');
-	             				}
-	             				
-	             			})
-	             		})
+	             		
+             			let inputReply = document.getElementById("bookReplyContent")
+             			inputReply.oninput = e=>{
+             				let content = e.target.value;
+             				let contentLenght = content.length;
+             				let maxByte = inputReply.getAttribute("maxlength");
+							let length = 0;    
+							
+             				for(let i = 0; i < contentLenght; i++){
+             					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
+             						length = length + 3; // 숫자와 영어가 아닐경우 3바이트 계산
+	                            }else{
+	                            	length = length + 1;
+	                            }
+             				}
+             				
+             				if (length < maxByte) {
+             					document.getElementById('bookReplyKeyup').innerText = length + "/50";
+            					} else {
+            						alert("바이트 제한을 초과했습니다.");
+            					 	inputReply.value = '';
+            					 	document.getElementById('bookReplyKeyup').innerText = "0/50";
+            					}
+             			}
 	             	</script>
             	</c:otherwise>
             </c:choose>

@@ -153,4 +153,8 @@ public class ProductDao {
 		return (ArrayList)sqlSession.selectList("productMapper.getOrderList", userNo);
 	}
 
+	public int addAddress(SqlSessionTemplate sqlSession, Address address) {
+		return sqlSession.insert("productMapper.addAddress", address);
+	}
+
 }

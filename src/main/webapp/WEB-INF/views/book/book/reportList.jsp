@@ -50,7 +50,7 @@
                   <option value="content">내용</option>
                   <option value="writer">작성자</option>
               </select>
-              <input type="text" name="reportSearchValue" maxlength="50">
+              <input type="text" name="reportSearchValue" id="reportSearchKeyword" maxlength="50">
               <button type="submit">검색</button>
           </form>
         </div>
@@ -93,7 +93,7 @@
 		          			</c:when>
 		          			<c:when test="${ r.bookReportSecret eq 1 }">
 		        				<c:choose>
-		        					<c:when test="${ r.userId eq loginUser.userId }">
+		        					<c:when test="${ r.userId eq loginUser.userId or loginUser.userStatus eq 'A' }">
 		        						<tr>
 								          <td class="rno"><c:out value="${ r.bookReportNo }" /></td>
 								          <td>

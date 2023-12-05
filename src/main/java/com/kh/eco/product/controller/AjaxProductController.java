@@ -2,6 +2,8 @@ package com.kh.eco.product.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +14,7 @@ import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
 import com.kh.eco.product.model.vo.Cart;
 import com.kh.eco.product.model.vo.ProductLike;
+import com.kh.eco.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -90,7 +93,12 @@ public class AjaxProductController {
 		return new Gson().toJson(productService.getKeywords(keyword));
 	}
 	@GetMapping(value = "addressList", produces="application/json; charset=UTF-8")
-	public String getAddressList(int userNo) {
-		return new Gson().toJson(productService.getAddressList(userNo));
+	public String getAddressList(HttpSession session) {
+		return new Gson().toJson(productService.getAddressList(getUserNo(session)));
+	}
+	
+	public int getUserNo(HttpSession session) {
+		User loginUser = (User)session.getAttribute("loginUser");
+		return loginUser != null ? loginUser.getUserNo() : 0;
 	}
 }

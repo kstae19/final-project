@@ -9,14 +9,12 @@
 	<resultMap id="bookResultSet" type="book">
 		<result column="ISBN13" property="ISBN13" />
 		<result column="BOOK_COUNT" property="bookCount" />
-		<result column="BOOK_TITLE" property="bookTitle" />
-		<result column="BOOK_IMG" property="bookImg" />
 		<result column="BOOK_REPLY_CONTENT" property="bookReply" />
 	</resultMap>
 	
 	<!-- 한줄평 -->
 	<resultMap id="bookReplyResultSet" type="bookReply">
-		<result column="BOOK_REPLY_DATE" property="bookReplyDate" />
+		<result column="REPLY_DATE" property="bookReplyDate" />
 		<result column="BOOK_REPLY_CONTENT" property="bookReplyContent" />
 		<result column="USER_ID" property="userId" />
 		<result column="ECO_HISTORY_NO" property="ecoNo" />
@@ -29,7 +27,7 @@
 		<result column="BOOK_REPORT_CONTENT" property="bookReportContent" />
 		<result column="BOOK_REPORT_TITLE" property="bookReportTitle" />
 		<result column="USER_ID" property="userId" />
-		<result column="BOOK_REPORT_DATE" property="bookReportDate" />
+		<result column="REPORT_DATE" property="bookReportDate" />
 		<result column="BOOK_REPORT_COUNT" property="bookReportCount" />
 		<result column="BOOK_REPORT_SECRET" property="bookReportSecret" />
 		<result column="BOOK_REPORT_STAR" property="bookReportStar" />
@@ -49,7 +47,7 @@
 		<result column="BOOK_REPORT_NO" property="reportNo" />
 		<result column="USER_ID" property="userId" />
 		<result column="BOOK_REPORT_TITLE" property="reportTitle" />
-		<result column="BOOK_REPORT_DATE" property="reportDate" />
+		<result column="REPORT_DATE" property="reportDate" />
 		<result column="BOOK_REPORT_STAR" property="reportStar" />
 	</resultMap>
 	
@@ -183,7 +181,7 @@
 	<!-- 도서 한줄평 리스트 조회 -->
 	<select id="ajaxSelectBookReply" parameterType="string" resultMap="bookReplyResultSet">
 		SELECT 
-			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
+			TO_CHAR(BOOK_REPLY_DATE, 'YYYY-MM-DD') AS "REPLY_DATE",
 			BOOK_REPLY_CONTENT,
 			USER_ID,
 			ECO_HISTORY_NO
@@ -229,7 +227,7 @@
 			BOOK_REPORT_NOTICE,
 			BOOK_REPORT_TITLE,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -279,7 +277,7 @@
 			BOOK_REPORT_NOTICE,
 			BOOK_REPORT_TITLE,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -347,7 +345,7 @@
 			BOOK_REPORT_TITLE,
 			BOOK_REPORT_CONTENT,
 			USER_ID,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR
@@ -516,6 +514,7 @@
 			BOOK_REPLY_CONTENT
 		FROM TB_BOOK_REPLY
 		WHERE USER_NO = #{userNo}
+		ORDER BY BOOK_REPLY_DATE DESC
 	</select>
 	
 	<!-- 마이페이지 독후감 게시글 개수 조회 -->
@@ -532,11 +531,12 @@
 			BOOK_REPORT_TITLE,
 			BOOK_REPORT_SECRET,
 			BOOK_REPORT_STAR, 
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_COUNT
 		FROM TB_BOOK_REPORT
 		WHERE USER_NO = #{userNo}
 		AND BOOK_REPORT_STATUS = 'Y'
+		ORDER BY BOOK_REPORT_DATE DESC
 	</select>
 	
 	<!-- 마이페이지 독후감 게시글 댓글 개수 조회 -->
@@ -553,7 +553,7 @@
 	<select id="reportReplyMyPage" parameterType="_int" resultMap="bookReportReplyResultSet">
 		SELECT
 		    BOOK_REPORT_REPLY_NO,
-		    TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_REPLY_DATE",
+		    TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPLY_DATE",
 		    BOOK_REPORT_REPLY_CONTENT,
 		    TBRR.BOOK_REPORT_NO
 		FROM TB_BOOK_REPORT_REPLY TBRR
@@ -561,6 +561,8 @@
 		ON TBRR.BOOK_REPORT_NO = TBR.BOOK_REPORT_NO
 		WHERE TBRR.USER_NO = #{userNo}
 		AND BOOK_REPORT_STATUS = 'Y'
+		ORDER BY
+			BOOK_REPORT_REPLY_DATE DESC
 	</select>
 	
 	<!-- 관리자페이지 신고게시글 개수 조회  -->
@@ -581,7 +583,7 @@
 			DISTINCT BRB.BOOK_REPORT_NO,
 			USER_ID,
 			BOOK_REPORT_TITLE,
-			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_DATE",
+			TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
 			BOOK_REPORT_STAR
 		FROM 
 			TB_BOOK_REPORT_BLACK BRB
@@ -598,6 +600,8 @@
                                             ON BRB.BOOK_REPORT_NO = BR.BOOK_REPORT_NO
                                             WHERE BOOK_REPORT_STATUS = 'Y')
 							        WHERE REPORT_COUNT > 0)
+		ORDER BY 
+			BOOK_REPORT_DATE DESC
 	</select>
 	
 	<!-- 관리자페이지 신고댓글 개수 조회 -->
@@ -615,7 +619,7 @@
 			DISTINCT BRRB.BOOK_REPORT_REPLY_NO,
 			USER_ID,
 			BOOK_REPORT_REPLY_CONTENT,
-    		TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "BOOK_REPORT_REPLY_DATE"
+    		TO_CHAR(BOOK_REPORT_REPLY_DATE, 'YYYY-MM-DD') AS "REPORT_REPLY_DATE"
 		FROM 
 			TB_BOOK_REPORT_REPLY_BLACK BRRB
 		JOIN
@@ -629,6 +633,8 @@
 				      COUNT(*) OVER (PARTITION BY BOOK_REPORT_REPLY_NO) AS REPLY_COUNT
 				      FROM TB_BOOK_REPORT_REPLY_BLACK)
 				WHERE REPLY_COUNT > 0)
+		ORDER BY
+			BOOK_REPORT_REPLY_DATE DESC
 	</select>
 	
 	<!-- 관리자 페이지 신고게시글 삭제 -->
