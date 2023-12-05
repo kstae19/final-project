@@ -136,10 +136,10 @@ public interface BookService {
 	public List<ReportReplyBlack> adminReportReplyBlack(PageInfo pi);
 	
 	// 관리자페이지 신고게시글 삭제
-	public int deleteReportBlack(int reportBlackNo);
+	public int deleteReportBlack(int[] arr);
 	
 	// 관리자페이지 신고댓글 삭제
-	public int deleteReplyBlack(int replyBlackNo);
+	public int deleteReplyBlack(int[] arr);
 	
 	
 	

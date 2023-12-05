@@ -40,8 +40,9 @@ public class BookController {
 	
 	private static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
 	
-	// 알라딘 api 메인 메소드
-	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
+	// 알라딘 api 리스트 메소드
+	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) 
+	throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
 		url += "&Query=" + URLEncoder.encode(query, "UTF-8");
@@ -54,7 +55,6 @@ public class BookController {
 		
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
-		// 요청방식은 GET방식과 POST방식에 상관없이 요청 가능합니다.
 		urlConnection.setRequestMethod("GET");
 		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 		
@@ -72,11 +72,6 @@ public class BookController {
 			Book book = new Book();
 			
 			book.setISBN13(item.get("isbn13").getAsString());
-			book.setBookCategory(item.get("categoryName").getAsString());
-			book.setBookContent(item.get("description").getAsString());
-			book.setBookDate(item.get("pubDate").getAsString());
-			book.setBookLink(item.get("link").getAsString());
-			book.setBookPublisher(item.get("publisher").getAsString());
 			book.setBookTitle(item.get("title").getAsString());
 			book.setBookWriter(item.get("author").getAsString());
 			book.setBookImg(item.get("cover").getAsString());
@@ -125,6 +120,9 @@ public class BookController {
 		book.setBookWriter(item.get("author").getAsString());
 		book.setBookImg(item.get("cover").getAsString());
 		
+		br.close();
+		urlConnection.disconnect();
+		
 		return book;
 	}
 	
@@ -142,7 +140,8 @@ public class BookController {
 	
 	// 메인화면 메소드
 	@GetMapping("book")
-	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) throws IOException {
+	public String bookMain(@RequestParam(value="cPage", defaultValue="1") int currentPage, Model model) 
+	throws IOException {
 		
 		List<Book> bookList = selectBookList(20, "환경", currentPage);
 		List<Book> countList = bookService.countList();
@@ -243,16 +242,10 @@ public class BookController {
 	
 	// 상세페이지 메소드
 	@RequestMapping("bookDetail.bk")
-	public String bookDetail(String ISBN, Model model, Book book, HttpSession session) throws IOException {
+	public String bookDetail(String ISBN, Model model, int count, HttpSession session) 
+	throws IOException {
 		
-		int count = 0;
-		if(book.getISBN13() != null) {
-			book.setISBN13(ISBN);
-			count = book.getBookCount();
-		} else {
-			book = bookLookUp(ISBN);
-			count = 1;
-		}
+			Book book = bookLookUp(ISBN);
 			
 			if(count == 0) { // 조회수가 0일때
 				int bookCount = bookService.insertBook(book);
@@ -389,11 +382,10 @@ public class BookController {
 	
 	// 독후감 게시글 신고
 	@PostMapping("reportBlack.bk")
-	public String reportBlack(int reportNo, String userId, int userNo, HttpSession session) {
+	public String reportBlack(int reportNo, int userNo, HttpSession session) {
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("reportNo", reportNo);
-		map.put("userId", userId);
 		map.put("userNo", userNo);
 		
 		if(bookService.reportBlack(map) > 0) {
