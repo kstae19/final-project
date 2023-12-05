@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class BicycleController {
 	
-	static final String KEY = "754e6e4b446b7374313036724a6e4d54";
+	@Value("${key.BIKE}")
+	private String bikeApiKey;
 	
 	@ResponseBody
 	@RequestMapping(value="bicycle.mo", produces="application/json; charset=UTF-8")
 	public String bicycleInfo() throws IOException {
-		
+	System.out.println(bikeApiKey);	
 		String url = "http://openapi.seoul.go.kr:8088/";
-		url += KEY;
+		url += bikeApiKey;
 		url += "/json/bikeList/1/1000";
 	
 		URL requestUrl = new URL(url);
@@ -42,7 +44,7 @@ public class BicycleController {
 	public String bicycle2Info() throws IOException {
 		
 		String url = "http://openapi.seoul.go.kr:8088/";
-		url += KEY;
+		url += bikeApiKey;
 		url += "/json/bikeList/1001/2000";
 	
 		URL requestUrl = new URL(url);
@@ -62,7 +64,7 @@ public class BicycleController {
 	public String bicycle3Info() throws IOException {
 		
 		String url = "http://openapi.seoul.go.kr:8088/";
-		url += KEY;
+		url += bikeApiKey;
 		url += "/json/bikeList/2001/3000";
 	
 		URL requestUrl = new URL(url);
