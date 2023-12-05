@@ -13,6 +13,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="icon" href="resources/images/common/1968582-28a745.png" type="image/x-icon">
 <meta charset="UTF-8">
 <title>로그인</title>
 <!-- jQuery 라이브러리 -->
