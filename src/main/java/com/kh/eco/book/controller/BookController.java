@@ -40,7 +40,7 @@ public class BookController {
 	
 	private static final String ALADINSERVICEKEY = "ttbrkd_gus_wl1746003";
 	
-	// 알라딘 api 검색기능 메소드
+	// 알라딘 api 메인 메소드
 	public ArrayList<Book> selectBookList(int maxResult, String query, int currentPage) throws IOException{
 		String url = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx";
 		url += "?TTBKey=" + ALADINSERVICEKEY;
@@ -159,17 +159,6 @@ public class BookController {
 		    }
 		}
 		
-		
-		/*
-		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
-		for(int i = 0; i < bookList.size(); i++) {
-			for(int n = 0; n < countList.size(); n++) {
-				if((bookList.get(i).getISBN13()).equals(countList.get(n).getISBN13())) {
-					bookList.get(i).setBookCount(countList.get(n).getBookCount());
-				}
-			}
-		}*/
-		
 		PageInfo pi = Pagination.getPageInfo(200, currentPage, 20, 10);
 		
 		model.addAttribute("bookList", bookList);
@@ -230,16 +219,6 @@ public class BookController {
 		        book.setBookCount(bookCount);
 		    }
 		}
-		
-		/*
-		// countList와 bookList의 각 식별값끼리 비교하면서 같을 경우 북리스트에 추가..
-		for(int i = 0; i < searchList.size(); i++) {
-			for(int n = 0; n < countList.size(); n++) {
-				if((searchList.get(i).getISBN13()).equals(countList.get(n).getISBN13())) {
-					searchList.get(i).setBookCount(countList.get(n).getBookCount());
-				}
-			}
-		}*/
 		
 		PageInfo pi = Pagination.getPageInfo(searchList.size(), currentPage, 20, 10);
 		// 만약 현재페이지 1 : 0 ~ 19(20)
