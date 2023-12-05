@@ -264,10 +264,6 @@
 			USER_ID
 		</if>
 		LIKE '%' || '${keyword}' || '%'
-		ORDER
-		BY
-			BOOK_REPORT_NOTICE DESC NULLS LAST,
-			BOOK_REPORT_DATE DESC
 	</select>
 	
 	<!-- 독후감 게시글 검색 조회 -->
@@ -300,7 +296,7 @@
 		LIKE '%' || '${keyword}' || '%'
 		ORDER
 		BY
-			BOOK_REPORT_NOTICE,
+			BOOK_REPORT_NOTICE DESC NULLS LAST,
 			BOOK_REPORT_DATE DESC
 	</select>
 	
