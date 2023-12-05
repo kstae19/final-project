@@ -213,9 +213,11 @@
 					<c:when test="${ sessionScope.loginUser.userStatus eq 'A' }">
 						<div class="iom iam">
 							<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
-			            </div>
-						<div class="lom login-menu" onclick="location.href='user.us'"><h3 id="header_h3">회원관리</h3> </div>
-						<div class="lom login-menu" onclick="location.href='logout.us'"><h3 id="header_h3">LOGOUT</h3> </div>
+            </div>
+
+						<div class="lom login-menu" onclick="location.href='admin.us'"><h3>관리자</h3> </div>
+						<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
+
 					</c:when>
 					<c:otherwise>
 						<c:choose>
@@ -223,11 +225,11 @@
 								<div id="login-menu">
 									<div class="iom">
 										<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
-						            </div>
+                  </div>
 									<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
 									<div class="lom login-menu" onclick="location.href='mypage.us'"><h3 id="header_h3">MYPAGE</h3> </div>
 									<div class="lom login-menu" onclick="location.href='logout.us'"><h3 id="header_h3">LOGOUT</h3> </div>
-					            </div>
+                  </div>
 							</c:when>
 							<c:otherwise>
 								<c:choose>

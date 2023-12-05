@@ -113,5 +113,42 @@ public class AchievementAjaxController {
 		}
 	}
 	
+	@GetMapping(value="mine.ac", produces="application/json; charset=UTF-8")
+	public String selectMyAchievement(int userNo, 
+														int challengeNo,
+														@RequestParam(value="currentPage", defaultValue="1")int currentPage) {
+		
+		System.out.println(userNo);
+		System.out.println(challengeNo);
+		
+		HashMap<String, Integer> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("challengeNo", challengeNo);
+		
+		PageInfo pi = Pagination.getPageInfo(
+				 achievementService.countMyAchievementList(map),
+				 currentPage, 
+				 10, 
+				 1);
+		
+		ArrayList<Achievement> myAchievement =  achievementService.selectMyAchievement(map, pi);
+		
+		 return new Gson().toJson(myAchievement);
+	}
+	
+	@GetMapping(value="progress.ac", produces="application/json; charset=UTF-8")
+	public String selectProgress(int userNo, int challengeNo) {
+		
+		HashMap<String, Integer> map = new HashMap();
+		map.put("userNo", userNo);
+		map.put("challengeNo", challengeNo);
+		
+		// userNo/challengeNo를 가지고 카운팅 --A 
+		int myAchievement = achievementService.countMyAchievementList(map);
+		
+		return new Gson().toJson(myAchievement);
+
+	}
+	
 
 }//class

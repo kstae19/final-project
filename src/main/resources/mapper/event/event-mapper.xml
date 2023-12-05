@@ -11,6 +11,7 @@
 		<result column="EVENT_CONTENT" property="eventContent"/>
 		<result column="EVENT_PLACE" property="eventPlace"/>
 		<result column="EVENT_DATE" property="eventDate"/>
+		<result column="ORIGIN_NAME" property="originName"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="UPLOAD_DATE" property="uploadDate" />
 		<result column="PARTICIPANTS" property="participants"/>
@@ -22,8 +23,10 @@
 		SELECT
 						EVENT_NO,
 						EVENT_TITLE,
+						EVENT_CONTENT,
 						EVENT_PLACE,
 						EVENT_DATE,
+						ORIGIN_NAME,
 						CHANGE_NAME,
 						PARTICIPANTS,
 						CATEGORY_NO
@@ -65,9 +68,9 @@
 						EVENT_DATE,
 						UPLOAD_DATE,
 						CHANGE_NAME,
+						PARTICIPANTS,
 						CATEGORY_NO
-						)
-						
+						)	
 		VALUES(
 						SEQ_EVENT_NO.NEXTVAL,
 						#{ eventTitle },
@@ -76,9 +79,9 @@
 						#{ eventDate},
 						SYSDATE,
 						#{ changeName },
+						DEFAULT,
 						#{ categoryNo }
 					)
-	
 	</insert>
 	<!-- 이벤트 수정 -->
 	<update id="updateEvent" parameterType="event">
@@ -89,7 +92,6 @@
 						EVENT_CONTENT = #{ eventContent },
 						EVENT_PLACE = #{ eventPlace },
 						CHANGE_NAME = #{ changeName },
-						EVENT_DATE = #{ eventDate },
 						MODIFY_DATE = SYSDATE,
 						CATEGORY_NO = #{ categoryNo }
 		WHERE
@@ -105,5 +107,20 @@
 						STATUS = 'N'
 		WHERE
 						EVENT_NO = #{ eventNo }
+	</update>
+	
+	<update id="joinEvent" parameterType="hashmap">
+		UPDATE
+						TB_EVENT
+		SET
+						PARTICIPANTS = PARTICIPANTS + 1
+		WHERE
+						EVENT_NO = #{ eventNo}
+		AND
+						(
+						SELECT COUNT(*)
+						FROM	TB_USER
+						WHERE USER_NO = #{ userNo }
+						 ) = 1
 	</update>
 </mapper>

@@ -3,6 +3,7 @@ package com.kh.eco.event.model.service;
 
 import com.kh.eco.event.model.vo.Event;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.eco.event.model.vo.Event;
 
@@ -18,10 +19,10 @@ public interface EventService {
 	
 	
 	// 이벤트 등록, 수정, 삭제
-	int insertEvent(Event event);
+	int insertEvent(Event e);
 	int updateEvent(Event event);
 	int deleteEvent(int eventNo);
-	
+	int joinEvent(HashMap<String, Integer> map);
 	
 }
 

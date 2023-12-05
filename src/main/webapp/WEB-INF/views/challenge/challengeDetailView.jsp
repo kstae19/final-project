@@ -254,8 +254,8 @@
     			<input id="achievementTitle" type="text" name="achievementTitle"/>
     			<textarea id="achievementContent" style="resize:none; width:100%; height:10%;"></textarea>
     			<input id="upfile" type="file" name="upfile" />첨부파일
-    			<button onclick="insertAchievement();">인증</button>
-    			<button onclick="selectMine();">내 인증글만 보기</button>
+    			<button id="insertAchievement">인증</button>
+    			<button id="toggle-btn" onclick="selectMine()">내 인증글만 보기</button>
     		</article>
     	</c:if>
     		
@@ -271,7 +271,7 @@
 
 </div><!-- wrapper -->
 <script>
-			function insertAchievement(){
+			$('#insertAchievement').on('click', function(){
 				
 				const formData = new FormData();
 				/** fileUpload 및 저장경로 공부 */
@@ -289,13 +289,39 @@
 				    enctype: 'multipart/form-data',
 				    data: formData,
 					success : function(data){
-						
-						console.log("난 결과 : " + data);
+
 						if(data == 'success'){
 							currentPage = 1;
 							selectMore(currentPage);
 							$('input').val('');
 							$('textarea').val('');
+							
+							$.ajax({
+								url : 'progress.ac',
+								data : {
+									userNo : ${ sessionScope.loginUser.userNo },
+									challengeNo : ${ challenge.challengeNo }
+								},
+								success : function(result){
+									let progress = (result)/${challenge.achievementCount};
+									if(0.25 <= progress && progress < 0.5){
+										alert('축하합니다 25% 이상 달성하셨습니다!');
+									}else if(0.5 <= progress && progress < 0.75){
+										alert('축하합니다 50% 이상 달성하셨습니다!');
+									}else if(0.75 <= progress && progress < 1){
+										alert('축하합니다 75% 이상 달성하셨습니다!');
+									}else if(1 <= progress) {
+										alert('축하합니다 100% 이상 달성하셨습니다! 마이페이지에서 뱃지를 확인하실 수 있습니다!');
+										//여기에 ajax또 쓰기 to 마이페이지
+									}else{
+										alert('잘하셨어요! 앞으로 조금만 더 힘내세요~~');
+									}
+								},
+								error : function(){
+									
+								}	
+							});
+
 						}else{
 							alert('인증 실패ㅠㅠ');
 						}
@@ -304,7 +330,7 @@
 						console.log('작성 실패!');
 					}
 				})
-			};//insertA 
+			});//insertA 
 </script>
 
 <script>
@@ -414,6 +440,60 @@
 	
 		});
 
+</script>
+<script>
+	let isToggled = false;
+	
+	$('#toggle-btn').on('click', function() {
+	  isToggled = !isToggled;
+	  if (isToggled) {
+	    // 버튼이 켜진 상태일 때 수행할 작업
+	    selectMine();
+	  } else {
+	    // 버튼이 꺼진 상태일 때 수행할 작업
+	    let currentPage = 1;
+	    selectMore(currentPage);
+	  }
+	});
+
+	function selectMine(){
+		$.ajax({
+			url : 'mine.ac',
+			data : {
+				userNo : ${ sessionScope.loginUser.userNo },
+				challengeNo : ${ challenge.challengeNo }
+			},
+			success : function(result){
+			
+				let resultStr = '';
+				for(let i in result){
+					resultStr +=
+									'<div>'
+									+'<img src="' + result[i].changeName + '"/>'
+									+'<span><b>'+ result[i].achievementTitle + '</b></span>'
+									+'<span>'+ result[i].userNo + '</span>'
+									+'<div>'+ result[i].achievementContent + '</div>'
+									+'</div>'
+ 			
+					if(result[i].userNo == ${loginUser.userNo}){		
+						resultStr += '<div>'
+										+'<button class="update-btn">수정하기</button>'
+									 	+'<button class="delete-btn">삭제하기</button>'
+									 	+'<p>' + result[i].achievementNo + '</p>'
+									 	+'</div>'
+					}; 
+			
+				};//for
+			
+				/** 자기글만 보여줄 때는 html() */
+					$('#achievement-content').html(resultStr);
+	
+			},
+			error : function(){
+				
+			}
+		});
+	};
 </script>
     	
     <!-- content -->

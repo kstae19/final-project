@@ -62,6 +62,7 @@ public interface ProductService {
 	ProductReview getLastReview(int userNo);
 	int deleteReview(int reviewNo);
 	ArrayList<Order> getOrderList(int userNo);
+	int addAddress(Address address);
 
 
 }

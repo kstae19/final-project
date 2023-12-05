@@ -13,6 +13,5 @@ public class ApproveRequest {
 	private String tid;
 	private String partnerOrderId;
 	private int userNo;
-	//private String partnerUserId;
 	private String pgToken;
 }

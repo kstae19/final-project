@@ -106,8 +106,8 @@
             	</div>
             	<div class="content-item">
 					 <select id="achievementCount" name="achievementCount">
-	            			<option value="everyday">매일</option>
-							<option value="everyweek">매주<option>
+	            			<option value="30">매일</option>
+							<option value="4">매주<option>
 					</select>
             	</div>
           	     <div class="content-item">

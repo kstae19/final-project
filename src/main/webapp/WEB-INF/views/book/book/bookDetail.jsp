@@ -42,10 +42,10 @@
         }
         
         .bookmark{
-        	content: url(http://localhost:8001/eco/resources/images/book/book-empty.png);
+        	content: url(/eco/resources/images/book/book-empty.png);
         }
         img[class$=abled]{
-        	content: url(http://localhost:8001/eco/resources/images/book/book-full.png);
+        	content: url(/eco/resources/images/book/book-full.png);
         }
     </style>
     
@@ -202,8 +202,6 @@
         				$('#bookReply-area').html(replyValue);
         				$('#bookReply-pagination').html(replyPiValue);
     				}
-    			
-    				
     			},
     			error : () => {
     				console.log("댓글 통신 실패");
