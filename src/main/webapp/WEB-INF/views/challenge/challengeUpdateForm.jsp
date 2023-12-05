@@ -71,7 +71,7 @@
 		<!--파일을 첨부하는 요청을 할 때는 반드시 form태그에 enctype="multipart/form-data" 를 추가해줘야함!!-->
         <form enctype="multipart/form-data" action="update.ch" id="updateForm" method="post">
 			<input type="hidden" name="userNo" value="${ sessionScope.loginUser.userNo }" />
-			<input type="hidden" name="challengeNo" value="${ challenge.challengeNo }" />
+			<input type="hidden" name="activityNo" value="${ challenge.activityNo }" />
             <article id="content-items">
             	<div class="content-item">
 	            	<label for="title">

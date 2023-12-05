@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="activityMapper">
+<!-- resultMap 영역 -->
+	<resultMap id="activityResultSet" type="activity">
+		<result column="ACTIVITY_NO" property="activityNo" />
+		<result column="STATUS" property="status" />
+		<result column="ORIGIN_NAME" property="originName" />
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="UPLOAD_DATE" property="uploadDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+		<result column="CATEGORY_NO" property="categoryNo" />
+		
+	<!-- 1. type필드를 통해 resultMap 다르게 구상하기 -->
+		<discriminator column="type" javaType="_int">
+			<case value="1" resultType="event">
+				<result column="EVENT_TITLE" property="eventTitle"/>
+				<result column="EVENT_CONTENT" property="eventContent"/>
+				<result column="EVENT_PLACE" property="eventPlace"/>
+				<result column="EVENT_DATE" property="eventDate"/>
+			</case>
+			<case value="2" resultType="challenge">
+				<result column="CHALLENGE_TITLE" property="challengeTitle"/>
+				<result column="CHALLENGE_CONTENT" property="challengeContent"/>
+				<result column="CHALLENGE_PLACE" property="challengePlace"/>
+				<result column="ACHIEVEMENT_COUNT" property="achievementCount"/>
+				<result column="SUCCESS_LIMIT" property="successLimit"/>
+				<result column="MIN_PARTICIPANT" property="minParticipant"/>
+				<result column="MAX_PARTICIPANT" property="maxParticipant"/>
+				<result column="VIEW_COUNT" property="viewCount"/>
+				<result column="LIKE_COUNT" property="likeCount"/>
+				<result column="START_DATE" property="startDate"/>
+				<result column="END_DATE" property="endDate"/>
+				<result column="USER_NO" property="userNo"/>
+				<!-- achieveList는 oracle에 column이 따로 없음 -->
+			</case>
+		</discriminator>
+	</resultMap>
+	
+	<!-- 2. challenge에 딸린 achievement리스트담을 resultMap -->
+	<resultMap id="challengeAndAchieveMap" type="challenge">
+		<result column="ACTIVITY_NO" property="activityNo"/>
+		<result column="CHALLENGE_TITLE" property="challengeTitle"/>
+		<result column="CHALLENGE_CONTENT" property="challengeContent"/>
+		<result column="CHALLENGE_PLACE" property="challengePlace"/>
+		<result column="ACHIEVEMENT_COUNT" property="achievementCount"/>
+		<result column="SUCCESS_LIMIT" property="successLimit"/>
+		<result column="MIN_PARTICIPANT" property="minParticipant"/>
+		<result column="MAX_PARTICIPANT" property="maxParticipant"/>
+		<result column="VIEW_COUNT" property="viewCount"/>
+		<result column="LIKE_COUNT" property="likeCount"/>
+		<result column="START_DATE" property="startDate"/>
+		<result column="END_DATE" property="endDate"/>
+		<result column="USER_NO" property="userNo"/>
+		<!-- 필드에 list등 collection담기 -->
+		<collection property="achieveList" resultMap="achieveMap" />
+	</resultMap>
+	
+	<!-- collection내용물에 해당하는 resultMap -->
+	<resultMap id="achieveMap" type="achievement">
+		<result column="ACHIEVE_NO" property="achievementNo"/>
+		<result column="ACTIVITY_NO" property="activityNo"/>
+		<result column="USER_NO" property="userNo"/>
+		<result column="ACHIEVE_TITLE" property="achievementTitle"/>
+		<result column="ACHIEVE_CONTENT" property="achievementContent"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="UPLOAD_DATE" property="uploadDate"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+
+	<resultMap id="challengeMap" type="challenge">
+		<result column="ACTIVITY_NO" property="activityNo" />
+		<result column="CHALLENGE_TITLE" property="challengeTitle" />
+		<result column="START_DATE" property="startDate" />
+		<result column="SUCCESS_LIMIT" property="successLimit" />
+		<result column="VIEW_COUNT" property="viewCount" />
+	
+		<result column="ORIGIN_NAME" property="originName" />
+		<result column="CHANGE_NAME" property="changeName" />
+		<result column="CHALLENGE_CONTENT" property="challengeContent" />
+		<result column="USER_NO" property="userNo" />
+		<result column="CATEGORY_NO" property="categoryNo" />
+		
+		<result column="END_DATE" property="endDate" />
+		<result column="CHALLENGE_PLACE" property="challengePlace" />
+		<result column="ACHIEVEMENT_COUNT" property="achievementCount" />
+		<result column="MIN_PARTICIPANT" property="minParticipant" />
+		<result column="MAX_PARTICIPANT" property="maxParticipant" />
+		<result column="STATUS" property="status" />
+		<result column="UPLOAD_DATE" property="uploadDate" />
+		<result column="MODIFY_DATE" property="modifyDate" />
+	</resultMap>
+
+	<resultMap id="eventMap" type="event">
+		<result column="ACTIVITY_NO" property="activityNo"/>
+		<result column="EVENT_TITLE" property="eventTitle"/>
+		<result column="EVENT_CONTENT" property="eventContent"/>
+		<result column="EVENT_PLACE" property="eventPlace"/>
+		<result column="EVENT_DATE" property="eventDate"/>
+		<result column="ORIGIN_NAME" property="originName"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="UPLOAD_DATE" property="uploadDate" />
+		<result column="PARTICIPANTS" property="participants"/>
+		<result column="CATEGORY_NO" property="categoryNo"/>
+	</resultMap>
+
+
+
+
+
+
+
+
+<!-- 게시글 총개수 조회 -->
+	<select id="countChallengeList" resultType="_int">
+		SELECT 
+						COUNT(*)
+		FROM 
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		WHERE 
+						STATUS = 'Y'
+	</select>
+	
+	<!-- 게시글 전체조회 -->
+	<select id="selectChallengeList" resultMap="challengeMap"><!-- resultType을 왜 arrayList가 아닌 resultMap으로 해야할까 -->
+		SELECT
+						ACTIVITY_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+						VIEW_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		JOIN
+						TB_USER USING(USER_NO)
+		JOIN 
+						TB_CATEGORY USING (CATEGORY_NO)
+		WHERE 
+						STATUS = 'Y' 
+		ORDER
+		BY	
+						UPLOAD_DATE DESC
+	</select>
+	
+	<!-- 검색결과수 조회 -->
+	<select id="countSearchList" resultType="_int" parameterType="hashmap">
+		SELECT 
+						COUNT(*)
+		FROM 
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)					
+		JOIN 
+						TB_USER USING (USER_NO)
+		WHERE 
+						TB_CHALLENGE.STATUS = 'Y'<!-- USER에도 STATUS가 있기 때문 -->
+	
+			<if test=" condition == 'title' ">
+						AND CHALLENGE_TITLE 
+			</if>
+			<if test=" condition == 'userId' ">
+						AND USER_ID
+			</if>
+						LIKE '%' || #{ keyword } || '%'
+	</select>
+	
+	<!-- 검색결과리스트 조회 -->
+	<select id="selectSearchList" resultMap="challengeMap" parameterType="hashmap">
+		SELECT
+						ACTIVITY_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+						VIEW_COUNT,			
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		JOIN
+						TB_USER USING(USER_NO)
+		JOIN 
+						TB_CATEGORY USING (CATEGORY_NO)
+		WHERE 
+						TB_ACTIVITY.STATUS = 'Y'	
+		AND
+		<choose>
+			<when test="condition == 'title' ">
+						CHALLENGE_TITLE
+			</when>
+			<otherwise>
+						USER_ID
+			</otherwise>
+		</choose>
+						LIKE '%' || #{keyword} || '%'
+		ORDER
+		BY	
+						UPLOAD_DATE DESC
+	</select>
+	
+	<!-- 정렬 결과수 조회 -->
+	<select id="countChallengeStatus" parameterType="hashmap" resultType="_int">
+		SELECT
+						COUNT(*)
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		WHERE
+						STATUS = 'Y'			
+			AND			
+					<if test=" status == 'coming' ">
+					<![CDATA[ 
+						SYSDATE < TO_DATE(START_DATE, 'YY/MM/DD')
+					]]> 
+					</if>	
+					<if test=" status == 'progress' ">
+					<![CDATA[ 
+						TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE AND SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
+					]]>
+					</if>
+					<if test=" status == 'complete' ">
+					<![CDATA[ 
+						TO_DATE(END_DATE, 'YY/MM/DD') < SYSDATE 
+					]]>
+					</if> 
+		 
+	</select>
+	
+	<!-- 정렬결과 리스트 조회 - 진행예정/진행중/종료 -->
+	<select id="selectChallengeStatus" parameterType="hashmap" resultMap="challengeMap">
+		SELECT
+						ACTIVITY_NO,
+						CHALLENGE_TITLE,
+						START_DATE,
+						SUCCESS_LIMIT,
+						VIEW_COUNT,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						USER_ID,
+						CATEGORY_NAME
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		JOIN
+						TB_USER USING (USER_NO)
+		JOIN
+						TB_CATEGORY USING (CATEGORY_NO)
+		WHERE 
+						TB_CHALLENGE.STATUS = 'Y'
+		AND
+					<if test=" status == 'coming' ">
+					<![CDATA[ 
+					SYSDATE < TO_DATE(START_DATE, 'YY/MM/DD')
+					]]> 
+					</if>	
+					<if test=" status == 'progress' ">
+					<![CDATA[ 
+					TO_DATE(START_DATE, 'YY/MM/DD') < SYSDATE AND SYSDATE < TO_DATE(END_DATE, 'YY/MM/DD')
+					]]>
+					</if>
+					<if test=" status == 'complete' ">
+					<![CDATA[ 
+					TO_DATE(END_DATE, 'YY/MM/DD') < SYSDATE 
+					]]>
+					</if> 
+	</select>
+	
+	
+	<!-- 조회수 증가 -->
+	<update id="increaseViewCount" parameterType="_int">
+		UPDATE 
+						TB_CHALLENGE
+		SET 
+						VIEW_COUNT = VIEW_COUNT + 1
+		WHERE 	
+						ACTIVITY_NO = #{ activityNo }
+	</update>	
+	
+	<!-- 유저아이디 조회 -->
+	<select id="selectUserId" parameterType="_int" resultType="string">
+		SELECT
+						USER_ID
+		FROM
+						TB_USER
+		JOIN
+						TB_CHALLENGE USING(USER_NO)
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	</select>
+	
+	<!-- 카테고리이름 조회 -->
+	<select id="selectCategoryName" parameterType="_int" resultType="string">
+		SELECT
+						CATEGORY_NAME
+		FROM
+						TB_CATEGORY
+		JOIN
+						TB_ACTIVITY USING (CATEGORY_NO)
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	
+	</select>
+	
+		<!-- 게시글 상세조회 -->
+	<select id="selectChallengeDetail" resultMap="challengeMap" parameterType="_int"><!-- resultMap으로 할까? -->
+		SELECT
+						ACTIVITY_NO,
+						CHALLENGE_TITLE,
+						CHALLENGE_CONTENT,
+						CHALLENGE_PLACE,
+						ACHIEVEMENT_COUNT,
+						SUCCESS_LIMIT,
+						MIN_PARTICIPANT,
+						MAX_PARTICIPANT,
+						STATUS,
+						VIEW_COUNT,
+					
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+						MODIFY_DATE,
+						START_DATE,
+						END_DATE,
+			
+						USER_NO,
+						CATEGORY_NO				
+		FROM 
+						TB_CHALLENGE
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		WHERE 
+						ACTIVITY_NO = #{ activityNo }
+	</select>
+	
+	<!-- 좋아요 한 회원인지 확인 -->
+	<select id="checkLikeCount" parameterType="hashmap" resultType="_int">
+		<!-- SELECT
+						COUNT(*)
+		FROM
+						TB_CHALLENGE
+		JOIN
+						TB_USER USING(USER_NO)
+		WHERE
+						USER_NO = #{ userNo }
+		AND
+						CHALLENGE_NO = #{ challengeNo }	 -->
+		SELECT
+						COUNT(*)
+		FROM
+						TB_LIKE_CHALLENGE
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+		AND		
+						USER_NO = #{ userNo }
+	</select>
+	
+	<!-- likedUser를 위한 확인 -->
+	<select id="selectLikedUser" parameterType="hashmap" resultType="_int">
+		SELECT
+						USER_NO<!-- null? 0? -->
+		FROM
+						TB_LIKE_CHALLENGE
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+		AND		
+						USER_NO = #{ userNo }<!-- 로그인한 유저넘버 -->
+	</select>
+	
+	<!-- 좋아요수 조회 -->
+	<select id="selectLikeCount" parameterType="_int" resultType="_int">
+		SELECT 
+						COUNT(*)
+		FROM
+						TB_LIKE_CHALLENGE
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	</select>
+	
+	<!-- 좋아요수 증가 : 좋아요수를 화면에 단순히 뿌려주는 용도면 challengeNo로 카운트한 개수만 화면에 뿌려줘도 괜찮음 즉 likecount컬럼과 이 쿼리문은 필요없음 -->
+<!-- 	<update id="increaseLikeCount" parameterType="hashmap">
+		UPDATE 
+						TB_CHALLENGE 
+		SET
+						LIKE_COUNT = (
+													SELECT COUNT(*)
+													FROM TB_LIKE_CHALLENGE
+													WHERE
+													CHALLENGE_NO = #{ challengeNo }	
+												) + 1
+		WHERE
+						USER_NO = #{ userNo }
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+	</update> -->
+	
+	<!-- 좋아요테이블에 한 행 삽입 -->
+	<insert id="insertLike" parameterType="hashmap">
+		INSERT 
+		INTO 
+							TB_LIKE_CHALLENGE
+		VALUES ( 
+							#{ activityNo }, 
+							#{ userNo }, 
+							SYSDATE 
+						)
+	</insert>
+	
+	<!-- 좋아요수 감소 -->
+<!-- 	<update id="decreaseLikeCount" parameterType="hashmap">
+		UPDATE 
+						TB_CHALLENGE 
+		SET
+						LIKE_COUNT = (
+													SELECT COUNT(*)
+													FROM TB_LIKE_CHALLENGE
+													WHERE
+													CHALLENGE_NO = #{ challengeNo }	
+												) - 1
+		WHERE
+						USER_NO = #{ userNo }
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+		
+	</update>	 -->
+	
+	<!-- 좋아요 테이블에 한 행 삭제 -->
+	<delete id="deleteLike" parameterType="hashmap">
+		DELETE
+			FROM		
+							TB_LIKE_CHALLENGE
+		WHERE 
+							ACTIVITY_NO =  #{ activityNo }
+		AND
+							USER_NO =  #{ userNo }
+	</delete>	
+	
+	<!-- 게시글 작성 -->
+	<insert id="insertChallenge" parameterType="challenge">
+<!-- 	
+	insert all 
+	into 테이블이름X(컬럼이름AX,컬럼이름BX) values (값X1, 값X2)
+	into 테이블이름Y(컬럼이름AY,컬럼이름BY) values (값Y1, 값Y2)
+	select * from dual; 
+-->
+	INSERT ALL	
+			INTO
+							TB_CHALLENGE(
+							ACTIVITY_NO,
+							CHALLENGE_TITLE,
+							CHALLENGE_CONTENT,
+							CHALLENGE_PLACE,			
+							ACHIEVEMENT_COUNT,
+							SUCCESS_LIMIT,
+							MIN_PARTICIPANT,
+							MAX_PARTICIPANT,
+							START_DATE,
+							END_DATE,
+							USER_NO	
+						)
+		VALUES(	
+							SEQ_ACTIVITY_NO.NEXTVAL,
+							#{challengeTitle},
+							#{challengeContent},
+							#{challengePlace},
+							#{achievementCount},
+							#{successLimit},
+							#{minParticipant},
+							#{maxParticipant},	
+							#{startDate},
+							#{endDate},
+							#{userNo}
+						)
+		INTO 
+							TB_ACTIVITY(
+							ACTIVITY_NO,
+							ORIGIN_NAME,
+							CHANGE_NAME,
+							UPLOAD_DATE,
+							MODIFY_DATE,
+							CATEGORY_NO,
+							STATUS,
+							TYPE
+						)
+		VALUES(
+							SEQ_ACTIVITY_NO.CURRVAL,
+							#{originName},
+							#{changeName},
+							SYSDATE,
+							SYSDATE,
+							#{categoryNo},
+							DEFAULT,
+							2
+						)
+		SELECT 
+						*
+		FROM  
+						DUAL
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateChallenge" parameterType="hashmap">
+		UPDATE
+						TB_CHALLENGE
+		SET
+       					 CHALLENGE_TITLE = #{challengeTitle},
+						 CHALLENGE_CONTENT = #{challengeContent},
+						 CHALLENGE_PLACE = #{challengePlace},
+						 ACHIEVEMENT_COUNT=#{achievementCount},
+						 SUCCESS_LIMIT = #{successLimit},
+						 MIN_PARTICIPANT=#{minParticipant},
+						 MAX_PARTICIPANT=#{maxParticipant},
+						 START_DATE = #{startDate},
+						 END_DATE = #{endDate}
+		WHERE 
+						 ACTIVITY_NO = #{ activityNo } 
+	</update>
+	<update id="updateActivity" parameterType="hashmap">
+		UPDATE
+						TB_ACTIVITY
+		SET
+       					 ORIGIN_NAME = #{originName},
+						 CHANGE_NAME = #{changeName},
+						 MODIFY_DATE = SYSDATE,
+						 CATEGORY_NO  = #{categoryNo}
+		WHERE 
+						 ACTIVITY_NO = #{ activityNo } 
+	</update>
+
+	<!-- 게시글 삭제 -->
+	<update id="deleteChallenge" parameterType="_int">
+	UPDATE 
+					TB_ACTIVITY
+	SET
+					STATUS = 'N'
+	WHERE 
+					ACTIVITY_NO = #{ activityNo }
+	</update>
+	
+
+
+
+
+
+<!-- 모든 이벤트리스트 조회 with 조건(월별) -->
+	<select id="selectEventList" resultMap="eventMap">
+		SELECT
+						ACTIVITY_NO,
+						EVENT_TITLE,
+						EVENT_CONTENT,
+						EVENT_PLACE,
+						EVENT_DATE,
+						ORIGIN_NAME,
+						CHANGE_NAME,
+						PARTICIPANTS,
+						CATEGORY_NO
+		FROM
+						TB_EVENT
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		WHERE
+						STATUS = 'Y'
+		<!-- 컨트롤러에서 해당월만 조건으로 달기 -->
+	</select>
+	
+	<!-- 세부이벤트 조회 -->
+	<select id="selectEventDetail" parameterType="_int" resultMap="eventMap">
+		SELECT
+						ACTIVITY_NO,
+						EVENT_TITLE,
+						EVENT_CONTENT,
+						EVENT_PLACE,
+						EVENT_DATE,
+						CHANGE_NAME,
+						UPLOAD_DATE,
+						PARTICIPANTS,
+						CATEGORY_NO
+		FROM
+						TB_EVENT
+		JOIN
+						TB_ACTIVITY USING(ACTIVITY_NO)
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	</select>
+
+	<!-- 이벤트 등록 -->
+	<insert id="insertEvent" parameterType="event">
+	INSERT ALL	
+			INTO
+							TB_EVENT
+							(
+							ACTIVITY_NO,
+							EVENT_TITLE,
+							EVENT_CONTENT,
+							EVENT_PLACE,
+							EVENT_DATE,
+							PARTICIPANTS
+							)	
+		VALUES		(	
+							SEQ_ACTIVITY_NO.NEXTVAL,
+							#{ eventTitle },
+							#{ eventContent },
+							#{ eventPlace },
+							#{ eventDate},
+							DEFAULT
+							)
+		INTO 
+							TB_ACTIVITY(
+							ACTIVITY_NO,
+							UPLOAD_DATE,
+							CHANGE_NAME,
+							CATEGORY_NO,
+							TYPE
+							)
+		VALUES		(
+							SEQ_ACTIVITY_NO.CURRVAL,
+							SYSDATE,
+							#{ changeName },
+							#{ categoryNo },
+							1
+							)
+		SELECT 
+						*
+		FROM  
+						DUAL
+	</insert>
+	<!-- 이벤트 수정 -->
+	<update id="updateEvent" parameterType="event">
+		UPDATE
+						TB_EVENT
+		SET
+						EVENT_TITLE = #{ eventTitle },
+						EVENT_CONTENT = #{ eventContent },
+						EVENT_PLACE = #{ eventPlace },
+						CHANGE_NAME = #{ changeName },
+						MODIFY_DATE = SYSDATE,
+						CATEGORY_NO = #{ categoryNo }
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	
+	</update>
+
+	<!-- 이벤트 삭제 -->
+	<update id="deleteEvent" parameterType="_int">
+		UPDATE
+						TB_EVENT
+		SET
+						STATUS = 'N'
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+	</update>
+	
+	<!-- 일반회원 이벤트 참가 -->
+	<update id="joinEvent" parameterType="hashmap">
+		UPDATE
+						TB_EVENT
+		SET
+						PARTICIPANTS = PARTICIPANTS + 1
+		WHERE
+						ACTIVITY_NO = #{ activityNo }
+		AND
+						(
+						SELECT COUNT(*)
+						FROM	TB_USER
+						WHERE USER_NO = #{ userNo }
+						 ) = 1
+	</update>
+
+
+
+
+</mapper>

@@ -14,9 +14,9 @@ import com.kh.eco.challenge.model.vo.Challenge;
 @Repository
 public class AchievementDao {
 
-	public int countAchievementList(SqlSessionTemplate sqlSession, int challengeNo) {
+	public int countAchievementList(SqlSessionTemplate sqlSession, int activityNo) {
 		
-		return sqlSession.selectOne("achievmentMapper.countAchievementList", challengeNo);
+		return sqlSession.selectOne("achievmentMapper.countAchievementList", activityNo);
 	}
 
 	public int countMyAchievementList(SqlSessionTemplate sqlSession, HashMap map) {
@@ -33,8 +33,8 @@ public class AchievementDao {
 	 * challengeNo, rowBounds); }
 	 */
 	
-	public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate sqlSession, int challengeNo, RowBounds rowBounds) {
-		return (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo, rowBounds);
+	public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate sqlSession, int activityNo, RowBounds rowBounds) {
+		return (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList", activityNo, rowBounds);
 	}
 
 	public ArrayList<Achievement> selectMyAchievement(SqlSessionTemplate sqlSession, HashMap map, RowBounds rowBounds) {

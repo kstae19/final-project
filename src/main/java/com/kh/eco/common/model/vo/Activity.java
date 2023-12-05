@@ -9,8 +9,9 @@ import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
 
-public abstract class EventChallenge {
+public abstract class Activity {
 
+	private int activityNo;
 	private String status;
 	private String originName;
 	private String changeName;

@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -113,7 +114,7 @@ public class EventController {
 	  
 	 // 이벤트 수정
 	 @ResponseBody
-	  @RequestMapping("update.ev") 
+	  @PostMapping("update.ev") 
 	  public String updateEvent(Event event) {
 		  System.out.println(event);
 		  
@@ -126,19 +127,19 @@ public class EventController {
 	  }
 	  
 	  // 이벤트 삭제
-	  @RequestMapping("delete.ev") 
-	  public String deleteEvent(int eventNo) {
+	  @PostMapping("delete.ev") 
+	  public String deleteEvent(int activityNo) {
 		  return "event/eventDetailView"; 
 	  }
 	 
-	    @RequestMapping("join.ev")
-	    public  String joinEvent(int userNo, int eventNo) {
+	    @PostMapping("join.ev")
+	    public  String joinEvent(int userNo, int activityNo) {
 	       	System.out.println(userNo);
-	    	System.out.println(eventNo);
+	    	System.out.println(activityNo);
 	    	
 	    	HashMap<String, Integer> map = new HashMap();
 	    	map.put("userNo", userNo);
-	    	map.put("eventNo", eventNo);
+	    	map.put("activityNo", activityNo);
 	    	
 	    	if(eventService.joinEvent(map)>0) {
 	    		return "success";

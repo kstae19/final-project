@@ -104,7 +104,7 @@
 			    				url : 'checkLike.ch',
 			    				data : {
 			    					userNo : ${ sessionScope.loginUser.userNo },
-			    					challengeNo : ${ challenge.challengeNo }
+			    					activityNo : ${ challenge.activityNo }
 			    				},
 			    				// 체크여부 확인 완료
 			    				success : function(data){ 
@@ -152,9 +152,10 @@
 					    				console.log('done때 : ${likeCount}');
 						    				$.ajax({
 				    		    				url : 'deleteLike.ch',
+				    		    				type : 'POST',
 				    		    				data : {
 				    		    					userNo : ${ sessionScope.loginUser.userNo },
-				    		    					challengeNo : ${ challenge.challengeNo },
+				    		    					activityNo : ${ challenge.activityNo },
 				    		    				},
 				    		    				success : function(result){ // deleteLike 연결 성공
 				    		    					
@@ -182,9 +183,10 @@
 					    				
 						    				$.ajax({
 							    				url : 'insertLike.ch',
+							    				type : 'POST',
 							    				data : {
 							    					userNo : ${ sessionScope.loginUser.userNo },
-							    					challengeNo : ${ challenge.challengeNo },
+							    					activityNo : ${ challenge.activityNo },
 							    				},
 							    				success : function(result){ // insertLike에 연결 성공
 							    					
@@ -222,8 +224,8 @@
     		<c:if test="${  sessionScope.loginUser.userNo eq challenge.userNo }">
     		
     			<!-- 수정 : 넘겨야할 파라미터가 객체라 그냥 input hidden으로 넘김 -->
-    			<form  enctype="multipart/form-data"  action="updateForm.ch" method="get">
-    				<input type="hidden" name="challengeNo" value="${ challenge.challengeNo }" />
+    			<form  enctype="multipart/form-data"  action="updateForm.ch" method="post">
+    				<input type="hidden" name="activityNo" value="${ challenge.activityNo }" />
     				<input type="hidden" name="challengeTitle" value="${ challenge.challengeTitle }" />
     				<input type="hidden" name="categoryNo" value="${ challenge.categoryNo }" />
     				<input type="hidden" name="challengePlace" value="${ challenge.challengePlace }" />
@@ -240,7 +242,7 @@
     			</form>
     			
     			<!-- 삭제 : 넘기는 파라미터가 1개라서 a태그 쿼리스트링으로 넘김 -->
-    			<button><a href="delete.ch?challengeNo=${ challenge.challengeNo }">삭제</a></button>
+    			<button><a href="delete.ch?activityNo=${ challenge.activityNo }">삭제</a></button>
     		</c:if>
     		
     	</section>
@@ -276,7 +278,7 @@
 				const formData = new FormData();
 				/** fileUpload 및 저장경로 공부 */
 				formData.append('upfile', $('#upfile')[0].files[0]);
-				formData.append('challengeNo', ${ challenge.challengeNo });
+				formData.append('activityNo', ${ challenge.activityNo });
 				formData.append('userNo', ${ sessionScope.loginUser.userNo });
 				formData.append('achievementTitle', $('#achievementTitle').val());
 				formData.append('achievementContent', $('#achievementContent').val());
@@ -300,7 +302,7 @@
 								url : 'progress.ac',
 								data : {
 									userNo : ${ sessionScope.loginUser.userNo },
-									challengeNo : ${ challenge.challengeNo }
+									activityNo : ${ challenge.activityNo }
 								},
 								success : function(result){
 									let progress = (result)/${challenge.achievementCount};
@@ -346,7 +348,7 @@
 				 $.ajax({
 						url : 'achievement',
 						data : { 
-							challengeNo : ${ challenge.challengeNo },
+							activityNo : ${ challenge.activityNo },
 							currentPage : currentPage
 						},
 						success : function(result){
@@ -461,7 +463,7 @@
 			url : 'mine.ac',
 			data : {
 				userNo : ${ sessionScope.loginUser.userNo },
-				challengeNo : ${ challenge.challengeNo }
+				activityNo : ${ challenge.activityNo }
 			},
 			success : function(result){
 			

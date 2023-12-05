@@ -12,11 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.eco.challenge.model.dao.ChallengeDao;
 import com.kh.eco.challenge.model.vo.Challenge;
+import com.kh.eco.common.model.vo.Activity;
 import com.kh.eco.common.model.vo.PageInfo;
 
 import lombok.RequiredArgsConstructor;
 
-
+@EnableTransactionManagement
 @RequiredArgsConstructor
 @Service
 public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 implements
@@ -94,27 +95,27 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 	
 	// 상세조회 
 	@Override
-	public int increaseViewCount(int challengeNo) {
+	public int increaseViewCount(int activityNo) {
 		
-		return challengeDao.increaseViewCount(sqlSession, challengeNo);
+		return challengeDao.increaseViewCount(sqlSession, activityNo);
 	}
 
 	@Override
-	public Challenge selectChallengeDetail(int challengeNo) {
+	public Challenge selectChallengeDetail(int activityNo) {
 		
-		return challengeDao.selectChallengeDetail(sqlSession, challengeNo);
+		return challengeDao.selectChallengeDetail(sqlSession, activityNo);
 	}
 
 	@Override
-	public String selectUserId(int challengeNo) {
+	public String selectUserId(int activityNo) {
 		
-		return challengeDao.selectUserId(sqlSession, challengeNo);
+		return challengeDao.selectUserId(sqlSession, activityNo);
 	}
 
 	@Override
-	public String selectCategoryName(int challengeNo) {
+	public String selectCategoryName(int activityNo) {
 		
-		return challengeDao.selectCategoryName(sqlSession, challengeNo);
+		return challengeDao.selectCategoryName(sqlSession, activityNo);
 	}
 
 	
@@ -135,9 +136,9 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 
 	
 	@Override
-	public int selectLikeCount(int challengeNo) {
+	public int selectLikeCount(int activityNo) {
 	
-		return challengeDao.selectLikeCount(sqlSession, challengeNo);
+		return challengeDao.selectLikeCount(sqlSession, activityNo);
 	}
 
 	@Override
@@ -181,17 +182,23 @@ public class ChallengeServiceImpl implements ChallengeService{ // 잊지말자 i
 		return challengeDao.insertChallenge(sqlSession, c);
 	}
 
+	@Transactional("transactionManager")
 	@Override
-	public int updateChallenge(Challenge c) {
+	public int updateChallenge(HashMap<String, Challenge>map) {
 		
-		return challengeDao.updateChallenge(sqlSession, c);
+		int result1 = challengeDao.updateChallenge(sqlSession, map);
+		int result2 = challengeDao.updateActivity(sqlSession, map);
+		
+		return result1 + result2;
 	}
 
 	@Override
-	public int deleteChallenge(int challengeNo) {
+	public int deleteChallenge(int activityNo) {
 		
-		return challengeDao.deleteChallenge(sqlSession, challengeNo);
+		return challengeDao.deleteChallenge(sqlSession, activityNo);
 	}
+
+
 
 
 

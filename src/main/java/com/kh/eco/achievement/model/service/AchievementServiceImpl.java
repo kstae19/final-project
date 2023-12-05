@@ -29,9 +29,9 @@ public class AchievementServiceImpl implements AchievementService {
 
 	
 	@Override
-	public int countAchievementList(int challengeNo) {
+	public int countAchievementList(int activityNo) {
 		
-		return achievementDao.countAchievementList(sqlSession, challengeNo);
+		return achievementDao.countAchievementList(sqlSession, activityNo);
 	}
 	@Override
 	public int countMyAchievementList(HashMap map) {
@@ -40,12 +40,12 @@ public class AchievementServiceImpl implements AchievementService {
 	}
 
 	@Override
-	public ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi) {
+	public ArrayList<Achievement> selectAchievementList(int activityNo, PageInfo pi) {
 
 		int offset = (pi.getCurrentPage() - 1) * pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		
-		return achievementDao.selectAchievementList(sqlSession, challengeNo, rowBounds);
+		return achievementDao.selectAchievementList(sqlSession, activityNo, rowBounds);
 	}
 	@Override
 	public ArrayList<Achievement> selectMyAchievement(HashMap map, PageInfo pi) {

@@ -76,8 +76,10 @@
 	            </script>
             </c:if>
 
+		<c:if test="${ not empty sessionScope.loginUser }">
 			<div><a href="enrollForm.ch">글쓰기</a></div>
-	
+		</c:if>
+		
             <article id="search-status">
             	<form action="search.status" method="GET">
 	            	<select name="status">
@@ -122,7 +124,7 @@
 				
 						<div class="content-item">
 						
-							<a href="detail.ch?challengeNo=${ c.challengeNo }"><img src="${ c.changeName }"/></a>
+							<a href="detail.ch?activityNo=${ c.activityNo }"><img src="${ c.changeName }"/></a>
 							<h6>${ c.challengeTitle }</h6>
 							
 							<div>

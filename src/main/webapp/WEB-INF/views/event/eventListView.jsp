@@ -56,7 +56,7 @@
 					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
 					       
-					        <input class="event" id="eventNo" name="eventNo" type="hidden"/>
+					        <input class="event" id="activityNo" name="activityNo" type="hidden"/>
 					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value="" />
 					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
@@ -104,7 +104,7 @@
  									<div id="dEventPlace"> </div>
 							       	<div id="dParticipants"> </div>
 							       	<div id="dUpfile"> </div>
-							       	<div id="dEventNo"></div>
+							       	<div id="dActivityNo"></div>
 					       	</div>
 
 						</div><!-- body -->
@@ -182,11 +182,12 @@
 		          initialView: 'dayGridMonth',
 		          editable: true,   
 		          events: [
+		        
 				 		<c:if test="${ not empty list}">
 							<c:forEach var="e" items="${list}">
 								
 								{ 
-									id : '${e.eventNo}',
+									id : '${e.activityNo}',
 									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
 									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
 									 extendedProps: {
@@ -199,6 +200,7 @@
 								}, 
 							</c:forEach>
 						</c:if> 
+			
 					],	
 					 eventDidMount: function(info) {
 						    //console.log(info.event.imageurl);
@@ -220,15 +222,13 @@
 				            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
 				            
 				            switch(event.extendedProps.categoryNo){
-				            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
-				            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
-				            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
-				            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
-				            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
-							
+					            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
+					            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
+					            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
+					            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
+					            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
 				            }
-				 
-				            
+       
 				            return { html: customHtml }
 				        }
 				
@@ -263,6 +263,9 @@
 	        	
 	        });
 	        
+      })//DOMContentLoaded
+</script>
+<script>	        
 	        $('#insertEvent').on('click', function(){
 	    		
 	    		const formData = new FormData();
@@ -301,7 +304,8 @@
 	    			}
 	    		})
 	    	});//insertE
-	    	
+</script>
+<script>	
 	    	$('#updateForm').on('click', function(){
 	    	
 	    	// 각 div.html()을 변수에 저장하고
@@ -312,7 +316,7 @@
 	    		let eventPlace = $('#dEventPlace').html();
 	    		let participants = $('#dParticipants').html();
 	    		let upfile = $('#dUpfile').html();
-	    		let eventNo = $('#dEventNo').html();
+	    		let eventNo = $('#dActivityNo').html();
 	    		
 	    	// #detail-content에  input(value가 변수인) 삽입
 	    		$('#detail-title').html('');
@@ -325,12 +329,13 @@
 	    		        +'<label for="uEventPlace">이벤트장소 : <input id="uEventPlace" class="event" name="eventPlace" type="text" required  value="' +eventPlace+ '"/></label>'
 	    		        +'<label for="uParticipants">참여인원 : <input id="uParticipants" class="event" name="participants" type="number" readonly value="' +participants+ '"/></label>'
 	    		       	+'<label for="uUpfile">첨부파일 : <input id="uUpfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required  value="' +upfile+ '"/></label>'
-	    		       	+'<input class="uEventNo" id="uEventNo" name="eventNo" type="hidden"  value="' +eventNo+ '"/>'
+	    		       	+'<input class="uActivityNo" id="uActivityNo" name="activityNo" type="hidden"  value="' +activityNo+ '"/>'
 	    		       	+'<div class="modal-footer">'
 	    		       	+'<button type="submit" class="tn btn-primary" id="updateEvent">수정</button>'
 	    		        +'</div>');
 	    		});//updateF
-	    		
+</script>	     		
+<script>
 	    		$('#detail-content').on('click', '#updateEvent', function(){
 	    			
 	    			const formData = new FormData();
@@ -340,7 +345,7 @@
 	    			formData.append('eventContent', $('#uEventContent').val());
 	    			formData.append('eventPlace', $('#uEventPlace').val());
 	    			formData.append('upfile', $('#uUpfile')[0].files[0]);
-	    			formData.append('eventNo', Number($('#uEventNo').val()));
+	    			formData.append('activityNo', Number($('#uActivityNo').val()));
 	    			    
 	    			$.ajax({
 	    				url : 'update.ev',
@@ -358,16 +363,17 @@
 	    				}
 	    			});
 	    		});
-	    		
+</script>
+<script>    		
 	    		$('#joinEvent').on('click', function(){
 	    			
 	    			$.ajax({
 	    				url : 'join.ev',
-	    				type : 'PUT',
+	    				type : 'POST',
 	    				data : { 
 	    					// 둘 다 null이 들어가는 이유?
 	    					userNo : ${ sessionScope.loginUser.userNo },
-	    					eventNo : $('#mEventNo').html(),
+	    					eventNo : $('#mActivityNo').html(),
 	    				},
 	    				success : function(data){
 	    					alert('참가신청 성공!');
@@ -379,7 +385,7 @@
 	    			});
 	    		});//joinE
 
-     })//DOMContentLoaded
+    
 
 </script>
 

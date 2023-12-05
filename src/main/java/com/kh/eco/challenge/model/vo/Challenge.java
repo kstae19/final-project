@@ -7,7 +7,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.kh.eco.achievement.model.vo.Achievement;
-import com.kh.eco.common.model.vo.EventChallenge;
+import com.kh.eco.common.model.vo.Activity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +15,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class Challenge extends EventChallenge {
+public class Challenge extends Activity {
 
-	private int challengeNo;
+	private int activityNo;
 	private String challengeTitle;
 	private String challengeContent;
 	private String challengePlace;

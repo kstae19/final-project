@@ -12,6 +12,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.eco.challenge.model.service.ChallengeService;
 import com.kh.eco.challenge.model.vo.Challenge;
 import com.kh.eco.common.model.template.Pagination;
+import com.kh.eco.common.model.vo.Activity;
 import com.kh.eco.common.model.vo.PageInfo;
 import com.kh.eco.event.model.service.EventService;
 
@@ -32,7 +36,7 @@ public class ChallengeController {
 	private final ChallengeService challengeService;
 	
 	// 전체 리스트 조회
-	@RequestMapping("challenge")
+	@GetMapping("challenge")
 	public String selectChallengeList(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model) throws IOException {
 		
 		/*내 답안 ==> private이라서 setter,getter로 바로 못 받음
@@ -59,7 +63,7 @@ public class ChallengeController {
 	}
 	
 	// 검색결과  조회
-	@RequestMapping("search.condition")
+	@GetMapping("search.condition")
 	public String selectChallengeSearch(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String condition, String keyword) {
 		
 		// condition과 keyword 한 쌍으로 담기
@@ -94,7 +98,7 @@ public class ChallengeController {
 
 
 	// 게시글 정렬결과 조회
-	@RequestMapping("search.status")
+	@GetMapping("search.status")
 	public String selectChallengeStatus(@RequestParam(value="currentPage", defaultValue="1")int currentPage, Model model, String status) {
 		
 		
@@ -137,7 +141,7 @@ public class ChallengeController {
 	}
 	
 	// insert완료시 목록뷰로 감
-	@RequestMapping("insert.ch")
+	@PostMapping("insert.ch")
 	public String insertChallenge(Challenge c, 
 												MultipartFile upfile,
 												HttpSession session,
@@ -209,8 +213,8 @@ public class ChallengeController {
 	}
 	
 	// 게시글 상세조회
-	@RequestMapping("detail.ch")
-	public String selectChallengeDetail(int challengeNo, /*int userNo,*/ Model model) {
+	@GetMapping("detail.ch")
+	public String selectChallengeDetail(int activityNo, /*int userNo,*/ Model model) {
 		
 		/*
 		 * // 변수 HashMap<String, Integer> map = new HashMap(); map.put("userNo",
@@ -218,20 +222,20 @@ public class ChallengeController {
 		 */
 		
 		// 1. 성공적으로 조회수 증가시
-		if(challengeService.increaseViewCount(challengeNo) > 0) {
+		if(challengeService.increaseViewCount(activityNo) > 0) {
 			
 			//System.out.println("내가 찍히면 조회수 증가" + challengeService.increaseViewCount(challengeNo));
 			
 			// 2. boardDetailView.jsp상 필요한 데이터를 조회 
-			model.addAttribute("challenge", challengeService.selectChallengeDetail(challengeNo));
-			model.addAttribute("likeCount", challengeService.selectLikeCount(challengeNo));
+			model.addAttribute("challenge", challengeService.selectChallengeDetail(activityNo));
+			model.addAttribute("likeCount", challengeService.selectLikeCount(activityNo));
 			
-			model.addAttribute("userId",  challengeService.selectUserId(challengeNo));
-			model.addAttribute("categoryName",  challengeService.selectCategoryName(challengeNo));
+			model.addAttribute("userId",  challengeService.selectUserId(activityNo));
+			model.addAttribute("categoryName",  challengeService.selectCategoryName(activityNo));
 			
 			//model.addAttribute("likedUser", challengeService.selectLikedUser(map));// detailView로 가야하기에 여기서 addAttribute
 			
-			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(challengeNo) );
+			System.out.println("내가 찍히면 challenge객체 넘어온 것" + challengeService.selectChallengeDetail(activityNo) );
 			return "challenge/challengeDetailView";
 			
 		} else {
@@ -255,10 +259,14 @@ public class ChallengeController {
 	
 	
 	
-	@RequestMapping("update.ch")
-	public String updateChallenge(Challenge c, MultipartFile upfile, HttpSession session, Model model) {
+	@PostMapping("update.ch")
+	public String updateChallenge(Challenge c, Activity a, MultipartFile upfile, HttpSession session, Model model) {
 	
-		
+		System.out.println("나는 추상클래스 구현한 자식 : " + c);
+		System.out.println("나는 추상클래스 부모 : " + a);
+		HashMap<String, Challenge> map = new HashMap();
+		map.put("challenge", c);
+
 //		=======================파일 다시 공부하기==========================
 		//	1. upfile이 새로 첨부된 경우 
 		if( !upfile.getOriginalFilename().equals("") ) {
@@ -278,7 +286,7 @@ public class ChallengeController {
 
 
 		System.out.println(c);
-		if(challengeService.updateChallenge(c) > 0) {
+		if(challengeService.updateChallenge(map) > 0 ) {
 			// update 성공, DB바뀜 = 새로운 리스트를 불러와야
 
 			
@@ -294,10 +302,11 @@ public class ChallengeController {
 		
 	}
 	
-	@RequestMapping("delete.ch")
-	public String deleteChallenge(int challengeNo, HttpSession session) {
+	// 쿼리스트링으로 값을 전달하는 건 GET방식 => GETMapping으로 받아야함(POST가 아니라)
+	@GetMapping("delete.ch")
+	public String deleteChallenge(int activityNo, HttpSession session) {
 		
-		if(challengeService.deleteChallenge(challengeNo) > 0) {
+		if(challengeService.deleteChallenge(activityNo) > 0) {
 			
 			session.setAttribute("alertMsg", "게시글 삭제 성공!");
 			return "redirect:/challenge";

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.kh.eco.challenge.model.vo.Challenge;
+import com.kh.eco.common.model.vo.Activity;
 import com.kh.eco.common.model.vo.PageInfo;
 
 public interface ChallengeService {
@@ -32,20 +33,20 @@ public interface ChallengeService {
 
 	
 	// 상세글 조회
-	int increaseViewCount(int challengeNo);
+	int increaseViewCount(int activityNo);
 	
-	Challenge selectChallengeDetail(int challengeNo);
+	Challenge selectChallengeDetail(int activityNo);
 	
-	String selectUserId(int challengeNo);
+	String selectUserId(int activityNo);
 	
-	String selectCategoryName(int challengeNo);
+	String selectCategoryName(int activityNo);
 
 	
 	
 	// 좋아요 기능
 	int checkLikeCount(HashMap<String, Integer> map);
 	//int selectLikedUser(HashMap<String, Integer> map);
-	int selectLikeCount(int challengeNo);
+	int selectLikeCount(int activityNo);
 	
 	int insertLike(HashMap<String, Integer> map);
 	int deleteLike(HashMap<String, Integer> map); //loginUser.userNo
@@ -54,9 +55,9 @@ public interface ChallengeService {
 	// 게시글 등록 수정 삭제
 	int insertChallenge(Challenge c);
 	
-	int updateChallenge(Challenge c);
+	int updateChallenge(HashMap<String, Challenge>map);
 	
-	int deleteChallenge(int challengeNo);
+	int deleteChallenge(int activityNo);
 
 	
 }

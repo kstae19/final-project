@@ -28,9 +28,9 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public Event selectEventDetail(int eventNo) {
+	public Event selectEventDetail(int activityNo) {
 		
-		return eventDao.selectEventDetail(sqlSession, eventNo);
+		return eventDao.selectEventDetail(sqlSession, activityNo);
 	}
 
 	@Override
@@ -46,9 +46,9 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public int deleteEvent(int eventNo) {
+	public int deleteEvent(int activityNo) {
 		
-		return eventDao.deleteEvent(sqlSession, eventNo);
+		return eventDao.deleteEvent(sqlSession, activityNo);
 	}
 
 	@Override

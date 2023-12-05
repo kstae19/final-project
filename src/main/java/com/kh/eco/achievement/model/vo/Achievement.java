@@ -11,7 +11,7 @@ import lombok.ToString;
 public class Achievement {
 
 	private int achievementNo;
-	private int challengeNo;
+	private int activityNo;
 	private int userNo;
 	private String achievementTitle;
 	private String achievementContent;
