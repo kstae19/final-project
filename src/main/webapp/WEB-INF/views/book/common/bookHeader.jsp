@@ -21,7 +21,6 @@
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
     <style>
         .main_image {
-          position: relative;
           margin-bottom: 10px;
         }
         .main_image_text {

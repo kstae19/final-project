@@ -66,7 +66,7 @@
 	}
 	.info > h1 {
 		text-align : center;
-		margin-top : 40px;
+		margin-top : 50px;
 	}
 	
 	.temp {
@@ -183,6 +183,13 @@
     	bottom: 87px;
 	}
 	
+	#back-btn{
+		float: right;
+		margin-top: 10px;
+		margin-right: 10px;
+		color: #28a745;
+	}
+	
 </style>
 </head>
 <body>
@@ -194,7 +201,8 @@
 			<button type="submit" class="btn btn-basic" id="search-btn"><i class="fas fa-search fa-lg"></i></button>
 		</div>
 		<div id="move-info" >
-			<div class="info">  
+			<div class="info"> 
+			<button type="submit" class="btn btn-basic" id="back-btn"><i class="fas fa-reply fa-lg"></i></button> 
 				<h1>${subName}역 ${subLine}</h1>
 				<h3 class="temp tm" id="h3time">열차 시간표</h3>
 				<div class="headinfo tim">
@@ -249,6 +257,10 @@
 	</div>
 	<script>
 		$(function(){
+			
+			$('#back-btn').on('click', () => {
+				location.href="move";
+			})
 			
 			let today = new Date(); 
 			let hours = today.getHours(); // 시
@@ -474,49 +486,49 @@
 					}).length;
 					
 					if(countTop == 1){
-						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 + 'px', 'bottom':'-55px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -600 + parseInt(arrivalTopList[1])*0.9 + 'px', 'bottom':'-55px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -600 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -600 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-100px'})
 					} 
 					else {
-						$('#cirTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-55px'})
-						$('#cirTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'2px'})
-						$('#cirTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'55px'})
-						$('#cirTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'110px'})
-						$('#cirTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'165px'})
-						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-95px'})
-						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-38px'})
-						$('#cirinfoTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'15px'})
-						$('#cirinfoTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'69px'})
-						$('#cirinfoTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'124px'})
-						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -700 + parseInt(arrivalTopList[1])*0.9 +'px', 'bottom':'-95px'})
-						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -700 + parseInt(arrivalTopList[3])*0.8 +'px', 'bottom':'-38px'})
-						$('#cirtimeTop' + arrivalTopList[4]).css({'left': -700 + parseInt(arrivalTopList[5])*0.7 +'px', 'bottom':'15px'})
-						$('#cirtimeTop' + arrivalTopList[6]).css({'left': -700 + parseInt(arrivalTopList[7])*0.6 +'px', 'bottom':'69px'})
-						$('#cirtimeTop' + arrivalTopList[8]).css({'left': -700 + parseInt(arrivalTopList[9])*0.5 +'px', 'bottom':'124px'})
+						$('#cirTop' + arrivalTopList[0]).css({'left': -600 + 'px', 'bottom':'-55px'})
+						$('#cirTop' + arrivalTopList[2]).css({'left': -450 + 'px', 'bottom':'0px'})
+						$('#cirTop' + arrivalTopList[4]).css({'left': -300 + 'px', 'bottom':'55px'})
+						$('#cirTop' + arrivalTopList[6]).css({'left': -150 + 'px', 'bottom':'110px'})
+						$('#cirTop' + arrivalTopList[8]).css({'left': 0 + 'px', 'bottom':'165px'})
+						$('#cirinfoTop' + arrivalTopList[0]).css({'left': -600 +'px', 'bottom':'-95px'})
+						$('#cirinfoTop' + arrivalTopList[2]).css({'left': -450 +'px', 'bottom':'-40px'})
+						$('#cirinfoTop' + arrivalTopList[4]).css({'left': -300 +'px', 'bottom':'15px'})
+						$('#cirinfoTop' + arrivalTopList[6]).css({'left': -150 +'px', 'bottom':'70px'})
+						$('#cirinfoTop' + arrivalTopList[8]).css({'left': 0 +'px', 'bottom':'125px'})
+						$('#cirtimeTop' + arrivalTopList[0]).css({'left': -600 +'px', 'bottom':'-95px'})
+						$('#cirtimeTop' + arrivalTopList[2]).css({'left': -450 +'px', 'bottom':'-40px'})
+						$('#cirtimeTop' + arrivalTopList[4]).css({'left': -300 +'px', 'bottom':'15px'})
+						$('#cirtimeTop' + arrivalTopList[6]).css({'left': -150 +'px', 'bottom':'70px'})
+						$('#cirtimeTop' + arrivalTopList[8]).css({'left': 0 +'px', 'bottom':'125px'})
 					}
 					
 					if(countBot == 1){
-						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 + 'px', 'bottom':'-55px'})
-						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-100px'})
-						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-100px'})
+						$('#cirBot' + arrivalBotList[0]).css({'left': -600 + parseInt(arrivalBotList[1])*0.9 + 'px', 'bottom':'-55px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -600 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -600 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
 					} 
 					else {
-						$('#cirBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-55px'})
-						$('#cirBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'2px'})
-						$('#cirBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'58px'})
-						$('#cirBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'116px'})
-						$('#cirBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[9])*0.9 +'px', 'bottom':'165px'})
-						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
-						$('#cirinfoBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'-38px'})
-						$('#cirinfoBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'18px'})
-						$('#cirinfoBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'75px'})
-						$('#cirinfoBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'124px'})
-						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -700 + parseInt(arrivalBotList[1])*0.9 +'px', 'bottom':'-95px'})
-						$('#cirtimeBot' + arrivalBotList[2]).css({'left': -700 + parseInt(arrivalBotList[3])*0.9 +'px', 'bottom':'-38px'})
-						$('#cirtimeBot' + arrivalBotList[4]).css({'left': -700 + parseInt(arrivalBotList[5])*0.9 +'px', 'bottom':'18px'})
-						$('#cirtimeBot' + arrivalBotList[6]).css({'left': -700 + parseInt(arrivalBotList[7])*0.9 +'px', 'bottom':'75px'})
-						$('#cirtimeBot' + arrivalBotList[8]).css({'left': -700 + parseInt(arrivalBotList[9])*0.9 +'px', 'bottom':'124px'})
+						$('#cirBot' + arrivalBotList[0]).css({'left': -600 +'px', 'bottom':'-55px'})
+						$('#cirBot' + arrivalBotList[2]).css({'left': -450 +'px', 'bottom':'0px'})
+						$('#cirBot' + arrivalBotList[4]).css({'left': -300 +'px', 'bottom':'55px'})
+						$('#cirBot' + arrivalBotList[6]).css({'left': -150 +'px', 'bottom':'110px'})
+						$('#cirBot' + arrivalBotList[8]).css({'left': 0 +'px', 'bottom':'165px'})
+						$('#cirinfoBot' + arrivalBotList[0]).css({'left': -600 +'px', 'bottom':'-95px'})
+						$('#cirinfoBot' + arrivalBotList[2]).css({'left': -450 +'px', 'bottom':'-40px'})
+						$('#cirinfoBot' + arrivalBotList[4]).css({'left': -300 +'px', 'bottom':'15px'})
+						$('#cirinfoBot' + arrivalBotList[6]).css({'left': -150 +'px', 'bottom':'70px'})
+						$('#cirinfoBot' + arrivalBotList[8]).css({'left': 0 +'px', 'bottom':'125px'})
+						$('#cirtimeBot' + arrivalBotList[0]).css({'left': -600 +'px', 'bottom':'-95px'})
+						$('#cirtimeBot' + arrivalBotList[2]).css({'left': -450 +'px', 'bottom':'-40px'})
+						$('#cirtimeBot' + arrivalBotList[4]).css({'left': -300 +'px', 'bottom':'15px'})
+						$('#cirtimeBot' + arrivalBotList[6]).css({'left': -150 +'px', 'bottom':'70px'})
+						$('#cirtimeBot' + arrivalBotList[8]).css({'left': 0 +'px', 'bottom':'125px'})
 					}
 				}
 			})

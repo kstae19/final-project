@@ -107,6 +107,13 @@
 		text-align:center;
 	}
 	
+	#back-btn{
+		float: right;
+		margin-top: 10px;
+		margin-right: 10px;
+		color: #28a745;
+	}
+	
 </style>
 </head>
 <body>
@@ -119,6 +126,7 @@
 		</div>
 		<div id="move-info" >
 			<div class="info">  
+			<button type="submit" class="btn btn-basic" id="back-btn"><i class="fas fa-reply fa-lg"></i></button>
 				<h1>${name}</h1>
 				<div class="floatleft">
 					<div class="headinfo">
@@ -174,6 +182,10 @@
 	</div>
 	<script>
 	$(function(){
+		
+		$('#back-btn').on('click', () => {
+			location.href="move";
+		})
 		  const rainIconMap = {
 		    1: '<i class="fas fa-cloud-rain" style="font-size:24px;"></i>',
 		    3: '<i class="far fa-snowflake" style="font-size:24px;"></i>',

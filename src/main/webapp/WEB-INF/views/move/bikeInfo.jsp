@@ -105,6 +105,13 @@
 		border : 2px solid #28a745;
 	}
 	
+	#back-btn{
+		float: right;
+		margin-top: 10px;
+		margin-right: 10px;
+		color: #28a745;
+	}
+	
 </style>
 </head>
 <body>
@@ -118,6 +125,7 @@
 		<div id="roadview"></div>
 		<div id="move-info" >
 			<div class="info">  
+			<button type="button" class="btn btn-basic" id="back-btn"><i class="fas fa-reply fa-lg"></i></button>
 				<h1>${bikeName}</h1>
 				<div class="headinfo">
 					<h3 class="temp tm">잔여 따릉이수</h3>
@@ -129,6 +137,10 @@
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e73308cfe55f562948dee9ae8bcd721e"></script>
 	<script>
 	$(function(){
+		
+		$('#back-btn').on('click', () => {
+			location.href="move";
+		})
 		
 		//console.log(${bikeLat});
 		var roadviewContainer = $('#roadview')[0]; //로드뷰를 표시할 div
