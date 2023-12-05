@@ -132,8 +132,8 @@ public class EventController {
 		  return "event/eventDetailView"; 
 	  }
 	 
-	    @PostMapping("join.ev")
-	    public  String joinEvent(int userNo, int activityNo) {
+	    @GetMapping("join.ev")
+	    public  String joinEvent(Integer userNo, Integer activityNo) {
 	       	System.out.println(userNo);
 	    	System.out.println(activityNo);
 	    	

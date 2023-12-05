@@ -35,7 +35,7 @@
 </head>
 <body>
   
-  <jsp:include page="../common/header.jsp" />
+ <%--  <jsp:include page="../common/header.jsp" /> --%>
   
  	<div id="wrapper">
 
@@ -126,34 +126,7 @@
 			
 		</div><!-- detailModal -->
 
-<script>		
-	/* function updateEvent(){
-		
-	 	$.ajax({
-			url : 'update.ev',
-			data : { 
-				eventTitle : $('#eventTitle').val(),
-				eventContent : $('#eventContent').val(),
-				eventPlace : $('#eventPlace').val(),
-				changeName : $('#changeName').val(),
-				categoryNo : $('#categoryNo').val(),
-				eventNo : $('#eventNo').val()
-			},
-			success : function(data){
-				console.log(data);
-				
-			},
-			error : function(){
-				alert('수정할 수 없습니다. 잠시 후 다시 시도해주세요');
-			}
-		});
-	 	
-	};//updateE */
-	
-	
-	
-</script>
-		
+
 		<div id="calendar"></div>
 		
 </div><!-- wrapper -->
@@ -182,7 +155,6 @@
 		          initialView: 'dayGridMonth',
 		          editable: true,   
 		          events: [
-		        
 				 		<c:if test="${ not empty list}">
 							<c:forEach var="e" items="${list}">
 								
@@ -200,7 +172,6 @@
 								}, 
 							</c:forEach>
 						</c:if> 
-			
 					],	
 					 eventDidMount: function(info) {
 						    //console.log(info.event.imageurl);
@@ -222,13 +193,15 @@
 				            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
 				            
 				            switch(event.extendedProps.categoryNo){
-					            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
-					            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
-					            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
-					            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
-					            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
+				            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
+				            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
+				            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
+				            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
+				            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
+							
 				            }
-       
+				 
+				            
 				            return { html: customHtml }
 				        }
 				
@@ -263,9 +236,6 @@
 	        	
 	        });
 	        
-      })//DOMContentLoaded
-</script>
-<script>	        
 	        $('#insertEvent').on('click', function(){
 	    		
 	    		const formData = new FormData();
@@ -304,8 +274,7 @@
 	    			}
 	    		})
 	    	});//insertE
-</script>
-<script>	
+	    	
 	    	$('#updateForm').on('click', function(){
 	    	
 	    	// 각 div.html()을 변수에 저장하고
@@ -334,8 +303,7 @@
 	    		       	+'<button type="submit" class="tn btn-primary" id="updateEvent">수정</button>'
 	    		        +'</div>');
 	    		});//updateF
-</script>	     		
-<script>
+	    		
 	    		$('#detail-content').on('click', '#updateEvent', function(){
 	    			
 	    			const formData = new FormData();
@@ -363,17 +331,16 @@
 	    				}
 	    			});
 	    		});
-</script>
-<script>    		
+	    		
 	    		$('#joinEvent').on('click', function(){
 	    			
 	    			$.ajax({
 	    				url : 'join.ev',
-	    				type : 'POST',
+	    				/* type : 'POST', */
 	    				data : { 
 	    					// 둘 다 null이 들어가는 이유?
 	    					userNo : ${ sessionScope.loginUser.userNo },
-	    					eventNo : $('#mActivityNo').html(),
+	    					activityNo : $('#mActivityNo').html(),
 	    				},
 	    				success : function(data){
 	    					alert('참가신청 성공!');
@@ -385,7 +352,7 @@
 	    			});
 	    		});//joinE
 
-    
+     })//DOMContentLoaded
 
 </script>
 

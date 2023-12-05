@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
 <!-- javascript -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -62,6 +62,39 @@
  	
     <div id="wrapper">
     
+    <!-- placeModal -->
+	<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+
+	<!-- Modal -->
+	<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+  Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div id="placeModal" class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="modal-body" class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
 	<section id="content-area">
         <br>
         <h2 align="center">게시글 작성</h2>
@@ -89,7 +122,7 @@
             	</div>
             	 	<div class="content-item">
 	            	<label for="place" >
-							장소<input id="place" type="text" name="challengePlace"/><i class="fas fa-map-marker-alt"></i>
+							장소<input id="place" type="text" name="challengePlace"/><button id="searchPlace" type="button"><i class="fas fa-map-marker-alt"></i></button>
 							<!-- 지도api에서 위치 클릭시 해당 도로명주소를 String으로 받아와 ajax로 input의 value값에 세팅할 예정 -->
 					</label>
             	</div>
@@ -139,6 +172,14 @@
             </article>
 
             <br><br>
+<style>
+#placeModal{
+	disply : flex;
+	justify-content : center;
+	align-items : center;
+
+}
+</style>            
             <script>
               	$(function(){
               		
@@ -164,9 +205,63 @@
               			}
               				
               		})//click이벤트
+              
+              	})//jQuery
               	
-              	})
               	
+            	$('#placeResult-form').on('click', 'button', function(){
+         			console.log($(this));
+         		}); 
+              	
+              	//click이벤트
+         		$('#searchPlace').on('click', function(){
+         			$('#placeModal').modal('show');
+         			$.ajax({
+         				url : 'search.place',
+         				data : {
+         					place : $('#place').val(),
+         				},
+         				success : data => {
+         					placeResults = data.response.result.items;
+         					console.log(placeResults);
+         					
+         					let value='';
+         					
+         					for(let i in placeResults){
+         						placeResult = placeResults[i];
+         						
+         						value += '<div id="placeResult-form">'
+			         							+ '<div>'
+			     								+ placeResult.title
+			     								+ '</div>'
+			     								
+		         								+ '<div>'
+		         								+ placeResult.address.parcel
+		         								+ '</div>'
+		         								+ '<button onclick="choose($(this))">지번주소 선택</button>'
+
+		         								+ '<div>'
+		         								+ placeResult.address.road
+		         								+ '</div>'
+		         								+ '<button onclick="choose($(this))">도로명주소 선택</button>'
+         								+ '</div>';
+         					 };//for
+         					$('#modal-body').html(value);
+         				},
+         				error : function(){
+         					console.log('실패');
+         					
+         				}
+         			})
+         		});//click
+         		
+			
+         		
+         		function choose(e){
+         			//드디어 나와쑈다~~~~
+         			console.log(e.prev()[0].innerHTML);
+         		}
+      
          
             </script>
             
