@@ -4,6 +4,10 @@ package com.kh.eco.challenge.model.vo;
 
 
 import java.sql.Date;
+import java.util.List;
+
+import com.kh.eco.achievement.model.vo.Achievement;
+import com.kh.eco.common.model.vo.EventChallenge;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,30 +15,24 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class Challenge {
+public class Challenge extends EventChallenge {
 
 	private int challengeNo;
 	private String challengeTitle;
 	private String challengeContent;
 	private String challengePlace;
 	
-	private String achievementCount;
+	private int achievementCount;
 	private int successLimit;
 	private int minParticipant;
 	private int maxParticipant;
 	
-	private String status;
 	private int viewCount;
 	private int likeCount;
-	private String originName;
-	private String changeName;
-	
-	private Date uploadDate;
-	private Date modifyDate;
 	private String startDate;
 	private String endDate;
-	
 	private int userNo;
-	private int categoryNo;
+	
+	private List<Achievement> achieveList;
 
 }

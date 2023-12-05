@@ -1,6 +1,7 @@
 package com.kh.eco.achievement.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -18,8 +19,11 @@ public class AchievementDao {
 		return sqlSession.selectOne("achievmentMapper.countAchievementList", challengeNo);
 	}
 
-	
-	
+	public int countMyAchievementList(SqlSessionTemplate sqlSession, HashMap map) {
+		
+		return sqlSession.selectOne("achievmentMapper.countMyAchievementList", map);
+	}
+
 	/*
 	 * public ArrayList<Achievement> selectAchievementList(SqlSessionTemplate
 	 * sqlSession, int challengeNo, RowBounds rowBounds) {
@@ -33,6 +37,10 @@ public class AchievementDao {
 		return (ArrayList)sqlSession.selectList("achievmentMapper.selectAchievementList", challengeNo, rowBounds);
 	}
 
+	public ArrayList<Achievement> selectMyAchievement(SqlSessionTemplate sqlSession, HashMap map, RowBounds rowBounds) {
+
+		return (ArrayList)sqlSession.selectList("achievmentMapper.selectMyAchievement", map, rowBounds);
+	}
 	public int insertAchievement(SqlSessionTemplate sqlSession, Achievement a) {
 		
 		return sqlSession.insert("achievmentMapper.insertAchievement", a);

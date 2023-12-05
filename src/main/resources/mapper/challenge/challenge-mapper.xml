@@ -15,9 +15,6 @@
 		<result column="ORIGIN_NAME" property="originName" />
 		<result column="CHANGE_NAME" property="changeName" />
 		<result column="CHALLENGE_CONTENT" property="challengeContent" />
-		<!-- challege VO에는 userNo, categoryNo (int)만 있음 -->
-		<!-- <result column="USER_ID" property="userId" />
-		<result column="CATEGORY_NAME" property="categoryName" /> -->
 		<result column="USER_NO" property="userNo" />
 		<result column="CATEGORY_NO" property="categoryNo" />
 		

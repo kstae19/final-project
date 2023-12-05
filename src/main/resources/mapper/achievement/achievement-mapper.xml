@@ -26,6 +26,20 @@
 						CHALLENGE_NO = #{ challengeNo }
 	</select>
 	
+	<!-- 내인증댓글 카운팅 -->
+	<select id="countMyAchievementList" parameterType="hashmap" resultType="_int">
+		SELECT
+						COUNT(*)
+		FROM
+						TB_ACHIEVE
+		WHERE
+						STATUS = 'Y'
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+		AND
+						USER_NO = #{ userNo }
+	</select>
+	
 	<!-- 인증댓글 전체조회 cNo-->
 	<select id="selectAchievementList" parameterType="_int" resultMap="achievementResultSet">
 		SELECT 
@@ -47,6 +61,29 @@
 						CHALLENGE_NO DESC
 	</select>
 	
+	<!-- 내 인증댓글 전체조회 -->
+	<select id="selectMyAchievement" parameterType="hashmap" resultMap="achievementResultSet">
+		SELECT 
+						ACHIEVE_NO,
+						CHALLENGE_NO,
+						USER_NO,
+						ACHIEVE_TITLE,
+						ACHIEVE_CONTENT,
+						CHANGE_NAME,
+						UPLOAD_DATE
+		FROM
+						TB_ACHIEVE
+		WHERE
+						STATUS = 'Y'
+		AND
+						CHALLENGE_NO = #{ challengeNo }
+		AND
+						USER_NO = #{ userNo }
+		ORDER
+		BY			UPLOAD_DATE DESC,
+						CHALLENGE_NO DESC
+	</select>
+	
 	<!--  인증댓글 등록 A -->
 	<insert id="insertAchievement" parameterType="achievement">
 		INSERT
@@ -60,8 +97,7 @@
 						ACHIEVE_CONTENT,
 						CHANGE_NAME,
 						UPLOAD_DATE
-						)
-						
+						)	
 		VALUES
 						(
 						SEQ_ACHIEVE_NO.NEXTVAL,
