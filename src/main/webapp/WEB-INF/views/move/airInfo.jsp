@@ -210,7 +210,7 @@
 		    }
 		  };
 
-		  console.log(${nigsky});
+		  // console.log(${nigsky});
 
 		  if (${morpty} == 1 || ${morpty} == 3 || ${morpty} == 4 ) {
 		    setRainIcon('#mintoday', ${morpty});
