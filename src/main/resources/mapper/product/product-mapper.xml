@@ -403,7 +403,7 @@ FROM (SELECT
             , USER_NO 
         FROM 
             TB_ORDER 
-        ORDER BY ORDER_NO)
+        ORDER BY ORDER_NO DESC)
  JOIN 
         TB_ORDER_ITEM USING(ORDER_NO)
  JOIN 
@@ -536,13 +536,14 @@ SELECT
 <select id="getAddressList" parameterType="_int" resultType="address">
 	SELECT 
 			ADDRESS_NO addressNo 
+			, USER_NO userNo
 			, POST  
 			, ADDRESS  
 			, DETAIL_ADDRESS detailAddress 
 			, RECEIVER 
 			, PHONE 
 		FROM TB_ADDRESS 
-		WEHRE USER_NO=#{userNo}
+		WHERE USER_NO=#{userNo}
 </select>
 
 <select id="getOrderList" parameterType="_int" resultType="order">
@@ -574,4 +575,20 @@ ORDER
     BY 
         ORDER_DATE DESC
 </select>
+
+<insert id="addAddress" parameterType="address">
+	INSERT 
+		INTO 
+			TB_ADDRESS 
+		VALUES(
+			SEQ_ADDR_NO.NEXTVAL
+			, #{userNo}
+			, #{post} 
+			, #{address}
+			, #{detailAddress}
+			, #{receiver}
+			, #{phone}
+			, DEFAULT
+			)
+</insert>
 </mapper>

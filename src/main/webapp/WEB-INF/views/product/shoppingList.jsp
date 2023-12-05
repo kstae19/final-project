@@ -127,7 +127,7 @@ h3 {
 
 							<!-- 상품 정보 -->
 							<div>
-								<a href="#"><h2>${o.orderDetail[0].productName }(${o.itemQty}건)</h2></a>
+								<a href="product.detail?productNo=${o.orderDetail[0].productNo }"><h2>${o.orderDetail[0].productName }(${o.itemQty}건)</h2></a>
 								<div>
 									<c:forEach items="${o.orderDetail}" var="cart">
 										<a href="product.detail?productNo=${cart.productNo }">${cart.optionName }</a>
