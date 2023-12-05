@@ -22,7 +22,7 @@
 		margin: auto;
 		width: 1200px;
 		height: 150px;
-		margin-bottom: 100px;
+		margin-bottom: 20px;
 	}
 	
 	#footer-main > div{
