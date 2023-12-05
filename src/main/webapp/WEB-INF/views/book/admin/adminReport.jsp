@@ -66,7 +66,7 @@
 	    				let reportBlackPiValue = '';
 	    				let previous = reportBlackPi.currentPage - 1;
 	    				let next = reportBlackPi.currentPage + 1;
-	    				if(reportBlackPi.currentPage != 1){
+	    				if(reportBlackPi.currentPage == 1){
 	    					reportBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
 	    					reportBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
@@ -122,7 +122,7 @@
 	    				let replyBlackPiValue = '';
 	    				let previous = replyBlackPi.currentPage - 1;
 	    				let next = replyBlackPi.currentPage + 1;
-	    				if(replyBlackPi.currentPage != 1){
+	    				if(replyBlackPi.currentPage == 1){
 	    					replyBlackPiValue += '<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>';
 	    				} else{
 	    					replyBlackPiValue += '<li class="page-item"><a class="page-link" onclick="reportBlack('+ previous +');">Previous</a></li>';
@@ -228,7 +228,7 @@
 </head>
 <body>
 	
-	<jsp:include page="../../common/header.jsp" />
+	<jsp:include page="../../user/adminPage/adminHeader.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 	<jsp:include page="../common/bookLeftBanner.jsp" />
 	

@@ -185,7 +185,7 @@
 </head>
 <body>
 
-	<jsp:include page="../../common/header.jsp" />
+	<jsp:include page="../../user/myPage/myPageHeader.jsp" />
 	<jsp:include page="../common/bookHeader.jsp" />
 	<jsp:include page="../common/myPageLeftBanner.jsp" />
 	
