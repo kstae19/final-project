@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import = "java.util.ResourceBundle" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%
+	ResourceBundle resource = ResourceBundle.getBundle("key");
+	
+	String kakaomap = resource.getString("key.KMAP");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -214,8 +222,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e73308cfe55f562948dee9ae8bcd721e"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=kakaomap%>"></script>
 	
 	<div id="move-main">
 		<div id="move-search">
@@ -462,7 +469,7 @@
 			    						
 			    						let tempresult = '';
 			    						
-			    						moreresult += '<form action="airInfo">'
+			    						moreresult += '<form action="airInfo" method="post">'
 			    						
 			    						for(let i in local){
 			    							temp = local[i];
@@ -577,7 +584,7 @@
 				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
 				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +
-										'<form action="bikeinfo" id="bikeinfo">' +
+										'<form action="bikeinfo" method="post" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
 										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
 										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
@@ -644,7 +651,7 @@
 				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
 				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +
-										'<form action="bikeinfo" id="bikeinfo">' +
+										'<form action="bikeinfo" method="post" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
 										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
 										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
@@ -712,7 +719,7 @@
 				    					'<div style="width:200px; height:100%"> '+bike.stationName + '<br>잔여 자전거 수 : ' +
 				    					bike.parkingBikeTotCnt + '<br></div>' + 
 										'<div style="text-align:right"> ' +	
-										'<form action="bikeinfo" id="bikeinfo">' +
+										'<form action="bikeinfo" method="post" id="bikeinfo">' +
 										'	<button>상세보기</button>' +
 										'	<input type="hidden" name="bikeLat" value="' + bike.stationLatitude + '"/>' +
 										'	<input type="hidden" name="bikeLng" value="' + bike.stationLongitude + '"/>' +
@@ -860,7 +867,7 @@
 					    					 '<div style="width:200px; height:100%"> ' + StData.stnKrNm + '역 ' + StData.lineNm + '<br>' +
 											 '</div>' +
 											 '<div style="text-align:right"> ' + 
-												'<form action="subinfo" id="subinfo">' +
+												'<form action="subinfo" method="post" id="subinfo">' +
 												 '	 <button>상세보기</button>' +
 												 '	 <input type="hidden" name="subName" value="' + StData.stnKrNm + '"/>' +
 												 '	 <input type="hidden" name="subLine" value="' + StData.lineNm  + '"/>' +
