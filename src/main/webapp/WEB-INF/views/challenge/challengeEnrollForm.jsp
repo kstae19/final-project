@@ -88,8 +88,8 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+        <button id="choose" type="button" class="btn btn-primary">선택</button>
       </div>
     </div>
   </div>
@@ -235,15 +235,16 @@
 			     								+ placeResult.title
 			     								+ '</div>'
 			     								
-		         								+ '<div>'
+		         								+ '<span>'
 		         								+ placeResult.address.parcel
-		         								+ '</div>'
+		         								+ '</span>'
 		         								+ '<button onclick="choose($(this))">지번주소 선택</button>'
-
-		         								+ '<div>'
+												+ '<br/>'
+		         								+ '<span>'
 		         								+ placeResult.address.road
-		         								+ '</div>'
+		         								+ '</span>'
 		         								+ '<button onclick="choose($(this))">도로명주소 선택</button>'
+		         								
          								+ '</div>';
          					 };//for
          					$('#modal-body').html(value);
@@ -258,9 +259,13 @@
 			
          		
          		function choose(e){
-         			//드디어 나와쑈다~~~~
-         			console.log(e.prev()[0].innerHTML);
-         		}
+         			let address =  e.prev()[0].innerHTML;
+
+         			$('#choose').on('click', function(){
+         				$('#placeModal').modal('hide');
+         				$('#place').val(address);
+         			})
+         		};
       
          
             </script>

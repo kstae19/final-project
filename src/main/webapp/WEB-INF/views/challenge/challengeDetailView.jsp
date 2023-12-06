@@ -64,6 +64,7 @@
     <div id="wrapper">
     	<header id="header-area">
     		<h1>${ challenge.challengeTitle }</h1>
+    		<h6>${ challenge.challengePlace }</h6>
     		<h6>${ categoryName }</h6>
     		<h6>${ userId }</h6>
     	</header>
@@ -77,7 +78,7 @@
     		</article>
     		
     		<article id="participants">
-    			${ challenge.minParticipant } ~ ${ challenge.maxParticipant }
+    			${ challenge.minParticipant }명 ~ ${ challenge.maxParticipant }명
     		</article>
     		
     		
@@ -389,36 +390,6 @@
 </script>
 
 <script>
-/* 나중에..
-	$('#achievement-content').on('click', '.update-btn', function(){
-		console.log('수정하기 클릭');
-		$(this).abhtml('');
-		/* $.ajax({
-			url : 'update.ac',
-			type : 'PUT',
-			data : {
-				
-			},
-			success : function(){
-				console.log('수정 성공');
-			},
-			error : function(){
-				console.log('수정 실패');
-			}
-		});//ajax 
-	});
-<!-- 		
-	function update(e){ //this넘기기
-	
-	let replyContent = $(e).siblings(".replyContent");
-	let content = replyContent.text();
-	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	replyContent.after('<input type="text" id="reportReplyContent" value="'+ content + '">');
-	replyContent.remove();
-	$(e).attr("onclick", "updateReportReply(this);");
-} 
--->
-*/
 
 		$('#achievement-content').on('click', '.delete-btn', function(){
 			
