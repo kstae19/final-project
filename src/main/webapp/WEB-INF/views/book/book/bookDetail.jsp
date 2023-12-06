@@ -284,11 +284,12 @@
 	             	<script>
 	             		
              			let inputReply = document.getElementById("bookReplyContent")
+             			let str = "";
              			inputReply.oninput = e=>{
              				let content = e.target.value;
              				let contentLenght = content.length;
              				let maxByte = inputReply.getAttribute("maxlength");
-							let length = 0;    
+							let length = 0;
 							
              				for(let i = 0; i < contentLenght; i++){
              					if ((content < "0" || content > "9") && (content < "A" || content > "Z") && (content < "a" || content > "z")){
@@ -297,13 +298,15 @@
 	                            	length = length + 1;
 	                            }
              				}
+             				console.log(length);
              				
-             				if (length < maxByte) {
+             				if (length <= maxByte) {
              					document.getElementById('bookReplyKeyup').innerText = length + "/50";
+             					str = content;
+             					console.log(str);
             					} else {
             						alert("바이트 제한을 초과했습니다.");
-            					 	inputReply.value = '';
-            					 	document.getElementById('bookReplyKeyup').innerText = "0/50";
+            					 	inputReply.value = str;
             					}
              			}
 	             	</script>

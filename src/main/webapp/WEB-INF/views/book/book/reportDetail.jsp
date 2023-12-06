@@ -134,7 +134,7 @@
 		function updateReportReply(e){// 댓글 수정 ajax
 			if($('#reportReplyContent').val().trim() != ''){
 	    		$.ajax({
-	    			url : 'updatereportreply.bk',
+	    			url : 'updateReply.bk',
 	    			type : 'post',
 	    			data : {
 	    				replyNo : $(e).siblings("input[type=hidden]").val(),
@@ -159,7 +159,6 @@
 		function update(e){ 
 			
 			let replyContent = $(e).siblings(".replyContent");
-			//let replyContent = $(e).next().next().next().next();
 			let content = replyContent.text();
 			
 			replyContent.after('<input type="text" id="reportReplyContent" value="'+ content + '">');
@@ -186,7 +185,6 @@
        			},
        			error : () => {
        				console.log("댓글 통신 실패");
-       				console.log($(e).siblings("input[type=hidden]").val());
        			}
        		})
        	}
@@ -240,51 +238,43 @@
         <p style="margin-bottom: 0px;">${ br.userId }</p>
         <span>${ br.bookReportDate }</span>
         <c:if test="${ not empty sessionScope.loginUser }">
-	        <button type="button" class="btn btn-dark" onclick="reportBlackPost(${br.bookReportNo}, '${ br.userId }', '${loginUser.userId}', ${ loginUser.userNo });">신고하기</button>
+	        <button type="button" class="btn btn-dark" onclick="reportBlackPost(${br.bookReportNo}, ${ loginUser.userNo });">신고하기</button>
 	        <c:if test="${ loginUser.userId eq br.userId or sessionScope.loginUser.userStatus eq 'A' }">
 		        <button type="button" class="btn btn-danger" onclick="reportDeletePost(${br.bookReportNo});">삭제</button>
 		        <button type="button" class="btn btn-secondary" onclick="reportUpdatePost(${br.bookReportNo});">수정</button>
 	        </c:if>
         </c:if>
         <script>
-        	function reportBlackPost(reportNo, userId, loginUserId, userNo){ // 신고버튼
+        	function reportBlackPost(reportNo, userNo){ // 신고버튼
         		
-        		if(userId === loginUserId){
-        			alert("자신이 작성한 글은 신고할 수 없습니다.");
-        		} else{
-        			// form태그 생성
-            		let form = document.createElement('form');
-            		
-            		// input[type=hidden]태그 생성 후 값 담음
-            		let rNoInput = document.createElement('input');
-            		rNoInput.setAttribute('type', 'hidden');
-            		rNoInput.setAttribute('name', 'reportNo');
-            		rNoInput.setAttribute('value', reportNo);
-            		let idInput = document.createElement('input');
-            		idInput.setAttribute('type', 'hidden');
-            		idInput.setAttribute('name', 'userId');
-            		idInput.setAttribute('value', userId);
-            		let uNoInput = document.createElement('input');
-            		uNoInput.setAttribute('type', 'hidden');
-            		uNoInput.setAttribute('name', 'userNo');
-            		uNoInput.setAttribute('value', userNo);
-            		
-            		// form태그의 자식요소로 추가
-            		form.appendChild(rNoInput);
-            		form.appendChild(idInput);
-            		form.appendChild(uNoInput);
-            		
-            		// form태그의 속성 추가
-            		form.setAttribute('method', 'post');
-            		form.setAttribute('action', 'reportBlack.bk');
-            		
-            		// body 안에 form태그 추가
-            		document.body.appendChild(form);
-            		
-            		// 실행
-            		form.submit();
-        		}
+       			// form태그 생성
+           		let form = document.createElement('form');
+           		
+           		// input[type=hidden]태그 생성 후 값 담음
+           		let rNoInput = document.createElement('input');
+           		rNoInput.setAttribute('type', 'hidden');
+           		rNoInput.setAttribute('name', 'reportNo');
+           		rNoInput.setAttribute('value', reportNo);
+           		let uNoInput = document.createElement('input');
+           		uNoInput.setAttribute('type', 'hidden');
+           		uNoInput.setAttribute('name', 'userNo');
+           		uNoInput.setAttribute('value', userNo);
+           		
+           		// form태그의 자식요소로 추가
+           		form.appendChild(rNoInput);
+           		form.appendChild(uNoInput);
+           		
+           		// form태그의 속성 추가
+           		form.setAttribute('method', 'post');
+           		form.setAttribute('action', 'reportBlack.bk');
+           		
+           		// body 안에 form태그 추가
+           		document.body.appendChild(form);
+           		
+           		// 실행
+           		form.submit();
         	}
+        	
         	function reportDeletePost(reportNo){ // 삭제
         		// form태그 생성
         		let form = document.createElement('form');

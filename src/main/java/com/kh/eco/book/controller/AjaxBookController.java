@@ -81,9 +81,10 @@ public class AjaxBookController {
 	
 	// 한줄평 등록
 	@PostMapping(value="insertBookReply.bk", produces="text/html; charset=UTF-8")
-	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) throws Exception {
+	public String ajaxInsertBookReply(String ISBN13, int userNo, String content, HttpSession session) 
+	throws Exception {
 		
-		BookController.checkText(content, 63);
+		BookController.checkText(content, 60);
 		
 		HashMap<String, Object> map = new HashMap();
 		map.put("ISBN13", ISBN13);
@@ -177,7 +178,7 @@ public class AjaxBookController {
 	}
 	
 	// 댓글 수정
-	@PostMapping("updatereportreply.bk")
+	@PostMapping("updateReply.bk")
 	public String ajaxUpdateReportReply(int replyNo, String content) throws Exception {
 		
 		BookController.checkText(content, 63);
@@ -222,7 +223,8 @@ public class AjaxBookController {
 	
 	// 마이페이지 북마크 책 조회
 	@PostMapping(value="bookmypage.bk", produces="application/json; charset=UTF-8")
-	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) throws IOException {
+	public String bookMyPage(@RequestParam(value="bPage", defaultValue="1") int currentPage, Model model, int userNo) 
+	throws IOException {
 		
 		PageInfo bookPi = Pagination.getPageInfo(bookService.bookmarkCountMyPage(userNo), currentPage, 4, 0);
 		
@@ -357,10 +359,7 @@ public class AjaxBookController {
 	@PostMapping(value="deleteReportBlack.bk", produces="text/html; charset=UTF-8")
 	public String deleteReportBlack(@RequestParam(value="blackReportNoArr") int[] arr) {
 		
-		int result = 0;
-		for(int i = 0; i < arr.length; i++) {
-			result += bookService.deleteReportBlack(arr[i]);
-		}
+		int result = bookService.deleteReportBlack(arr);
     
 		String check = result == arr.length ? "success" : "fail";
 		
@@ -371,10 +370,7 @@ public class AjaxBookController {
 	@PostMapping(value="deleteReplyBlack.bk", produces="text/html; charset=UTF-8")
 	public String deleteReplyBlack(@RequestParam(value="blackReplyNoArr") int[] arr) {
 		
-		int result = 0;
-		for(int i = 0; i < arr.length; i++) {
-			result += bookService.deleteReplyBlack(arr[i]);
-		}
+		int result = bookService.deleteReplyBlack(arr);
     
 		String check = result == arr.length ? "success" : "fail";
 		
