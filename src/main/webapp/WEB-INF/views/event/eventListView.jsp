@@ -21,13 +21,13 @@
 		border : 1px solid teal;
         width: 1200px;
         height: 1000px; 
-       margin: auto;
+        margin: auto;
         background-color: white;
+        padding-top: 50px;
     }
 
     #content-area{
-
-       border : 1px solid teal;
+        border : 1px solid teal;
         height : 75%; 
         width : 100%;
     }
@@ -35,7 +35,7 @@
 </head>
 <body>
   
- <%--  <jsp:include page="../common/header.jsp" /> --%>
+    <jsp:include page="../common/header.jsp" /> 
   
  	<div id="wrapper">
 
