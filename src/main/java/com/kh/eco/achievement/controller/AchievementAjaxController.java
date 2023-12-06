@@ -41,14 +41,14 @@ public class AchievementAjaxController {
 	private final AchievementService achievementService;
 
 	@GetMapping(value = "achievement", produces = "application/json; charset=UTF-8")
-	public String selectAchievementList(int challengeNo, @RequestParam(value="currentPage", defaultValue="1")int currentPage) {
+	public String selectAchievementList(int activityNo, @RequestParam(value="currentPage", defaultValue="1")int currentPage) {
 		
 		 PageInfo pi = Pagination.getPageInfo(
-				 												achievementService.countAchievementList(challengeNo),
+				 												achievementService.countAchievementList(activityNo),
 																 currentPage, 
 																 10, 
 																 1);
-		 ArrayList<Achievement> achieveList = achievementService.selectAchievementList(challengeNo, pi); 
+		 ArrayList<Achievement> achieveList = achievementService.selectAchievementList(activityNo, pi); 
 		 
 		 return new Gson().toJson(achieveList);
 	}
@@ -115,15 +115,15 @@ public class AchievementAjaxController {
 	
 	@GetMapping(value="mine.ac", produces="application/json; charset=UTF-8")
 	public String selectMyAchievement(int userNo, 
-														int challengeNo,
+														int activityNo,
 														@RequestParam(value="currentPage", defaultValue="1")int currentPage) {
 		
 		System.out.println(userNo);
-		System.out.println(challengeNo);
+		System.out.println(activityNo);
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
-		map.put("challengeNo", challengeNo);
+		map.put("activityNo", activityNo);
 		
 		PageInfo pi = Pagination.getPageInfo(
 				 achievementService.countMyAchievementList(map),
@@ -137,11 +137,11 @@ public class AchievementAjaxController {
 	}
 	
 	@GetMapping(value="progress.ac", produces="application/json; charset=UTF-8")
-	public String selectProgress(int userNo, int challengeNo) {
+	public String selectProgress(int userNo, int activityNo) {
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
-		map.put("challengeNo", challengeNo);
+		map.put("activityNo", activityNo);
 		
 		// userNo/challengeNo를 가지고 카운팅 --A 
 		int myAchievement = achievementService.countMyAchievementList(map);

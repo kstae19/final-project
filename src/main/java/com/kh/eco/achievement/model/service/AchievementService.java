@@ -11,11 +11,11 @@ import com.kh.eco.common.model.vo.PageInfo;
 public interface AchievementService {
 
 	// 인증 전체개수 카운트
-	int countAchievementList(int challengeNo);
+	int countAchievementList(int activityNo);
 	int countMyAchievementList(HashMap map);
 	
 	// 인증 전체조회
-	ArrayList<Achievement> selectAchievementList(int challengeNo, PageInfo pi);
+	ArrayList<Achievement> selectAchievementList(int activityNo, PageInfo pi);
 	ArrayList<Achievement> selectMyAchievement(HashMap map, PageInfo pi);
 	
 	// 인증 등록

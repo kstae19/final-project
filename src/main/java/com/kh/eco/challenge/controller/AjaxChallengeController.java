@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,13 +25,13 @@ public class AjaxChallengeController {
 	
 	
 	// Model을 쓸거면 ajax를 쓰면 안돼 Java랑 JS섞어쓰지마
-	@RequestMapping(value="checkLike.ch") // produce="json"안해야 success가 돌아감
-	public String checkLikeCount(int userNo, int challengeNo, Model model) {
-		System.out.println(userNo + "   " + challengeNo);
+	@GetMapping(value="checkLike.ch") // produce="json"안해야 success가 돌아감
+	public String checkLikeCount(int userNo, int activityNo, Model model) {
+		System.out.println(userNo + "   " + activityNo);
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
-		map.put("challengeNo", challengeNo);
+		map.put("activityNo", activityNo);
 		
 		System.out.println("좋아요여부 : " + challengeService.checkLikeCount(map));
 		if(challengeService.checkLikeCount(map) > 0) { // 좋아요 이미 체크한 회원
@@ -45,13 +48,13 @@ public class AjaxChallengeController {
 	}
 	
 	
-	@RequestMapping("insertLike.ch")
-	public String insertLike(int userNo, int challengeNo) {
+	@PostMapping("insertLike.ch")
+	public String insertLike(int userNo, int activityNo) {
 		
 		// 복합키인 userNo와 challengeNo를 map에 각각 담음
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", userNo);
-		map.put("challengeNo", challengeNo);
+		map.put("activityNo", activityNo);
 		
 		
 		
@@ -71,12 +74,12 @@ public class AjaxChallengeController {
 
 	
 	
-	@RequestMapping("deleteLike.ch")
-	public String deleteLike(int userNo, int challengeNo) {
+	@PostMapping("deleteLike.ch")
+	public String deleteLike(int userNo, int activityNo) {
 		
 		HashMap<String, Integer> map = new HashMap();
 		map.put("userNo", Integer.valueOf(userNo));
-		map.put("challengeNo", Integer.valueOf(challengeNo));
+		map.put("activityNo", Integer.valueOf(activityNo));
 		
 		if(challengeService.deleteLike(map)  > 0 ) {
 		

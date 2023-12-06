@@ -4,9 +4,9 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="achievmentMapper">
 
-	<resultMap id="achievementResultSet" type="achievement">
+	<resultMap id="achievementMap" type="achievement">
 		<result column="ACHIEVE_NO" property="achievementNo" />
-		<result column="CHALLENGE_NO" property="challengeNo" />
+		<result column="ACTIVITY_NO" property="activityNo" />
 		<result column="USER_NO" property="userNo" />
 		<result column="ACHIEVE_TITLE" property="achievementTitle" />
 		<result column="ACHIEVE_CONTENT" property="achievementContent" />
@@ -23,7 +23,7 @@
 		WHERE
 						STATUS = 'Y'
 		AND
-						CHALLENGE_NO = #{ challengeNo }
+						ACTIVITY_NO = #{ activityNo }
 	</select>
 	
 	<!-- 내인증댓글 카운팅 -->
@@ -35,16 +35,16 @@
 		WHERE
 						STATUS = 'Y'
 		AND
-						CHALLENGE_NO = #{ challengeNo }
+						ACTIVITY_NO = #{ activityNo }
 		AND
 						USER_NO = #{ userNo }
 	</select>
 	
 	<!-- 인증댓글 전체조회 cNo-->
-	<select id="selectAchievementList" parameterType="_int" resultMap="achievementResultSet">
+	<select id="selectAchievementList" parameterType="_int" resultMap="achievementMap">
 		SELECT 
 						ACHIEVE_NO,
-						CHALLENGE_NO,
+						ACTIVITY_NO,
 						USER_NO,
 						ACHIEVE_TITLE,
 						ACHIEVE_CONTENT,
@@ -55,17 +55,17 @@
 		WHERE
 						STATUS = 'Y'
 		AND
-						CHALLENGE_NO = #{ challengeNo }
+						ACTIVITY_NO = #{ activityNo }
 		ORDER
 		BY			UPLOAD_DATE DESC,
-						CHALLENGE_NO DESC
+						ACTIVITY_NO DESC
 	</select>
 	
 	<!-- 내 인증댓글 전체조회 -->
-	<select id="selectMyAchievement" parameterType="hashmap" resultMap="achievementResultSet">
+	<select id="selectMyAchievement" parameterType="hashmap" resultMap="achievementMap">
 		SELECT 
 						ACHIEVE_NO,
-						CHALLENGE_NO,
+						ACTIVITY_NO,
 						USER_NO,
 						ACHIEVE_TITLE,
 						ACHIEVE_CONTENT,
@@ -76,12 +76,12 @@
 		WHERE
 						STATUS = 'Y'
 		AND
-						CHALLENGE_NO = #{ challengeNo }
+						ACTIVITY_NO = #{ activityNo }
 		AND
 						USER_NO = #{ userNo }
 		ORDER
 		BY			UPLOAD_DATE DESC,
-						CHALLENGE_NO DESC
+						ACTIVITY_NO DESC
 	</select>
 	
 	<!--  인증댓글 등록 A -->
@@ -91,7 +91,7 @@
 						TB_ACHIEVE
 						(
 						ACHIEVE_NO,
-						CHALLENGE_NO,
+						ACTIVITY_NO,
 						USER_NO,
 						ACHIEVE_TITLE,
 						ACHIEVE_CONTENT,
@@ -101,7 +101,7 @@
 		VALUES
 						(
 						SEQ_ACHIEVE_NO.NEXTVAL,
-						#{	 challengeNo },
+						#{	 activityNo },
 						#{ userNo },
 						#{ achievementTitle },
 						#{ achievementContent },

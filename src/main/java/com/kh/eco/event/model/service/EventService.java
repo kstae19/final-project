@@ -15,13 +15,13 @@ public interface EventService {
 	ArrayList<Event> selectEventList();
 	
 	// 세부 이벤트 조회
-	Event selectEventDetail(int eventNo);
+	Event selectEventDetail(int activityNo);
 	
 	
 	// 이벤트 등록, 수정, 삭제
 	int insertEvent(Event e);
 	int updateEvent(Event event);
-	int deleteEvent(int eventNo);
+	int deleteEvent(int activityNo);
 	int joinEvent(HashMap<String, Integer> map);
 	
 }

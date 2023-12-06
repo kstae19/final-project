@@ -35,7 +35,7 @@
 </head>
 <body>
   
-  <jsp:include page="../common/header.jsp" />
+ <%--  <jsp:include page="../common/header.jsp" /> --%>
   
  	<div id="wrapper">
 
@@ -56,7 +56,7 @@
 					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
 					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
 					       
-					        <input class="event" id="eventNo" name="eventNo" type="hidden"/>
+					        <input class="event" id="activityNo" name="activityNo" type="hidden"/>
 					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value="" />
 					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
 				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
@@ -104,7 +104,7 @@
  									<div id="dEventPlace"> </div>
 							       	<div id="dParticipants"> </div>
 							       	<div id="dUpfile"> </div>
-							       	<div id="dEventNo"></div>
+							       	<div id="dActivityNo"></div>
 					       	</div>
 
 						</div><!-- body -->
@@ -126,34 +126,7 @@
 			
 		</div><!-- detailModal -->
 
-<script>		
-	/* function updateEvent(){
-		
-	 	$.ajax({
-			url : 'update.ev',
-			data : { 
-				eventTitle : $('#eventTitle').val(),
-				eventContent : $('#eventContent').val(),
-				eventPlace : $('#eventPlace').val(),
-				changeName : $('#changeName').val(),
-				categoryNo : $('#categoryNo').val(),
-				eventNo : $('#eventNo').val()
-			},
-			success : function(data){
-				console.log(data);
-				
-			},
-			error : function(){
-				alert('수정할 수 없습니다. 잠시 후 다시 시도해주세요');
-			}
-		});
-	 	
-	};//updateE */
-	
-	
-	
-</script>
-		
+
 		<div id="calendar"></div>
 		
 </div><!-- wrapper -->
@@ -186,7 +159,7 @@
 							<c:forEach var="e" items="${list}">
 								
 								{ 
-									id : '${e.eventNo}',
+									id : '${e.activityNo}',
 									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
 									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
 									 extendedProps: {
@@ -312,7 +285,7 @@
 	    		let eventPlace = $('#dEventPlace').html();
 	    		let participants = $('#dParticipants').html();
 	    		let upfile = $('#dUpfile').html();
-	    		let eventNo = $('#dEventNo').html();
+	    		let eventNo = $('#dActivityNo').html();
 	    		
 	    	// #detail-content에  input(value가 변수인) 삽입
 	    		$('#detail-title').html('');
@@ -325,7 +298,7 @@
 	    		        +'<label for="uEventPlace">이벤트장소 : <input id="uEventPlace" class="event" name="eventPlace" type="text" required  value="' +eventPlace+ '"/></label>'
 	    		        +'<label for="uParticipants">참여인원 : <input id="uParticipants" class="event" name="participants" type="number" readonly value="' +participants+ '"/></label>'
 	    		       	+'<label for="uUpfile">첨부파일 : <input id="uUpfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required  value="' +upfile+ '"/></label>'
-	    		       	+'<input class="uEventNo" id="uEventNo" name="eventNo" type="hidden"  value="' +eventNo+ '"/>'
+	    		       	+'<input class="uActivityNo" id="uActivityNo" name="activityNo" type="hidden"  value="' +activityNo+ '"/>'
 	    		       	+'<div class="modal-footer">'
 	    		       	+'<button type="submit" class="tn btn-primary" id="updateEvent">수정</button>'
 	    		        +'</div>');
@@ -340,7 +313,7 @@
 	    			formData.append('eventContent', $('#uEventContent').val());
 	    			formData.append('eventPlace', $('#uEventPlace').val());
 	    			formData.append('upfile', $('#uUpfile')[0].files[0]);
-	    			formData.append('eventNo', Number($('#uEventNo').val()));
+	    			formData.append('activityNo', Number($('#uActivityNo').val()));
 	    			    
 	    			$.ajax({
 	    				url : 'update.ev',
@@ -363,11 +336,11 @@
 	    			
 	    			$.ajax({
 	    				url : 'join.ev',
-	    				type : 'PUT',
+	    				/* type : 'POST', */
 	    				data : { 
 	    					// 둘 다 null이 들어가는 이유?
 	    					userNo : ${ sessionScope.loginUser.userNo },
-	    					eventNo : $('#mEventNo').html(),
+	    					activityNo : $('#mActivityNo').html(),
 	    				},
 	    				success : function(data){
 	    					alert('참가신청 성공!');
