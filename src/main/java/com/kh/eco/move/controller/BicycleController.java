@@ -22,7 +22,6 @@ public class BicycleController {
 	@ResponseBody
 	@RequestMapping(value="bicycle.mo", produces="application/json; charset=UTF-8")
 	public String bicycleInfo() throws IOException {
-	System.out.println(bikeApiKey);	
 		String url = "http://openapi.seoul.go.kr:8088/";
 		url += bikeApiKey;
 		url += "/json/bikeList/1/1000";
