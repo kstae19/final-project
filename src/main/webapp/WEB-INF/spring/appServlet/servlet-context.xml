@@ -34,6 +34,10 @@
 			<beans:bean class="com.kh.eco.common.interceptor.LoginInterceptor" id="loginInterceptor" />
 		</interceptor>
 		<interceptor>
+			<mapping path="/event" />
+			<beans:bean class="com.kh.eco.common.interceptor.CalendarInterceptor" id="calendarInterceptor"/>
+		</interceptor>
+		<interceptor>
 			<mapping path="/adminReport" />
 			<mapping path="/admin.us" />
 			<beans:bean class="com.kh.eco.common.interceptor.AdminInterceptor" id="adminInterceptor" />
