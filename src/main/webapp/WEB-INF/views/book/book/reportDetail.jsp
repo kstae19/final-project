@@ -185,7 +185,6 @@
        			},
        			error : () => {
        				console.log("댓글 통신 실패");
-       				console.log($(e).siblings("input[type=hidden]").val());
        			}
        		})
        	}
