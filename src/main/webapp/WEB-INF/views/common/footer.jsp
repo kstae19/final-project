@@ -104,7 +104,7 @@
 								    강혜수 : 치열하게 고민하고 완성해내자<br>
 								    박은희 : 끝까지 간다<br>
 								    황성민 : 죽어라 하자!</p>
-			<p class="copy-footer">Copyright © 2023-2023 Eco Firendly Institute All Right Reserved</p>
+			<p class="copy-footer">Copyright © 2023-2023 Eco Friendly Institute All Right Reserved</p>
 		</div>
 		<div id="footer-sns">
 			<div id="footer-btn">
