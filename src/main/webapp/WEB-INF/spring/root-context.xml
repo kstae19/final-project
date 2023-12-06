@@ -5,6 +5,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="classpath:/key.properties" />
+	</bean>
+	
 	
 	<!-- DB연결을 위한 Bean등록 3단계 -->
 	<!-- 1단계 : DB연결을 위한 도구를 설정 -->
@@ -37,7 +41,7 @@
 	 	<property name="host" value="smtp.gmail.com"/>
 	 	<property name="port" value="587"/>
 	 	<property name="username" value="compie1176@gmail.com"/>
-	 	<property name="password" value="dadndyddxzkoxxdu"/>
+	 	<property name="password" value="${KEY.MAIL}"/>
 	 	<property name="javaMailProperties">
 	 		<props>
 	 			<prop key="mail.smtp.auth">true</prop>

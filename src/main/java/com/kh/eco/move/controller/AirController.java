@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,13 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class AirController {
 
-	static final String SERVICEKEY = "3Pie%2Be9C78s5Ul6%2BzJZaCEXTbWWADemQXG3w6CG2Ssfn4s8L%2FLmlt4oMadloG2BYKSVBPmEYrlwGX8hAgcqMSQ%3D%3D";
+	@Value("${key.AIR}")
+	private String airApiKey;
 	
 	@ResponseBody
 	@RequestMapping(value="air.mo", produces="application/json; charset=UTF-8") 
 	public String airInfo() throws IOException {
 		String url = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
-		url += "?serviceKey=" + SERVICEKEY;
+		url += "?serviceKey=" + airApiKey;
 		url += "&sidoName=" + URLEncoder.encode("서울", "UTF-8");
 		url += "&returnType=json";
 		url += "&numOfRows=40";
@@ -36,7 +38,7 @@ public class AirController {
 		BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 		String responseText = br.readLine();
 		
-		System.out.println(responseText);
+		// System.out.println(responseText);
 		
 		br.close();
 		urlConnection.disconnect();
@@ -60,7 +62,7 @@ public class AirController {
 		calendar.add(Calendar.HOUR_OF_DAY, -1);
 
 		String result1 = String.format("%02d00", calendar.get(Calendar.HOUR_OF_DAY));
-		System.out.println(result1);
+		// System.out.println(result1);
 		
 		// System.out.println(areaName);
 		
@@ -117,14 +119,14 @@ public class AirController {
 		} 		
 		
 		String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst";
-		url += "?serviceKey=" + SERVICEKEY;
+		url += "?serviceKey=" + airApiKey;
 		url += "&dataType=json&numOfRows=1000&pageNo=1";
 		url += "&base_date=" + result;
 		url += "&base_time=" + result1;
 		url += "&nx=" + nx;
 		url += "&ny=" + ny;
 		// System.out.println(today);
-		System.out.println(url);
+		// System.out.println(url);
 		
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
@@ -207,14 +209,14 @@ public class AirController {
 		} 		
 		
 		String url = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";
-		url += "?serviceKey=" + SERVICEKEY;
+		url += "?serviceKey=" + airApiKey;
 		url += "&dataType=json&numOfRows=310&pageNo=1";
 		url += "&base_date=" + result;
 		url += "&base_time=0500";
 		url += "&nx=" + nx;
 		url += "&ny=" + ny;
 		// System.out.println(today);
-		System.out.println(url);
+		// System.out.println(url);
 		
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();

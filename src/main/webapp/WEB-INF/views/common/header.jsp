@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
- <link rel="icon" href="resources/images/1968582-28a745.png" type="image/x-icon">
 
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -47,6 +46,7 @@
 	
 	.sidenav a:hover {
 	  color: #28a745;
+	  text-decoration: none;
 	}
 	
 	.sidenav .closebtn {
@@ -93,12 +93,13 @@
 	
 	 #header_h3 {
 	    display: block;
-	    font-size: 18px;
+	    font-size: 16px;
 	    margin-block-start: 0.67em;
 	    margin-block-end: 0.67em;
 	    margin-inline-start: 0px;
 	    margin-inline-end: 0px;
 	    font-weight: bold;
+	    margin-left : 10px;
 	}
 
 	.cart img{
@@ -213,7 +214,7 @@
 					<c:when test="${ sessionScope.loginUser.userStatus eq 'A' }">
 						<div class="iom iam">
 							<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
-            </div>
+            			</div>
 
 						<div class="lom login-menu" onclick="location.href='admin.us'"><h3>관리자</h3> </div>
 						<div class="lom login-menu" onclick="location.href='logout.us'"><h3>LOGOUT</h3> </div>
@@ -248,7 +249,7 @@
 											<div class="iom">
 												<h3 id="header_h3">${ sessionScope.loginUser.userName }님 환영합니다</h3>
 								            </div>
-											<div class="lom cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
+											<div class="cart" onclick="location.href='cart?userNo=${sessionScope.loginUser.userNo}'"><h3><img src="resources/images/shopping-cart-solid.svg"></h3></div>
 											<div class="lom login-menu" onclick="location.href='mypage.us'"><h3 id="header_h3">MYPAGE</h3> </div>
 											<div class="lom login-menu" onclick="location.href='kakaologout.us'"><h3 id="header_h3">카카오 LOGOUT</h3> </div>
 							            </div>
