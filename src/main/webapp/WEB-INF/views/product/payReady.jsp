@@ -18,7 +18,7 @@
 		location.href='${pcUrl}';
 	})
 </script>
-
+<jsp:include page="../common/footer.jsp"/>
 </h1>
 </body>
 </html>

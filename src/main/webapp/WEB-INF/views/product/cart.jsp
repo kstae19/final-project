@@ -259,6 +259,6 @@ h3{
 <br>
 <br>
 
-
+<jsp:include page="../common/footer.jsp"/>
 </body>
 </html>
