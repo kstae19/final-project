@@ -139,18 +139,12 @@
     			// 만약 초기ajax success에 ajax를 쓴다면 동기로 처리되는 것이 아니라 그대로 비동기로 처리됨
     			//	$('#content-area').on('click', '#likeCount', function(){
     					
-    		// jQuery시작
     		  $(function(){		
-				// 클릭이벤트함수
 				$('#like').on('click',  function(){
-			    		
 					checkLikeCount()
-		    		.done(function(checked){// 체크여부 확인 완료했을 때
-		    			
+		    		.done(function(checked){		
 		    			const count = parseInt($('#count').html()); 
-		    		
-					    			if(checked == 'success'){ // 이미 체크한 회원이라면
-					    				console.log('done때 : ${likeCount}');
+					    			if(checked == 'success'){ 		
 						    				$.ajax({
 				    		    				url : 'deleteLike.ch',
 				    		    				type : 'POST',
@@ -158,30 +152,18 @@
 				    		    					userNo : ${ sessionScope.loginUser.userNo },
 				    		    					activityNo : ${ challenge.activityNo },
 				    		    				},
-				    		    				success : function(result){ // deleteLike 연결 성공
-				    		    					
-				    		    					console.log(result);
-				    		    				
-				    		    					if(result == 'success' ){// 좋아요 한행 삭제 성공
-				    		    						
-				    		    						console.log('좋아요 한행 삭제 성공');
-				    		    						//$('#count').html(${likeCount}-1);// 디테일화면에 들어왔을 때 로드되는 좋아요수
+				    		    				success : function(result){ 
+				    		    					if(result == 'success' ){	
 				    		    						$('#count').html(count - 1);
 				    		    						$('#like').html('🤍');
-				    		    						
-				    		    					} else {
-				    		    						console.log('좋아요 한행 삭제 실패');
-				    		    					}
+				    		    					} 
 				    		    				},
 				    		    				error : function(){
-				    		    					
 				    		    					console.log('decraese연결 실패');
-				    		    					
 				    		    				}
 					    				})
-					    			}//if 
-					    			else { // 처음 체크하거나 취소후 재체크하는 회원이라면
-					    				
+					    			}
+					    			else { 
 						    				$.ajax({
 							    				url : 'insertLike.ch',
 							    				type : 'POST',
@@ -189,36 +171,23 @@
 							    					userNo : ${ sessionScope.loginUser.userNo },
 							    					activityNo : ${ challenge.activityNo },
 							    				},
-							    				success : function(result){ // insertLike에 연결 성공
-							    					
-							    					console.log(result);
-							    				
-							    					if(result == 'success'){ // 좋아요 한행 추가 성공
-							    						console.log('좋아요 한행 추가 성공');
+							    				success : function(result){     				
+							    					if(result == 'success'){ 	    					
 							    						$('#count').html(count + 1);
-							    			
-							    						//$('#count').html($ {likeCount} + 1);
-							    						$('#like').html('💚');// + 는 String끼리 concat 하는 효과
-							    					} else {
-							    						console.log('좋아요 한행 추가 실패')
-							    					}
-			
+							    						$('#like').html('💚');
+							    					} 
 							    				},
 							    				error : function(){					
 							    					console.log('increase연결 실패'); 
 							    				}
-					    			})
-					    			
-					    			}// else	
-
-					    		})// done
-						    	.fail(function(message){// 체크여부 확인 실패했을 때
+					    					})
+					    			}
+					    		})
+						    	.fail(function(message){
 						    			console.log('좋아요수 체크 실패');
-						    	});// fail
-				});// 클릭이벤트함수
-    		  })//jQuery끝
-    		
-    		
+						    	});
+					});
+    		  })
 		    </script>
 		    		
     		

@@ -59,7 +59,7 @@ public class PlaceController {
 		return responseText;		
 		
 	}
-	
+
 	@RequestMapping("map/{x}/{y}")//요청url
 	public String searchPlaceMap(@PathVariable("x")	@ModelAttribute String x, //""는 url에 넣은 값이름
 													@PathVariable("y")	@ModelAttribute String y) {
