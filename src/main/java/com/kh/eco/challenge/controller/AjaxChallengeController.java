@@ -29,7 +29,7 @@ public class AjaxChallengeController {
 	public String checkLikeCount(int userNo, int activityNo, Model model) {
 		System.out.println(userNo + "   " + activityNo);
 		
-		HashMap<String, Integer> map = new HashMap();
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("userNo", userNo);
 		map.put("activityNo", activityNo);
 		

@@ -165,7 +165,7 @@
 		JOIN 
 						TB_USER USING (USER_NO)
 		WHERE 
-						TB_CHALLENGE.STATUS = 'Y'<!-- USER에도 STATUS가 있기 때문 -->
+						TB_CHALLENGE.STATUS = 'Y'
 	
 			<if test=" condition == 'title' ">
 						AND CHALLENGE_TITLE 

@@ -10,7 +10,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-public class Event  extends Activity{
+
+public class Event  extends Activity  {
 	
 	private int activityNo;
 	private String eventTitle;
