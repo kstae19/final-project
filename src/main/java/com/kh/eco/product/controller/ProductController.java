@@ -3,9 +3,10 @@ package com.kh.eco.product.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -34,33 +35,35 @@ import com.kh.eco.product.model.vo.ProductReview;
 import com.kh.eco.user.model.vo.User;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
 	
 	private final ProductService productService;
-	
+	/**
+	 * @param currentPage 현재 페이지
+	 * @param orderBy 정렬 기준
+	 * @param category 제품 카테고리
+	 * @param keyword 검색어
+	 * @param model 
+	 * @return 제품 메인페이지
+	 */
 	@RequestMapping("product")
-	public String productHome(@RequestParam(value="cPage", defaultValue="1") 
-								int currentPage,
-								@RequestParam(value="orderBy", defaultValue="latest") 
-								String orderBy, 
-								@RequestParam(value="category", defaultValue="all") 
-								String category,
+	public String productHome(@RequestParam(value="cPage", defaultValue="1") int currentPage,
+								@RequestParam(value="orderBy", defaultValue="latest") String orderBy, 
+								@RequestParam(value="category", defaultValue="all") String category,
 								String keyword, 
-								Model model,
-								HttpSession session) {
+								Model model) {
 		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
 		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), currentPage, 6, 5);
-		model.addAttribute("pi", pi);				
-		
-		HashMap map = new HashMap();
-		map.put("orderBy", orderBy);	//정렬 기준
-		map.put("category", category);	//상품 종류
-		map.put("keyword", keyword);	//검색 키워드
-		
+		model.addAttribute("pi", pi);						
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("orderBy", orderBy);
+		map.put("category", category);
+		map.put("keyword", keyword);		
 		if(keyword != null) {
 			if(productService.checkKeyword(keyword)>0) {
 				productService.updateKeywordCount(keyword);
@@ -69,11 +72,7 @@ public class ProductController {
 			}
 		}		
 		model.addAttribute("map", map);
-		model.addAttribute("productList", productService.selectProductList(map, pi));
-		
-		User loginUser = (User)session.getAttribute("loginUser");
-		if(loginUser != null) System.out.println("로그인 유저 : "+loginUser.getUserNo());
-		
+		model.addAttribute("productList", productService.selectProductList(map, pi));		
 		return "product/productHome";
 	}
 	
@@ -90,30 +89,28 @@ public class ProductController {
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {
 		String likeCheck = like.getUserNo() !=0 ? productService.checkLike(like) : "N";
-		productService.updateProductCount(like.getProductNo());
+		int productNo = like.getProductNo();
+		productService.updateProductCount(productNo);
 		model.addAttribute("like", likeCheck);
-		model.addAttribute("p", productService.selectProduct(like.getProductNo()));
-		model.addAttribute("images", productService.getImages(like.getProductNo()));
-		model.addAttribute("brand", productService.getBrand(like.getProductNo()));
-		model.addAttribute("review", productService.getRate(like.getProductNo()));
+		model.addAttribute("p", productService.selectProduct(productNo));
+		model.addAttribute("images", productService.getImages(productNo));
+		model.addAttribute("brand", productService.getBrand(productNo));
+		model.addAttribute("review", productService.getRate(productNo));
 		return "product/productDetail";
 	}
-	
-	@RequestMapping("product.orderForm")
-	public String orderForm() {		
-		return "redirect:/";
-	}
-	
+
 	@GetMapping("cart")
 	public String myCart(int userNo, Model model) {
-		ArrayList<Cart> cartItems = productService.selectCartItems(userNo);
+		List<Cart> cartItems = productService.selectCartItems(userNo);
 		model.addAttribute("cartItems", cartItems);
 		return "product/cart";
 	}
+	
 	@RequestMapping("listOrderForm")
-	public String orderListForm(OrderCart orderCart, Cart item, Model model) {
-		
-		ArrayList<Cart> itemList = orderCart.getItemList();
+	public String orderListForm(OrderCart orderCart
+								, Cart item
+								, Model model) {		
+		List<Cart> itemList = orderCart.getItemList();
 		if(itemList.isEmpty()) {
 			ProductOption option = productService.getProductOption(item.getOptionNo());
 			item.setOptionName(option.getOptionName());
@@ -132,23 +129,15 @@ public class ProductController {
 		model.addAttribute("totalPrice", totalPrice);
 		return "product/orderForm";
 	}
+	
 	@PostMapping("product.order")
 	public String orderProduct(Order order
-								, KakaoPay pay
-								, Model model
-								, HttpSession session) throws IOException, ParseException {
+							   , KakaoPay pay
+							   , Model model
+							   , HttpSession session) throws IOException, ParseException {
 		session.setAttribute("order", order);
-		//주문이 완료되야 테이블에 저장할 수 있으므로 일단 세션에 담아두기
-		
 		model.addAttribute("pcUrl", productService.getPcUrl(pay));
 		return "product/payReady";
-	}
-	@ResponseBody
-	@RequestMapping(value="pay", produces="html/text; charset=UTF-8")
-	public String makePayment(KakaoPay pay) throws IOException, ParseException{
-		//TC0ONETIME
-		String pcUrl = productService.getPcUrl(pay);
-		return pcUrl;
 	}
 	
 	@GetMapping("shoppingList")
@@ -160,7 +149,7 @@ public class ProductController {
 		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), currentPage, 4, 5);
 		model.addAttribute("pi", pi);	
 
-		ArrayList<Order> orders = productService.getShoppingList(userNo, pi);
+		List<Order> orders = productService.getShoppingList(userNo, pi);
 		for(Order o : orders) {
 			int totalPrice =0;
 			o.setItemQty(o.getOrderDetail().size());
@@ -178,18 +167,21 @@ public class ProductController {
 		model.addAttribute("likeList", productService.getLikes(userNo));
 		model.addAttribute("review", productService.getLastReview(userNo));
 		model.addAttribute("orderList", productService.getOrderList(userNo));
-		System.out.println(model.getAttribute("review"));
 		return "product/myshopping";
 	}
+	
 	@GetMapping("paySuccess")
-	public String getSuccessPage(String pg_token, Model model, HttpSession session) throws IOException, ParseException {
-		//db에서 방금 추가된 정보들 가져오기
+	public String getSuccessPage(String pg_token
+								, Model model
+								, HttpSession session) throws IOException, ParseException {
 		ApproveRequest approveRequest = productService.getRequestParam();
 		approveRequest.setPgToken(pg_token);
-		model.addAttribute("itemName", productService.approvePayment(approveRequest, (Order)session.getAttribute("order")));
+		model.addAttribute("itemName", productService.approvePayment(approveRequest
+																	, (Order)session.getAttribute("order")));
 		session.removeAttribute("order");
 		return "product/paySuccess";
 	}
+	
 	@GetMapping("payReady")
 	public String payReady() {
 		return "product/payReady";
@@ -199,10 +191,8 @@ public class ProductController {
 		return "product/reviewForm";
 	}
 	@PostMapping("insert.review")
-	public String insertReview(ProductReview review,
-								MultipartFile upfile
-								, HttpSession session
-								,Model model) {
+	public String insertReview(ProductReview review, MultipartFile upfile, 
+								HttpSession session ,Model model) {
 		String originName = upfile.getOriginalFilename();
 		if(!originName.equals("")) {
 			review.setOriginName(originName);
@@ -211,7 +201,6 @@ public class ProductController {
 		int result = productService.insertReview(review);
 		String alertMsg = result>0? "후기 등록 성공":"후기 등록 실패";
 		model.addAttribute("alertMsg", alertMsg);
-
 		return "redirect:/";
 	}
 	public String saveFile(MultipartFile upfile, HttpSession session) {

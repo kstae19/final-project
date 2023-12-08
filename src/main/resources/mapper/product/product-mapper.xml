@@ -3,15 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="productMapper">
-<resultMap id="resultProductMap" type="product">
-	<result property="productNo" column="PRODUCT_NO"/>
-	<result property="productName" column="PRODUCT_NM"/>
-	<result property="mainImg" column="MAIN_IMG"/>
-	<result property="productInfo" column = "PRODUCT_INFO"/>
-	<result property="detailInfo" column = "DETAIL_INFO"/>
-	<result property="extraInfo" column = "EXTRA_INFO"/>
-	<collection property="optionList" ofType="option" resultMap = "optionMap"/>
-</resultMap>
+
 <resultMap id="resultLikeMap" type = "productLike">
 	<result property="productNo" column="PRODUCT_NO"/>
 	<result property="userNo" column="USER_NO"/>
@@ -31,11 +23,7 @@
 	<result property="price" column="PRICE"/>
 	<result property="userNo" column="USER_NO"/>
 </resultMap>
-<resultMap id ="optionMap" type="option">
-	<result column = "OPTION_NO" property = "optionNo"/>
-	<result column = "OPTION_NM" property="optionName"/>
-	<result column = "PRICE" property="price"/>
-</resultMap>
+
 
 <resultMap id="shoppingListMap" type="order">
 	<result property="orderNo" column="ORDER_NO" />
@@ -69,7 +57,21 @@
 
 
 <!-- 상품 관련 -->
-<select id="selectProductList" resultMap="resultProductMap" parameterType="hashmap">
+<resultMap id ="optionMap" type="option">
+	<result column = "OPTION_NO" property = "optionNo"/>
+	<result column = "OPTION_NM" property="optionName"/>
+	<result column = "PRICE" property="price"/>
+</resultMap>
+<resultMap id="resultProductMap" type="product">
+	<result property="productNo" column="PRODUCT_NO"/>
+	<result property="productName" column="PRODUCT_NM"/>
+	<result property="mainImg" column="MAIN_IMG"/>
+	<result property="productInfo" column = "PRODUCT_INFO"/>
+	<result property="detailInfo" column = "DETAIL_INFO"/>
+	<result property="extraInfo" column = "EXTRA_INFO"/>
+	<collection property="optionList" ofType="option" resultMap = "optionMap"/>
+</resultMap>
+<select id="selectProductList" resultMap="resultProductMap" parameterType="map">
 SELECT 
 		PRODUCT_NO, 
 		PRODUCT_NM, 

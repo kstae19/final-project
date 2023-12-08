@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.session.RowBounds;
 import org.json.simple.JSONObject;
@@ -43,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 	private final SqlSessionTemplate sqlSession;
 	
 	@Override
-	public ArrayList<Product> selectProductList(HashMap map, PageInfo pi) {
+	public ArrayList<Product> selectProductList(Map<String, String> map, PageInfo pi) {
 		int offset = (pi.getCurrentPage()-1)*pi.getBoardLimit();
 		RowBounds rowBounds = new RowBounds(offset, pi.getBoardLimit());
 		return dao.selectProductList(sqlSession, map, rowBounds);
@@ -163,10 +164,10 @@ public class ProductServiceImpl implements ProductService {
 	public String getPcUrl(KakaoPay pay) throws IOException, ParseException{
 		String url = "https://kapi.kakao.com/v1/payment/ready";
 		String postParams = "cid=TC0ONETIME"
-			+ "&partner_order_id=order1122"//가맹점 주문 번호 문자열
-			+ "&partner_user_id="+pay.getUserNo() //가맹점 회원id 문자열
-			+ "&item_name="+pay.getItemName() //상품명 문자열
-			+ "&quantity="+pay.getQuantity()//상품갯수
+			+ "&partner_order_id=order1122"
+			+ "&partner_user_id="+pay.getUserNo()
+			+ "&item_name="+pay.getItemName()
+			+ "&quantity="+pay.getQuantity()
 			+ "&total_amount="+pay.getTotalAmount()
 			+ "&tax_free_amount=0"
 			+ "&approval_url=http://localhost:8001/eco/paySuccess"
@@ -201,7 +202,6 @@ public class ProductServiceImpl implements ProductService {
 		approveRequest.setTid(tid);
 		
 		int result = dao.insertReady(sqlSession, approveRequest);
-		if(result>0) System.out.println("tid값 인서트 성공");
 		return pcUrl;
 	}
 	private String readBody(InputStream body) {
@@ -227,11 +227,6 @@ public class ProductServiceImpl implements ProductService {
 		return dao.getRequestParam(sqlSession);
 	}
 
-	@Override
-	public String payResult(String pcUrl) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	@Transactional
 	@Override
 	public String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException {
@@ -256,11 +251,7 @@ public class ProductServiceImpl implements ProductService {
 		String responseData = "";
 		if(urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			responseData = readBody(urlConnection.getInputStream());
-			//responseCode 200 성공~~
 			int orderResult = orderProduct(order);
-			if(orderResult>0) {
-				System.out.println("DB도 잘 다녀옴");
-			}
 		}else {
 			responseData = readBody(urlConnection.getErrorStream());
 		}
@@ -363,6 +354,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public int addAddress(Address address) {
 		return dao.addAddress(sqlSession, address);
+	}
+
+	@Override
+	public String payResult(String pcUrl) throws IOException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

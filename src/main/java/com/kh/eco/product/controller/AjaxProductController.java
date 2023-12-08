@@ -1,9 +1,11 @@
 package com.kh.eco.product.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.kh.eco.product.model.service.ProductService;
 import com.kh.eco.product.model.vo.Cart;
+import com.kh.eco.product.model.vo.KakaoPay;
 import com.kh.eco.product.model.vo.ProductLike;
 import com.kh.eco.user.model.vo.User;
 
@@ -100,5 +103,10 @@ public class AjaxProductController {
 	public int getUserNo(HttpSession session) {
 		User loginUser = (User)session.getAttribute("loginUser");
 		return loginUser != null ? loginUser.getUserNo() : 0;
+	}
+	@RequestMapping(value="pay", produces="html/text; charset=UTF-8")
+	public String makePayment(KakaoPay pay) throws IOException, ParseException{
+		String pcUrl = productService.getPcUrl(pay);
+		return pcUrl;
 	}
 }

@@ -173,7 +173,7 @@ h2 {
 				</div>
 			</form>
 			<script>
-				function letsgo(){
+				function makePayment(){
 					$.ajax({
 						url :'pay',
 						data : {
@@ -193,7 +193,7 @@ h2 {
 				function addressList(){
 					$.ajax({
 						url : 'addressList',
-						success : e=>{
+						success : e => {
 							$('#addressList .modal-body > div').empty();
 							e.map(a=>{
 								$el = $('<div class="address"><table class="table table-borderless"></table></div>').attr('id', a.addressNo);
@@ -212,8 +212,7 @@ h2 {
 							})
 								return true;
 						},
-						error : () =>{
-							console.log('ajax하기시러..배송지이이이이!');
+						error : () => {
 							return false;
 						}
 					});				
@@ -233,6 +232,7 @@ h2 {
       		</div>
 		</div>
 	</div>
+<jsp:include page="../common/footer.jsp"/>	
 <!-- The Modal -->
   <div class="modal fade" id="addressList">
     <div class="modal-dialog modal-dialog-centered">
@@ -284,7 +284,7 @@ h2 {
 	<script>
 		function postCode(){
 			new daum.Postcode({
-				oncomplete : function(data){
+				oncomplete : data=>{
 					console.log(data);
 					$('input[name="post"]').val(data.zonecode);
 					$('input[name="address"]').val(data.address);
@@ -305,15 +305,9 @@ h2 {
 					console.log(e);
 					alert('배송지 추가 성공!');
 					addressList();
-				},
-				error : () =>{
-					console.log('ajax...');
 				}
-			});
-			
+			});			
 		};
-
 	</script>
-<jsp:include page="../common/footer.jsp"/>	
 </body>
 </html>

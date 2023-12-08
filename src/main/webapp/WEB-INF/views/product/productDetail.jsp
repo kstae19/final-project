@@ -224,7 +224,8 @@ div {
 							alert('옵션을 먼저 선택 해주세요.');
 							return false;
 						}
-					}
+					};
+					
 					function addCart(){
 						let $option = $('#choice select').val();
 						if($option == 0){
@@ -250,16 +251,11 @@ div {
 									else{
 										alert('이미 장바구니에 존재하는 상품입니다.\n 추가일자 :'+e);
 									}
-								},
-								error : ()=>{
-									console.log('ajax망..'); 
-								}
-								
-							})
-							
-						}
-						
-					}
+								}							
+							})							
+						}						
+					};
+					
 					function askLogin(){
 						if(confirm('로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?')){
 						location.href='login';
@@ -280,45 +276,31 @@ div {
 								else if(e == 'removed'){
 									$(th).attr('src', 'resources/images/heart-regular.svg');
 								};
-							},
-							error : e => {
-								console.log('세상은 요지경~~');
 							}
 						})
-					}
+					};
 					$(()=>{
-
 						$('#choice select').change(()=>{
 							$.ajax({
 								url : 'getPrice',
 								data : {optionNo : $('#choice select').val()},
 								success : price =>{
-									//$qty = $('#choice input').val();
-									//$price = $qty*Number(price.replace(',', ''));
-									//console.log($price);
-									//console.log($qty);
 									$('#price').text(price+'원');
 									$('#totalPrice').text(price+'원');
 									$('#choice input').attr('disabled', false);
-								},
-								error : ()=>{
-									console.log('공부 더해 이자기식아!');
 								}
 							})
 						});
-
 						$('#choice input').change(()=>{
 							if($('#choice select').val() == 0){
 								alert('옵션을 먼저 선택 해주세요.');
 								$('#choice select').focus();
-							}else{
-								
+							}else{							
 							let price = $('#choice span').text();
 							let totalPrice =parseInt(price.replace(',', ''))*parseInt($('#choice input[type=number]').val());
 							$('#totalPrice').text(totalPrice.toLocaleString()+'원');
-							}
-							
-						})
+							}							
+						});
 					})
 				</script>
 		<div id="picture-area">
@@ -365,9 +347,6 @@ div {
 					success: reviews => {
 						let html = template(reviews);
 						$reviews.html(html);
-					},
-					error:()=>{
-						alert('지겨웡~~~~~~~~~~');
 					}
 				});
 			});
@@ -375,12 +354,12 @@ div {
 				let value = '<table><tbody>';
 				$.each(data, (index, item)=>{
 						value += '<tr>'
-							+ '<td rowspan="2"><img src="'+item.changeName+'"></td>'
-							+ '<td><span class="fakebtn">'+item.option+'</span> <b>'+item.reviewTitle+'</b></td>'
-							+'</tr>'
-							+'<tr>'
-							+ '<td>'+item.reviewContent+'</td>'
-							+'</tr>';
+								+ '<td rowspan="2"><img src="'+item.changeName+'"></td>'
+								+ '<td><span class="fakebtn">'+item.option+'</span> <b>'+item.reviewTitle+'</b></td>'
+								+'</tr>'
+								+'<tr>'
+								+ '<td>'+item.reviewContent+'</td>'
+								+'</tr>';
 				});
 				value += '</tbody></table>';
 				return value;
@@ -392,8 +371,7 @@ div {
 				else{
 					$reviews.css('display', 'none');
 				}
-			}
-			
+			}			
 		</script>
 	</div>
 	

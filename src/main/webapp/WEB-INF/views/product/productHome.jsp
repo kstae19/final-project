@@ -100,7 +100,6 @@ ul{
 	margin-left: 5px;
 	border-radius: 5px;
 	border: none;
-	background: #6EA0B1;
 	color: white;
 	font-size: 20px;
 }
@@ -178,6 +177,12 @@ ul{
 .keyword>div{
 	width:280px;
 }
+.btn-selected{
+	background:#466D1D;
+}
+.btn-not{
+	background: #98BF64;
+}
 </style>
 </head>
 <body>
@@ -214,10 +219,9 @@ ul{
 			</div>
 
 			<div id="controll-area">
-				<button onclick="sort('F');">FOOD</button>
-				<button onclick="sort('G');">Eco Friendly Items</button>
-				<button onclick="sort('all');">ALL</button>
-
+				<button id="F" class="btn-not" onclick="sort(this);">FOOD</button>
+				<button id="G" class="btn-not" onclick="sort(this);">Eco Friendly Items</button>
+				<button id="all" class="btn-not" onclick="sort(this);">ALL</button>
 				<select>
 					<option value="latest">최신순</option>
 					<option value="view">조회순</option>
@@ -226,7 +230,11 @@ ul{
 					<option value="priceAsc">가격 낮은순</option>
 				</select>
 			</div>
-
+			<script>
+				$(()=>{
+					
+				})
+			</script>
 			<div id="product-area">
 				<div id="products">
 					<c:forEach var="p" items="${productList }">
@@ -326,8 +334,8 @@ ul{
 					function setKeyword(li){
 						$('input[name=keyword]').val($(li).children().children('div').text());				
 					};
-					function sort(category){
-						location.href='product?category='+category;
+					function sort(btn){
+						location.href='product?category='+btn.id;
 					};
 					function askLogin(){
 						alertify.confirm('로그인','로그인이 필요한 기능입니다. 로그인 화면으로 이동하시겠습니까?',
@@ -338,6 +346,7 @@ ul{
 									alertify.error('비회원으로 계속합니다.');
 								});
 					};
+					
 					function like(pno, th){
 						console.log(pno);
 						$.ajax({
@@ -351,29 +360,27 @@ ul{
 								value = e=='added'? 'resources/images/heart-solid.svg' : 
 										(e=='removed'? 'resources/images/heart-regular.svg': '');
 								if(value != '') $(th).attr('src', value);
-							},
-							error : e => {
-								console.log('세상은 요지경~~');
 							}
 						})
 					};
+					
 					$(()=>{
+						$('#controll-area>button[id="${map.category}"]')
+						.removeClass("btn-not")
+						.addClass("btn-selected");
 						
 						$.ajax({
 							url : 'getLikes.pr',
 							data : {userNo : '${sessionScope.loginUser.userNo}'},
 							success: result =>{
 								for(let i in result){
-									$('.product').each((idnex, item)=>{
+									$('.product').each((index, item)=>{
 										if(result[i].productNo == item.id){
 										$(item).find('.like-cart>img').attr('src', 'resources/images/heart-solid.svg');
 											
 										}
 									})
 								}
-							},
-							error: ()=>{
-								console.log('에이젝스 망했어...');
 							}
 						});
 						
