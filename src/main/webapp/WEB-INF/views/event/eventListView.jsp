@@ -239,6 +239,9 @@
 	        $('#insertEvent').on('click', function(){
 	    		
 	    		const formData = new FormData();
+	    		console.log($('#upfile')[0].files[0]);//File객체
+	    		console.log($('#upfile')[0]);// input태그 자체
+	    		console.log($('#upfile').val());//C:\fakepath\ecoFriendly.jpg
 	    		
 	    		formData.append('eventTitle', $('#eventTitle').val());
 	    		formData.append('eventContent', $('#eventContent').val());
@@ -247,8 +250,6 @@
 	    		formData.append('upfile', $('#upfile')[0].files[0]);
 	    		formData.append('categoryNo', $('#categoryNo').val());
 	    			
-	    			console.log($('#upfile')[0].files[0]);
-	    			console.log($('#eventDate').val());
 	    			
 	    		$.ajax({
 	    			url : 'insert.ev',
@@ -313,7 +314,7 @@
 	    			formData.append('eventContent', $('#uEventContent').val());
 	    			formData.append('eventPlace', $('#uEventPlace').val());
 	    			formData.append('upfile', $('#uUpfile')[0].files[0]);
-	    			formData.append('activityNo', Number($('#uActivityNo').val()));
+	    			formData.append('activityNo', $('#uActivityNo').val()));
 	    			    
 	    			$.ajax({
 	    				url : 'update.ev',
