@@ -96,7 +96,7 @@ h2 {
 							<div>
 								<h5>${item.productName}</h5>
 								<span>${item.optionName }</span>
-								<span>${item.price *order.qty}</span>
+								<span class="one-price">${item.price *order.qty}</span>
 							</div>
 							</div>
 						</c:if>
@@ -109,7 +109,7 @@ h2 {
 									<div>
 										<h5>${i.productName} (${i.qty }개)</h5>
 										<span>${i.optionName }</span>
-										<span>${i.price *i.qty}원</span>
+										<div class="item-price">${i.price *i.qty}</div>
 									</div>
 								</div>
 							</c:forEach>
@@ -173,6 +173,16 @@ h2 {
 				</div>
 			</form>
 			<script>
+				$(()=>{
+					const $total = $('#totalPrice');
+					$total.text(locale($total.text())+'원');
+					$('.item-price').each((index, value)=>{
+						$(value).text(locale($(value).text())+'원');
+					})
+				});
+				function locale(number){
+					return Number(number).toLocaleString('ko-KR');
+				};
 				function makePayment(){
 					$.ajax({
 						url :'pay',

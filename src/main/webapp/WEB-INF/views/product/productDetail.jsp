@@ -152,7 +152,7 @@ div {
 				<img src="${p.mainImg }">
 			</div>
 			<div id="product-info">
-			<form action="listOrderForm" method="post">
+			<form action="listOrderForm" method="get">
 				<div id="productTitle">
 					<div id="productName">
 						<h1>${p.productName }</h1>

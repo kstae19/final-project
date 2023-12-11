@@ -43,14 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductController {
 	
 	private final ProductService productService;
-	/**
-	 * @param currentPage 현재 페이지
-	 * @param orderBy 정렬 기준
-	 * @param category 제품 카테고리
-	 * @param keyword 검색어
-	 * @param model 
-	 * @return 제품 메인페이지
-	 */
 	@GetMapping("product")
 	public String productHome(@RequestParam(value="cPage", defaultValue="1") int currentPage,
 								@RequestParam(value="orderBy", defaultValue="latest") String orderBy, 
@@ -58,7 +50,7 @@ public class ProductController {
 								String keyword, 
 								Model model) {
 		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
-		PageInfo pi = Pagination.getPageInfo(productService.selectProductCount(), currentPage, 6, 5);
+		PageInfo pi = Pagination.getPageInfo(count, currentPage, 6, 5);
 		model.addAttribute("pi", pi);						
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("orderBy", orderBy);
@@ -75,16 +67,6 @@ public class ProductController {
 		model.addAttribute("productList", productService.selectProductList(map, pi));		
 		return "product/productHome";
 	}
-	
-	@ResponseBody
-	@GetMapping("check.like")
-	public String checkLike(ProductLike like) {
-		return productService.checkLike(like);
-	}
-	public int removeLike(ProductLike like) {
-		return productService.removeLike(like);
-	}	
-
 	
 	@GetMapping("product.detail")
 	public String showDetail(ProductLike like, Model model) {
@@ -109,19 +91,10 @@ public class ProductController {
 	}
 	
 	
-	@RequestMapping("listOrderForm")
-	public String orderListForm(OrderCart orderCart
-								, Cart item
-								, Model model) {		
+	@PostMapping("listOrderForm")
+	public String orderListForm(OrderCart orderCart, Model model) {		
 		List<Cart> itemList = orderCart.getItemList();
-		if(itemList.isEmpty()) {
-			ProductOption option = productService.getProductOption(item.getOptionNo());
-			item.setOptionName(option.getOptionName());
-			item.setPrice(option.getPrice());
-			itemList.add(item);
-		}
 		model.addAttribute("items",orderCart);
-		
 		int numOfItem = itemList.size();
 		int totalPrice = 0;
 		for(int i =0 ; i<numOfItem;i++) {
@@ -129,6 +102,22 @@ public class ProductController {
 		}
 		model.addAttribute("shipping", (totalPrice>=40000)? true : false);
 		model.addAttribute("numOfItem", numOfItem);
+		model.addAttribute("totalPrice", totalPrice);
+		return "product/orderForm";
+	}
+	@GetMapping("listOrderForm")
+	public String orderListForm(Cart item
+								, Model model) {		
+		ProductOption option = productService.getProductOption(item.getOptionNo());
+		item.setOptionName(option.getOptionName());
+		item.setPrice(option.getPrice());
+		OrderCart orderCart = new OrderCart();
+		orderCart.getItemList().add(item);
+		model.addAttribute("items",orderCart);
+		
+		int totalPrice = item.getPrice()*item.getQty();
+		model.addAttribute("shipping", (totalPrice>=40000)? true : false);
+		model.addAttribute("numOfItem", 1);
 		model.addAttribute("totalPrice", totalPrice);
 		return "product/orderForm";
 	}
