@@ -51,7 +51,7 @@ public class ProductController {
 	 * @param model 
 	 * @return 제품 메인페이지
 	 */
-	@RequestMapping("product")
+	@GetMapping("product")
 	public String productHome(@RequestParam(value="cPage", defaultValue="1") int currentPage,
 								@RequestParam(value="orderBy", defaultValue="latest") String orderBy, 
 								@RequestParam(value="category", defaultValue="all") String category,
@@ -98,13 +98,16 @@ public class ProductController {
 		model.addAttribute("review", productService.getRate(productNo));
 		return "product/productDetail";
 	}
+	
 
 	@GetMapping("cart")
 	public String myCart(int userNo, Model model) {
 		List<Cart> cartItems = productService.selectCartItems(userNo);
 		model.addAttribute("cartItems", cartItems);
+		log.info("cart = {}", cartItems);
 		return "product/cart";
 	}
+	
 	
 	@RequestMapping("listOrderForm")
 	public String orderListForm(OrderCart orderCart
@@ -161,6 +164,7 @@ public class ProductController {
 		model.addAttribute("orders", orders);
 		return "product/shoppingList";
 	}
+	
 	@GetMapping("myshopping")
 	public String myPage(int userNo, Model model) {
 		HashMap map = new HashMap();
@@ -169,6 +173,7 @@ public class ProductController {
 		model.addAttribute("orderList", productService.getOrderList(userNo));
 		return "product/myshopping";
 	}
+	
 	
 	@GetMapping("paySuccess")
 	public String getSuccessPage(String pg_token
@@ -186,10 +191,12 @@ public class ProductController {
 	public String payReady() {
 		return "product/payReady";
 	}
+	
 	@GetMapping("reviewForm")
 	public String reviewForm() {
 		return "product/reviewForm";
 	}
+	
 	@PostMapping("insert.review")
 	public String insertReview(ProductReview review, MultipartFile upfile, 
 								HttpSession session ,Model model) {
@@ -203,6 +210,8 @@ public class ProductController {
 		model.addAttribute("alertMsg", alertMsg);
 		return "redirect:/";
 	}
+	
+	
 	public String saveFile(MultipartFile upfile, HttpSession session) {
 		String originName = upfile.getOriginalFilename();
 		String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
@@ -218,6 +227,7 @@ public class ProductController {
 
 		return "resources/uploadFiles/"+changeName;
 	}
+	
 	@GetMapping("delete.review")
 	public String deleteReview(int reviewNo, HttpSession session) {
 		User loginUser = (User)session.getAttribute("loginUser");
@@ -228,6 +238,7 @@ public class ProductController {
 			return "redirect:/";
 		}
 	}
+	
 	@PostMapping("newAddress")
 	public String newAddress(Address address, HttpSession session) {
 		User loginUser = ((User)session.getAttribute("loginUser"));

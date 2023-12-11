@@ -192,7 +192,7 @@ ul{
 		<br> <br>
 		<div class="content">
 			<div id="searching-area">
-			<form action = "product" method="post">
+			<form action = "product" method="get">
 			<c:choose>
 				<c:when test="${not empty map.orderBy }">
 					<input type="hidden" name = "orderBy" value="${map.orderBy}"> 

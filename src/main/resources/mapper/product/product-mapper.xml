@@ -25,14 +25,6 @@
 </resultMap>
 
 
-<resultMap id="shoppingListMap" type="order">
-	<result property="orderNo" column="ORDER_NO" />
-	<result property="userNo" column="USER_NO" />
-	<result property="orderDate" column="ORDER_DATE"/>
-	<result property="addressNo" column="ADDRESS_NO"/>
-	<collection property="orderDetail" ofType="cart" resultMap="cartMap"/>
-</resultMap>
-
 <resultMap id="reviewMap" type="productReview">
 	<result property="reviewNo" column="REVIEW_NO"/>
 	<result property="option" column="OPTION_NM"/>
@@ -386,6 +378,14 @@ INSERT
 	SELECT COUNT(*) FROM TB_ORDER WHERE USER_NO = #{userNo}
 </select>
 
+<resultMap id="shoppingListMap" type="order">
+	<result property="orderNo" column="ORDER_NO" />
+	<result property="userNo" column="USER_NO" />
+	<result property="orderDate" column="ORDER_DATE"/>
+	<result property="addressNo" column="ADDRESS_NO"/>
+	<collection property="orderDetail" ofType="cart" resultMap="cartMap"/>
+</resultMap>
+
 <select id="getShoppingList" parameterType="hashmap" resultMap="shoppingListMap">
 SELECT 
         R, ORDER_NO 
@@ -399,23 +399,24 @@ SELECT
         , BRAND_NO 
         , BRAND_NAME 
         , MAIN_IMG 
-FROM (SELECT 
-            ROWNUM R
-            , ORDER_NO
-            , USER_NO 
-        FROM 
-            TB_ORDER 
-        ORDER BY ORDER_NO DESC)
- JOIN 
-        TB_ORDER_ITEM USING(ORDER_NO)
- JOIN 
-    TB_PRODUCT_OPTION USING(OPTION_NO) 
- JOIN 
-    TB_PRODUCT USING(PRODUCT_NO) 
- JOIN 
-    TB_BRAND USING(BRAND_NO) 
- WHERE R BETWEEN #{startRow} AND #{endRow} 
- AND USER_NO = #{userNo}
+	FROM (
+			SELECT 
+	            ROWNUM R
+	            , ORDER_NO
+	            , USER_NO 
+	        FROM 
+	            TB_ORDER 
+	        ORDER BY ORDER_NO DESC)
+	 JOIN 
+	     TB_ORDER_ITEM USING(ORDER_NO)
+	 JOIN 
+	     TB_PRODUCT_OPTION USING(OPTION_NO) 
+	 JOIN 
+	     TB_PRODUCT USING(PRODUCT_NO) 
+	 JOIN 
+	     TB_BRAND USING(BRAND_NO) 
+	 WHERE R BETWEEN #{startRow} AND #{endRow} 
+	 AND USER_NO = #{userNo}
 </select>
 
 <!-- 리뷰 -->
