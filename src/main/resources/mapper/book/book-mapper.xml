@@ -230,37 +230,37 @@
             
 		UNION ALL
 		
-		(SELECT *
-		 FROM
+		SELECT *
+		FROM
 			(SELECT A.*, ROWNUM AS RNUM
-				FROM    (SELECT
-				            BOOK_REPORT_NO,
-				            BOOK_REPORT_NOTICE,
-				            BOOK_REPORT_TITLE,
-				            USER_ID,
-				            TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
-				            BOOK_REPORT_COUNT,
-				            BOOK_REPORT_SECRET,
-				            BOOK_REPORT_STAR
-				        FROM
+			 FROM    (SELECT
+				      		BOOK_REPORT_NO,
+				        	BOOK_REPORT_NOTICE,
+				        	BOOK_REPORT_TITLE,
+				        	USER_ID,
+				        	TO_CHAR(BOOK_REPORT_DATE, 'YYYY-MM-DD') AS "REPORT_DATE",
+				        	BOOK_REPORT_COUNT,
+				        	BOOK_REPORT_SECRET,
+				        	BOOK_REPORT_STAR
+				      FROM
 				            TB_BOOK_REPORT
-				        JOIN
+				      JOIN
 				            TB_USER USING(USER_NO)
-				        WHERE
+				      WHERE
 				            BOOK_REPORT_STATUS = 'Y'
-				        AND 
+				      AND 
 				            BOOK_REPORT_NOTICE != 1
-				        ORDER
-				        BY
+				      ORDER
+				      BY
 				            BOOK_REPORT_DATE DESC) A)
-			WHERE RNUM > #{startLimit}
-			<![CDATA[
-			AND RNUM <= ]]>(#{endLimit}-(SELECT COUNT(*)
+		   WHERE RNUM > #{startLimit}
+		   <![CDATA[
+		   AND RNUM <= ]]>(#{endLimit}-(SELECT COUNT(*)
 					                    FROM
 					                        TB_BOOK_REPORT
 					                    WHERE
 					                        BOOK_REPORT_STATUS = 'Y'
-					                    AND BOOK_REPORT_NOTICE = 1)))
+					                    AND BOOK_REPORT_NOTICE = 1))
 		
 	</select>
 	
