@@ -19,4 +19,5 @@ public abstract class Activity   {
 	private Date modifyDate;
 	private int categoryNo;
 	private int type;
+	
 }

@@ -52,14 +52,13 @@
 				      
 				      	<div id="insert-form" class="modal-body" >
 
-					       	<label for="eventTitle">이벤트명 : <input id="eventTitle" class="event" name="eventTitle" type="text" required/></label>
-					        <label for="eventContent">이벤트 내용 : <input id="eventContent" class="event" name="eventContent" type="text" required/></label>
-					        <label for="eventPlace">이벤트 장소 : <input id="eventPlace" class="event" name="eventPlace" type="text" required/></label>
-					       
-					        <input class="event" id="activityNo" name="activityNo" type="hidden"/>
-					       	<input class="event" id="eventDate" name="eventDate" type="hidden" value="" />
-					       	<label for="upfile">첨부파일 : <input id="upfile" class="event" name="upfile" type="file" accept=".jpg, .jpeg, .png" required/></label>
-				       		<label for="categoryNo">카테고리 : <input id="categoryNo" class="event" name="categoryNo" type="number" required/></label>
+ 							<input type="hidden" class="event" id="activityNo" name="activityNo" value=""  />
+					       	<input type="hidden" class="event" id="eventDate" name="eventDate" value=""  />
+					       	<label for="eventTitle">이벤트명 : <input id="eventTitle" name="eventTitle" class="event"  type="text" required/></label>
+					        <label for="eventContent">이벤트내용 : <input id="eventContent" name="eventContent"  	class="event"  type="text" required/></label>
+					        <label for="eventPlace">이벤트장소 : <input id="eventPlace" name="eventPlace"   class="event"  type="text" required/></label>
+					       	<label for="upfile">첨부파일 : <input id="upfile" name="upfile" type="file"   class="event"accept=".jpg, .jpeg, .png" required/></label>
+				       		<label for="categoryNo">카테고리 : <input id="categoryNo" name="categoryNo" 	 class="event"  type="number" required/></label>
 
 					      <div class="modal-footer">
 					        <button class="btn btn-primary" id="insertEvent">등록</button>
@@ -157,11 +156,10 @@
 		          events: [
 				 		<c:if test="${ not empty list}">
 							<c:forEach var="e" items="${list}">
-								
 								{ 
 									id : '${e.activityNo}',
-									title: '${e.eventTitle}', // text는 ''로 감싸줌, 아니면 변수로 인식함
-									start: '${e.eventDate}',// Date는 Date(sql)인데 왜 ''로 감싸야할까
+									title: '${e.eventTitle}',  
+									start: '${e.eventDate}',
 									 extendedProps: {
 										 place : '${e.eventPlace}',
 										 participants : ${e.participants},
@@ -173,37 +171,21 @@
 							</c:forEach>
 						</c:if> 
 					],	
-					 eventDidMount: function(info) {
-						    //console.log(info.event.imageurl);
-					 },
 					 eventContent: function (arg) {
-							//console.log(arg);
 				            var event = arg.event;
-				            
 				            var customHtml = '';
-				            
-				            //customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.id + "</div>";
-				            
-				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";
-				            
+				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.title + "</div>";       
 				            customHtml += "<div class='r10 font-xxs font-bold' style='overflow: hidden;'>" + event.start + "</div>";
-				            
 				            customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.place +  "</div>";
-				                        
-				            //customHtml += "<div class='r10 highlighted-badge font-xxs font-bold'>" + event.extendedProps.categoryNo +  "</div>";
-				            
 				            switch(event.extendedProps.categoryNo){
 				            case 1 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR19-1BXMU8CHpgW_o4ef_cMsKFAubWdsfsCyzeUgwcqD7CBv0WwUT64Y72HnUgoNhtLeE&usqp=CAU'   +  "'/>"; break;
 				            case 2 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPJBfEwiOl6PHNVLBpR2ooLZf1gx5fYI9d6bn6TZYfGRnImcjHHII11hSwlsibXcf_tBA&usqp=CAU'   +  "'/>"; break;
 				            case 3 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6lm87onPTFXI7buPjllu_ocW0774X3gVW4mONbR6QmmEvnVM03KpEmSGibNCONwJ9kEA&usqp=CAU'   +  "'/>"; break;
 				            case 4 :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0iX_NJSlpi54a2A2_yvf4wNzmIUPTmM9OHw&usqp=CAU'   +  "'/>"; break;
 				            default :   customHtml += "<img  style='width:100%; height : 100px;' src='"+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXljjKETOFvt1Uq8HnOM2b1ngsAP3kLEttg&usqp=CAU'   +  "'/>";
-							
-				            }
-				 
-				            
+				     		}
 				            return { html: customHtml }
-				        }
+			        }
 				
 			});// var calendar
 			calendar.render();
@@ -219,38 +201,28 @@
 	        
 	        calendar.on('eventClick', function(e){
 			
-					event = e.event._def;
-					//console.log(event);
-
-			 $('#detail-content').children().eq(0).html(event.title);
-			 $('#detail-content').children().eq(1).html(event.extendedProps.categoryNo);
-			 $('#detail-content').children().eq(2).html(event.extendedProps.content);
-			 //$('#detail-content').children().eq(3).html(event.start);
-			 $('#detail-content').children().eq(3).html(event.extendedProps.place);
-			 $('#detail-content').children().eq(4).html(event.extendedProps.participants);
-			 $('#detail-content').children().eq(5).html(event.extendedProps.imageurl);
-			 $('#detail-content').children().eq(6).html(event.publicId);
-
-
-	          $('#detailModal').modal('show');
-	        	
+				 event = e.event._def;
+	
+				 $('#detail-content').children().eq(0).html(event.title);
+				 $('#detail-content').children().eq(1).html(event.extendedProps.categoryNo);
+				 $('#detail-content').children().eq(2).html(event.extendedProps.content);
+				 $('#detail-content').children().eq(3).html(event.extendedProps.place);
+				 $('#detail-content').children().eq(4).html(event.extendedProps.participants);
+				 $('#detail-content').children().eq(5).html(event.extendedProps.imageurl);
+				 $('#detail-content').children().eq(6).html(event.publicId);
+	
+		         $('#detailModal').modal('show');  	
 	        });
 	        
-	        $('#insertEvent').on('click', function(){
-	    		
+	        $('#insertEvent').on('click', () => {	
 	    		const formData = new FormData();
-	    		console.log($('#upfile')[0].files[0]);//File객체
-	    		console.log($('#upfile')[0]);// input태그 자체
-	    		console.log($('#upfile').val());//C:\fakepath\ecoFriendly.jpg
-	    		
 	    		formData.append('eventTitle', $('#eventTitle').val());
 	    		formData.append('eventContent', $('#eventContent').val());
 	    		formData.append('eventPlace', $('#eventPlace').val());
 	    		formData.append('eventDate', $('#eventDate').val());
 	    		formData.append('upfile', $('#upfile')[0].files[0]);
 	    		formData.append('categoryNo', $('#categoryNo').val());
-	    			
-	    			
+	    				
 	    		$.ajax({
 	    			url : 'insert.ev',
 	    			type : 'POST',
@@ -258,20 +230,20 @@
 	    		    contentType: false,
 	    		    enctype: 'multipart/form-data',
 	    		    data: formData,
-	    			success : function(data){	    	
-	    				console.log(data);
-	    				alert('이벤트 등록 성공!');	
-	    				$('#insertModal').modal('hide');
-	    				/* calendar.addEvent({
-	    					title : "금요일", // 이벤트 제목
-	    					start : "2020-09-29" //달력 날짜에 매핑
-	    					}) */
-	    				//calendar.render(); => 안됨
-	    				// calendar.refetchEvents(); => 안됨
-	    				// calendar.rerenderEvents(); => 안됨
+	    			success : data => {	    	
+	    				if(data === 'success'){
+	    					$('#insertModal').modal('hide');		
+	    					calendar.refetchEvents();
+    						alert('이벤트 등록 성공!');	
+
+    				
+    					} else{
+    						alert('이벤트 등록 실패!');
+    					}
 	    			},
-	    			error : function(){
-	    				console.log('작성 실패!');
+	    			error : () => {
+	    				alert('이벤트를 등록할 수 없습니다.');
+	    				$('#insertModal').modal('hide');
 	    			}
 	    		})
 	    	});//insertE
@@ -314,7 +286,7 @@
 	    			formData.append('eventContent', $('#uEventContent').val());
 	    			formData.append('eventPlace', $('#uEventPlace').val());
 	    			formData.append('upfile', $('#uUpfile')[0].files[0]);
-	    			formData.append('activityNo', $('#uActivityNo').val()));
+	    			formData.append('activityNo', $('#uActivityNo').val());
 	    			    
 	    			$.ajax({
 	    				url : 'update.ev',
@@ -323,8 +295,12 @@
 	    			    contentType: false,
 	    			    enctype: 'multipart/form-data',
 	    			    data: formData,
-	    				success : function(){
-	    					alert('이벤트 수정 성공!');
+	    				success : result => {
+	    					if(result === 'success'){
+	    						alert('이벤트 수정 성공!');
+	    					} else{
+	    						alert('이벤트 수정 실패!');
+	    					}
 	    					$('#detailModal').modal('hide');
 	    				},
 	    				error : function(){

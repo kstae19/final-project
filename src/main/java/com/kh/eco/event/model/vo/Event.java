@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @NoArgsConstructor @ToString
-
 public class Event  extends Activity  {
 	
 	private int activityNo;
@@ -18,8 +17,9 @@ public class Event  extends Activity  {
 	private String eventContent;
 	private String eventPlace;
 	private String eventDate;
-	
 	private int participants;
+	
+	
 	// private List<User> participantsList;
 	
 }

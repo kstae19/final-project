@@ -98,7 +98,7 @@
     		<script>
     		// 1. 전역함수 선언
     			var checkLikeCount = function(){
-	    					console.log('checkLikeCount때 : ${likeCount}');
+	    					
 			    			var deferred = $.Deferred();
 			    			
 			    			$.ajax({
@@ -110,7 +110,7 @@
 			    				// 체크여부 확인 완료
 			    				success : function(data){ 
 			    					deferred.resolve(data);
-			    					console.log('체크여부 확인 완료');
+			    				
 			    					if(data == 'success'){ // 체크한 회원이면
 			    						$('#like').html('💚');
 			    					} else{
