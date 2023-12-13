@@ -74,32 +74,36 @@ SELECT
 	FROM 
 		TB_PRODUCT P
 	JOIN 
-		TB_PRODUCT_OPTION O USING (PRODUCT_NO)
+		TB_PRODUCT_OPTION O USING (PRODUCT_NO) 
+	LEFT JOIN (
+				  SELECT 
+				  		COUNT(*) "LIKE"
+				  		, PRODUCT_NO 
+				  	FROM 
+				  		TB_PRODUCT_LIKE 
+				  	GROUP 
+				  		BY 
+				  			PRODUCT_NO) USING(PRODUCT_NO) 
 	WHERE 
-		O.STATUS IN ('Y', 'O') 
+		 O.STATUS IN ('Y', 'O') 
 	AND 
 		P.STATUS = 'Y' 
 	<if test="category != 'all'">
-	AND CATEGORY = #{category} 
-	</if>
-	
+	AND CATEGORY = #{category} </if>	
 	<if test="keyword != null">
-	AND OPTION_NM LIKE '%${keyword}%' OR PRODUCT_NM LIKE '%${keyword}%' 
-	</if>
-	
+	AND OPTION_NM LIKE '%${keyword}%' OR PRODUCT_NM LIKE '%${keyword}%' </if>	
 	<if test="orderBy == 'latest' ">
-	ORDER BY CREATE_DATE DESC 
-	</if>
+	ORDER BY CREATE_DATE DESC </if>
 	<if test="orderBy == 'view'">
-	ORDER BY COUNT DESC 
-	</if>
+	ORDER BY COUNT DESC </if>
+	<if test="orderBy == 'like'">
+	ORDER BY "LIKE" DESC NULLS LAST </if>
 	<if test="orderBy == 'priceDesc'">
-	ORDER BY PRICE DESC 
-	</if>
+	ORDER BY PRICE DESC </if>
 	<if test="orderBy == 'priceAsc'">
-	ORDER BY PRICE ASC 
-	</if>
+	ORDER BY PRICE ASC </if>
 </select>
+
 <select id="searchProduct" resultMap="resultProductMap" parameterType="string">
 SELECT 
 		PRODUCT_NO, 

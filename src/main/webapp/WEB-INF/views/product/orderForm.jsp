@@ -294,8 +294,7 @@ h2 {
 	<script>
 		function postCode(){
 			new daum.Postcode({
-				oncomplete : data=>{
-					console.log(data);
+				oncomplete : data => {
 					$('input[name="post"]').val(data.zonecode);
 					$('input[name="address"]').val(data.address);
 				}
@@ -311,8 +310,7 @@ h2 {
 						address : $('input[name = "address"]').val(),
 						detailAddress : $('input[name = "detailAddress"]').val(),
 						},
-				success : e =>{
-					console.log(e);
+				success : e => {
 					alert('배송지 추가 성공!');
 					addressList();
 				}

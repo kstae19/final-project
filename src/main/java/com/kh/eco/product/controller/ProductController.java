@@ -47,22 +47,17 @@ public class ProductController {
 	public String productHome(@RequestParam(value="cPage", defaultValue="1") int currentPage,
 								@RequestParam(value="orderBy", defaultValue="latest") String orderBy, 
 								@RequestParam(value="category", defaultValue="all") String category,
-								String keyword, 
-								Model model) {
-		int count = category.equals("all")? productService.selectProductCount() : productService.selectCategoryCount(category);
+								String keyword, Model model) {
+		int count = category.equals("all")? productService.selectProductCount() 
+										  : productService.selectCategoryCount(category);
 		PageInfo pi = Pagination.getPageInfo(count, currentPage, 6, 5);
 		model.addAttribute("pi", pi);						
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("orderBy", orderBy);
 		map.put("category", category);
 		map.put("keyword", keyword);		
-		if(keyword != null) {
-			if(productService.checkKeyword(keyword)>0) {
-				productService.updateKeywordCount(keyword);
-			}else {
-				productService.saveKeyword(keyword);								
-			}
-		}		
+		if(keyword != null) productService.checkKeyword(keyword);
+
 		model.addAttribute("map", map);
 		model.addAttribute("productList", productService.selectProductList(map, pi));		
 		return "product/productHome";
@@ -86,7 +81,6 @@ public class ProductController {
 	public String myCart(int userNo, Model model) {
 		List<Cart> cartItems = productService.selectCartItems(userNo);
 		model.addAttribute("cartItems", cartItems);
-		log.info("cart = {}", cartItems);
 		return "product/cart";
 	}
 	
@@ -135,12 +129,9 @@ public class ProductController {
 	@GetMapping("shoppingList")
 	public String getShoppingList(@RequestParam(value="cPage", defaultValue="1") 
 								int currentPage, 
-								@RequestParam(value="userNo", defaultValue="0") 
-								Integer userNo,
-								Model model) {
+								int userNo, Model model) {
 		PageInfo pi = Pagination.getPageInfo(productService.selectOrderCount(userNo), currentPage, 4, 5);
 		model.addAttribute("pi", pi);	
-
 		List<Order> orders = productService.getShoppingList(userNo, pi);
 		for(Order o : orders) {
 			int totalPrice =0;

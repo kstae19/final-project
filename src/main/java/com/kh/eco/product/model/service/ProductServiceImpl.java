@@ -16,7 +16,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -164,16 +163,15 @@ public class ProductServiceImpl implements ProductService {
 	public String getPcUrl(KakaoPay pay) throws IOException, ParseException{
 		String url = "https://kapi.kakao.com/v1/payment/ready";
 		String postParams = "cid=TC0ONETIME"
-			+ "&partner_order_id=order1122"
-			+ "&partner_user_id="+pay.getUserNo()
-			+ "&item_name="+pay.getItemName()
-			+ "&quantity="+pay.getQuantity()
-			+ "&total_amount="+pay.getTotalAmount()
-			+ "&tax_free_amount=0"
-			+ "&approval_url=http://localhost:8001/eco/paySuccess"
-			+ "&cancel_url=http://localhost:8001/eco/product"
-			+ "&fail_url=http://localhost:8001/eco"					
-			;
+							+ "&partner_order_id=order1122"
+							+ "&partner_user_id="+pay.getUserNo()
+							+ "&item_name="+pay.getItemName()
+							+ "&quantity="+pay.getQuantity()
+							+ "&total_amount="+pay.getTotalAmount()
+							+ "&tax_free_amount=0"
+							+ "&approval_url=http://localhost:8001/eco/paySuccess"
+							+ "&cancel_url=http://localhost:8001/eco/product"
+							+ "&fail_url=http://localhost:8001/eco";
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
 		urlConnection.setRequestMethod("POST");
@@ -183,25 +181,21 @@ public class ProductServiceImpl implements ProductService {
 		urlConnection.setDoOutput(true);
 		DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
 		wr.write(postParams.getBytes());
-		wr.flush();
-		
+		wr.flush();		
 		String responseData = "";
 		if(urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 			responseData = readBody(urlConnection.getInputStream());
 		}else {
 			responseData = readBody(urlConnection.getErrorStream());
-		}
-		
+		}		
 		JSONParser parser = new JSONParser();
 		JSONObject element = (JSONObject)parser.parse(responseData);
 		String tid = element.get("tid").toString();
 		String pcUrl = element.get("next_redirect_pc_url").toString();
-		ApproveRequest approveRequest = new ApproveRequest();
-		
+		ApproveRequest approveRequest = new ApproveRequest();		
 		approveRequest.setUserNo(pay.getUserNo());
 		approveRequest.setTid(tid);
-		
-		int result = dao.insertReady(sqlSession, approveRequest);
+		dao.insertReady(sqlSession, approveRequest);		
 		return pcUrl;
 	}
 	private String readBody(InputStream body) {
@@ -226,16 +220,14 @@ public class ProductServiceImpl implements ProductService {
 	public ApproveRequest getRequestParam() {
 		return dao.getRequestParam(sqlSession);
 	}
-
-	@Transactional
 	@Override
 	public String approvePayment(ApproveRequest approve, Order order) throws IOException, ParseException {
 		String url = "https://kapi.kakao.com/v1/payment/approve";
 		String param = "cid="+approve.getCid()
-					+ "&tid=" + approve.getTid()
-					+ "&partner_order_id=" + approve.getPartnerOrderId()
-					+ "&partner_user_id=" + approve.getUserNo()
-					+ "&pg_token=" + approve.getPgToken();
+						+ "&tid=" + approve.getTid()
+						+ "&partner_order_id=" + approve.getPartnerOrderId()
+						+ "&partner_user_id=" + approve.getUserNo()
+						+ "&pg_token=" + approve.getPgToken();
 
 		URL requestUrl = new URL(url);
 		HttpURLConnection urlConnection = (HttpURLConnection)requestUrl.openConnection();
@@ -254,11 +246,9 @@ public class ProductServiceImpl implements ProductService {
 			int orderResult = orderProduct(order);
 		}else {
 			responseData = readBody(urlConnection.getErrorStream());
-		}
-		
+		}		
 		JSONParser parser = new JSONParser();
-		JSONObject element = (JSONObject)parser.parse(responseData);
-		
+		JSONObject element = (JSONObject)parser.parse(responseData);		
 		return element.get("item_name").toString();
 	}
 
@@ -266,13 +256,12 @@ public class ProductServiceImpl implements ProductService {
 	public ProductOption getProductOption(int optionNo) {
 		return dao.getProductOption(sqlSession, optionNo);
 	}
-
+	
 	@Override
 	public ArrayList<Order> getShoppingList(int userNo, PageInfo pi) {		
 		int startRow = (pi.getCurrentPage()-1)*pi.getBoardLimit()+1;
 		int endRow = pi.getCurrentPage()*pi.getBoardLimit();
 		
-		System.out.println(startRow+"부터"+endRow);
 		HashMap map = new HashMap();
 		map.put("startRow", startRow);
 		map.put("endRow", endRow);
@@ -317,8 +306,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public int checkKeyword(String keyword) {
-		return dao.checkKeyword(sqlSession, keyword);
+		int checkResult = dao.checkKeyword(sqlSession, keyword);
+		if(checkResult>0) {
+			checkResult*=updateKeywordCount(keyword);
+		}else {
+			checkResult*=saveKeyword(keyword);
+		}		
+		return checkResult;
 	}
 
 	@Override
@@ -358,7 +354,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public String payResult(String pcUrl) throws IOException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
